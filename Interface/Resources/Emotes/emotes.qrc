@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/emotes">
+        <file>alien.png</file>
+        <file>angel.png</file>
+        <file>angry.png</file>
+        <file>cool.png</file>
+        <file>crying.png</file>
+        <file>devil.png</file>
+        <file>embarrassed.png</file>
+        <file>grin.png</file>
+        <file>happy.png</file>
+        <file>heart.png</file>
+        <file>joyful.png</file>
+        <file>kissing.png</file>
+        <file>lol.png</file>
+        <file>pinched.png</file>
+        <file>pouty.png</file>
+        <file>sad.png</file>
+        <file>sick.png</file>
+        <file>sleeping.png</file>
+        <file>smile.png</file>
+        <file>surprised.png</file>
+        <file>tongue.png</file>
+        <file>uncertain.png</file>
+        <file>unsure.png</file>
+        <file>wink.png</file>
+        <file>wondering.png</file>
+    </qresource>
+</RCC>

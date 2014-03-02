@@ -1,0 +1,6 @@
+I: LICENSING
+    We cannot apply a closed source license to this project due that we need to purchase an additional license from Digia. The free version of Qt allows us to use all of it’s features. But only allows us to develop open source applications.
+    We could use this restriction in our advantage to show our work to the rest of the teams.
+
+II: Developer’s notes
+    1. The application is partially complete, due that it only supports direct LAN chatting. The private chatting (where the user can choose to connect to a specific server in the Local network) still needs some work.
