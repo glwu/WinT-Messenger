@@ -16,7 +16,7 @@ QT += gui
 QT += quick
 QT += network
 QT += widgets
-QT += bluetooth
+#QT += bluetooth
 
 # Include the source code and the interface
 include(Sources/src.pri)
@@ -39,12 +39,10 @@ android {
 }
 
 win32* {
-    TARGET  = "WinT IM"
     RC_FILE = Systems/Windows/icon.rc
 }
 
 macx {
-    TARGET  = "WinT IM"
     ICON    = Systems/Mac/icon.icns
     RC_FILE = Systems/Mac/info.plist
 

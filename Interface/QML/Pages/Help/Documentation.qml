@@ -54,7 +54,13 @@ Page {
 
                 // INTRODUCTION
                         + "<h2>Introduction</h2>"
-                        + "<p>We are too lazy to write a manual. Do you need one?</p>"
+                        + "<p>WinT Messenger, as its name says, is an instant messenger software. "
+                        + "In contrast to most messaging clients, WinT Messenger is free, open source and does not require any type of registration in order to use it. "
+                        + "WinT Messenger is made in QML/C++ and its based on the Qt framework. "
+                        + "WinT Messenger is officially supported on Android, iOS, Microsoft Windows, Mac OS X and Linux. " +
+                        + "Unlike other messaging clients, WinT IM connects to you local network, allowing anyone "
+                        + "on your network to join the conversation. "
+                        + "In the near future, WinT Messenger will support Bluetooth connections.</p>"
 
                 // ADVANCED CONCEPTS
                         + "<h2>Advanced Concepts</h2>"
@@ -88,7 +94,7 @@ Page {
                         + "<li>Part of the code found on the <a href = 'http://qt-project.org/doc/qt-4.8/network-network-chat.html'>Network Chat example</a>.</li>"
                         + "</ul>"
 
-                // FREQUENTLY ASKED QUESTIONS
+                /*// FREQUENTLY ASKED QUESTIONS
                         + "<h2>Frequently Asked Questions</h2>"
                         + "<ol>"
 
@@ -121,7 +127,7 @@ Page {
                         + "<ul><li>Answer #7.</li></ul>"
 
                 // END OF FAQ
-                        + "</ol>"
+                        + "</ol>"*/
 
                 // END OF HTML DOCUMENT
                         + "</body>"

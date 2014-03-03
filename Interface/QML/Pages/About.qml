@@ -17,18 +17,18 @@ Page {
     property int perfectY: 10 + parent.height / 16
 
     Column {
-        y                        : arrangeFirstItem
+        y                        : arrangeFirstItem + perfectY
         spacing                  : 8
-        anchors.bottom           : parent.bottom
-        anchors.bottomMargin     : perfectY
+        //anchors.bottom           : parent.bottom
+        //anchors.bottomMargin     : perfectY
         anchors.horizontalCenter : parent.horizontalCenter
 
         Button {
             text      : qsTr("Website")
-            onClicked : Qt.openUrlExternally("http://www.wint3794.org")
+            onClicked : Qt.openUrlExternally("http://wint-im.sf.net")
         }
 
-        Button {
+        /*Button {
             text      : qsTr("Acknowledgements")
             onClicked : Qt.openUrlExternally("http://www.thebluealliance.com/team/3794")
         }
@@ -36,6 +36,6 @@ Page {
         Button {
             text      : qsTr("Credits")
             onClicked : Qt.openUrlExternally("http://www.thebluealliance.com/team/3794")
-        }
+        }*/
     }
 }
