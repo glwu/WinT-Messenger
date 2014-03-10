@@ -2,12 +2,12 @@
 //  This file is part of the WinT IM
 //
 //  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
+//  Copyright (c) 2014 WinT 3794. All rights reserved.
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 
-Item {
+Rectangle {
     property alias title    : titleText.text
     property alias subtitle : subtitleText.text
     property alias image    : image.source
@@ -33,6 +33,8 @@ Item {
         font.family              : defaultFont
         horizontalAlignment      : Text.AlignHCenter
         verticalAlignment        : Text.AlignVCenter
+        antialiasing             : true
+        smooth                   : true
     }
 
     Text {
@@ -42,8 +44,10 @@ Item {
         font.pixelSize           : smartFontSize(12)
         horizontalAlignment      : Text.AlignHCenter
         font.family              : defaultFont
+        smooth                   : true
         verticalAlignment        : Text.AlignVCenter
         wrapMode                 : Text.WrapAtWordBoundaryOrAnywhere
         y                        : titleText.y + titleText.height + 8
+        antialiasing             : true
     }
 }

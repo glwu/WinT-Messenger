@@ -7,6 +7,9 @@
         <file>Information.png</file>
         <file>Logo.png</file>
         <file>Settings.png</file>
+        <file>Controls/Frame.png</file>
+        <file>Controls/FrameFocus.png</file>
+        <file>Doc/Daimler.png</file>
         <file>Doc/GNU.png</file>
         <file>Doc/Qt.png</file>
         <file>ToolbarIcons/About.png</file>

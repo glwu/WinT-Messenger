@@ -50,7 +50,8 @@ Section "WinT Messenger (required)" SecDummy
   SetOutPath "$INSTDIR"
   
   ;ADD YOUR OWN FILES HERE...
-  File /r "*"
+  File "WinT Messenger.exe"
+  File "License.txt"
   
   ;Store installation folder
   WriteRegStr HKCU "Software\WinT Messenger" "" $INSTDIR

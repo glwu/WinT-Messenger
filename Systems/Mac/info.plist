@@ -9,9 +9,9 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleExecutable</key>
-	<string>WinT Messenger</string>
+	<string>WinT IM</string>
 	<key>CFBundleIdentifier</key>
-	<string>WinT Messenger</string>
+	<string>WinT IM</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright (c) 2013-2014 the WinT team
 GNU General Public License v3.0</string>

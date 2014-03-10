@@ -2,12 +2,12 @@
 //  This file is part of the WinT IM
 //
 //  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
+//  Copyright (c) 2014 WinT 3794. All rights reserved.
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 
-Item {
+Rectangle {
     id: page
     anchors.fill: parent
 
@@ -51,7 +51,7 @@ Item {
             textFormat               : TextEdit.RichText
             width                    : page.width
             wrapMode                 : TextEdit.WrapAtWordBoundaryOrAnywhere
-            //onLinkActivated          : Qt.openUrlExternally(link)
+            onLinkActivated          : Qt.openUrlExternally(link)
             text                     : {
                 if (bridge.hasConnection()) {
                     return "<font color = '#666'><samp>"

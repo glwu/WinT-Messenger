@@ -1,9 +1,7 @@
 #ifndef CHAT_H
 #define CHAT_H
 
-#include <QColor>
-#include <QSettings>
-
+#include <QStringList>
 #include "client.h"
 
 class LanChat : public QObject {
@@ -20,13 +18,12 @@ public slots:
     void returnPressed(QString text);
 
 private slots:
-    void appendMessage(const QString &message);
+    void appendMessage(const QString &from, const QString &message);
     void newParticipant(QString &nick);
     void participantLeft(QString &nick);
 
 private:
     Client client;
-    QString color;
 };
 
 #endif

@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>WinT Messenger</string>
+	<string>WinT IM</string>
 	<key>CFBundleExecutable</key>
 	<string>wint-im</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Created by the WinT 3794 team</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.wint.messenger</string>
+	<string>org.wint.wint-im</string>
 	<key>CFBundleName</key>
-	<string>WinT Messenger</string>
+	<string>WinT IM</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

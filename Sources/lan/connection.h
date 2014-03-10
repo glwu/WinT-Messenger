@@ -76,7 +76,7 @@ public:
 
 signals:
     void readyForUse();
-    void newMessage(const QString &message);
+    void newMessage(const QString &from, const QString &message);
 
 protected:
     void timerEvent(QTimerEvent *timerEvent);

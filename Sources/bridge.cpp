@@ -21,6 +21,7 @@ void Bridge::stopLanChat() {
 }
 
 bool Bridge::hasConnection() {
+    // This shit only works on UNIX systems (for example Linux & OS X)
     if (lanChatEnabled) {
         foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
             if (address.protocol() == QAbstractSocket::IPv4Protocol
@@ -41,7 +42,9 @@ void Bridge::processMessage(const QString &text, bool info) {
     QString message = text;
 
     if (info)
-        message = "<font color = 'blue'><samp>" + message + "</samp></font>";
+        message = "<font color = 'blue'><samp>" + text + "</samp></font>";
+    else
+        message = "<font color = 'green'>" + text + "</font>";
 
     newMessage(emotes->addEmotes(message));
 }

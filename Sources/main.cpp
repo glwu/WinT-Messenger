@@ -28,23 +28,22 @@ void setupWindow() {
     Bridge *bridge = new Bridge();
     Settings *settings = new Settings();
 
-    bool mobile = isMobile();
     QQmlApplicationEngine *engine = new QQmlApplicationEngine();
     engine->rootContext()->setContextProperty("settings", settings);
     engine->rootContext()->setContextProperty("bridge", bridge);
-    engine->rootContext()->setContextProperty("isMobile", mobile);
+    engine->rootContext()->setContextProperty("isMobile", isMobile());
 
     QObject::connect(engine, SIGNAL(quit()), qApp, SLOT(quit()));
 
     QQmlComponent *component = new QQmlComponent(engine);
-    component->loadUrl(QUrl("qrc:/QML/main.qml"));
+    component->loadUrl(QUrl("qrc:/Interface/QML/main.qml"));
 
     QObject *object = component->create();
 
     QQuickWindow *window = qobject_cast<QQuickWindow *>(object);
     window->setMinimumSize(QSize(320, 480));
 
-    if (!mobile) {
+    if (!isMobile()) {
         window->resize(QSize(settings->value("width", 748).toInt(),
                              settings->value("height", 520).toInt()));
 

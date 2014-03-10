@@ -2,18 +2,16 @@
 //  This file is part of the WinT IM
 //
 //  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
+//  Copyright (c) 2014 WinT 3794. All rights reserved.
 //
+import QtQuick 2.0
 
-import QtQuick 2.2
 
 Rectangle {
     property bool   backButtonEnabled
     property alias  text: windowTitleText.text
-
     property alias  backButtonOpacity: backButton.opacity
     property alias  backButtonArea: backMouseArea
-
     property bool   settingsButtonEnabled: true
     property bool   aboutButtonEnabled: true
 
@@ -25,21 +23,44 @@ Rectangle {
 
     color: colors.toolbarColor
 
-    Item {
+    MouseArea {
+        anchors.fill: parent
+        property variant clickPos: "1,1"
+
+        onPressed: {
+            clickPos  = Qt.point(mouse.x,mouse.y)
+        }
+
+        onPositionChanged: {
+            var delta = Qt.point(mouse.x-clickPos.x, mouse.y-clickPos.y)
+            rootWindow.x = rootWindow.x+delta.x;
+            rootWindow.y = rootWindow.y+delta.y;
+        }
+
+        enabled: !isMobile
+    }
+
+    Rectangle {
         id: backButton
         anchors.left           : parent.left
         anchors.leftMargin     : 4
         anchors.verticalCenter : parent.verticalCenter
+        color                  : "transparent"
         height                 : backImage.height
         width                  : opacity > 0 ? backImage.width : 0
 
         enabled: parent.backButtonEnabled
 
+        radius: 4
+        antialiasing: true
+
         Image {
             id: backImage
+            smooth                   : true
             source                   : "qrc:/images/ToolbarIcons/Back.png"
             height                   : 48
             width                    : 48
+            antialiasing             : true
         }
 
         MouseArea {
@@ -50,11 +71,12 @@ Rectangle {
         Behavior on opacity { NumberAnimation{} }
     }
 
-    Item {
+    Rectangle {
         id: settingsButton
         anchors.right          : /*isMobile ? parent.right : separator.left*/ parent.right
         anchors.rightMargin    : 4
         anchors.verticalCenter : parent.verticalCenter
+        color                  : "transparent"
         height                 : settingsImage.height
         width                  : settingsImage.width
         enabled                : settingsButtonEnabled
@@ -64,10 +86,12 @@ Rectangle {
 
         Image {
             id: settingsImage
-            anchors.fill: parent
-            source: "qrc:/images/ToolbarIcons/Settings.png"
-            height: 48
-            width: 48
+            anchors.fill             : parent
+            smooth                   : true
+            source                   : "qrc:/images/ToolbarIcons/Settings.png"
+            antialiasing             : true
+            height                   : 48
+            width                    : 48
         }
 
         MouseArea {
@@ -80,12 +104,13 @@ Rectangle {
         }
     }
 
-    Item {
+    Rectangle {
         id: aboutButton
         anchors.right: parent.right
         anchors.rightMargin: settingsButton.opacity > 0 ? 2 * settingsButton.anchors.rightMargin + settingsButton.width :
                                                           4
         anchors.verticalCenter : parent.verticalCenter
+        color                  : "transparent"
         height                 : aboutImage.height
         width                  : aboutImage.width
         enabled                : aboutButtonEnabled
@@ -98,6 +123,7 @@ Rectangle {
             id: aboutImage
             anchors.fill             : parent
             source                   : "qrc:/images/ToolbarIcons/About.png"
+            antialiasing             : true
             height                   : 48
             width                    : 48
         }
@@ -124,7 +150,10 @@ Rectangle {
 
         MouseArea {
             anchors.fill : parent
-            onClicked: stackView.pop()
+            onClicked: {
+                if (isMobile)
+                    stackView.pop()
+            }
         }
 
         Behavior on x { NumberAnimation{ easing.type: Easing.OutCubic} }

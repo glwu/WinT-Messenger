@@ -2,10 +2,10 @@
 //  This file is part of the WinT IM
 //
 //  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
+//  Copyright (c) 2014 WinT 3794. All rights reserved.
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 import QtQuick.Dialogs 1.1
 import "../Widgets"
 
@@ -30,58 +30,21 @@ Page {
 
         Label {
             anchors.left : parent.left
-            text         : qsTr("Choose a nickname and profile color:")
+            text         : qsTr("Nickname:")
         }
 
-        Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            height: textBox.height
-
-            Textbox {
-                id: textBox
-
-                anchors.left        : parent.left
-                anchors.right       : colorRectangle.left
-                anchors.rightMargin : 2
-
-                placeholderText : qsTr("Type a nickname and choose a profile color")
-
-                Keys.onReturnPressed: {
-                    settings.setValue("userName", textBox.text)
-                    settings.setValue("firstLaunch", false);
-                    Qt.inputMethod.hide()
-                    finishSetup(textBox.text)
-                }
-            }
-
-            Rectangle {
-                id: colorRectangle
-                anchors.right: parent.right
-
-                height: textBox.height
-                width : height
-                border.width: 1
-
-                color: colorDialog.color
-                border.color: colors.border
-
-                MouseArea {
-                    id: mouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onClicked   : colorDialog.open()
-                }
+        Textbox {
+            id: textBox
+            anchors.left    : parent.left
+            anchors.right   : parent.right
+            placeholderText : qsTr("Please type a nickname")
+            Keys.onReturnPressed: {
+                settings.setValue("userName", textBox.text)
+                settings.setValue("firstLaunch", false);
+                Qt.inputMethod.hide()
+                finishSetup(textBox.text)
             }
         }
-    }
-
-    ColorDialog {
-        id: colorDialog
-        title      : qsTr("Chose profile color")
-        color      : "#55aa7f"
-        onAccepted : settings.setValue("userColor", color)
     }
 
     Button {
@@ -92,7 +55,6 @@ Page {
         enabled                  : textBox.length > 0 ? 1 : 0
         onClicked                : {
             settings.setValue("userName", textBox.text)
-            settings.setValue("userColor", colorDialog.color)
             settings.setValue("firstLaunch", false);
             Qt.inputMethod.hide()
             finishSetup(textBox.text)

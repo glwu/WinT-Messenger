@@ -5,7 +5,15 @@ Emotes::Emotes() {
 }
 
 QString Emotes::addEmotes(QString msg) {
-    QString path = "&nbsp;<img src = 'qrc:/emotes/";
+    QString width;
+
+    #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+        width = "width = '32' height = '32'";
+    #else
+        width = "";
+    #endif
+
+    QString path = "&nbsp;<img " + width + " src = 'qrc:/emotes/";
     QString end = ".png'>&nbsp;";
 
     msg.replace("x-(",  "*ANGRY*");

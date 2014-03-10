@@ -1,18 +1,12 @@
-# WinT Messenger Build instructions
+WinT LMS Build instructions
+---------------------------
 
-*Guide*
-
----
-
-### Requirements
 To build the app, you must:
-
     1. Install the Qt SDK >= 5.2.0
     2. Install XCode CLI tools on Mac.
     3. Install the Qt libs on Linux/UNIX.
 
-### Compiling from the command line
-
+*I: Compiling from the command line:*
     1. Navigate to the project directory using the 'cd' command.
     2. Run 'qmake':
         -> On Windows:
@@ -25,15 +19,13 @@ To build the app, you must:
     5. Run 'make clean' to remove all object (*.o) files and the C++ mockup files.
     6. You are virtually done now, if you want to prepare the binary for deployment, refer to part III.
 
-### Compiling from Qt Creator.*
-
-    1. Open the wint-im.pro file with Qt Creator.
+*II: Compiling from Qt Creator.*
+    1. Open the lms.pro file with Qt Creator.
     2. Set the build options.
     3. Compile it by clicking on the build button.
 
-### Deployment
-    + **NOTE: You should compile the app in 'release' mode**
-	
+*III: Deployment*
+    **You should compile the app in 'release' mode**
     1. UNIX/Linux:
         + Most distributions already come with the Qt libraries preinstalled, it's not necessary to add the Qt libs manually.
         + It's preferred to compile the program under both 32 bit and 64 bit architectures.
@@ -44,12 +36,10 @@ To build the app, you must:
         + Run the 'macdeployqt' tool and copy the resulting app bundle in a DMG image.
 
     3. Windows:
-		+ Build as normal.
-		+ Configure projects PATH variables to avoid creating a bash script.
-			+ PATH = %cd%\dependencies;%PATH%
-			+ QML_IMPORT_PATH = %cd%\dependencies\qml
-			+ QML2_IMPORT_PATH = %cd%\dependencies\qml
-			+ QT_QPA_PLATFORM_PLUGIN_PATH = %cd%\dependencies\plugins\platforms
+	+ Build Qt statically.
+        + Compile the project statically.
+        + Test as required.
+        + Package the resulting folder into an NSIS installer.
    
     4. Mobile systems:
         + Use the official IDE's (such as XCode for iOS) to build and deploy the app for mobile devices.
