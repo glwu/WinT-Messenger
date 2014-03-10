@@ -6,9 +6,7 @@
 //
 
 import QtQuick 2.2
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
-import QtQuick.Particles 2.0
+import QtQuick.Controls 1.1
 import "Widgets"
 
 ApplicationWindow {
@@ -26,11 +24,10 @@ ApplicationWindow {
     signal enableAboutButton(bool enabled)
 
     FontLoader {
-        source: "qrc:/Interface/Resources/Fonts/Regular.ttf"
+        source: "qrc:/Fonts/Regular.ttf"
     }
 
-    property string defaultFont: "Roboto"
-    property string controlPath: "qrc:/images/Controls/"
+    property string defaultFont: "Open Sans"
 
     function smartFontSize(integer) {
         if (settings.value("mobileOptimized", isMobile) === true)
@@ -51,7 +48,7 @@ ApplicationWindow {
     onFinishSetup: {
         stackView.clear()
         stackView.push(Qt.resolvedUrl("Pages/Start.qml"))
-        enableSettingsButton(false)
+        enableSettingsButton(true)
     }
 
     onOpenPage             : stackView.push(Qt.resolvedUrl(page))
@@ -82,10 +79,10 @@ ApplicationWindow {
             backButtonOpacity: stackView.depth > 1 ? 1 : 0
 
             backButtonArea.onClicked: {
-                if (aboutButtonEnabled == false)
+                if (aboutButtonEnabled === false)
                     enableAboutButton(true)
 
-                if (settingsButtonEnabled == false)
+                if (settingsButtonEnabled === false)
                     enableSettingsButton(true)
 
                 stackView.pop()
