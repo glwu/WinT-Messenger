@@ -245,7 +245,7 @@ void Connection::processData() {
 
     switch (currentDataType) {
     case PlainText:
-        emit newMessage(username, QString::fromUtf8(buffer));
+        emit newMessage(QString::fromUtf8(buffer));
         break;
     case Ping:
         write("PONG 1 p");

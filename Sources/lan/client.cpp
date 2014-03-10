@@ -94,8 +94,8 @@ void Client::readyForUse() {
                                      connection->peerPort()))
         return;
 
-    connect(connection, SIGNAL(newMessage(QString,QString)),
-            this, SIGNAL(newMessage(QString,QString)));
+    connect(connection, SIGNAL(newMessage(QString)),
+            this, SIGNAL(newMessage(QString)));
 
     peers.insert(connection->peerAddress(), connection);
     QString nick = connection->name();

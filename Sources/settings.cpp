@@ -1,7 +1,7 @@
 #include "settings.h"
 
 Settings::Settings() {
-    settings = new QSettings("WinT 3794", "WinT IM");
+    settings = new QSettings("WinT Messenger");
 }
 
 void Settings::setValue(const QString &key, const QVariant &value) {

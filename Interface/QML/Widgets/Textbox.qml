@@ -2,21 +2,20 @@
 //  This file is part of the WinT IM
 //
 //  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. All rights reserved.
+//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
+import QtQuick 2.2
+import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.1
 
 TextField {
     id: textField
     font.family    : defaultFont
     style          : textFieldStyle
     height         : smartBorderSize(32)
-    font.pixelSize : smartFontSize(12)
     antialiasing   : true
-    smooth         : true
+    font.pixelSize : smartFontSize(12)
 
     MouseArea {
         id: mouseArea
@@ -35,23 +34,17 @@ TextField {
             textColor            : colors.textFieldForeground
             placeholderTextColor : colors.textFieldPlaceholder
 
-            background:  BorderImage {
-                border.bottom: smartBorderSize(8)
-                border.top: smartBorderSize(8)
-                border.right: smartBorderSize(8)
-                border.left: smartBorderSize(8)
+            background: Rectangle {
+                color: "white"
 
-                source: {
+                border.color: {
                     if (mouseArea.containsMouse || textField.focus)
-                        return controlPath + "FrameFocus.png"
+                        return settings.value("userColor", "#55aa7f")
                     else
-                        return controlPath + "Frame.png"
+                        return colors.border
                 }
-
-                width: parent.width
-                height: parent.height
-
             }
+
         }
     }
 }

@@ -2,15 +2,15 @@
 //  This file is part of the WinT IM
 //
 //  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. All rights reserved.
+//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.0
+import QtQuick 2.2
 
 QtObject {
     property string toolbarText: "#fff"
     property string highlight: "#3498DB"
-    property string border: "#22417C"
+    property string border: "#9f9f9f"
     property string background: "#fdfdfd"
     property string disabled: "#cbcbcb"
     property string borderColor: "#888"

@@ -5,6 +5,8 @@
 #include <QStringList>
 #include <QApplication>
 
+#include <QDateTime>
+
 #include "emotes.h"
 #include "lan/chat.h"
 

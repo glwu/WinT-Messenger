@@ -2,15 +2,13 @@
 //  This file is part of the WinT IM
 //
 //  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. All rights reserved.
+//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.0
+import QtQuick 2.2
 
-Rectangle {
+Item {
     id: page
-
-    color: "transparent"
 
     property bool backButtonEnabled    : true
     property bool logoEnabled          : true
@@ -22,12 +20,14 @@ Rectangle {
     property bool resizeGripEnabled    : isMobile ? false : true
 
     signal setupPage(string _toolbarTitle, bool _backButtonEnabled)
+
     onSetupPage: {
         setBackButtonEnabled(_backButtonEnabled)
         setTitle(_toolbarTitle)
     }
 
     Component.onCompleted: setupPage(toolbarTitle, backButtonEnabled)
+
     onVisibleChanged: {
         if (visible)
             setupPage(toolbarTitle, backButtonEnabled)

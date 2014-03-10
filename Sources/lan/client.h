@@ -65,7 +65,7 @@ public:
     bool hasConnection(const QHostAddress &senderIp, int senderPort = -1) const;
 
 signals:
-    void newMessage(const QString &from, const QString &message);
+    void newMessage(const QString &message);
     void newParticipant(QString &nick);
     void participantLeft(QString &nick);
 

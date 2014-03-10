@@ -46,7 +46,7 @@ static const unsigned broadcastPort = 4500;
 PeerManager::PeerManager(Client *client) : QObject(client) {
     this->client = client;
 
-    QSettings settings("WinT 3794", "WinT IM");
+    QSettings settings("WinT Messenger");
     username = settings.value("userName", "unknown").toByteArray();
 
     if (username.isEmpty())
