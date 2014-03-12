@@ -19,12 +19,11 @@ public:
 
     Q_INVOKABLE void startLanChat();
     Q_INVOKABLE void stopLanChat();
-    Q_INVOKABLE bool hasConnection();
 
     Q_INVOKABLE void sendMessage(QString text);
 
 private slots:
-    void processMessage(const QString &text, bool info);
+    void processMessage(const QString &text);
 
 signals:
     void newMessage(const QString &text);

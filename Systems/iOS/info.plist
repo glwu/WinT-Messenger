@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>WinT Messenger</string>
 	<key>CFBundleExecutable</key>
-	<string>wint-im</string>
+	<string>WinTMessenger</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Created by the WinT 3794 team</string>
 	<key>CFBundleIdentifier</key>

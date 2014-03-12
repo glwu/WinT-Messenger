@@ -66,8 +66,6 @@ public:
 
 signals:
     void newMessage(const QString &message);
-    void newParticipant(QString &nick);
-    void participantLeft(QString &nick);
 
 private slots:
     void newConnection(Connection *connection);

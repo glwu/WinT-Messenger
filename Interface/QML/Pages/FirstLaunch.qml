@@ -10,7 +10,7 @@ import QtQuick.Dialogs 1.1
 import "../Widgets"
 
 Page {
-    backButtonEnabled : false
+    //backButtonEnabled : false
     logoImageSource   : "qrc:/images/Doc/First.png"
     logoSubtitle      : qsTr("Please type your nickname")
     logoTitle         : qsTr("Initial setup")
@@ -18,7 +18,10 @@ Page {
 
     property int perfectY: 10 + parent.height / 16
 
-    Component.onCompleted: enableSettingsButton(false)
+    Component.onCompleted: {
+        enableAboutButton(false)
+        enableSettingsButton(false)
+    }
 
     Column {
         spacing: 8
@@ -47,13 +50,6 @@ Page {
                 anchors.rightMargin : 2
 
                 placeholderText : qsTr("Type a nickname and choose a profile color")
-
-                Keys.onReturnPressed: {
-                    settings.setValue("userName", textBox.text)
-                    settings.setValue("firstLaunch", false);
-                    Qt.inputMethod.hide()
-                    finishSetup(textBox.text)
-                }
             }
 
             Rectangle {

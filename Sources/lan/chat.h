@@ -14,15 +14,13 @@ public:
     LanChat();
 
 signals:
-    void newMessage(const QString &text, bool info);
+    void newMessage(const QString &text);
 
 public slots:
     void returnPressed(QString text);
 
 private slots:
     void appendMessage(const QString &message);
-    void newParticipant(QString &nick);
-    void participantLeft(QString &nick);
 
 private:
     Client client;

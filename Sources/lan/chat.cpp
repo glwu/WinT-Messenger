@@ -3,16 +3,14 @@
 using namespace std;
 
 LanChat::LanChat() {
-    connect(&client, SIGNAL(newMessage(QString)), this, SLOT(appendMessage(QString)));
-    connect(&client, SIGNAL(newParticipant(QString&)),     this, SLOT(newParticipant(QString&)));
-    connect(&client, SIGNAL(participantLeft(QString&)),    this, SLOT(participantLeft(QString&)));
+    connect(&client, SIGNAL(newMessage(QString)),      this, SLOT(appendMessage(QString)));
 
     QSettings *settings = new QSettings("WinT Messenger");
     color = settings->value("userColor", "#55aa7f").toString();
 }
 
 void LanChat::appendMessage(const QString &message) {
-    newMessage(message, false);
+    newMessage(message);
 }
 
 void LanChat::returnPressed(QString text) {
@@ -23,20 +21,6 @@ void LanChat::returnPressed(QString text) {
                 + text;
 
         client.sendMessage(formattedText);
-        newMessage(formattedText, false);
+        newMessage(formattedText);
     }
-}
-
-void LanChat::newParticipant(QString &nick) {
-    nick.replace("<b>", "");
-    nick.replace("</b>", "");
-    newMessage(+ "[" + QDateTime::currentDateTime().toString("hh:mm:ss") + "] "
-               + QString("%1 has joined.").arg(nick), true);
-}
-
-void LanChat::participantLeft(QString &nick) {
-    nick.replace("<b>", "");
-    nick.replace("</b>", "");
-    newMessage(+ "[" + QDateTime::currentDateTime().toString("hh:mm:ss") + "] "
-               + QString("%1 has left.").arg(nick), true);
 }

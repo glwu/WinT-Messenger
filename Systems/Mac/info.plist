@@ -9,7 +9,7 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleExecutable</key>
-	<string>WinT Messenger</string>
+	<string>WinTMessenger</string>
 	<key>CFBundleIdentifier</key>
 	<string>WinT Messenger</string>
 	<key>NSHumanReadableCopyright</key>

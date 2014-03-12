@@ -16,26 +16,17 @@ Page {
 
     property int perfectY: 10 + parent.height / 16
 
+    Component.onCompleted: enableSettingsButton(false)
+    onVisibleChanged: enableSettingsButton(!visible)
+
     Column {
         y                        : arrangeFirstItem + perfectY
         spacing                  : 8
-        //anchors.bottom           : parent.bottom
-        //anchors.bottomMargin     : perfectY
         anchors.horizontalCenter : parent.horizontalCenter
 
         Button {
             text      : qsTr("Website")
             onClicked : Qt.openUrlExternally("http://wint-im.sf.net")
         }
-
-        /*Button {
-            text      : qsTr("Acknowledgements")
-            onClicked : Qt.openUrlExternally("http://www.thebluealliance.com/team/3794")
-        }
-
-        Button {
-            text      : qsTr("Credits")
-            onClicked : Qt.openUrlExternally("http://www.thebluealliance.com/team/3794")
-        }*/
     }
 }

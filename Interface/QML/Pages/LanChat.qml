@@ -14,6 +14,16 @@ Page {
     logoEnabled  : false
     toolbarTitle : qsTr("LAN Chat")
 
+    Component.onCompleted: {
+        enableAboutButton(false)
+        enableSettingsButton(false)
+    }
+
+    onVisibleChanged: {
+        enableAboutButton(!visible)
+        enableSettingsButton(!visible)
+    }
+
     ChatInterface {
         id: chatInterface
     }

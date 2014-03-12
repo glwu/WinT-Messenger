@@ -98,9 +98,6 @@ void Client::readyForUse() {
             this, SIGNAL(newMessage(QString)));
 
     peers.insert(connection->peerAddress(), connection);
-    QString nick = connection->name();
-    if (!nick.isEmpty())
-        emit newParticipant(nick);
 }
 
 void Client::disconnected() {
@@ -114,11 +111,8 @@ void Client::connectionError(QAbstractSocket::SocketError) {
 }
 
 void Client::removeConnection(Connection *connection) {
-    if (peers.contains(connection->peerAddress())) {
+    if (peers.contains(connection->peerAddress()))
         peers.remove(connection->peerAddress());
-        QString nick = connection->name();
-        if (!nick.isEmpty())
-            emit participantLeft(nick);
-    }
+
     connection->deleteLater();
 }

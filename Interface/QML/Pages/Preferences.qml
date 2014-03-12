@@ -18,6 +18,9 @@ Page {
 
     property int perfectY: 10 + parent.height / 16 + 25
 
+    Component.onCompleted: enableAboutButton(false)
+    onVisibleChanged: enableAboutButton(!visible)
+
     Column {
         spacing: 8
         y: arrangeFirstItem

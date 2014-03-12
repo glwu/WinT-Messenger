@@ -52,7 +52,7 @@ Rectangle {
 
     Item {
         id: settingsButton
-        anchors.right          : /*isMobile ? parent.right : separator.left*/ parent.right
+        anchors.right          : parent.right
         anchors.rightMargin    : 4
         anchors.verticalCenter : parent.verticalCenter
         height                 : settingsImage.height

@@ -16,7 +16,7 @@ ApplicationWindow {
     minimumHeight: 480
     minimumWidth: 320
 
-    signal finishSetup(string username)
+    signal finishSetup()
     signal openPage(string page)
     signal setBackButtonEnabled(bool enabled)
     signal setTitle(string text)
@@ -46,9 +46,12 @@ ApplicationWindow {
     Colors {id: colors}
 
     onFinishSetup: {
+        enableAboutButton(true)
+        enableSettingsButton(true)
+        setBackButtonEnabled(false)
+
         stackView.clear()
         stackView.push(Qt.resolvedUrl("Pages/Start.qml"))
-        enableSettingsButton(true)
     }
 
     onOpenPage             : stackView.push(Qt.resolvedUrl(page))

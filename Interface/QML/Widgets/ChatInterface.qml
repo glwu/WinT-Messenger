@@ -51,22 +51,15 @@ Item {
             textFormat               : TextEdit.RichText
             width                    : page.width
             wrapMode                 : TextEdit.WrapAtWordBoundaryOrAnywhere
-            //onLinkActivated          : Qt.openUrlExternally(link)
-            text                     : {
-                if (bridge.hasConnection()) {
-                    return "<font color = '#666'><samp>"
-                            + qsTr("Welcome to the chat room!")
-                            + "<br>"
-                            + "-------------------------"
-                            + "</samp></font><br>"
-                }
 
-                else
-                    return "<font color = 'blue'><samp>"
-                            + "<b><font color = 'red'>Error - Cannot connect to the network</font></b><br>"
-                            + "Check that you are connected to a network "
-                            + "and that WinT IM is allowed to access the network."
-                            + "</samp></font><br>"
+            Label {
+               anchors.fill: parent
+               color: "#888"
+               text: "Welcome to the chat room!"
+               font.family: defaultFont
+               font.letterSpacing: 1
+               font.pixelSize: smartFontSize(16)
+               visible: textbox.length < 1 ? 1 : 0
             }
         }
     }
@@ -87,8 +80,6 @@ Item {
             anchors.right          : emotesButton.left
             anchors.rightMargin    : 6
             placeholderText        : qsTr("Type a message...")
-            enabled                : bridge.hasConnection()
-
             Keys.onReturnPressed: {
                 if (text.length > 0) {
                     bridge.sendMessage(sendTextbox.text)
