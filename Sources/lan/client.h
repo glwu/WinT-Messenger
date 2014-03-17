@@ -64,6 +64,8 @@ public:
     QString nickName() const;
     bool hasConnection(const QHostAddress &senderIp, int senderPort = -1) const;
 
+    int userCount;
+
 signals:
     void newMessage(const QString &message);
 

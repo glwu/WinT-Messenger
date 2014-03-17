@@ -22,6 +22,5 @@
         <file>Pages/Help/Credits.qml</file>
         <file>Pages/Help/Documentation.qml</file>
         <file>Pages/Help/Help.qml</file>
-        <file>Pages/Help/Notice.qml</file>
     </qresource>
 </RCC>

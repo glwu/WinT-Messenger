@@ -2,7 +2,7 @@
 //  This file is part of the WinT IM 1.0
 //
 //  Created on Dec. 18, 2013.
-//  Copyright (c) 2013 WinT 3794. All rights reserved.
+//  Copyright (c) 2014 WinT 3794, refer to the "License.txt" file for more info
 //
 
 #include <QObject>
@@ -60,7 +60,9 @@ void setupWindow() {
     window->show();
 }
 
-int main(int argc, char ** argv) {
+int main(int argc, char **argv) {
+    QNetworkProxyFactory::setUseSystemConfiguration(true);
+
     QApplication app(argc, argv);
     setupWindow();
     return app.exec();

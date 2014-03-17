@@ -57,14 +57,19 @@ Page {
                         + "<p>WinT Messenger, as its name says, is an instant messenger software. "
                         + "In contrast to most messaging clients, WinT Messenger is free, open source and does not require any type of registration in order to use it. "
                         + "WinT Messenger is made in QML/C++ and its based on the Qt framework. "
-                        + "WinT Messenger is officially supported on Android, iOS, Microsoft Windows, Mac OS X and Linux. " +
-                        + "Unlike other messaging clients, WinT IM connects to you local network, allowing anyone "
-                        + "on your network to join the conversation. "
+                        + "WinT Messenger is officially supported on Android, iOS, Microsoft Windows, Mac OS X and Linux. "
+                        + "Unlike other messaging clients, WinT IM connects to you local network, allowing anyone on your network to join the conversation. "
                         + "In the near future, WinT Messenger will support Bluetooth connections.</p>"
 
-                // ADVANCED CONCEPTS
-                        + "<h2>Advanced Concepts</h2>"
-                        + "<p>To be written...</p>"
+                // FEAUTURES
+                        + "<h2>Features</h2>"
+                        + "<ul>"
+                        + "<li>Easy and friendly to use interface</li>"
+                        + "<li>Cross-platform on Windows, Mac OS X, Linux, Android and iOS</li>"
+                        + "<li>Fully <a href=\"https://github.com/WinT-3794/WinT-Messenger\">open source</a> and <a href=\"http://sf.net/projects/wint-im\">actively developed</a></li>"
+                        + "<li>Does not require an account to use it</li>"
+                        + "<li>Supports network chat and (soon) device-to-device blue-tooth chat and ad-hoc chat</a>"
+                        + "</ul>"
 
                 // ABOUT US
                         + "<h2>About the WinT team</h2>"

@@ -19,13 +19,13 @@ Item {
 
     Flickable {
         id: chatWidget
-        contentHeight        : parent.height - arrangeFirstItem - sendRectangle.height - 12
+        contentHeight        : textbox.paintedHeight
         interactive          : true
         flickableDirection   : Flickable.VerticalFlick
         anchors.fill         : parent
         anchors.topMargin    : arrangeFirstItem
         anchors.margins      : 12
-        anchors.bottomMargin : sendRectangle.height + 12
+        anchors.bottomMargin : 56
 
         function ensureVisible(r) {
             if (contentX >= r.x)
@@ -51,13 +51,16 @@ Item {
             textFormat               : TextEdit.RichText
             width                    : page.width
             wrapMode                 : TextEdit.WrapAtWordBoundaryOrAnywhere
-            onLinkActivated          : Qt.openUrlExternally(link)
-            text                     : "<font color=gray>Welcome to the chat room!</font><br>"
-        }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: grid.opacity = 0
+            Label {
+               anchors.fill: parent
+               color: "#888"
+               text: "Welcome to the chat room!"
+               font.family: defaultFont
+               font.letterSpacing: 1
+               font.pixelSize: smartFontSize(16)
+               visible: textbox.length < 1 ? 1 : 0
+            }
         }
     }
 
@@ -67,16 +70,7 @@ Item {
         anchors.right : parent.right
         y             : parent.height - height
         height        : smartBorderSize(44)
-        color         : colors.panelBackground
-
-
-        Rectangle {
-            height: 1
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: colors.panelBorder
-        }
+        color         : colors.toolbarColor
 
         Textbox {
             id                     : sendTextbox

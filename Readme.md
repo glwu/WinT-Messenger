@@ -14,12 +14,12 @@ To build the app, you must:
 ### Compiling from the command line
 
 1. Navigate to the project directory using the 'cd' command.
-2. Run 'qmake':
+2. Run 'qmake-qt5' (avoid using qmake directly if you have Qt4 installed):
         -> On Windows:
-           + qmake --spec win32 
+           + qmake-qt5 --spec win32 
         -> On Mac: 
-           + qmake --spec macx-g++
-        -> On other UNIX desktop systems (such as Linux and BSD), qmake usually works directly.
+           + qmake-qt5 --spec macx-g++
+        -> On other UNIX desktop systems (such as Linux and BSD), qmake-qt5 usually works directly.
 3. Run 'make' to begin the compilation process.
 4. If everything went correctly, you should have obtained a binary.
 5. Run 'make clean' to remove all object (*.o) files and the C++ mockup files.

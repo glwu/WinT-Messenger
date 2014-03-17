@@ -174,8 +174,7 @@ int Connection::readDataIntoBuffer(int maxSize) {
 }
 
 int Connection::dataLengthForCurrentDataType() {
-    if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0
-            || !buffer.endsWith(SeparatorToken))
+    if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 || !buffer.endsWith(SeparatorToken))
         return 0;
 
     buffer.chop(1);

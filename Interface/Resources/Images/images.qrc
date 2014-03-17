@@ -2,9 +2,7 @@
     <qresource prefix="/images">
         <file>Connect.png</file>
         <file>Donate.png</file>
-        <file>FirstLaunch.png</file>
         <file>Help.png</file>
-        <file>Information.png</file>
         <file>Logo.png</file>
         <file>Settings.png</file>
         <file>Doc/GNU.png</file>
@@ -12,6 +10,6 @@
         <file>ToolbarIcons/About.png</file>
         <file>ToolbarIcons/Back.png</file>
         <file>ToolbarIcons/Settings.png</file>
-        <file>Doc/First.png</file>
+        <file>First.png</file>
     </qresource>
 </RCC>

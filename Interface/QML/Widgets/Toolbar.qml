@@ -23,7 +23,7 @@ Rectangle {
     anchors.right : parent.right
     anchors.top   : parent.top
 
-    color: colors.toolbarColor
+    color: colors.userColor
 
     Item {
         id: backButton

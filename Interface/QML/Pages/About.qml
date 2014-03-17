@@ -9,15 +9,22 @@ import QtQuick 2.2
 import "../Widgets"
 
 Page {
-    logoImageSource : "qrc:/images/Information.png"
+    logoImageSource : "qrc:/images/Logo.png"
     logoSubtitle    : qsTr("Created by the WinT 3794 team")
     logoTitle       : qsTr("WinT Messenger 1.0")
     toolbarTitle    : qsTr("About")
 
     property int perfectY: 10 + parent.height / 16
 
-    Component.onCompleted: enableSettingsButton(false)
-    onVisibleChanged: enableSettingsButton(!visible)
+    Component.onCompleted: {
+        enableAboutButton(false)
+        enableSettingsButton(false)
+    }
+
+    onVisibleChanged: {
+        enableAboutButton(!visible)
+        enableSettingsButton(!visible)
+    }
 
     Column {
         y                        : arrangeFirstItem + perfectY

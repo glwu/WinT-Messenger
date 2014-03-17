@@ -1,8 +1,6 @@
 #include "emotes.h"
 
-Emotes::Emotes() {
-
-}
+Emotes::Emotes() {}
 
 QString Emotes::addEmotes(QString msg) {
     QString path = "&nbsp;<img src = 'qrc:/emotes/";

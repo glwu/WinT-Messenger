@@ -45,10 +45,8 @@ Client::Client() {
     peerManager->setServerPort(server.serverPort());
     peerManager->startBroadcasting();
 
-    QObject::connect(peerManager, SIGNAL(newConnection(Connection*)),
-                     this, SLOT(newConnection(Connection*)));
-    QObject::connect(&server, SIGNAL(newConnection(Connection*)),
-                     this, SLOT(newConnection(Connection*)));
+    QObject::connect(peerManager, SIGNAL(newConnection(Connection*)), this, SLOT(newConnection(Connection*)));
+    QObject::connect(&server,     SIGNAL(newConnection(Connection*)), this, SLOT(newConnection(Connection*)));
 }
 
 void Client::sendMessage(const QString &message) {
@@ -82,21 +80,17 @@ bool Client::hasConnection(const QHostAddress &senderIp, int senderPort) const {
 void Client::newConnection(Connection *connection) {
     connection->setGreetingMessage(peerManager->userName());
 
-    connect(connection, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(connectionError(QAbstractSocket::SocketError)));
-    connect(connection, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    connect(connection, SIGNAL(readyForUse()), this, SLOT(readyForUse()));
+    connect(connection, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
+    connect(connection, SIGNAL(disconnected()),                      this, SLOT(disconnected()));
+    connect(connection, SIGNAL(readyForUse()),                       this, SLOT(readyForUse()));
 }
 
 void Client::readyForUse() {
     Connection *connection = qobject_cast<Connection *>(sender());
-    if (!connection || hasConnection(connection->peerAddress(),
-                                     connection->peerPort()))
+    if (!connection || hasConnection(connection->peerAddress(), connection->peerPort()))
         return;
 
-    connect(connection, SIGNAL(newMessage(QString)),
-            this, SIGNAL(newMessage(QString)));
-
+    connect(connection, SIGNAL(newMessage(QString)), this, SIGNAL(newMessage(QString)));
     peers.insert(connection->peerAddress(), connection);
 }
 
@@ -111,8 +105,9 @@ void Client::connectionError(QAbstractSocket::SocketError) {
 }
 
 void Client::removeConnection(Connection *connection) {
-    if (peers.contains(connection->peerAddress()))
+    if (peers.contains(connection->peerAddress())) {
         peers.remove(connection->peerAddress());
+    }
 
     connection->deleteLater();
 }

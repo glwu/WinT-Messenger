@@ -16,28 +16,24 @@ Page {
 
     property int perfectY: arrangeFirstItem + parent.height / 32
 
-    Label {
-        anchors.horizontalCenter : parent.horizontalCenter
-        y                        : perfectY - height - 21
-        text                     : qsTr("If you are on a FIRST event, <a href='http://www.wint3794.org'>read the FIRST Notice</a>.")
-        onLinkActivated          : openPage("Pages/Help/Notice.qml")
-        textFormat               : Qt.RichText
-    }
-
     Column {
         spacing: 8
-        y: perfectY + parent.height / 32
+        y: perfectY
         anchors.horizontalCenter : parent.horizontalCenter
 
         Button {
-            anchors.horizontalCenter : parent.horizontalCenter
             onClicked : openPage("Pages/BtChat.qml")
             text      : qsTr("Bluetooth")
             enabled   : false
         }
 
         Button {
-            anchors.horizontalCenter : parent.horizontalCenter
+            onClicked : openPage("Pages/AdHocChat.qml")
+            text      : qsTr("Ad-hoc network")
+            enabled   : false
+        }
+
+        Button {
             text      : qsTr("Local Network")
             onClicked : {
                 text = qsTr("Please wait...")

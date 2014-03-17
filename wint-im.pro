@@ -46,8 +46,8 @@ macx {
 RESOURCES += \
     Interface/Resources/Emotes/emotes.qrc \
     Interface/Resources/Images/images.qrc \
-    Interface/QML/QML.qrc \
-    Interface/Resources/Fonts/Fonts.qrc
+    Interface/Resources/Fonts/fonts.qrc \
+    Interface/QML/qml.qrc
 
 SOURCES += \
     Sources/main.cpp \

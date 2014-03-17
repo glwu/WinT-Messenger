@@ -15,14 +15,46 @@ Rectangle {
     signal clicked
     property alias text: label.text
 
-    opacity: 0.75
-    color: "#f1f1f1"
+    opacity: 0.9
+    gradient: Gradient {
+        GradientStop {
+            position: 0
+            color:{
+                if (mouseArea.containsMouse)
+                    return colors.buttonBackground1Hover
+                else if (mouseArea.pressed)
+                    return colors.buttonBackground1Pressed
+                else if (!button.enabled)
+                    return colors.buttonBackgroundDisabled
+                else
+                    return colors.buttonBackground1
+            }
+        }
+
+        GradientStop {
+            position: 1
+            color:{
+                if (mouseArea.containsMouse)
+                    return colors.buttonBackground2Hover
+                else if (mouseArea.pressed)
+                    return colors.buttonBackground2Pressed
+                else if (!button.enabled)
+                    return colors.buttonBackgroundDisabled
+                else
+                    return colors.buttonBackground2
+            }
+        }
+    }
 
     border.color: {
-        if (mouseArea.pressed || mouseArea.containsMouse)
-            return settings.value("userColor", "#55aa7f")
+        if (mouseArea.containsMouse)
+            return colors.borderColorHover
+        else if (mouseArea.pressed)
+            return colors.borderColorPressed
+        else if (!button.enabled)
+            return colors.borderColorDisabled
         else
-            return colors.border
+            return colors.borderColor
     }
 
     MouseArea {
@@ -37,6 +69,11 @@ Rectangle {
         anchors.centerIn: parent
         font.pixelSize  : smartFontSize(12)
         font.family     : defaultFont
-        color           : parent.enabled ? "#222" : "#aaa"
+        color: {
+            if (!button.enabled)
+                return colors.buttonForegroundDisabled
+            else
+                return colors.buttonForeground
+        }
     }
 }

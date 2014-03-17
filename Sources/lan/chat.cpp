@@ -3,10 +3,10 @@
 using namespace std;
 
 LanChat::LanChat() {
-    connect(&client, SIGNAL(newMessage(QString)),      this, SLOT(appendMessage(QString)));
+    connect(&client, SIGNAL(newMessage(QString)), this, SLOT(appendMessage(QString)));
 
     QSettings *settings = new QSettings("WinT Messenger");
-    color = settings->value("userColor", "#55aa7f").toString();
+    color = settings->value("userColor", "#00557f").toString();
 }
 
 void LanChat::appendMessage(const QString &message) {

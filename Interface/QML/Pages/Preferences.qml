@@ -18,8 +18,15 @@ Page {
 
     property int perfectY: 10 + parent.height / 16 + 25
 
-    Component.onCompleted: enableAboutButton(false)
-    onVisibleChanged: enableAboutButton(!visible)
+    Component.onCompleted: {
+        enableAboutButton(false)
+        enableSettingsButton(false)
+    }
+
+    onVisibleChanged: {
+        enableAboutButton(!visible)
+        enableSettingsButton(!visible)
+    }
 
     Column {
         spacing: 8
@@ -40,6 +47,8 @@ Page {
 
             height: textBox.height
 
+            color: colors.background
+
             Textbox {
                 id: textBox
                 anchors.left    : parent.left
@@ -59,7 +68,7 @@ Page {
                 border.width: 1
 
                 color: colorDialog.color
-                border.color: colors.border
+                border.color: colors.borderColor
 
                 MouseArea {
                     id: mouseArea
@@ -73,16 +82,23 @@ Page {
         ColorDialog {
             id: colorDialog
             title      : qsTr("Chose profile color")
-            color      : settings.value("userColor", "#55aa7f")
-            onAccepted : settings.setValue("userColor", color)
+            color      : settings.value("userColor", colors.userColor)
+            onAccepted : {
+                settings.setValue("userColor", color)
+                colors.userColor = colorDialog.color
+            }
         }
 
         CheckBox {
             id: checkbox
-            x: textBox.x
             checked: settings.value("mobileOptimized", isMobile)
             onCheckedChanged: settings.setValue("mobileOptimized", checked)
-            text: qsTr("Optimize interface for touch")
+
+            Label {
+                anchors.left: checkbox.right
+                text: qsTr("Optimize interface for touch")
+            }
+
         }
 
         Button {
@@ -94,6 +110,8 @@ Page {
                 settings.setValue("mobileOptimized", checkbox.checked)
                 settings.setValue("userColor", colorDialog.color)
                 settings.setValue("userName", textBox.text)
+
+                colors.userColor = colorDialog.color
                 stackView.pop()
             }
         }

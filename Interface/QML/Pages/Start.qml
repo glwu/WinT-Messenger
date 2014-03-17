@@ -6,18 +6,18 @@
 //
 
 import QtQuick 2.2
+import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.1
 import "../Widgets"
 
 Page {
     backButtonEnabled   : false
-    logoImageSource     : "qrc:/images/Logo.png"
+    logoImageSource     : "qrc:/images/First.png"
     logoSubtitle        : qsTr("Please choose an option")
     logoTitle           : qsTr("Welcome")
     toolbarTitle        : qsTr("Start")
 
     property int perfectY: arrangeFirstItem + parent.height / 32
-
 
     Column {
         spacing: 8

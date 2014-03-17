@@ -10,8 +10,7 @@ import QtQuick.Dialogs 1.1
 import "../Widgets"
 
 Page {
-    //backButtonEnabled : false
-    logoImageSource   : "qrc:/images/Doc/First.png"
+    logoImageSource   : "qrc:/images/Logo.png"
     logoSubtitle      : qsTr("Please type your nickname")
     logoTitle         : qsTr("Initial setup")
     toolbarTitle      : qsTr("Initial setup")
@@ -61,7 +60,14 @@ Page {
                 border.width: 1
 
                 color: colorDialog.color
-                border.color: colors.border
+                border.color: {
+                    if (mouseArea.containsMouse)
+                        return colors.borderColorHover
+                    else if (mouseArea.pressed)
+                        return colors.borderColorPressed
+                    else
+                        return colors.borderColor
+                }
 
                 MouseArea {
                     id: mouseArea
@@ -76,8 +82,11 @@ Page {
     ColorDialog {
         id: colorDialog
         title      : qsTr("Chose profile color")
-        color      : "#55aa7f"
-        onAccepted : settings.setValue("userColor", color)
+        color      : settings.value("userColor", colors.userColor)
+        onAccepted : {
+            settings.setValue("userColor", color)
+            colors.userColor = colorDialog.color
+        }
     }
 
     Button {
@@ -90,6 +99,8 @@ Page {
             settings.setValue("userName", textBox.text)
             settings.setValue("userColor", colorDialog.color)
             settings.setValue("firstLaunch", false);
+            colors.userColor = colorDialog.color
+
             Qt.inputMethod.hide()
             finishSetup(textBox.text)
         }

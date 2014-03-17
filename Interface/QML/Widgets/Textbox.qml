@@ -17,6 +17,8 @@ TextField {
     antialiasing   : true
     font.pixelSize : smartFontSize(12)
 
+    opacity: 0.9
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
@@ -35,13 +37,13 @@ TextField {
             placeholderTextColor : colors.textFieldPlaceholder
 
             background: Rectangle {
-                color: "white"
+                color: colors.textFieldBackground
 
                 border.color: {
                     if (mouseArea.containsMouse || textField.focus)
-                        return settings.value("userColor", "#55aa7f")
+                        return colors.borderColorHover
                     else
-                        return colors.border
+                        return colors.borderColor
                 }
             }
 
