@@ -19,7 +19,7 @@ Item {
 
     Flickable {
         id: chatWidget
-        contentHeight        : parent.height - arrangeFirstItem - sendRectangle.height - 12
+        contentHeight        : textbox.paintedHeight
         interactive          : true
         flickableDirection   : Flickable.VerticalFlick
         anchors.fill         : parent
@@ -41,11 +41,11 @@ Item {
         TextEdit {
             id: textbox
             activeFocusOnPress       : false
+            anchors.fill             : parent
             clip                     : true
             color                    : colors.text
             font.family              : defaultFont
             font.pixelSize           : smartFontSize(16)
-            height                   : parent.height
             onCursorRectangleChanged : chatWidget.ensureVisible(cursorRectangle)
             readOnly                 : true
             textFormat               : TextEdit.RichText
@@ -65,28 +65,21 @@ Item {
         id: sendRectangle
         anchors.left  : parent.left
         anchors.right : parent.right
-        y             : parent.height - height
-        height        : smartBorderSize(44)
-        color         : colors.panelBackground
-
-
-        Rectangle {
-            height: 1
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: colors.panelBorder
-        }
+        anchors.bottom: parent.bottom
+        height        : smartBorderSize(32)
+        color         : "transparent"
 
         Textbox {
             id                     : sendTextbox
-            anchors.left           : parent.left
-            anchors.leftMargin     : 6
-            anchors.verticalCenter : parent.verticalCenter
-            anchors.right          : emotesButton.left
-            anchors.rightMargin    : 6
-            placeholderText        : qsTr("Type a message...")
-            Keys.onReturnPressed: {
+
+            anchors.left   : parent.left
+            anchors.right  : emotesButton.left
+            anchors.bottom : parent.bottom
+            anchors.top    : parent.top
+            anchors.rightMargin: -1
+
+            placeholderText      : qsTr("Type a message...")
+            Keys.onReturnPressed : {
                 if (text.length > 0) {
                     bridge.sendMessage(sendTextbox.text)
                     sendTextbox.text = ""
@@ -96,18 +89,22 @@ Item {
 
         Button {
             id: emotesButton
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: sendButton.left
-            anchors.rightMargin: 6
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+
+            anchors.right  : sendButton.left
+            anchors.bottom : parent.bottom
+            anchors.top    : parent.top
+
+            height : smartBorderSize(32)
+            width  : smartBorderSize(32)
+
+            anchors.rightMargin: -1
 
             Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
-                source: "qrc:/emotes/smile.png"
+                anchors.horizontalCenter : parent.horizontalCenter
+                anchors.verticalCenter   : parent.verticalCenter
+                height : smartBorderSize(16)
+                width  : smartBorderSize(16)
+                source : "qrc:/emotes/smile.png"
             }
 
             onClicked: {
@@ -120,14 +117,16 @@ Item {
 
         Button {
             id: sendButton
-            anchors.verticalCenter : parent.verticalCenter
-            anchors.right          : parent.right
-            anchors.rightMargin    : 6
-            width                  : smartBorderSize(64)
-            height                 : smartBorderSize(32)
-            text                   : qsTr("Send")
-            enabled                : sendTextbox.length > 0 ? 1 : 0
-            onClicked              : {
+
+            anchors.right  : parent.right
+            anchors.bottom : parent.bottom
+            anchors.top    : parent.top
+
+            width     : smartBorderSize(64)
+            height    : smartBorderSize(32)
+            text      : qsTr("Send")
+            enabled   : sendTextbox.length > 0 ? 1 : 0
+            onClicked : {
                 bridge.sendMessage(sendTextbox.text)
                 sendTextbox.text = ""
             }
@@ -136,9 +135,9 @@ Item {
 
     Grid {
         anchors.bottom: sendRectangle.top
-        anchors.bottomMargin: 16
+        anchors.bottomMargin: 4
         anchors.right: page.right
-        anchors.rightMargin: 16
+        anchors.rightMargin: 4
         opacity: 0
         enabled: opacity > 0 ? 1 : 0
 

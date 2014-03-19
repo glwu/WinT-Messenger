@@ -17,7 +17,7 @@ TextField {
     antialiasing   : true
     font.pixelSize : smartFontSize(12)
 
-    opacity: 0.9
+    opacity: 0.8
 
     MouseArea {
         id: mouseArea

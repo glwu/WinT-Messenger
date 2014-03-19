@@ -21,6 +21,8 @@ public slots:
 
 private slots:
     void appendMessage(const QString &message);
+    void newParticipant(const QString &nick);
+    void participantLeft(const QString &nick);
 
 private:
     Client client;

@@ -15,47 +15,19 @@ Rectangle {
     signal clicked
     property alias text: label.text
 
-    opacity: 0.9
-    gradient: Gradient {
-        GradientStop {
-            position: 0
-            color:{
-                if (mouseArea.containsMouse)
-                    return colors.buttonBackground1Hover
-                else if (mouseArea.pressed)
-                    return colors.buttonBackground1Pressed
-                else if (!button.enabled)
-                    return colors.buttonBackgroundDisabled
-                else
-                    return colors.buttonBackground1
-            }
-        }
-
-        GradientStop {
-            position: 1
-            color:{
-                if (mouseArea.containsMouse)
-                    return colors.buttonBackground2Hover
-                else if (mouseArea.pressed)
-                    return colors.buttonBackground2Pressed
-                else if (!button.enabled)
-                    return colors.buttonBackgroundDisabled
-                else
-                    return colors.buttonBackground2
-            }
-        }
-    }
-
-    border.color: {
-        if (mouseArea.containsMouse)
-            return colors.borderColorHover
+    color: {
+        if (mouseArea.containsMouse && !mouseArea.pressed)
+            return colors.buttonBackgroundHover
         else if (mouseArea.pressed)
-            return colors.borderColorPressed
+            return colors.buttonBackgroundPressed
         else if (!button.enabled)
-            return colors.borderColorDisabled
+            return colors.buttonBackgroundDisabled
         else
-            return colors.borderColor
+            return colors.buttonBackground
     }
+
+    opacity: 0.8
+    border.color: colors.borderColor
 
     MouseArea {
         id: mouseArea

@@ -23,7 +23,13 @@ Rectangle {
     anchors.right : parent.right
     anchors.top   : parent.top
 
-    color: colors.userColor
+    color: "#3c3b37"
+
+    Rectangle {
+        color: colors.userColor
+        anchors.fill: parent
+        opacity: 0.5
+    }
 
     Item {
         id: backButton
@@ -121,6 +127,8 @@ Rectangle {
         horizontalAlignment      : Text.AlignHCenter
         verticalAlignment        : Text.AlignVCenter
         font.family              : defaultFont
+
+        opacity: 0.75
 
         MouseArea {
             anchors.fill : parent

@@ -7,7 +7,7 @@ QString Emotes::addEmotes(QString msg) {
     QString end = ".png'>&nbsp;";
 
     msg.replace("x-(",  "*ANGRY*");
-    msg.replace(":-)",  "*BANDIT*");
+    msg.replace(":-)",  "*SMILE*");
     msg.replace("B-)",  "*COOL*");
     msg.replace(":'(",  "*CRYING*");
     msg.replace(">:-)", "*DEVIL*");
@@ -19,7 +19,6 @@ QString Emotes::addEmotes(QString msg) {
     msg.replace(":-[",  "*POUTY*");
     msg.replace(":-(",  "*SAD*");
     msg.replace(":-&",  "*SICK*");
-    msg.replace(":-)",  "*SMILE*");
     msg.replace(":-O",  "*SURPRISED*");
     msg.replace("x-|",  "*PINCHED*");
     msg.replace(":-P",  "*TONGUE*");
@@ -65,11 +64,10 @@ QString Emotes::addEmotes(QString msg) {
     msg.replace("*SICK*",      path + "sick"      + end);
     msg.replace("*SLEEPING*",  path + "sleeping"  + end);
     msg.replace("*SMILE*",     path + "smile"     + end);
-    msg.replace("*PINCHED*",   path + "pinched" + end);
+    msg.replace("*PINCHED*",   path + "pinched"   + end);
     msg.replace("*TONGUE*",    path + "tongue"    + end);
     msg.replace("*UNCERTAIN*", path + "unsure"    + end);
     msg.replace("*WINK*",      path + "wink"      + end);
     msg.replace("*WONDERING*", path + "wondering" + end);
-
     return msg;
 }

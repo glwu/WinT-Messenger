@@ -40,8 +40,8 @@
 
 #include "peermanager.h"
 
-static const qint32 BroadcastInterval = 128;
-static const unsigned broadcastPort = 4500;
+static const qint32 BroadcastInterval = 2000;
+static const unsigned broadcastPort = 45000;
 
 PeerManager::PeerManager(Client *client) : QObject(client) {
     this->client = client;
@@ -55,14 +55,11 @@ PeerManager::PeerManager(Client *client) : QObject(client) {
     updateAddresses();
     serverPort = 0;
 
-    broadcastSocket.bind(QHostAddress::Any, broadcastPort, QUdpSocket::ShareAddress
-                         | QUdpSocket::ReuseAddressHint);
-    connect(&broadcastSocket, SIGNAL(readyRead()),
-            this, SLOT(readBroadcastDatagram()));
+    broadcastSocket.bind(QHostAddress::Any, broadcastPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
+    connect(&broadcastSocket, SIGNAL(readyRead()), this, SLOT(readBroadcastDatagram()));
 
     broadcastTimer.setInterval(BroadcastInterval);
-    connect(&broadcastTimer, SIGNAL(timeout()),
-            this, SLOT(sendBroadcastDatagram()));
+    connect(&broadcastTimer, SIGNAL(timeout()), this, SLOT(sendBroadcastDatagram()));
 }
 
 void PeerManager::setServerPort(int port) {

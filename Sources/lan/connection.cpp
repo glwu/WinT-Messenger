@@ -40,9 +40,9 @@
 
 #include "connection.h"
 
-static const int TransferTimeout = 30000;
-static const int PongTimeout = 60000;
-static const int PingInterval = 5000;
+static const int TransferTimeout = 30 * 1000;
+static const int PongTimeout = 60 * 1000;
+static const int PingInterval = 5 * 1000;
 static const char SeparatorToken = ' ';
 
 Connection::Connection(QObject *parent) : QTcpSocket(parent) {
@@ -58,8 +58,7 @@ Connection::Connection(QObject *parent) : QTcpSocket(parent) {
     QObject::connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
     QObject::connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
     QObject::connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
-    QObject::connect(this, SIGNAL(connected()),
-                     this, SLOT(sendGreetingMessage()));
+    QObject::connect(this, SIGNAL(connected()), this, SLOT(sendGreetingMessage()));
 }
 
 QString Connection::name() const {
