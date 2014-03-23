@@ -23,25 +23,28 @@ ApplicationWindow {
     signal enableSettingsButton(bool enabled)
     signal enableAboutButton(bool enabled)
 
+    Component.onCompleted: bridge.setEmotesSize(smartSize(8))
+
+    Text {
+        id: sizeText
+        font.pointSize: 1
+    }
+
+    function smartSize(size) {
+        return sizeText.height * size
+    }
+
     FontLoader {
         source: "qrc:/Fonts/Regular.ttf"
     }
 
+    onClosing: {
+        bridge.stopAdHoc()
+        bridge.stopBtChat()
+        bridge.stopLanChat()
+    }
+
     property string defaultFont: "Open Sans"
-
-    function smartFontSize(integer) {
-        if (settings.value("mobileOptimized", isMobile) === true)
-            return integer * 1.25
-        else
-            return integer
-    }
-
-    function smartBorderSize(integer) {
-        if (settings.value("mobileOptimized", isMobile) === true)
-            return integer * 1.25
-        else
-            return integer
-    }
 
     Colors {id: colors}
 

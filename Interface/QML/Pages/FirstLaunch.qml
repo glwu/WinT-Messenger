@@ -15,15 +15,13 @@ Page {
     logoTitle         : qsTr("Initial setup")
     toolbarTitle      : qsTr("Initial setup")
 
-    property int perfectY: 10 + parent.height / 16
-
     Component.onCompleted: {
         enableAboutButton(false)
         enableSettingsButton(false)
     }
 
     Column {
-        spacing: 8
+        spacing: smartSize(8)
         y: arrangeFirstItem
         anchors.left        : parent.left
         anchors.right       : parent.right
@@ -91,7 +89,7 @@ Page {
 
     Button {
         anchors.bottom           : parent.bottom
-        anchors.bottomMargin     : perfectY
+        anchors.bottomMargin     : 10 + parent.height / 16
         anchors.horizontalCenter : parent.horizontalCenter
         text                     : qsTr("Done")
         enabled                  : textBox.length > 0 ? 1 : 0

@@ -10,7 +10,7 @@ class Emotes : public QObject {
 
 public:
     Emotes();
-    QString addEmotes(QString msg);
+    QString addEmotes(QString msg, int size);
 };
 
 #endif

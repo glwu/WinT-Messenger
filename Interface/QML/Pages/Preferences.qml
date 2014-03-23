@@ -7,16 +7,15 @@
 
 import QtQuick 2.2
 import QtQuick.Dialogs 1.1
-import QtQuick.Controls 1.1
 import "../Widgets"
 
 Page {
+    id: preferences
+
     logoImageSource : "qrc:/images/Settings.png"
     logoSubtitle    : qsTr("Customize WinT IM")
     logoTitle       : qsTr("Settings")
     toolbarTitle    : qsTr("Settings")
-
-    property int perfectY: 10 + parent.height / 16 + 25
 
     Component.onCompleted: {
         enableAboutButton(false)
@@ -29,7 +28,7 @@ Page {
     }
 
     Column {
-        spacing: 8
+        spacing: smartSize(8)
         y: arrangeFirstItem
         anchors.left        : parent.left
         anchors.right       : parent.right
@@ -89,25 +88,12 @@ Page {
             }
         }
 
-        CheckBox {
-            id: checkbox
-            checked: settings.value("mobileOptimized", isMobile)
-            onCheckedChanged: settings.setValue("mobileOptimized", checked)
-
-            Label {
-                anchors.left: checkbox.right
-                text: qsTr("Optimize interface for touch")
-            }
-
-        }
-
         Button {
             anchors.horizontalCenter: parent.horizontalCenter
-            y: perfectY
+            y: 10 + preferences.height / 16
             text: qsTr("Apply")
 
             onClicked: {
-                settings.setValue("mobileOptimized", checkbox.checked)
                 settings.setValue("userColor", colorDialog.color)
                 settings.setValue("userName", textBox.text)
 

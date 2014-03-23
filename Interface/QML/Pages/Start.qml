@@ -20,7 +20,7 @@ Page {
     property int perfectY: arrangeFirstItem + parent.height / 32
 
     Column {
-        spacing: 8
+        spacing: smartSize(4)
         y: perfectY
         anchors.horizontalCenter : parent.horizontalCenter
 

@@ -9,8 +9,8 @@ import QtQuick 2.2
 
 Rectangle {
     id: button
-    height : smartBorderSize(32)
-    width  : smartBorderSize(192)
+    height : 2.1 * label.height
+    width  : label.width > (5 * height) ? (1.5 * label.width) : (5 * height)
 
     signal clicked
     property alias text: label.text
@@ -39,7 +39,7 @@ Rectangle {
     Text {
         id: label
         anchors.centerIn: parent
-        font.pixelSize  : smartFontSize(12)
+        font.pointSize  : isMobile ? 12 : 8
         font.family     : defaultFont
         color: {
             if (!button.enabled)

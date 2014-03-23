@@ -13,9 +13,9 @@ TextField {
     id: textField
     font.family    : defaultFont
     style          : textFieldStyle
-    height         : smartBorderSize(32)
+    height         : 1.5 * smartSize(font.pointSize)
     antialiasing   : true
-    font.pixelSize : smartFontSize(12)
+    font.pointSize : isMobile ? 12 : 8
 
     opacity: 0.8
 
@@ -37,7 +37,7 @@ TextField {
             placeholderTextColor : colors.textFieldPlaceholder
 
             background: Rectangle {
-                color: colors.textFieldBackground
+                color: textField.enabled ? colors.textFieldBackground : colors.buttonBackgroundDisabled
 
                 border.color: {
                     if (mouseArea.containsMouse || textField.focus)

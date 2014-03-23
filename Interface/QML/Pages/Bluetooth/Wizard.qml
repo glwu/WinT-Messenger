@@ -11,7 +11,7 @@ import "../Widgets"
 Page {
     logoImageSource : "qrc:/images/Logo.png"
     logoSubtitle    : qsTr("Created by the WinT 3794 team")
-    logoTitle       : qsTr("WinT Messenger 1.1")
+    logoTitle       : qsTr("WinT Messenger 1.0")
     toolbarTitle    : qsTr("About")
 
     property int perfectY: 10 + parent.height / 16
@@ -28,7 +28,7 @@ Page {
 
     Column {
         y                        : arrangeFirstItem + perfectY
-        spacing                  : smartSize(4)
+        spacing                  : 8
         anchors.horizontalCenter : parent.horizontalCenter
 
         Button {

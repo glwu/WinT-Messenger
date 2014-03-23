@@ -16,7 +16,7 @@ Item {
     property string logoSubtitle       : qsTr("Subtitle goes here")
     property string logoTitle          : qsTr("Title goes here")
     property string toolbarTitle       : qsTr("Title")
-    property int arrangeFirstItem      : logoEnabled ? page.height - [(page.height - 128) / 2] + 3 : smartBorderSize(64)
+    property int arrangeFirstItem      : logoEnabled ? 1.12 * (logo.y + logo.height + 12) : toolbar.height + 12
     property bool resizeGripEnabled    : isMobile ? false : true
 
     signal setupPage(string _toolbarTitle, bool _backButtonEnabled)

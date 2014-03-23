@@ -17,7 +17,7 @@ Page {
     property int perfectY: arrangeFirstItem + parent.height / 32
 
     Column {
-        spacing: 8
+        spacing: smartSize(4)
         y: perfectY
         anchors.horizontalCenter : parent.horizontalCenter
 
@@ -28,9 +28,8 @@ Page {
         }
 
         Button {
-            onClicked : openPage("Pages/AdHocChat.qml")
-            text      : qsTr("Ad-hoc network")
-            enabled   : false
+            onClicked : openPage("Pages/AdHoc/Wizard.qml")
+            text      : qsTr("Setup an Ad-hoc network")
         }
 
         Button {
@@ -40,7 +39,7 @@ Page {
                 enabled = false
 
                 bridge.startLanChat()
-                openPage("Pages/LanChat.qml")
+                openPage("Pages/Chat.qml")
 
                 text = qsTr("Local Network")
                 enabled = true

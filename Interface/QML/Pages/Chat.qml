@@ -12,7 +12,7 @@ Page {
     id: page
 
     logoEnabled  : false
-    toolbarTitle : qsTr("LAN Chat")
+    toolbarTitle : qsTr("Chat room")
 
     Component.onCompleted: {
         enableAboutButton(false)

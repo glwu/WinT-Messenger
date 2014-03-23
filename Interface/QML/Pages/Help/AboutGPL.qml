@@ -21,13 +21,13 @@ Page {
         anchors.right       : parent.right
         anchors.leftMargin  : 16
         anchors.rightMargin : 16
-        spacing             : 12
+        spacing             : smartSize(6)
         y                   : [(moreInfoButton.y + (arrangeFirstItem - 92)) / 2] - 8
 
         Text {
             id: infoLabel
             color               : colors.logoTitle
-            font.pixelSize      : smartFontSize(11)
+            font.pointSize      : isMobile ? 11 : 8
             wrapMode            : Text.WrapAtWordBoundaryOrAnywhere
             text                : qsTr("The GNU General Public License is the most widely used free software license, it guarantees end users the freedoms to use, study, share, and modify the software.")
             font.family         : defaultFont
@@ -39,7 +39,7 @@ Page {
         Text {
             id: moreInfoLabel
             color               : colors.logoSubtitle
-            font.pixelSize      : smartFontSize(10)
+            font.pointSize      : isMobile ? 10 : 7
             wrapMode            : Text.WrapAtWordBoundaryOrAnywhere
             text                : qsTr("This program is released under the General Public License 3.0.")
             font.family         : defaultFont

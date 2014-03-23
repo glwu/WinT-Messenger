@@ -39,7 +39,7 @@ Page {
             clip                     : true
             color                    : colors.text
             font.family              : defaultFont
-            font.pixelSize           : smartFontSize(12)
+            font.pointSize           : isMobile ? 12 : 8
             onCursorRectangleChanged : flickable.ensureVisible(cursorRectangle)
             readOnly                 : true
             textFormat               : TextEdit.RichText

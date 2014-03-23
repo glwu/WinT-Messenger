@@ -14,20 +14,18 @@ Page {
     logoTitle       : qsTr("Donate")
     toolbarTitle    : qsTr("Donate")
 
-    property int perfectY: 10 + parent.height / 16
-
     Column {
         anchors.left        : parent.left
         anchors.right       : parent.right
         anchors.leftMargin  : 16
         anchors.rightMargin : 16
-        spacing             : 12
+        spacing             : smartSize(6)
         y                   : [(moreInfoButton.y + (arrangeFirstItem - 92)) / 2] - 8
 
         Text {
             id: infoLabel
             color               : colors.logoTitle
-            font.pixelSize      : smartFontSize(11)
+            font.pointSize      : 11
             wrapMode            : Text.WrapAtWordBoundaryOrAnywhere
             text                : qsTr("Sorry, this feature is not implemented yet")
             font.family         : defaultFont
@@ -39,7 +37,7 @@ Page {
         Text {
             id: moreInfoLabel
             color               : colors.logoSubtitle
-            font.pixelSize      : smartFontSize(10)
+            font.pointSize      : 10
             wrapMode            : Text.WrapAtWordBoundaryOrAnywhere
             text                : qsTr("We will implement it later")
             font.family         : defaultFont
@@ -53,7 +51,7 @@ Page {
     Button {
         id: moreInfoButton
         anchors.bottom           : parent.bottom
-        anchors.bottomMargin     : perfectY
+        anchors.bottomMargin     : 10 + parent.height / 16
         anchors.horizontalCenter : parent.horizontalCenter
         text                     : qsTr("Donate")
         onClicked                : Qt.openUrlExternally("http://wint3794.org/donate")

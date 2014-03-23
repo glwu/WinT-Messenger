@@ -10,11 +10,9 @@
         <file>Widgets/Textbox.qml</file>
         <file>Widgets/Toolbar.qml</file>
         <file>Pages/About.qml</file>
-        <file>Pages/BtChat.qml</file>
         <file>Pages/Connect.qml</file>
         <file>Pages/Donate.qml</file>
         <file>Pages/FirstLaunch.qml</file>
-        <file>Pages/LanChat.qml</file>
         <file>Pages/Preferences.qml</file>
         <file>Pages/Start.qml</file>
         <file>Pages/Help/AboutGPL.qml</file>
@@ -22,5 +20,7 @@
         <file>Pages/Help/Credits.qml</file>
         <file>Pages/Help/Documentation.qml</file>
         <file>Pages/Help/Help.qml</file>
+        <file>Pages/Chat.qml</file>
+        <file>Pages/AdHoc/Wizard.qml</file>
     </qresource>
 </RCC>

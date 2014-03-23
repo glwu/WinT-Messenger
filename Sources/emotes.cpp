@@ -2,9 +2,9 @@
 
 Emotes::Emotes() {}
 
-QString Emotes::addEmotes(QString msg) {
-    QString path = "&nbsp;<img src = 'qrc:/emotes/";
-    QString end = ".png'>&nbsp;";
+QString Emotes::addEmotes(QString msg, int size) {
+    QString path = "&nbsp;<img src = \"qrc:/emotes/";
+    QString end = QString(".png\" width=%1 height=%1>&nbsp;").arg(size);
 
     msg.replace("x-(",  "*ANGRY*");
     msg.replace(":-)",  "*SMILE*");

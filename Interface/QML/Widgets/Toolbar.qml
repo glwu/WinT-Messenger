@@ -9,7 +9,7 @@ import QtQuick 2.2
 
 Rectangle {
     property bool   backButtonEnabled
-    property alias  text: windowTitleText.text
+    property alias  text: titleText.text
 
     property alias  backButtonOpacity: backButton.opacity
     property alias  backButtonArea: backMouseArea
@@ -17,7 +17,7 @@ Rectangle {
     property bool   settingsButtonEnabled: true
     property bool   aboutButtonEnabled: true
 
-    height : backButton.height * 1.25
+    height : isMobile ? smartSize(32) : smartSize(28)
 
     anchors.left  : parent.left
     anchors.right : parent.right
@@ -34,9 +34,9 @@ Rectangle {
     Item {
         id: backButton
         anchors.left           : parent.left
-        anchors.leftMargin     : 4
+        anchors.leftMargin     : smartSize(4)
         anchors.verticalCenter : parent.verticalCenter
-        height                 : backImage.height
+        height                 : smartSize(24)
         width                  : opacity > 0 ? backImage.width : 0
 
         enabled: parent.backButtonEnabled
@@ -44,8 +44,8 @@ Rectangle {
         Image {
             id: backImage
             source                   : "qrc:/images/ToolbarIcons/Back.png"
-            height                   : 48
-            width                    : 48
+            height                   : smartSize(24)
+            width                    : height
         }
 
         MouseArea {
@@ -59,10 +59,10 @@ Rectangle {
     Item {
         id: settingsButton
         anchors.right          : parent.right
-        anchors.rightMargin    : 4
+        anchors.rightMargin    : smartSize(4)
         anchors.verticalCenter : parent.verticalCenter
-        height                 : settingsImage.height
-        width                  : settingsImage.width
+        height                 : smartSize(24)
+        width                  : height
         enabled                : settingsButtonEnabled
         opacity                : settingsButtonEnabled ? 1 : 0
 
@@ -72,8 +72,8 @@ Rectangle {
             id: settingsImage
             anchors.fill: parent
             source: "qrc:/images/ToolbarIcons/Settings.png"
-            height: 48
-            width: 48
+            height: smartSize(24)
+            width : height
         }
 
         MouseArea {
@@ -88,12 +88,11 @@ Rectangle {
 
     Item {
         id: aboutButton
-        anchors.right: parent.right
-        anchors.rightMargin: settingsButton.opacity > 0 ? 2 * settingsButton.anchors.rightMargin + settingsButton.width :
-                                                          4
+        anchors.right          : settingsButton.left
+        anchors.rightMargin    : smartSize(4)
         anchors.verticalCenter : parent.verticalCenter
-        height                 : aboutImage.height
-        width                  : aboutImage.width
+        height                 : smartSize(24)
+        width                  : height
         enabled                : aboutButtonEnabled
         opacity                : aboutButtonEnabled ? 1 : 0
 
@@ -104,8 +103,8 @@ Rectangle {
             id: aboutImage
             anchors.fill             : parent
             source                   : "qrc:/images/ToolbarIcons/About.png"
-            height                   : 48
-            width                    : 48
+            height                   : smartSize(24)
+            width                    : height
         }
 
         MouseArea {
@@ -119,11 +118,11 @@ Rectangle {
     }
 
     Text {
-        id: windowTitleText
+        id: titleText
         color                    : colors.toolbarText
         x                        : backButton.x + backButton.width + backButton.y
         anchors.verticalCenter   : parent.verticalCenter
-        font.pixelSize           : smartFontSize(20)
+        font.pointSize           : isMobile ? 24 : 18
         horizontalAlignment      : Text.AlignHCenter
         verticalAlignment        : Text.AlignVCenter
         font.family              : defaultFont

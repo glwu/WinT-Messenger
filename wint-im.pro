@@ -33,7 +33,7 @@ android {
 }
 
 win32* {
-    RC_FILE = Systems/Windows/icon.rc
+    RC_FILE = Systems/Windows/manifest.rc
 }
 
 macx {
@@ -69,4 +69,28 @@ HEADERS += \
     Sources/lan/connection.h \
     Sources/lan/peermanager.h \
     Sources/lan/server.h
+
+OTHER_FILES += \
+    Interface/QML/Widgets/Button.qml \
+    Interface/QML/Widgets/ChatInterface.qml \
+    Interface/QML/Widgets/Colors.qml \
+    Interface/QML/Widgets/Label.qml \
+    Interface/QML/Widgets/Logo.qml \
+    Interface/QML/Widgets/Page.qml \
+    Interface/QML/Widgets/Textbox.qml \
+    Interface/QML/Widgets/Toolbar.qml \
+    Interface/QML/Pages/About.qml \
+    Interface/QML/Pages/Chat.qml \
+    Interface/QML/Pages/Connect.qml \
+    Interface/QML/Pages/Donate.qml \
+    Interface/QML/Pages/FirstLaunch.qml \
+    Interface/QML/Pages/Preferences.qml \
+    Interface/QML/Pages/Start.qml \
+    Interface/QML/Pages/AdHoc/Wizard.qml \
+    Interface/QML/Pages/Help/AboutGPL.qml \
+    Interface/QML/Pages/Help/AboutQt.qml \
+    Interface/QML/Pages/Help/Credits.qml \
+    Interface/QML/Pages/Help/Documentation.qml \
+    Interface/QML/Pages/Help/Help.qml \
+    Interface/QML/main.qml
 

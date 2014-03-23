@@ -10,6 +10,6 @@ import QtQuick 2.2
 Text {
     color               : colors.text
     font.family         : defaultFont
-    font.pixelSize      : smartFontSize(12)
+    font.pointSize      : isMobile ? 12 : 8
 }
 

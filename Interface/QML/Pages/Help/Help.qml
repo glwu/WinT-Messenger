@@ -10,13 +10,15 @@ import "../../Widgets"
 
 Page {
     logoImageSource : "qrc:/images/Help.png"
-    logoSubtitle    : qsTr("Learn to use IM")
+    logoSubtitle    : qsTr("Learn the basics of this app")
     logoTitle       : qsTr("Help")
     toolbarTitle    : qsTr("Help")
 
+    property int perfectY: arrangeFirstItem + parent.height / 32
+
     Column {
-        spacing                  : 8
-        y                        : arrangeFirstItem
+        spacing                  : smartSize(4)
+        y                        : perfectY
         anchors.horizontalCenter : parent.horizontalCenter
 
         Button {

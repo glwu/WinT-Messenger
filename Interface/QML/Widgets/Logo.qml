@@ -20,8 +20,8 @@ Item {
         anchors.bottom           : titleText.top
         anchors.bottomMargin     : 18
         anchors.horizontalCenter : parent.horizontalCenter
-        height                   : 128
-        width                    : 128
+        height                   : isMobile ? 5 * titleText.height : 128
+        width                    : height
     }
 
     Text {
@@ -29,7 +29,7 @@ Item {
         anchors.horizontalCenter : parent.horizontalCenter
         anchors.verticalCenter   : parent.verticalCenter
         color                    : colors.logoTitle
-        font.pixelSize           : smartFontSize(16)
+        font.pointSize           : isMobile ? 14 : 12
         font.family              : defaultFont
         horizontalAlignment      : Text.AlignHCenter
         verticalAlignment        : Text.AlignVCenter
@@ -39,7 +39,7 @@ Item {
         id                       : subtitleText
         anchors.horizontalCenter : parent.horizontalCenter
         color                    : colors.logoSubtitle
-        font.pixelSize           : smartFontSize(12)
+        font.pointSize           : isMobile ? 12 : 10
         horizontalAlignment      : Text.AlignHCenter
         font.family              : defaultFont
         verticalAlignment        : Text.AlignVCenter

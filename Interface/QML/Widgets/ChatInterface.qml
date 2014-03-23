@@ -45,7 +45,7 @@ Item {
             clip                     : true
             color                    : colors.text
             font.family              : defaultFont
-            font.pixelSize           : smartFontSize(16)
+            font.pointSize           : isMobile ? 16 : 12
             onCursorRectangleChanged : chatWidget.ensureVisible(cursorRectangle)
             readOnly                 : true
             textFormat               : TextEdit.RichText
@@ -66,11 +66,11 @@ Item {
         anchors.left  : parent.left
         anchors.right : parent.right
         anchors.bottom: parent.bottom
-        height        : smartBorderSize(32)
+        height        : smartSize(20)
         color         : "transparent"
 
         Textbox {
-            id                     : sendTextbox
+            id: sendTextbox
 
             anchors.left   : parent.left
             anchors.right  : emotesButton.left
@@ -94,16 +94,16 @@ Item {
             anchors.bottom : parent.bottom
             anchors.top    : parent.top
 
-            height : smartBorderSize(32)
-            width  : smartBorderSize(32)
+            height : smartSize(20)
+            width  : height
 
             anchors.rightMargin: -1
 
             Image {
                 anchors.horizontalCenter : parent.horizontalCenter
                 anchors.verticalCenter   : parent.verticalCenter
-                height : smartBorderSize(16)
-                width  : smartBorderSize(16)
+                height : smartSize(8)
+                width  : smartSize(8)
                 source : "qrc:/emotes/smile.png"
             }
 
@@ -122,8 +122,8 @@ Item {
             anchors.bottom : parent.bottom
             anchors.top    : parent.top
 
-            width     : smartBorderSize(64)
-            height    : smartBorderSize(32)
+            width     : height * 2
+            height    : smartSize(20)
             text      : qsTr("Send")
             enabled   : sendTextbox.length > 0 ? 1 : 0
             onClicked : {
@@ -142,286 +142,286 @@ Item {
         enabled: opacity > 0 ? 1 : 0
 
         id: grid
-        spacing: 8
+        spacing: smartSize(4)
 
         Behavior on opacity { NumberAnimation{} }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *ANGEL*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/angel.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *ANGRY*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/angry.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *COOL*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/cool.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *CRYING*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/crying.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *DEVIL*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/devil.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *GRIN*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/happy.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *HEART*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/heart.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *JOYFUL*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/joyful.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *KISSING*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/kissing.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *LOL*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/lol.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *POUTY*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/pouty.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *SAD*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/sad.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *SICK*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/sick.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *SLEEPING*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/sleeping.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *SMILE*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/smile.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *PINCHED*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/pinched.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *TONGUE*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/tongue.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *UNCERTAIN*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/uncertain.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *WINK*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/wink.png"
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *WONDERING*"
-            height: smartBorderSize(32)
-            width: smartBorderSize(32)
+            height: smartSize(16)
+            width: smartSize(16)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: smartBorderSize(16)
-                width: smartBorderSize(16)
+                height: smartSize(8)
+                width: smartSize(8)
                 source: "qrc:/emotes/wondering.png"
             }
         }
