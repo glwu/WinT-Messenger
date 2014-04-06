@@ -13,7 +13,7 @@ Rectangle {
 
     height : bridge.ratio(32)
 
-    color: mouseArea.containsMouse || mouseArea.pressed ? colors.toolbarColorStatic : "transparent"
+    color: !mobile && (mouseArea.containsMouse || mouseArea.pressed) ? colors.toolbarColorStatic : "transparent"
 
     property alias userName: label.text
 

@@ -65,9 +65,10 @@ Flickable {
             var xDiff = oldX - mouseX;
             var yDiff = oldY - mouseY;
 
-            if(Math.abs(xDiff) > Math.abs(yDiff))
-                if(oldX < mouseX)
-                    stackView.pop()
+            if (mobile)
+                if(Math.abs(xDiff) > Math.abs(yDiff))
+                    if(oldX < mouseX)
+                        stackView.pop()
         }
     }
 }

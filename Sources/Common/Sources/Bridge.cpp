@@ -15,7 +15,10 @@ Bridge::Bridge() {
 
 void Bridge::attachFile() {
     if (netChatEnabled) {
-        netChat->sendFile(QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath()));
+#if !defined(Q_OS_ANDROID)
+        netChat->sendFile(QFileDialog::getOpenFileName(NULL, tr("Open File"), QDir::homePath()));
+#endif
+        QMessageBox::warning(NULL, tr("Not supported"), tr("Sorry, file sharing is not supported yet"));
     }
 }
 

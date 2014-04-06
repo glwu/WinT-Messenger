@@ -11,6 +11,7 @@
 #include <QScreen>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QApplication>
 
 #include "Emotes.h"
 #include "../../Chat/Network/Headers/NetChat.h"

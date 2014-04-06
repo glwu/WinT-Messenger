@@ -97,7 +97,7 @@ Page {
                         + "<p>WinT Messenger uses the following:</p>"
                         + "<ul>"
                         + "<li>Some of the icons provided by the <a href = 'http://developer.android.com/design/index.html'>Android Develeoper page</a>.</li>"
-                        + "<li>The Softie icons (provided by <a href = 'http://www.elegantthemes.com'>Elegant Themes</a>).</li>"
+                        + "<li>Part of the Google JFK icons (provided by <a href = 'http://carlosjj.deviantart.com/art/Google-JFK-Icons-ICO-and-PNG-270715545'>carlosjj</a>).</li>"
                         + "<li>Part of the code found on the <a href = 'http://harmattan-dev.nokia.com/docs/library/html/qtmobility/btchat.html'>Bluetooth Chat example</a>.</li>"
                         + "<li>Part of the code found on the <a href = 'http://qt-project.org/doc/qt-4.8/network-network-chat.html'>Network Chat example</a>.</li>"
                         + "</ul>"
