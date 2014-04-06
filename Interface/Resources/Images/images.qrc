@@ -1,15 +1,15 @@
 <RCC>
     <qresource prefix="/images">
         <file>Connect.png</file>
-        <file>Donate.png</file>
         <file>Help.png</file>
         <file>Logo.png</file>
         <file>Settings.png</file>
-        <file>Doc/GNU.png</file>
-        <file>Doc/Qt.png</file>
         <file>ToolbarIcons/About.png</file>
         <file>ToolbarIcons/Back.png</file>
         <file>ToolbarIcons/Settings.png</file>
-        <file>First.png</file>
+        <file>ToolbarIcons/Attach.png</file>
+        <file>ToolbarIcons/Person.png</file>
+        <file>ToolbarIcons/Group.png</file>
+        <file>Info.png</file>
     </qresource>
 </RCC>

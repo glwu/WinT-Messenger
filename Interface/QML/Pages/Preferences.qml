@@ -1,5 +1,5 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of the WinT Messenger
 //
 //  Created on Jan, 8, 2014.
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
@@ -7,13 +7,14 @@
 
 import QtQuick 2.2
 import QtQuick.Dialogs 1.1
+import QtQuick.Controls 1.1
 import "../Widgets"
 
 Page {
     id: preferences
 
     logoImageSource : "qrc:/images/Settings.png"
-    logoSubtitle    : qsTr("Customize WinT IM")
+    logoSubtitle    : qsTr("Customize WinT Messenger")
     logoTitle       : qsTr("Settings")
     toolbarTitle    : qsTr("Settings")
 
@@ -28,7 +29,7 @@ Page {
     }
 
     Column {
-        spacing: smartSize(8)
+        spacing: bridge.ratio(8)
         y: arrangeFirstItem
         anchors.left        : parent.left
         anchors.right       : parent.right
@@ -56,6 +57,7 @@ Page {
 
                 placeholderText : qsTr("Type a nickname and choose a profile color")
                 text            : settings.value("userName", "unknown")
+                onTextChanged   : settings.setValue("userName", text)
             }
 
             Rectangle {
@@ -68,6 +70,16 @@ Page {
 
                 color: colorDialog.color
                 border.color: colors.borderColor
+
+                onColorChanged: {
+                    settings.setValue("userColor", colorDialog.color)
+                    colors.userColor = colorDialog.color
+
+                    if (settings.customizedUiColor())
+                        colors.toolbarColor = colors.userColor
+                    else
+                        colors.toolbarColor = colors.toolbarColorStatic
+                }
 
                 MouseArea {
                     id: mouseArea
@@ -82,23 +94,45 @@ Page {
             id: colorDialog
             title      : qsTr("Chose profile color")
             color      : settings.value("userColor", colors.userColor)
-            onAccepted : {
-                settings.setValue("userColor", color)
-                colors.userColor = colorDialog.color
+        }
+
+        CheckBox {
+            id: customizedUiColor
+            checked: settings.customizedUiColor()
+            onCheckedChanged: {
+                settings.setValue("customizedUiColor", checked)
+
+                if (settings.customizedUiColor())
+                    colors.toolbarColor = colors.userColor
+                else
+                    colors.toolbarColor = colors.toolbarColorStatic
+            }
+
+            Label {
+                anchors.left: customizedUiColor.right
+                text: qsTr("Use the profile color to theme the app")
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: sizes.control
             }
         }
 
-        Button {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 10 + preferences.height / 16
-            text: qsTr("Apply")
+        CheckBox {
+            id: opaqueToolbar
+            checked: settings.opaqueToolbar()
+            onCheckedChanged: {
+                settings.setValue("opaqueToolbar", checked)
 
-            onClicked: {
-                settings.setValue("userColor", colorDialog.color)
-                settings.setValue("userName", textBox.text)
+                if (settings.opaqueToolbar())
+                    toolbar.opacity = 1
+                else
+                    toolbar.opacity = 0.9
+            }
 
-                colors.userColor = colorDialog.color
-                stackView.pop()
+            Label {
+                anchors.left: opaqueToolbar.right
+                text: qsTr("Opaque toolbar")
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: sizes.control
             }
         }
     }

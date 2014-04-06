@@ -1,8 +1,8 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of WinT Messenger
 //
-//  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. All rights reserved.
+//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Please check the license.txt file for more information.
 //
 
 import QtQuick 2.2
@@ -23,30 +23,20 @@ ApplicationWindow {
     signal enableSettingsButton(bool enabled)
     signal enableAboutButton(bool enabled)
 
-    Component.onCompleted: bridge.setEmotesSize(smartSize(8))
-
-    Text {
-        id: sizeText
-        font.pointSize: 1
-    }
-
-    function smartSize(size) {
-        return sizeText.height * size
-    }
-
     FontLoader {
         source: "qrc:/Fonts/Regular.ttf"
     }
 
     onClosing: {
-        bridge.stopAdHoc()
+        bridge.stopHotspot()
         bridge.stopBtChat()
-        bridge.stopLanChat()
+        bridge.stopNetChat()
     }
 
     property string defaultFont: "Open Sans"
 
-    Colors {id: colors}
+    Colors {id: colors }
+    Sizes  {id: sizes  }
 
     onFinishSetup: {
         enableAboutButton(true)
@@ -72,7 +62,7 @@ ApplicationWindow {
             anchors.fill: parent
             initialItem: Loader {
                 source: {
-                    if (settings.value("firstLaunch", true) === true)
+                    if (settings.firstLaunch())
                         return "Pages/FirstLaunch.qml"
                     else
                         return "Pages/Start.qml"
@@ -85,14 +75,14 @@ ApplicationWindow {
             backButtonOpacity: stackView.depth > 1 ? 1 : 0
 
             backButtonArea.onClicked: {
-                if (aboutButtonEnabled === false)
+                if (!aboutButtonEnabled)
                     enableAboutButton(true)
 
-                if (settingsButtonEnabled === false)
+                if (!settingsButtonEnabled)
                     enableSettingsButton(true)
 
                 stackView.pop()
-                bridge.stopLanChat()
+                bridge.stopNetChat()
             }
         }
 

@@ -1,5 +1,5 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of the WinT Messenger
 //
 //  Created on Jan, 8, 2014.
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
@@ -12,7 +12,7 @@ import "../Widgets"
 
 Page {
     backButtonEnabled   : false
-    logoImageSource     : "qrc:/images/First.png"
+    logoImageSource     : "qrc:/images/Logo.png"
     logoSubtitle        : qsTr("Please choose an option")
     logoTitle           : qsTr("Welcome")
     toolbarTitle        : qsTr("Start")
@@ -20,7 +20,7 @@ Page {
     property int perfectY: arrangeFirstItem + parent.height / 32
 
     Column {
-        spacing: smartSize(4)
+        spacing: bridge.ratio(4)
         y: perfectY
         anchors.horizontalCenter : parent.horizontalCenter
 
@@ -30,8 +30,8 @@ Page {
         }
 
         Button {
-            onClicked : openPage("Pages/Donate.qml")
-            text      : qsTr("Donate")
+            onClicked : Qt.openUrlExternally("http://wint-im.sf.net/news.html")
+            text      : qsTr("News")
         }
 
         Button {

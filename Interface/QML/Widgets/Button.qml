@@ -1,16 +1,16 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of WinT Messenger
 //
-//  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
+//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Please check the license.txt file for more information.
 //
 
 import QtQuick 2.2
 
 Rectangle {
     id: button
-    height : 2.1 * label.height
-    width  : label.width > (5 * height) ? (1.5 * label.width) : (5 * height)
+    height : 1.9 * label.height
+    width  : label.width > (6 * height) ? (1.5 * label.width) : (6 * height)
 
     signal clicked
     property alias text: label.text
@@ -39,7 +39,7 @@ Rectangle {
     Text {
         id: label
         anchors.centerIn: parent
-        font.pointSize  : isMobile ? 12 : 8
+        font.pixelSize  : sizes.control
         font.family     : defaultFont
         color: {
             if (!button.enabled)

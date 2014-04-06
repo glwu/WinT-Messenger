@@ -1,8 +1,8 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of WinT Messenger
 //
-//  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
+//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Please check the license.txt file for more information.
 //
 
 import QtQuick 2.2
@@ -17,26 +17,29 @@ Rectangle {
     property bool   settingsButtonEnabled: true
     property bool   aboutButtonEnabled: true
 
-    height : isMobile ? smartSize(32) : smartSize(28)
+    property int buttonSize: bridge.ratio(48)
+
+    height : bridge.ratio(56)
 
     anchors.left  : parent.left
     anchors.right : parent.right
     anchors.top   : parent.top
 
-    color: "#3c3b37"
+    color: colors.toolbarColorStatic
+    opacity: settings.opaqueToolbar() ? 1 : 0.7
 
     Rectangle {
-        color: colors.userColor
+        color: colors.toolbarColor
         anchors.fill: parent
-        opacity: 0.5
+        opacity: 0.97
     }
 
     Item {
         id: backButton
         anchors.left           : parent.left
-        anchors.leftMargin     : smartSize(4)
+        anchors.leftMargin     : bridge.ratio(4)
         anchors.verticalCenter : parent.verticalCenter
-        height                 : smartSize(24)
+        height                 : buttonSize
         width                  : opacity > 0 ? backImage.width : 0
 
         enabled: parent.backButtonEnabled
@@ -44,7 +47,7 @@ Rectangle {
         Image {
             id: backImage
             source                   : "qrc:/images/ToolbarIcons/Back.png"
-            height                   : smartSize(24)
+            height                   : buttonSize
             width                    : height
         }
 
@@ -59,9 +62,9 @@ Rectangle {
     Item {
         id: settingsButton
         anchors.right          : parent.right
-        anchors.rightMargin    : smartSize(4)
+        anchors.rightMargin    : bridge.ratio(4)
         anchors.verticalCenter : parent.verticalCenter
-        height                 : smartSize(24)
+        height                 : buttonSize
         width                  : height
         enabled                : settingsButtonEnabled
         opacity                : settingsButtonEnabled ? 1 : 0
@@ -72,7 +75,7 @@ Rectangle {
             id: settingsImage
             anchors.fill: parent
             source: "qrc:/images/ToolbarIcons/Settings.png"
-            height: smartSize(24)
+            height: buttonSize
             width : height
         }
 
@@ -89,9 +92,9 @@ Rectangle {
     Item {
         id: aboutButton
         anchors.right          : settingsButton.left
-        anchors.rightMargin    : smartSize(4)
+        anchors.rightMargin    : bridge.ratio(4)
         anchors.verticalCenter : parent.verticalCenter
-        height                 : smartSize(24)
+        height                 : buttonSize
         width                  : height
         enabled                : aboutButtonEnabled
         opacity                : aboutButtonEnabled ? 1 : 0
@@ -103,7 +106,7 @@ Rectangle {
             id: aboutImage
             anchors.fill             : parent
             source                   : "qrc:/images/ToolbarIcons/About.png"
-            height                   : smartSize(24)
+            height                   : buttonSize
             width                    : height
         }
 
@@ -122,12 +125,10 @@ Rectangle {
         color                    : colors.toolbarText
         x                        : backButton.x + backButton.width + backButton.y
         anchors.verticalCenter   : parent.verticalCenter
-        font.pointSize           : isMobile ? 24 : 18
+        font.pixelSize           : sizes.toolbarTitle
         horizontalAlignment      : Text.AlignHCenter
         verticalAlignment        : Text.AlignVCenter
         font.family              : defaultFont
-
-        opacity: 0.75
 
         MouseArea {
             anchors.fill : parent

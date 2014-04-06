@@ -1,5 +1,5 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of the WinT Messenger
 //
 //  Created on Jan, 8, 2014.
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
@@ -17,19 +17,19 @@ Page {
     property int perfectY: arrangeFirstItem + parent.height / 32
 
     Column {
-        spacing: smartSize(4)
+        spacing: bridge.ratio(4)
         y: perfectY
         anchors.horizontalCenter : parent.horizontalCenter
 
         Button {
-            onClicked : openPage("Pages/BtChat.qml")
+            onClicked : openPage("Pages/Chat.qml")
             text      : qsTr("Bluetooth")
             enabled   : false
         }
 
         Button {
-            onClicked : openPage("Pages/AdHoc/Wizard.qml")
-            text      : qsTr("Setup an Ad-hoc network")
+            onClicked : openPage("Pages/Hotspot/Wizard.qml")
+            text      : qsTr("Setup a wireless hotspot")
         }
 
         Button {
@@ -38,7 +38,7 @@ Page {
                 text = qsTr("Please wait...")
                 enabled = false
 
-                bridge.startLanChat()
+                bridge.startNetChat()
                 openPage("Pages/Chat.qml")
 
                 text = qsTr("Local Network")

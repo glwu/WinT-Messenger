@@ -1,5 +1,5 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of the WinT Messenger
 //
 //  Created on Jan, 8, 2014.
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
@@ -10,7 +10,7 @@ import "../../Widgets"
 
 Page {
     logoEnabled    : false
-    toolbarTitle   : isMobile ? qsTr("Help") : qsTr("Documentation")
+    toolbarTitle   : mobile ? qsTr("Help") : qsTr("Documentation")
 
     Flickable {
         id: flickable
@@ -39,7 +39,7 @@ Page {
             clip                     : true
             color                    : colors.text
             font.family              : defaultFont
-            font.pointSize           : isMobile ? 12 : 8
+            font.pixelSize           : sizes.text
             onCursorRectangleChanged : flickable.ensureVisible(cursorRectangle)
             readOnly                 : true
             textFormat               : TextEdit.RichText
@@ -54,12 +54,15 @@ Page {
 
                 // INTRODUCTION
                         + "<h2>Introduction</h2>"
-                        + "<p>WinT Messenger, as its name says, is an instant messenger software. "
-                        + "In contrast to most messaging clients, WinT Messenger is free, open source and does not require any type of registration in order to use it. "
-                        + "WinT Messenger is made in QML/C++ and its based on the Qt framework. "
-                        + "WinT Messenger is officially supported on Android, iOS, Microsoft Windows, Mac OS X and Linux. "
-                        + "Unlike other messaging clients, WinT IM connects to you local network, allowing anyone on your network to join the conversation. "
-                        + "In the near future, WinT Messenger will support Bluetooth connections.</p>"
+                        + "<p>WinT Messenger is a practical instant messaging application that can be used inside a local area network to allow communication between connected workstations. "
+                        + "WinT Messenger connects to your local network and allows anyone that uses it to join the automatically generated chat room."
+                        + "As such, you won't have to register in order to use it."
+                        + "The chat window is very simple and features an intuitive layout, "
+                        + "comprising the input text field and a small collection of emoticons that can make your conversation a bit more expressive, "
+                        + "interesting and fun at the same time. "
+                        + "Right from the very start, you can customize your username and choose a color in order to change the appearance of the interface. "
+                        + "Alternatively, you can perform these actions at a later time, in the 'Settings' area. "
+                        + "Its future strategy is to allow cross-platform communication between devices in the same network or via Bluetooth and wireless hotspots.</p>"
 
                 // FEAUTURES
                         + "<h2>Features</h2>"
@@ -91,7 +94,7 @@ Page {
 
                 // ACKNOWLEDGEMENTS
                         + "<h2>Acknowledgements</h2>"
-                        + "<p>WinT IM uses the following:</p>"
+                        + "<p>WinT Messenger uses the following:</p>"
                         + "<ul>"
                         + "<li>Some of the icons provided by the <a href = 'http://developer.android.com/design/index.html'>Android Develeoper page</a>.</li>"
                         + "<li>The Softie icons (provided by <a href = 'http://www.elegantthemes.com'>Elegant Themes</a>).</li>"

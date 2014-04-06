@@ -1,5 +1,5 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of the WinT Messenger
 //
 //  Created on Jan, 8, 2014.
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
@@ -7,11 +7,12 @@
 
 import QtQuick 2.2
 import QtQuick.Dialogs 1.1
+import QtQuick.Controls 1.1
 import "../Widgets"
 
 Page {
     logoImageSource   : "qrc:/images/Logo.png"
-    logoSubtitle      : qsTr("Please type your nickname")
+    logoSubtitle      : qsTr("Customize your setup")
     logoTitle         : qsTr("Initial setup")
     toolbarTitle      : qsTr("Initial setup")
 
@@ -21,17 +22,12 @@ Page {
     }
 
     Column {
-        spacing: smartSize(8)
+        spacing: bridge.ratio(8)
         y: arrangeFirstItem
         anchors.left        : parent.left
         anchors.right       : parent.right
         anchors.leftMargin  : 24
         anchors.rightMargin : 24
-
-        Label {
-            anchors.left : parent.left
-            text         : qsTr("Choose a nickname and profile color:")
-        }
 
         Rectangle {
             anchors.left: parent.left
@@ -67,12 +63,63 @@ Page {
                         return colors.borderColor
                 }
 
+                onColorChanged: {
+                    settings.setValue("userColor", colorDialog.color)
+                    colors.userColor = colorDialog.color
+
+                    if (settings.customizedUiColor())
+                        colors.toolbarColor = colors.userColor
+                    else
+                        colors.toolbarColor = colors.toolbarColorStatic
+                }
+
                 MouseArea {
                     id: mouseArea
                     anchors.fill: parent
                     hoverEnabled: true
                     onClicked   : colorDialog.open()
                 }
+            }
+        }
+
+        CheckBox {
+            id: customizedUiColor
+            checked: settings.customizedUiColor()
+            onCheckedChanged: {
+                settings.setValue("customizedUiColor", checked)
+
+                if (settings.customizedUiColor())
+                    colors.toolbarColor = colors.userColor
+                else
+                    colors.toolbarColor = colors.toolbarColorStatic
+            }
+
+            Label {
+                anchors.left: customizedUiColor.right
+                text: qsTr("Use the profile color to theme the app")
+                font.pixelSize: sizes.control
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+
+        CheckBox {
+            id: opaqueToolbar
+            checked: settings.opaqueToolbar()
+            onCheckedChanged: {
+                settings.setValue("opaqueToolbar", checked)
+
+                if (settings.opaqueToolbar())
+                    toolbar.opacity = 1
+                else
+                    toolbar.opacity = 0.9
+            }
+
+            Label {
+                anchors.left: opaqueToolbar.right
+                text: qsTr("Opaque toolbar")
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: sizes.control
             }
         }
     }
@@ -97,10 +144,12 @@ Page {
             settings.setValue("userName", textBox.text)
             settings.setValue("userColor", colorDialog.color)
             settings.setValue("firstLaunch", false);
+            settings.setValue("customizedUiColor", customizedUiColor.checked)
+
             colors.userColor = colorDialog.color
 
-            Qt.inputMethod.hide()
             finishSetup(textBox.text)
+            Qt.inputMethod.hide()
         }
     }
 }

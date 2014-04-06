@@ -1,22 +1,26 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of WinT Messenger
 //
-//  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
+//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Please check the license.txt file for more information.
 //
 
 import QtQuick 2.2
 
 QtObject {
-    property string toolbarText: "#fff"
-    property string background: "#f6f6f6"
+    property string background: "#f7f7f7"
     property string disabled: "#cbcbcb"
     property string borderColor: "#c7c7c7"
 
+    property string toolbarText: "#fff"
+    property string toolbarColor: settings.customizedUiColor() ? userColor : "#333"
+    property string toolbarColorStatic: "#333"
+    property string toolbarPressedColor: "#666"
+
     property string text: "#000"
 
-    property string logoTitle: "#222"
-    property string logoSubtitle: "#444"
+    property string logoTitle: toolbarColorStatic
+    property string logoSubtitle: "#666"
 
     property string textFieldBackground: "#fdfdfd"
     property string textFieldForeground: "#222"

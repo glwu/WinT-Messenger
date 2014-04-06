@@ -1,26 +1,24 @@
 //
-//  This file is part of the WinT IM 1.0
+//  This file is part of WinT Messenger
 //
-//  Created on Dec. 18, 2013.
-//  Copyright (c) 2014 WinT 3794, refer to the "License.txt" file for more info
+//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Please check the license.txt file for more information.
 //
 
-#include <QObject>
-#include <QProcess>
 #include <QQmlContext>
 #include <QApplication>
 #include <QQuickWindow>
 #include <QQmlComponent>
 #include <QQmlApplicationEngine>
 
-#include "bridge.h"
-#include "settings.h"
+#include "Common/Headers/Bridge.h"
+#include "Common/Headers/Settings.h"
 
 bool isMobile() {
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     return true;
 #else
-    return false;
+	return false;
 #endif
 }
 
@@ -28,33 +26,30 @@ void setupWindow() {
     Bridge *bridge = new Bridge();
     Settings *settings = new Settings();
 
-    bool mobile = isMobile();
     QQmlApplicationEngine *engine = new QQmlApplicationEngine();
     engine->rootContext()->setContextProperty("settings", settings);
     engine->rootContext()->setContextProperty("bridge", bridge);
-    engine->rootContext()->setContextProperty("isMobile", mobile);
-
-    QObject::connect(engine, SIGNAL(quit()), qApp, SLOT(quit()));
+    engine->rootContext()->setContextProperty("mobile", isMobile());
 
     QQmlComponent *component = new QQmlComponent(engine);
     component->loadUrl(QUrl("qrc:/QML/main.qml"));
 
     QObject *object = component->create();
-
     QQuickWindow *window = qobject_cast<QQuickWindow *>(object);
-    window->setMinimumSize(QSize(320, 480));
 
-    if (!mobile) {
+    if (!isMobile()) {
+        QObject::connect(window, SIGNAL(widthChanged(int)),  settings, SLOT(saveWidth(int)));
+        QObject::connect(window, SIGNAL(heightChanged(int)), settings, SLOT(saveHeight(int)));
+        QObject::connect(window, SIGNAL(xChanged(int)),      settings, SLOT(saveX(int)));
+        QObject::connect(window, SIGNAL(yChanged(int)),      settings, SLOT(saveY(int)));
+
+        window->setMinimumSize(QSize(320, 480));
+
         window->resize(QSize(settings->value("width", 748).toInt(),
                              settings->value("height", 520).toInt()));
 
         window->setPosition(QPoint(settings->value("x", 150).toInt(),
                                    settings->value("y", 150).toInt()));
-
-        QObject::connect(window, SIGNAL(widthChanged(int)),  settings, SLOT(saveWidth(int)));
-        QObject::connect(window, SIGNAL(heightChanged(int)), settings, SLOT(saveHeight(int)));
-        QObject::connect(window, SIGNAL(xChanged(int)),      settings, SLOT(saveX(int)));
-        QObject::connect(window, SIGNAL(yChanged(int)),      settings, SLOT(saveY(int)));
     }
 
     window->show();

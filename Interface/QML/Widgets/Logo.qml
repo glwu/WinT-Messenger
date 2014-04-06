@@ -1,8 +1,8 @@
 //
-//  This file is part of the WinT IM
+//  This file is part of WinT Messenger
 //
-//  Created on Jan, 8, 2014.
-//  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
+//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Please check the license.txt file for more information.
 //
 
 import QtQuick 2.2
@@ -20,7 +20,7 @@ Item {
         anchors.bottom           : titleText.top
         anchors.bottomMargin     : 18
         anchors.horizontalCenter : parent.horizontalCenter
-        height                   : isMobile ? 5 * titleText.height : 128
+        height                   : mobile ? 5 * titleText.height : 128
         width                    : height
     }
 
@@ -29,7 +29,7 @@ Item {
         anchors.horizontalCenter : parent.horizontalCenter
         anchors.verticalCenter   : parent.verticalCenter
         color                    : colors.logoTitle
-        font.pointSize           : isMobile ? 14 : 12
+        font.pixelSize           : sizes.title
         font.family              : defaultFont
         horizontalAlignment      : Text.AlignHCenter
         verticalAlignment        : Text.AlignVCenter
@@ -39,7 +39,7 @@ Item {
         id                       : subtitleText
         anchors.horizontalCenter : parent.horizontalCenter
         color                    : colors.logoSubtitle
-        font.pointSize           : isMobile ? 12 : 10
+        font.pixelSize           : sizes.subtitle
         horizontalAlignment      : Text.AlignHCenter
         font.family              : defaultFont
         verticalAlignment        : Text.AlignVCenter
