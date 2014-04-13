@@ -10,24 +10,17 @@ import QtQuick 2.2
 Rectangle {
     anchors.left: parent.left
     anchors.right: parent.right
-
-    height : bridge.ratio(32)
-
-    color: !mobile && (mouseArea.containsMouse || mouseArea.pressed) ? colors.toolbarColorStatic : "transparent"
+    height: DeviceManager.ratio(32)
+    color: (mouseArea.containsMouse || mouseArea.pressed) ? colors.toolbarColorStatic: "transparent"
 
     property alias userName: label.text
 
-    function maybeSuicide(user) {
-        if (user === userName || user === label.text)
-            destroy(1000)
-    }
-
     Image {
         id: userPicture
-        height : width
-        width  : bridge.ratio(28)
-        source : "qrc:/images/ToolbarIcons/Person.png"
-
+        height: width
+        width: DeviceManager.ratio(28)
+        source: "qrc:/images/ToolbarIcons/Person.png"
+        asynchronous: true
         anchors.left: parent.left
         anchors.margins: 12
         anchors.verticalCenter: parent.verticalCenter
@@ -48,7 +41,7 @@ Rectangle {
     }
 
     Connections {
-        target: bridge
-        onDelUser: maybeSuicide(nick)
+        target: Bridge
+        onDelUser: user === userName ? destroy(): update()
     }
 }

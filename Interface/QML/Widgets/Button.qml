@@ -9,8 +9,8 @@ import QtQuick 2.2
 
 Rectangle {
     id: button
-    height : 1.9 * label.height
-    width  : label.width > (6 * height) ? (1.5 * label.width) : (6 * height)
+    height: 1.9 * label.height
+    width: label.width > (6 * height) ? (1.5 * label.width): (6 * height)
 
     signal clicked
     property alias text: label.text
@@ -33,14 +33,12 @@ Rectangle {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
-        onClicked   : button.clicked()
+        onClicked: button.clicked()
     }
 
-    Text {
+    Label {
         id: label
         anchors.centerIn: parent
-        font.pixelSize  : sizes.control
-        font.family     : defaultFont
         color: {
             if (!button.enabled)
                 return colors.buttonForegroundDisabled

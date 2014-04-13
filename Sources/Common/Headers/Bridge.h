@@ -8,17 +8,16 @@
 #ifndef BRIDGE_H
 #define BRIDGE_H
 
-#include <QScreen>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QApplication>
 
 #include "Emotes.h"
+#include "DeviceManager.h"
 #include "../../Chat/Network/Headers/NetChat.h"
 
 #ifdef Q_OS_WIN
-#include <qt_windows.h>
-#include <qwindowdefs_win.h>
+#include "qt_windows.h"
+#include "qwindowdefs_win.h"
 #endif
 
 class Bridge: public QWidget {
@@ -30,8 +29,6 @@ public:
 
     Q_INVOKABLE void attachFile();
     Q_INVOKABLE void sendMessage(QString text);
-
-    Q_INVOKABLE int ratio(int input);
 
     Q_INVOKABLE void startNetChat();
     Q_INVOKABLE void stopNetChat();

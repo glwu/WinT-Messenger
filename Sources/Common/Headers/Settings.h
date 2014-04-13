@@ -8,7 +8,6 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QObject>
 #include <QSettings>
 
 class Settings : public QObject {
@@ -24,12 +23,6 @@ public:
     Q_INVOKABLE bool firstLaunch();
     Q_INVOKABLE bool customizedUiColor();
     Q_INVOKABLE bool opaqueToolbar();
-
-public slots:
-    void saveX(int x);
-    void saveY(int y);
-    void saveWidth(int width);
-    void saveHeight(int height);
 
 private:
     QSettings *settings;

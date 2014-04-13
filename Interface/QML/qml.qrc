@@ -4,7 +4,6 @@
         <file>Widgets/ChatInterface.qml</file>
         <file>Widgets/Colors.qml</file>
         <file>Widgets/Label.qml</file>
-        <file>Widgets/Logo.qml</file>
         <file>Widgets/Page.qml</file>
         <file>Widgets/Textbox.qml</file>
         <file>Widgets/Toolbar.qml</file>

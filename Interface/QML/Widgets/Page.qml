@@ -10,65 +10,97 @@ import QtQuick 2.2
 Flickable {
     id: page
 
-    property bool backButtonEnabled    : true
-    property bool flickable            : true
-    property bool logoEnabled          : true
-    property string logoImageSource    : ""
-    property string logoSubtitle       : qsTr("Subtitle goes here")
-    property string logoTitle          : qsTr("Title goes here")
-    property string toolbarTitle       : qsTr("Title")
-    property int arrangeFirstItem      : logoEnabled ? 1.125 * (logo.y + logo.height + bridge.ratio(12)) : toolbar.height + bridge.ratio(4)
+    property bool backButtonEnabled: true
+    property bool flickable: true
+    property bool logoEnabled: true
 
-    signal setupPage(string _toolbarTitle, bool _backButtonEnabled)
+    property alias logoImageSource: image.source
+    property alias logoSubtitle: subtitleText.text
+    property alias logoTitle: titleText.text
 
-    onSetupPage: {
-        setBackButtonEnabled(_backButtonEnabled)
-        setTitle(_toolbarTitle)
+    property string toolbarTitle: qsTr("Title")
+    property int arrangeFirstItem: logoEnabled ? 1.125 * (logo.y + logo.height + DeviceManager.ratio(12)): toolbar.height + DeviceManager.ratio(4)
+
+    Component.onCompleted: {
+        setBackButtonEnabled(backButtonEnabled)
+        setTitle(toolbarTitle)
     }
-
-    Component.onCompleted: setupPage(toolbarTitle, backButtonEnabled)
 
     onVisibleChanged: {
-        if (visible)
-            setupPage(toolbarTitle, backButtonEnabled)
+        if (visible) {
+            setBackButtonEnabled(backButtonEnabled)
+            setTitle(toolbarTitle)
+        }
     }
 
-    contentHeight        : rootWindow.height
-    interactive          : flickable
-    flickableDirection   : Flickable.VerticalFlick
+    contentHeight: rootWindow.height
+    interactive: flickable
+    flickableDirection: Flickable.VerticalFlick
 
-    Logo {
+    Item {
         id: logo
-        enabled  : page.logoEnabled
-        image    : page.logoImageSource
-        subtitle : page.logoSubtitle
-        title    : page.logoTitle
-        visible  : page.logoEnabled
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        enabled: page.logoEnabled
+        visible: page.logoEnabled
+
+        Image {
+            id: image
+            anchors.bottom: titleText.top
+            anchors.bottomMargin: 18
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: 5 * titleText.height
+            width: height
+            //sourceSize: Qt.size(height, height)
+            smooth: true
+            asynchronous: true
+        }
+
+        Label {
+            id: titleText
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            color: colors.logoTitle
+            font.pixelSize: sizes.title
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        Label {
+            id: subtitleText
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: colors.logoSubtitle
+            font.pixelSize: sizes.subtitle
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            y: titleText.y + titleText.height + 8
+        }
     }
 
     MouseArea {
         id: swipeDetector
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+
+        width: parent.width / 6
 
         property int oldX: 0
         property int oldY: 0
 
-        hoverEnabled: false
-        visible: true
-
         onPressed: {
-            oldX = mouseX;
-            oldY = mouseY;
+            oldX = mouseX
+            oldY = mouseY
         }
 
         onReleased: {
             var xDiff = oldX - mouseX;
             var yDiff = oldY - mouseY;
 
-            if (mobile)
-                if(Math.abs(xDiff) > Math.abs(yDiff))
-                    if(oldX < mouseX)
-                        stackView.pop()
+            if(Math.abs(xDiff) > Math.abs(yDiff))
+                if(oldX < mouseX)
+                    stackView.pop()
         }
     }
 }

@@ -11,92 +11,71 @@ Item {
     id: page
     anchors.fill: parent
 
-    function setText(text, color) {
-        textbox.text = "<font color=" + color + ">" + text + "</font><br>"
-    }
+    function setText(text, color) {textbox.text = "<font color=" + color + ">" + text + "</font><br>"}
+    function clearText()          {textbox.text = ""}
+    function setTextSize(size)    {textbox.font.pixelSize = DeviceManager.ratio(size)}
+    function addUser(user)        {Qt.createQmlObject(("UserInfo {userName:\"" + user + "\";}"), column, (user + "-userInfo"))}
 
-    function clearText() {
-        textbox.text = ""
-    }
-
-    function setTextSize(size) {
-        textbox.font.pixelSize = bridge.ratio(size)
-    }
-
-    function addUser(user) {
-        Qt.createQmlObject(("UserInfo {userName:\"" + user + "\";}"), column, (user + "-userInfo"))
-    }
-
-    Component.onCompleted: addUser(qsTr("You") + " (" + settings.value("userName", "unknown") + ")")
+    Component.onCompleted: addUser(qsTr("You") + " (" + Settings.value("userName", "unknown") + ")")
 
     Connections {
-        target: bridge
-        onNewMessage: textbox.append(text)
+        target: Bridge
         onNewUser: addUser(nick)
+        onNewMessage: {
+            textbox.append(text)
+            if (textbox.lineCount > textbox.cursorPosition)
+                textbox.cursorPosition = textbox.lineCount
+        }
     }
 
     Flickable {
         id: chatWidget
-
-        contentHeight      : textbox.paintedHeight
-        interactive        : true
-        flickableDirection : Flickable.VerticalFlick
-
-        anchors.margins      : 12
-        anchors.bottomMargin : sendRectangle.height + 11
-
-        anchors.left   : parent.left
-        anchors.right  : usersWidget.left
-        anchors.bottom : parent.bottom
-        anchors.top    : parent.top
-
-        function ensureVisible(r) {
-            if (contentX >= r.x)
-                contentX = r.x;
-            else if (contentX+width <= r.x+r.width)
-                contentX = r.x+r.width-width;
-            if (contentY >= r.y)
-                contentY = r.y;
-            else if (contentY+height <= r.y+r.height)
-                contentY = r.y+r.height-height;
-        }
+        contentHeight: textbox.paintedHeight
+        interactive: true
+        flickableDirection: Flickable.VerticalFlick
+        anchors.margins: 12
+        anchors.bottomMargin: sendRectangle.height + 11
+        anchors.left: parent.left
+        anchors.right: usersWidget.left
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
+        clip: true
 
         TextEdit {
             id: textbox
-            activeFocusOnPress       : false
-            anchors.fill             : parent
-            clip                     : true
-            color                    : colors.text
-            font.family              : defaultFont
-            onCursorRectangleChanged : chatWidget.ensureVisible(cursorRectangle)
-            readOnly                 : true
-            textFormat               : TextEdit.RichText
-            width                    : page.width
-            wrapMode                 : TextEdit.WrapAtWordBoundaryOrAnywhere
-            onLinkActivated          : Qt.openUrlExternally(link)
-            font.pixelSize           : bridge.ratio(16)
+            width: page.width
+            anchors.fill: parent
+            color: colors.text
+            textFormat: TextEdit.RichText
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+            renderType: Text.NativeRendering
+            font.family: defaultFont
+            font.pixelSize: DeviceManager.ratio(16)
+            readOnly: true
+            activeFocusOnPress: false
+            clip: true
         }
     }
 
     Image {
         id: menuButton
 
-        height : width
-        width  : bridge.ratio(32)
-        source : "qrc:/images/ToolbarIcons/Group.png"
+        height: width
+        width: DeviceManager.ratio(32)
+        source: "qrc:/images/ToolbarIcons/Group.png"
+        asynchronous: true
 
-        anchors.top     : parent.top
-        anchors.right   : parent.right
-        anchors.margins : 12
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 12
 
         MouseArea {
             anchors.fill: parent
             onClicked: {
                 menuButton.opacity = 0
-                textbox.wrapMode = TextEdit.NoWrap
 
-                if (page.width >= bridge.ratio(250))
-                    usersWidget.width = bridge.ratio(250)
+                if (page.width >= DeviceManager.ratio(250))
+                    usersWidget.width = DeviceManager.ratio(250)
                 else
                     usersWidget.width = page.width
             }
@@ -105,13 +84,10 @@ Item {
 
     Rectangle {
         id: usersWidget
-
-        anchors.right  : parent.right
-        anchors.bottom : parent.bottom
-        anchors.top    : parent.top
-
-        anchors.bottomMargin : sendRectangle.height
-
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
+        anchors.bottomMargin: sendRectangle.height
         color: "#666"
         opacity: 0.8
         width: 0
@@ -121,7 +97,6 @@ Item {
         Flickable {
             anchors.fill: parent
             anchors.topMargin: captionRectangle.y + captionRectangle.height + 24
-
             interactive: true
             flickableDirection: Flickable.VerticalFlick
 
@@ -138,40 +113,31 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-
             height: toolbar.height
             color: colors.toolbarColorStatic
 
-            Text {
+            Label {
                 id: userWidgetTitle
-
                 font.pixelSize: sizes.toolbarTitle
                 text: qsTr("Users")
-
                 color: colors.toolbarText
-
                 anchors.left: backButton.right
                 anchors.margins: 12
                 anchors.verticalCenter: parent.verticalCenter
-
-                height: bridge.ratio(48)
-
+                height: DeviceManager.ratio(48)
                 verticalAlignment: Text.AlignVCenter
             }
 
             Image {
                 id: backButton
-
                 anchors.left: parent.left
                 anchors.margins: 12
-
                 anchors.verticalCenter: parent.verticalCenter
-
-                source                   : "qrc:/images/ToolbarIcons/Back.png"
-                height                   : bridge.ratio(48)
-                width                    : height
-
+                source: "qrc:/images/ToolbarIcons/Back.png"
+                height: DeviceManager.ratio(48)
+                width: height
                 rotation: 180
+                asynchronous: true
 
                 MouseArea {
                     anchors.fill: parent
@@ -183,46 +149,42 @@ Item {
 
     Rectangle {
         id: sendRectangle
-        anchors.left   : parent.left
-        anchors.right  : parent.right
-        anchors.bottom : parent.bottom
-        height         : bridge.ratio(32)
-        color          : "transparent"
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: DeviceManager.ratio(32)
+        color: "transparent"
 
         Button {
             id: attachButton
-
-            anchors.bottom : parent.bottom
-            anchors.left   : parent.left
-            anchors.top    : parent.top
-
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.top: parent.top
             width: parent.height
-            onClicked: bridge.attachFile()
+            onClicked: Bridge.attachFile()
 
             Image {
-                anchors.horizontalCenter : parent.horizontalCenter
-                anchors.verticalCenter   : parent.verticalCenter
-                height : width
-                width  : bridge.ratio(28)
-                source : "qrc:/images/ToolbarIcons/Attach.png"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                height: width
+                width: DeviceManager.ratio(28)
+                source: "qrc:/images/ToolbarIcons/Attach.png"
             }
         }
 
         Textbox {
             id: sendTextbox
-
-            anchors.left   : attachButton.right
-            anchors.right  : emotesButton.left
-            anchors.bottom : parent.bottom
-            anchors.top    : parent.top
-
+            anchors.left: attachButton.right
+            anchors.right: emotesButton.left
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
             anchors.rightMargin: -1
-            anchors.leftMargin : -1
+            anchors.leftMargin: -1
+            placeholderText: qsTr("Type a message...")
 
-            placeholderText      : qsTr("Type a message...")
-            Keys.onReturnPressed : {
+            Keys.onReturnPressed: {
                 if (text.length > 0) {
-                    bridge.sendMessage(sendTextbox.text)
+                    Bridge.sendMessage(sendTextbox.text)
                     sendTextbox.text = ""
                 }
             }
@@ -230,22 +192,18 @@ Item {
 
         Button {
             id: emotesButton
-
-            anchors.right  : sendButton.left
-            anchors.bottom : parent.bottom
-            anchors.top    : parent.top
-
+            anchors.right: sendButton.left
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
             width: parent.height
-
             anchors.rightMargin: -1
 
             Image {
-                height : width
-                width  : bridge.ratio(16)
-                source : "qrc:/emotes/smile.png"
-
-                anchors.horizontalCenter : parent.horizontalCenter
-                anchors.verticalCenter   : parent.verticalCenter
+                height: width
+                width: DeviceManager.ratio(16)
+                source: "qrc:/emotes/smile.png"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             onClicked: {
@@ -258,311 +216,328 @@ Item {
 
         Button {
             id: sendButton
-
-            anchors.right  : parent.right
-            anchors.bottom : parent.bottom
-            anchors.top    : parent.top
-
-            width     : bridge.ratio(64)
-            text      : qsTr("Send")
-            enabled   : sendTextbox.length > 0 ? 1 : 0
-            onClicked : {
-                bridge.sendMessage(sendTextbox.text)
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+            width: DeviceManager.ratio(64)
+            text: qsTr("Send")
+            enabled: sendTextbox.length > 0 ? 1: 0
+            onClicked: {
+                Bridge.sendMessage(sendTextbox.text)
                 sendTextbox.text = ""
             }
         }
     }
 
     Grid {
-        anchors.bottom: sendRectangle.top
-        anchors.bottomMargin: bridge.ratio(4)
-        anchors.right: page.right
-        anchors.rightMargin: bridge.ratio(4)
-        opacity: 0
-        enabled: opacity > 0 ? 1 : 0
-
         id: grid
-        spacing: bridge.ratio(4)
+        anchors.bottom: sendRectangle.top
+        anchors.bottomMargin: DeviceManager.ratio(4)
+        anchors.right: page.right
+        anchors.rightMargin: DeviceManager.ratio(4)
+        opacity: 0
+        enabled: opacity > 0 ? 1: 0
+        spacing: DeviceManager.ratio(4)
 
         Behavior on opacity { NumberAnimation{} }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *ANGEL*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/angel.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *ANGRY*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/angry.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *COOL*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/cool.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *CRYING*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/crying.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *DEVIL*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/devil.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *GRIN*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/happy.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *HEART*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/heart.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *JOYFUL*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/joyful.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *KISSING*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/kissing.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *LOL*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/lol.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *POUTY*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/pouty.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *SAD*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/sad.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *SICK*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/sick.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *SLEEPING*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/sleeping.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *SMILE*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/smile.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *PINCHED*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/pinched.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *TONGUE*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/tongue.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *UNCERTAIN*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/uncertain.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *WINK*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/wink.png"
+                asynchronous: true
             }
         }
 
         Button {
             onClicked: sendTextbox.text = sendTextbox.text + " *WONDERING*"
-            height: bridge.ratio(32)
-            width: bridge.ratio(32)
+            height: DeviceManager.ratio(32)
+            width: DeviceManager.ratio(32)
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: width
-                width: bridge.ratio(16)
+                width: DeviceManager.ratio(16)
                 source: "qrc:/emotes/wondering.png"
+                asynchronous: true
             }
         }
     }

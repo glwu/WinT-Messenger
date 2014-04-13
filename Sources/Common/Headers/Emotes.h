@@ -9,7 +9,7 @@
 #define EMOTES_H
 
 #include <QObject>
-#include <QSettings>
+#include <QString>
 
 class Emotes : public QObject {
 

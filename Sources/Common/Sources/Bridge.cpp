@@ -26,23 +26,6 @@ void Bridge::sendMessage(QString text) {
     returnPressed(text);
 }
 
-int Bridge::ratio(int input) {
-    double multiplicationRatio = 1;
-    double deviceRatio = 1;
-
-#if defined(Q_OS_ANDROID)
-    multiplicationRatio = 1.8;
-    deviceRatio = qMin(qMax(qApp->primaryScreen()->geometry().width(),
-                            qApp->primaryScreen()->geometry().height()) / 1136.,
-                       qMin(qApp->primaryScreen()->geometry().width(),
-                            qApp->primaryScreen()->geometry().height()) / 640.);
-#elif defined(Q_OS_IOS)
-    multiplicationRatio = 1.2;
-#endif
-
-    return input * multiplicationRatio * deviceRatio;
-}
-
 void Bridge::startNetChat() {
     netChat = new NetChat();
     netChatEnabled = true;
@@ -142,5 +125,5 @@ void Bridge::startHotspot(const QString &_ssid, const QString &_password) {
 }
 
 void Bridge::processMessage(const QString &text) {
-    newMessage(emotes->addEmotes(text, ratio(16)));
+    newMessage(emotes->addEmotes(text, DeviceManager::ratio(16)));
 }

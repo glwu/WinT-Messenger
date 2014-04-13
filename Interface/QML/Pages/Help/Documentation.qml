@@ -9,17 +9,17 @@ import QtQuick 2.2
 import "../../Widgets"
 
 Page {
-    logoEnabled    : false
-    toolbarTitle   : mobile ? qsTr("Help") : qsTr("Documentation")
+    logoEnabled: false
+    toolbarTitle: qsTr("Help")
 
     Flickable {
         id: flickable
-        anchors.fill       : parent
-        anchors.margins    : 16
-        anchors.topMargin  : 16 + arrangeFirstItem
-        contentHeight      : textView.paintedHeight
-        flickableDirection : Flickable.VerticalFlick
-        interactive        : true
+        anchors.fill: parent
+        anchors.margins: 16
+        anchors.topMargin: 16 + arrangeFirstItem
+        contentHeight: textView.paintedHeight
+        flickableDirection: Flickable.VerticalFlick
+        interactive: true
 
         function ensureVisible(r) {
             if (contentX >= r.x)
@@ -34,19 +34,17 @@ Page {
 
         TextEdit {
             id: textView
-            activeFocusOnPress       : true
-            anchors.fill             : parent
-            clip                     : true
-            color                    : colors.text
-            font.family              : defaultFont
-            font.pixelSize           : sizes.text
-            onCursorRectangleChanged : flickable.ensureVisible(cursorRectangle)
-            readOnly                 : true
-            textFormat               : TextEdit.RichText
-            wrapMode                 : TextEdit.WrapAtWordBoundaryOrAnywhere
-            onLinkActivated          : Qt.openUrlExternally(link)
-
-            text                     : {
+            activeFocusOnPress: true
+            anchors.fill: parent
+            color: colors.text
+            font.family: defaultFont
+            font.pixelSize: sizes.text
+            onCursorRectangleChanged: flickable.ensureVisible(cursorRectangle)
+            readOnly: true
+            textFormat: TextEdit.RichText
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+            onLinkActivated: Qt.openUrlExternally(link)
+            text: {
                 // START OF HTML DOCUMENT
                 "<!DOCTYPE html>"
                         + "<html>"

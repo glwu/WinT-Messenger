@@ -8,8 +8,8 @@
 import QtQuick 2.2
 
 Text {
-    color               : colors.text
-    font.family         : defaultFont
-    font.pixelSize      : sizes.control
+    color: colors.text
+    font.family: defaultFont
+    font.pixelSize: sizes.control
 }
 

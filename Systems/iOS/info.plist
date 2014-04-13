@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>WinT Messenger</string>
 	<key>CFBundleExecutable</key>
-	<string>WinTMessenger</string>
+	<string>wint-messenger</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Created by the WinT 3794 team</string>
 	<key>CFBundleIdentifier</key>
@@ -38,9 +38,7 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>fonts/Bold.ttf</string>
 		<string>fonts/Regular.ttf</string>
-		<string>fonts/Italic.ttf</string>
 	</array>
 	<key>CFBundleIcons</key>
 	<dict>

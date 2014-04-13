@@ -13,7 +13,7 @@ QtObject {
     property string borderColor: "#c7c7c7"
 
     property string toolbarText: "#fff"
-    property string toolbarColor: settings.customizedUiColor() ? userColor : "#333"
+    property string toolbarColor: Settings.customizedUiColor() ? userColor: "#333"
     property string toolbarColorStatic: "#333"
     property string toolbarPressedColor: "#666"
 
@@ -28,15 +28,15 @@ QtObject {
 
     property string buttonBackground: "#ededed"
     property string buttonForeground: "#222222"
-    property string userColor       : settings.value("userColor", "#00557f")
+    property string userColor: Settings.value("userColor", "#00557f")
 
     property string buttonBackgroundHover: "#f2f2f2"
-    property string borderColorHover     : borderColor
+    property string borderColorHover: borderColor
 
     property string buttonBackgroundPressed: "#e8e8e8"
-    property string borderColorPressed     : borderColor
+    property string borderColorPressed: borderColor
 
     property string buttonBackgroundDisabled: "#efefef"
     property string buttonForegroundDisabled: "#838383"
-    property string borderColorDisabled     : "#d9d9d9"
+    property string borderColorDisabled: "#d9d9d9"
 }

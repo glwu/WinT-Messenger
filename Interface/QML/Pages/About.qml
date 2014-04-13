@@ -9,12 +9,10 @@ import QtQuick 2.2
 import "../Widgets"
 
 Page {
-    logoImageSource : "qrc:/images/Info.png"
-    logoSubtitle    : qsTr("Created by the WinT 3794 team")
-    logoTitle       : qsTr("WinT Messenger 1.1 beta")
-    toolbarTitle    : qsTr("About")
-
-    property int perfectY: 10 + parent.height / 16
+    logoImageSource: "qrc:/images/Info.png"
+    logoSubtitle: qsTr("Created by the WinT 3794 team")
+    logoTitle: qsTr("WinT Messenger 1.1 beta")
+    toolbarTitle: qsTr("About")
 
     Component.onCompleted: {
         enableAboutButton(false)
@@ -27,19 +25,19 @@ Page {
     }
 
     Column {
-        y                        : arrangeFirstItem + perfectY
-        spacing                  : bridge.ratio(4)
-        anchors.horizontalCenter : parent.horizontalCenter
+        y: arrangeFirstItem + 10 + parent.height / 16
+        spacing: DeviceManager.ratio(4)
+        anchors.horizontalCenter: parent.horizontalCenter
 
         Button {
-            text      : qsTr("Website")
-            onClicked : Qt.openUrlExternally("http://wint-im.sf.net")
+            text: qsTr("Website")
+            onClicked: Qt.openUrlExternally("http://wint-im.sf.net")
         }
 
         Button {
-            onClicked : Qt.openUrlExternally("http://wint-im.sf.net/donate.html")
-            text      : qsTr("Donate")
-            enabled   : false
+            onClicked: Qt.openUrlExternally("http://wint-im.sf.net/donate.html")
+            text: qsTr("Donate")
+            enabled: false
         }
     }
 }

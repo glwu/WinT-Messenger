@@ -13,10 +13,10 @@ import "../Widgets"
 Page {
     id: preferences
 
-    logoImageSource : "qrc:/images/Settings.png"
-    logoSubtitle    : qsTr("Customize WinT Messenger")
-    logoTitle       : qsTr("Settings")
-    toolbarTitle    : qsTr("Settings")
+    logoImageSource: "qrc:/images/Settings.png"
+    logoSubtitle: qsTr("Customize WinT Messenger")
+    logoTitle: qsTr("Settings")
+    toolbarTitle: qsTr("Settings")
 
     Component.onCompleted: {
         enableAboutButton(false)
@@ -29,53 +29,47 @@ Page {
     }
 
     Column {
-        spacing: bridge.ratio(8)
+        spacing: DeviceManager.ratio(8)
         y: arrangeFirstItem
-        anchors.left        : parent.left
-        anchors.right       : parent.right
-        anchors.leftMargin  : 48
-        anchors.rightMargin : 48
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: 48
+        anchors.rightMargin: 48
 
         Label {
-            anchors.left : parent.left
-            text         : qsTr("Nickname and profile color:")
+            anchors.left: parent.left
+            text: qsTr("Nickname and profile color:")
         }
 
         Rectangle {
-            anchors.left  : parent.left
-            anchors.right : parent.right
-
+            anchors.left: parent.left
+            anchors.right: parent.right
             height: textBox.height
-
             color: colors.background
 
             Textbox {
                 id: textBox
-                anchors.left    : parent.left
-                anchors.right   : colorRectangle.left
+                anchors.left: parent.left
+                anchors.right: colorRectangle.left
                 anchors.rightMargin: 2
-
-                placeholderText : qsTr("Type a nickname and choose a profile color")
-                text            : settings.value("userName", "unknown")
-                onTextChanged   : settings.setValue("userName", text)
+                placeholderText: qsTr("Type a nickname and choose a profile color")
+                text: Settings.value("userName", "unknown")
+                onTextChanged: Settings.setValue("userName", text)
             }
 
             Rectangle {
                 id: colorRectangle
                 anchors.right: parent.right
-
                 height: textBox.height
-                width : height
+                width: height
                 border.width: 1
-
                 color: colorDialog.color
                 border.color: colors.borderColor
-
                 onColorChanged: {
-                    settings.setValue("userColor", colorDialog.color)
+                    Settings.setValue("userColor", colorDialog.color)
                     colors.userColor = colorDialog.color
 
-                    if (settings.customizedUiColor())
+                    if (Settings.customizedUiColor())
                         colors.toolbarColor = colors.userColor
                     else
                         colors.toolbarColor = colors.toolbarColorStatic
@@ -85,24 +79,24 @@ Page {
                     id: mouseArea
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked   : colorDialog.open()
+                    onClicked: colorDialog.open()
                 }
             }
         }
 
         ColorDialog {
             id: colorDialog
-            title      : qsTr("Chose profile color")
-            color      : settings.value("userColor", colors.userColor)
+            title: qsTr("Chose profile color")
+            color: Settings.value("userColor", colors.userColor)
         }
 
         CheckBox {
             id: customizedUiColor
-            checked: settings.customizedUiColor()
+            checked: Settings.customizedUiColor()
             onCheckedChanged: {
-                settings.setValue("customizedUiColor", checked)
+                Settings.setValue("customizedUiColor", checked)
 
-                if (settings.customizedUiColor())
+                if (Settings.customizedUiColor())
                     colors.toolbarColor = colors.userColor
                 else
                     colors.toolbarColor = colors.toolbarColorStatic
@@ -118,11 +112,11 @@ Page {
 
         CheckBox {
             id: opaqueToolbar
-            checked: settings.opaqueToolbar()
+            checked: Settings.opaqueToolbar()
             onCheckedChanged: {
-                settings.setValue("opaqueToolbar", checked)
+                Settings.setValue("opaqueToolbar", checked)
 
-                if (settings.opaqueToolbar())
+                if (Settings.opaqueToolbar())
                     toolbar.opacity = 1
                 else
                     toolbar.opacity = 0.9

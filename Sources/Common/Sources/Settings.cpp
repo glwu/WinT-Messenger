@@ -30,19 +30,3 @@ bool Settings::customizedUiColor() {
 bool Settings::opaqueToolbar() {
     return settings->value("opaqueToolbar", false).toBool();
 }
-
-void Settings::saveX(int x) {
-    setValue("x", x);
-}
-
-void Settings::saveY(int y) {
-    setValue("y", y);
-}
-
-void Settings::saveWidth(int width) {
-    setValue("width", width);
-}
-
-void Settings::saveHeight(int height) {
-    setValue("height", height);
-}

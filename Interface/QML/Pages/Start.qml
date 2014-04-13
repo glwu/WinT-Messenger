@@ -11,32 +11,30 @@ import QtQuick.Dialogs 1.1
 import "../Widgets"
 
 Page {
-    backButtonEnabled   : false
-    logoImageSource     : "qrc:/images/Logo.png"
-    logoSubtitle        : qsTr("Please choose an option")
-    logoTitle           : qsTr("Welcome")
-    toolbarTitle        : qsTr("Start")
-
-    property int perfectY: arrangeFirstItem + parent.height / 32
+    backButtonEnabled: false
+    logoImageSource: "qrc:/images/Logo.png"
+    logoSubtitle: qsTr("Please choose an option")
+    logoTitle: qsTr("Welcome")
+    toolbarTitle: qsTr("Start")
 
     Column {
-        spacing: bridge.ratio(4)
-        y: perfectY
-        anchors.horizontalCenter : parent.horizontalCenter
+        spacing: DeviceManager.ratio(4)
+        y: arrangeFirstItem + parent.height / 32
+        anchors.horizontalCenter: parent.horizontalCenter
 
         Button {
-            onClicked : openPage("Pages/Connect.qml")
-            text      : qsTr("Connect")
+            onClicked: openPage("Pages/Connect.qml")
+            text: qsTr("Connect")
         }
 
         Button {
-            onClicked : Qt.openUrlExternally("http://wint-im.sf.net/news.html")
-            text      : qsTr("News")
+            onClicked: Qt.openUrlExternally("http://wint-im.sf.net/news.html")
+            text: qsTr("News")
         }
 
         Button {
-            onClicked : openPage("Pages/Help/Help.qml")
-            text      : qsTr("Help")
+            onClicked: openPage("Pages/Help/Help.qml")
+            text: qsTr("Help")
         }
     }
 }

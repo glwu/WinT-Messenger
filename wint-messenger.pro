@@ -4,9 +4,6 @@
 TARGET   = wint-messenger
 TEMPLATE = app
 
-# Uncomment the following line for building the app statically
-#CONFIG  += STATIC
-
 # Make sure that all files are enconded in UTF-8
 CODECFORTR  = UTF-8
 CODECFORSRC = UTF-8
@@ -20,12 +17,14 @@ QT += widgets
 
 # Additional options for iOS, Android, Windows & OS X
 ios {
-    QMAKE_INFO_PLIST = Systems/iOS/info.plist
-    RC_FILE          = Systems/iOS/info.plist
-    RC_FILE         += Systems/iOS/icon.png
-    FONTS.files      = $$PWD/Interface/Resources/Fonts/Regular.ttf
+    QMAKE_INFO_PLIST   = Systems/iOS/info.plist
+
+    ICONS.files        = $$PWD/Systems/iOS/icon.png
+    FONTS.files        = $$PWD/Interface/Resources/Fonts/Regular.ttf
     FONTS.path         = fonts
+
     QMAKE_BUNDLE_DATA += FONTS
+    QMAKE_BUNDLE_DATA += ICONS
 }
 
 android {
@@ -37,10 +36,11 @@ win32* {
 }
 
 macx {
+    QMAKE_INFO_PLIST = Systems/Mac/info.plist
     ICON    = Systems/Mac/icon.icns
     RC_FILE = Systems/Mac/info.plist
+
     CONFIG += app_bundle
-    QMAKE_INFO_PLIST = Systems/Mac/info.plist
     TARGET = "WinT Messenger"
 }
 
@@ -49,7 +49,6 @@ OTHER_FILES += \
     Interface/QML/Widgets/ChatInterface.qml \
     Interface/QML/Widgets/Colors.qml \
     Interface/QML/Widgets/Label.qml \
-    Interface/QML/Widgets/Logo.qml \
     Interface/QML/Widgets/Page.qml \
     Interface/QML/Widgets/Textbox.qml \
     Interface/QML/Widgets/Toolbar.qml \
@@ -70,10 +69,7 @@ HEADERS += \
     Sources/Common/Headers/Bridge.h \
     Sources/Common/Headers/Emotes.h \
     Sources/Common/Headers/Settings.h \
-    #Sources/Chat/Bluetooth/Headers/BtChat.h \
-    #Sources/Chat/Bluetooth/Headers/BtClient.h \
-    #Sources/Chat/Bluetooth/Headers/BtSelector.h \
-    #Sources/Chat/Bluetooth/Headers/BtServer.h \
+    Sources/Common/Headers/DeviceManager.h \
     Sources/Chat/Network/Headers/NetChat.h \
     Sources/Chat/Network/Headers/NetClient.h \
     Sources/Chat/Network/Headers/NetConnection.h \
@@ -84,16 +80,13 @@ SOURCES += \
     Sources/Common/Sources/Bridge.cpp \
     Sources/Common/Sources/Emotes.cpp \
     Sources/Common/Sources/Settings.cpp \
-    #Sources/Chat/Bluetooth/Sources/BtChat.cpp \
-    #Sources/Chat/Bluetooth/Sources/BtClient.cpp \
-    #Sources/Chat/Bluetooth/Sources/BtSelector.cpp \
-    #Sources/Chat/Bluetooth/Sources/BtServer.cpp \
     Sources/Chat/Network/Sources/NetChat.cpp \
     Sources/Chat/Network/Sources/NetClient.cpp \
     Sources/Chat/Network/Sources/NetConnection.cpp \
     Sources/Chat/Network/Sources/NetPeerManager.cpp \
     Sources/Chat/Network/Sources/NetServer.cpp \
-    Sources/main.cpp
+    Sources/main.cpp \
+    Sources/Common/Sources/DeviceManager.cpp
 
 RESOURCES += \
     Interface/Resources/Emotes/emotes.qrc \

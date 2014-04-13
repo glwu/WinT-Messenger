@@ -9,9 +9,9 @@ import QtQuick 2.2
 import "../Widgets"
 
 Page {
-    flickable    : false
-    logoEnabled  : false
-    toolbarTitle : qsTr("Chat room")
+    flickable: false
+    logoEnabled: false
+    toolbarTitle: qsTr("Chat room")
 
     Component.onCompleted: {
         enableAboutButton(false)

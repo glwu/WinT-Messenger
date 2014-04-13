@@ -8,25 +8,20 @@
 import QtQuick 2.2
 
 Rectangle {
-    property bool   backButtonEnabled
-    property alias  text: titleText.text
+    property int buttonSize: DeviceManager.ratio(48)
+    property alias text: titleText.text
+    property alias backButtonOpacity: backButton.opacity
+    property alias backButtonArea: backMouseArea
+    property bool backButtonEnabled
+    property bool settingsButtonEnabled: true
+    property bool aboutButtonEnabled: true
 
-    property alias  backButtonOpacity: backButton.opacity
-    property alias  backButtonArea: backMouseArea
-
-    property bool   settingsButtonEnabled: true
-    property bool   aboutButtonEnabled: true
-
-    property int buttonSize: bridge.ratio(48)
-
-    height : bridge.ratio(56)
-
-    anchors.left  : parent.left
-    anchors.right : parent.right
-    anchors.top   : parent.top
-
+    height: DeviceManager.ratio(56)
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: parent.top
     color: colors.toolbarColorStatic
-    opacity: settings.opaqueToolbar() ? 1 : 0.7
+    opacity: Settings.opaqueToolbar() ? 1: 0.75
 
     Rectangle {
         color: colors.toolbarColor
@@ -36,24 +31,26 @@ Rectangle {
 
     Item {
         id: backButton
-        anchors.left           : parent.left
-        anchors.leftMargin     : bridge.ratio(4)
-        anchors.verticalCenter : parent.verticalCenter
-        height                 : buttonSize
-        width                  : opacity > 0 ? backImage.width : 0
-
+        anchors.left: parent.left
+        anchors.leftMargin: DeviceManager.ratio(4)
+        anchors.verticalCenter: parent.verticalCenter
+        height: buttonSize
+        width: opacity > 0 ? backImage.width: 0
         enabled: parent.backButtonEnabled
 
         Image {
             id: backImage
-            source                   : "qrc:/images/ToolbarIcons/Back.png"
-            height                   : buttonSize
-            width                    : height
+            source: "qrc:/images/ToolbarIcons/Back.png"
+            height: buttonSize
+            width: height
+            asynchronous: true
+            smooth: true
+            //sourceSize: Qt.size(height, height)
         }
 
         MouseArea {
             id: backMouseArea
-            anchors.fill : parent
+            anchors.fill: parent
         }
 
         Behavior on opacity { NumberAnimation{} }
@@ -61,13 +58,13 @@ Rectangle {
 
     Item {
         id: settingsButton
-        anchors.right          : parent.right
-        anchors.rightMargin    : bridge.ratio(4)
-        anchors.verticalCenter : parent.verticalCenter
-        height                 : buttonSize
-        width                  : height
-        enabled                : settingsButtonEnabled
-        opacity                : settingsButtonEnabled ? 1 : 0
+        anchors.right: parent.right
+        anchors.rightMargin: DeviceManager.ratio(4)
+        anchors.verticalCenter: parent.verticalCenter
+        height: buttonSize
+        width: height
+        enabled: settingsButtonEnabled
+        opacity: settingsButtonEnabled ? 1: 0
 
         Behavior on opacity { NumberAnimation{} }
 
@@ -76,12 +73,15 @@ Rectangle {
             anchors.fill: parent
             source: "qrc:/images/ToolbarIcons/Settings.png"
             height: buttonSize
-            width : height
+            width: height
+            //sourceSize: Qt.size(height, height)
+            smooth: true
+            asynchronous: true
         }
 
         MouseArea {
             id: settingsMouseArea
-            anchors.fill : parent
+            anchors.fill: parent
             onClicked: {
                 openPage("Pages/Preferences.qml")
                 enableSettingsButton(false)
@@ -91,28 +91,31 @@ Rectangle {
 
     Item {
         id: aboutButton
-        anchors.right          : settingsButton.left
-        anchors.rightMargin    : bridge.ratio(4)
-        anchors.verticalCenter : parent.verticalCenter
-        height                 : buttonSize
-        width                  : height
-        enabled                : aboutButtonEnabled
-        opacity                : aboutButtonEnabled ? 1 : 0
+        anchors.right: settingsButton.left
+        anchors.rightMargin: DeviceManager.ratio(4)
+        anchors.verticalCenter: parent.verticalCenter
+        height: buttonSize
+        width: height
+        enabled: aboutButtonEnabled
+        opacity: aboutButtonEnabled ? 1: 0
 
         Behavior on opacity { NumberAnimation{} }
         Behavior on anchors.rightMargin { NumberAnimation{}}
 
         Image {
             id: aboutImage
-            anchors.fill             : parent
-            source                   : "qrc:/images/ToolbarIcons/About.png"
-            height                   : buttonSize
-            width                    : height
+            anchors.fill: parent
+            source: "qrc:/images/ToolbarIcons/About.png"
+            height: buttonSize
+            width: height
+            //sourceSize: Qt.size(height, height)
+            smooth: true
+            asynchronous: true
         }
 
         MouseArea {
             id: aboutMouseArea
-            anchors.fill : parent
+            anchors.fill: parent
             onClicked: {
                 openPage("Pages/About.qml")
                 enableAboutButton(false)
@@ -120,18 +123,18 @@ Rectangle {
         }
     }
 
-    Text {
+    Label {
         id: titleText
-        color                    : colors.toolbarText
-        x                        : backButton.x + backButton.width + backButton.y
-        anchors.verticalCenter   : parent.verticalCenter
-        font.pixelSize           : sizes.toolbarTitle
-        horizontalAlignment      : Text.AlignHCenter
-        verticalAlignment        : Text.AlignVCenter
-        font.family              : defaultFont
+        color: colors.toolbarText
+        x: backButton.x + backButton.width + backButton.y
+        anchors.verticalCenter: parent.verticalCenter
+        font.pixelSize: sizes.toolbarTitle
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        opacity: 0.75
 
         MouseArea {
-            anchors.fill : parent
+            anchors.fill: parent
             onClicked: stackView.pop()
         }
 
