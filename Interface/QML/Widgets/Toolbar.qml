@@ -5,122 +5,92 @@
 //  Please check the license.txt file for more information.
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 
 Rectangle {
-    property int buttonSize: DeviceManager.ratio(48)
     property alias text: titleText.text
-    property alias backButtonOpacity: backButton.opacity
-    property alias backButtonArea: backMouseArea
-    property bool backButtonEnabled
-    property bool settingsButtonEnabled: true
-    property bool aboutButtonEnabled: true
+    property alias settingsButtonEnabled: settingsButton.enabled
+    property alias aboutButtonEnabled: aboutButton.enabled
 
-    height: DeviceManager.ratio(56)
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: parent.top
-    color: colors.toolbarColorStatic
+
+    height: DeviceManager.ratio(56)
     opacity: Settings.opaqueToolbar() ? 1: 0.75
+    color: colors.toolbarColorStatic
 
     Rectangle {
-        color: colors.toolbarColor
         anchors.fill: parent
-        opacity: 0.97
+        color: colors.toolbarColor
+        opacity: 0.7
     }
 
-    Item {
+    Image {
         id: backButton
         anchors.left: parent.left
         anchors.leftMargin: DeviceManager.ratio(4)
         anchors.verticalCenter: parent.verticalCenter
-        height: buttonSize
-        width: opacity > 0 ? backImage.width: 0
-        enabled: parent.backButtonEnabled
 
-        Image {
-            id: backImage
-            source: "qrc:/images/ToolbarIcons/Back.png"
-            height: buttonSize
-            width: height
-            asynchronous: true
-            smooth: true
-            //sourceSize: Qt.size(height, height)
-        }
+        width: opacity > 0 ? DeviceManager.ratio(48) : 0
+        height: DeviceManager.ratio(48)
+
+        asynchronous: true
+        source: "qrc:/images/ToolbarIcons/Back.png"
+
+        opacity: stackView.depth > 1 ? 1: 0
 
         MouseArea {
-            id: backMouseArea
+            id: backButtonMouseArea
             anchors.fill: parent
+            onClicked: popStackView()
         }
 
         Behavior on opacity { NumberAnimation{} }
     }
 
-    Item {
+    Image {
         id: settingsButton
         anchors.right: parent.right
         anchors.rightMargin: DeviceManager.ratio(4)
         anchors.verticalCenter: parent.verticalCenter
-        height: buttonSize
+
+        height: DeviceManager.ratio(48)
         width: height
-        enabled: settingsButtonEnabled
-        opacity: settingsButtonEnabled ? 1: 0
 
-        Behavior on opacity { NumberAnimation{} }
+        opacity: enabled ? 1 : 0
 
-        Image {
-            id: settingsImage
-            anchors.fill: parent
-            source: "qrc:/images/ToolbarIcons/Settings.png"
-            height: buttonSize
-            width: height
-            //sourceSize: Qt.size(height, height)
-            smooth: true
-            asynchronous: true
-        }
+        source: "qrc:/images/ToolbarIcons/Settings.png"
+        asynchronous: true
 
         MouseArea {
-            id: settingsMouseArea
             anchors.fill: parent
-            onClicked: {
-                openPage("Pages/Preferences.qml")
-                enableSettingsButton(false)
-            }
+            onClicked: openPage("Pages/Preferences.qml")
         }
+
+        Behavior on opacity { NumberAnimation{} }
     }
 
-    Item {
+    Image {
         id: aboutButton
         anchors.right: settingsButton.left
         anchors.rightMargin: DeviceManager.ratio(4)
         anchors.verticalCenter: parent.verticalCenter
-        height: buttonSize
+
+        height: DeviceManager.ratio(48)
         width: height
-        enabled: aboutButtonEnabled
-        opacity: aboutButtonEnabled ? 1: 0
 
-        Behavior on opacity { NumberAnimation{} }
-        Behavior on anchors.rightMargin { NumberAnimation{}}
+        opacity: enabled ? 1 : 0
 
-        Image {
-            id: aboutImage
-            anchors.fill: parent
-            source: "qrc:/images/ToolbarIcons/About.png"
-            height: buttonSize
-            width: height
-            //sourceSize: Qt.size(height, height)
-            smooth: true
-            asynchronous: true
-        }
+        source: "qrc:/images/ToolbarIcons/About.png"
+        asynchronous: true
 
         MouseArea {
-            id: aboutMouseArea
             anchors.fill: parent
-            onClicked: {
-                openPage("Pages/About.qml")
-                enableAboutButton(false)
-            }
+            onClicked: openPage("Pages/About.qml")
         }
+
+        Behavior on opacity { NumberAnimation{} }
     }
 
     Label {
@@ -135,7 +105,7 @@ Rectangle {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: stackView.pop()
+            onClicked: popStackView()
         }
 
         Behavior on x { NumberAnimation{ easing.type: Easing.OutCubic} }

@@ -32,10 +32,16 @@ int main(int argc, char **argv) {
     QQmlComponent *component = new QQmlComponent(engine);
     component->loadUrl(QUrl("qrc:/QML/main.qml"));
 
-    QObject *object = component->create();
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(object);
-
+    QObject *root = component->create();
+    QQuickWindow *window = qobject_cast<QQuickWindow *>(root);
     window->show();
+
+    if (!DeviceManager::isMobile()) {
+        if (settings->firstLaunch()) {
+            window->setWidth(720);
+            window->setHeight(540);
+        }
+    }
 
     return app.exec();
 }

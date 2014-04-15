@@ -5,7 +5,7 @@
 //  Please check the license.txt file for more information.
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 
 Item {
     id: page
@@ -13,7 +13,6 @@ Item {
 
     function setText(text, color) {textbox.text = "<font color=" + color + ">" + text + "</font><br>"}
     function clearText()          {textbox.text = ""}
-    function setTextSize(size)    {textbox.font.pixelSize = DeviceManager.ratio(size)}
     function addUser(user)        {Qt.createQmlObject(("UserInfo {userName:\"" + user + "\";}"), column, (user + "-userInfo"))}
 
     Component.onCompleted: addUser(qsTr("You") + " (" + Settings.value("userName", "unknown") + ")")
@@ -50,7 +49,7 @@ Item {
             wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
             renderType: Text.NativeRendering
             font.family: defaultFont
-            font.pixelSize: DeviceManager.ratio(16)
+            font.pixelSize: DeviceManager.ratio(14)
             readOnly: true
             activeFocusOnPress: false
             clip: true
@@ -172,9 +171,30 @@ Item {
             }
         }
 
+        Button {
+            id: btButton
+            anchors.bottom: parent.bottom
+            anchors.left: attachButton.right
+            anchors.top: parent.top
+            anchors.leftMargin: -1
+            width: visible ? parent.height : 0
+            onClicked: Bridge.showBtSelector()
+            enabled: Bridge.btChatEnabled()
+            visible: enabled
+
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                height: width
+                width: parent.visible ? DeviceManager.ratio(28) : 0
+                source: "qrc:/images/ToolbarIcons/Bt.png"
+            }
+        }
+
+
         Textbox {
             id: sendTextbox
-            anchors.left: attachButton.right
+            anchors.left: btButton.right
             anchors.right: emotesButton.left
             anchors.bottom: parent.bottom
             anchors.top: parent.top

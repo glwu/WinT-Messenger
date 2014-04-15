@@ -5,7 +5,7 @@
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 import "../../Widgets"
 
 Page {
@@ -50,14 +50,14 @@ Page {
     }
 
     Component.onCompleted: {
-        enableAboutButton(false)
-        enableSettingsButton(false)
+        toolbar.aboutButtonEnabled = false
+        toolbar.settingsButtonEnabled = false
         updateStatus()
     }
 
     onVisibleChanged: {
-        enableAboutButton(!visible)
-        enableSettingsButton(!visible)
+        toolbar.aboutButtonEnabled = !visible
+        toolbar.settingsButtonEnabled = !visible
 
         if (!visible)
             Bridge.stopHotspot()
@@ -76,7 +76,6 @@ Page {
         ChatInterface {
             anchors.fill: parent
             id: control
-            Component.onCompleted: setTextSize(12)
         }
     }
 

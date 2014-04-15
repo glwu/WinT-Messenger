@@ -30,3 +30,14 @@ bool Settings::customizedUiColor() {
 bool Settings::opaqueToolbar() {
     return settings->value("opaqueToolbar", false).toBool();
 }
+
+QString Settings::getDialogColor(const QString &originalColor) {
+    QColorDialog dialog;
+    dialog.setCurrentColor(QColor(originalColor));
+    int ret = dialog.exec();
+
+    if (ret == QColorDialog::Accepted)
+        return dialog.selectedColor().name();
+
+    return settings->value("userColor", "#0081bd").toString();
+}

@@ -5,7 +5,7 @@
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 import "../Widgets"
 
 Page {
@@ -20,18 +20,21 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
 
         Button {
-            onClicked: openPage("Pages/Chat.qml")
-            text: qsTr("Bluetooth")
-            enabled: false
+            text: qsTr("Bluetooth chat")
+            onClicked: {
+                text = qsTr("Please wait...")
+                enabled = false
+
+                Bridge.startBtChat()
+                openPage("Pages/Chat.qml")
+
+                text = qsTr("Bluetooth chat")
+                enabled = true
+            }
         }
 
         Button {
-            onClicked: openPage("Pages/Hotspot/Wizard.qml")
-            text: qsTr("Setup a wireless hotspot")
-        }
-
-        Button {
-            text: qsTr("Local Network")
+            text: qsTr("Network (LAN) chat")
             onClicked: {
                 text = qsTr("Please wait...")
                 enabled = false
@@ -39,9 +42,14 @@ Page {
                 Bridge.startNetChat()
                 openPage("Pages/Chat.qml")
 
-                text = qsTr("Local Network")
+                text = qsTr("Network (LAN) chat")
                 enabled = true
             }
+        }
+
+        Button {
+            onClicked: openPage("Pages/Hotspot/Wizard.qml")
+            text: qsTr("Setup a wireless hotspot")
         }
     }
 

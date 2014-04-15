@@ -5,9 +5,8 @@
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.2
-import QtQuick.Dialogs 1.1
-import QtQuick.Controls 1.1
+import QtQuick 2.0
+import QtQuick.Controls 1.0
 import "../Widgets"
 
 Page {
@@ -19,13 +18,13 @@ Page {
     toolbarTitle: qsTr("Settings")
 
     Component.onCompleted: {
-        enableAboutButton(false)
-        enableSettingsButton(false)
+        toolbar.aboutButtonEnabled = false
+        toolbar.settingsButtonEnabled = false
     }
 
     onVisibleChanged: {
-        enableAboutButton(!visible)
-        enableSettingsButton(!visible)
+        toolbar.aboutButtonEnabled = !visible
+        toolbar.settingsButtonEnabled = !visible
     }
 
     Column {
@@ -63,11 +62,10 @@ Page {
                 height: textBox.height
                 width: height
                 border.width: 1
-                color: colorDialog.color
+                color: colors.userColor
                 border.color: colors.borderColor
                 onColorChanged: {
-                    Settings.setValue("userColor", colorDialog.color)
-                    colors.userColor = colorDialog.color
+                    Settings.setValue("userColor", colors.userColor)
 
                     if (Settings.customizedUiColor())
                         colors.toolbarColor = colors.userColor
@@ -79,15 +77,9 @@ Page {
                     id: mouseArea
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked: colorDialog.open()
+                    onClicked: colors.userColor = Settings.getDialogColor(colors.userColor);
                 }
             }
-        }
-
-        ColorDialog {
-            id: colorDialog
-            title: qsTr("Chose profile color")
-            color: Settings.value("userColor", colors.userColor)
         }
 
         CheckBox {
@@ -119,7 +111,7 @@ Page {
                 if (Settings.opaqueToolbar())
                     toolbar.opacity = 1
                 else
-                    toolbar.opacity = 0.9
+                    toolbar.opacity = 0.75
             }
 
             Label {

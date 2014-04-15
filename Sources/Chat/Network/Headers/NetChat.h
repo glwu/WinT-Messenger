@@ -1,17 +1,8 @@
-//
-//  This file is part of WinT Messenger
-//
-//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
-//  Please check the license.txt file for more information.
-//
-
-#ifndef NETCHAT_H
-#define NETCHAT_H
-
-#include <QColor>
-#include <QSettings>
+#ifndef NET_CHAT_H
+#define NET_CHAT_H
 
 #include "NetClient.h"
+#include "../../../Common/Headers/MessageManager.h"
 
 class NetChat : public QObject {
 
@@ -27,7 +18,7 @@ signals:
 
 public slots:
     void returnPressed(QString text);
-    void sendFile(QString fileName);
+    void shareFile();
 
 private slots:
     void newParticipant(const QString &nick);
@@ -35,9 +26,6 @@ private slots:
 
 private:
     NetClient client;
-    QString color;
-
-    QString prepareMessage(const QString message);
 };
 
 #endif

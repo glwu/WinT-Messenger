@@ -1,24 +1,14 @@
-//
-//  This file is part of WinT Messenger
-//
-//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
-//  Please check the license.txt file for more information.
-//
-
 #ifndef BRIDGE_H
 #define BRIDGE_H
 
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "Emotes.h"
+#include "MessageManager.h"
 #include "DeviceManager.h"
-#include "../../Chat/Network/Headers/NetChat.h"
 
-#ifdef Q_OS_WIN
-#include "qt_windows.h"
-#include "qwindowdefs_win.h"
-#endif
+#include "../../Chat/Network/Headers/NetChat.h"
+#include "../../Chat/Bluetooth/Headers/BtChat.h"
 
 class Bridge: public QWidget {
 
@@ -26,6 +16,7 @@ class Bridge: public QWidget {
 
 public:
     Bridge();
+    ~Bridge();
 
     Q_INVOKABLE void attachFile();
     Q_INVOKABLE void sendMessage(QString text);
@@ -35,10 +26,22 @@ public:
 
     Q_INVOKABLE void startBtChat();
     Q_INVOKABLE void stopBtChat();
+    Q_INVOKABLE void showBtSelector();
 
-    Q_INVOKABLE bool hotspotEnabled();
     Q_INVOKABLE void stopHotspot();
     Q_INVOKABLE void startHotspot(const QString &_ssid, const QString &_password);
+
+    Q_INVOKABLE bool netChatEnabled() {
+        return _netChatEnabled;
+    }
+
+    Q_INVOKABLE bool hotspotEnabled() {
+        return _netHotspot;
+    }
+
+    Q_INVOKABLE bool btChatEnabled() {
+        return _btChatEnabled;
+    }
 
 private slots:
     void processMessage(const QString &text);
@@ -50,11 +53,16 @@ signals:
     void delUser(const QString &nick);
 
 private:
+    BtChat *btChat;
     NetChat *netChat;
-    Emotes *emotes;
 
-    bool netChatEnabled;
-    bool netHotspot;
+    QList<NetChat*> netChatObjects;
+    QList<BtChat*> btChatObjects;
+
+    bool _btChatEnabled;
+    bool _netChatEnabled;
+    bool _netHotspot;
+
     int emotesSize;
 };
 

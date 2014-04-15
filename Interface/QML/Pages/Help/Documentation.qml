@@ -5,7 +5,7 @@
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 import "../../Widgets"
 
 Page {

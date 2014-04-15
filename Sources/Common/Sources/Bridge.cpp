@@ -7,19 +7,29 @@
 
 #include "../Headers/Bridge.h"
 
+#ifdef Q_OS_WIN
+#include <qt_windows.h>
+#include <qwindowdefs_win.h>
+#endif
+
 Bridge::Bridge() {
-    emotes = new Emotes();
-    netChatEnabled = false;
-    netHotspot = false;
+    _btChatEnabled = false;
+    _netChatEnabled = false;
+    _netHotspot = false;
+}
+
+Bridge::~Bridge() {
+    stopBtChat();
+    stopNetChat();
+    stopHotspot();
 }
 
 void Bridge::attachFile() {
-    if (netChatEnabled) {
-#if !defined(Q_OS_ANDROID)
-        netChat->sendFile(QFileDialog::getOpenFileName(NULL, tr("Open File"), QDir::homePath()));
-#endif
-        QMessageBox::warning(NULL, tr("Not supported"), tr("Sorry, file sharing is not supported yet"));
-    }
+    if (netChatEnabled())
+        netChat->shareFile();
+
+    if (btChatEnabled())
+        btChat->shareFile();
 }
 
 void Bridge::sendMessage(QString text) {
@@ -27,8 +37,11 @@ void Bridge::sendMessage(QString text) {
 }
 
 void Bridge::startNetChat() {
+    stopNetChat();
+
     netChat = new NetChat();
-    netChatEnabled = true;
+    netChatObjects.append(netChat);
+    _netChatEnabled = true;
 
     QObject::connect(netChat, SIGNAL(newMessage(QString)),    this,    SLOT(processMessage(QString)));
     QObject::connect(netChat, SIGNAL(newUser(QString)),       this,    SIGNAL(newUser(QString)));
@@ -37,22 +50,30 @@ void Bridge::startNetChat() {
 }
 
 void Bridge::stopNetChat() {
-    if (netChatEnabled) {
-        netChat->deleteLater();
-        netChatEnabled = false;
-    }
+    qDeleteAll(netChatObjects.begin(), netChatObjects.end());
+    netChatObjects.clear();
+    _netChatEnabled = false;
 }
 
 void Bridge::startBtChat() {
+    btChat = new BtChat();
+    btChatObjects.append(btChat);
+    _btChatEnabled = true;
 
+    QObject::connect(btChat, SIGNAL(insertMessage(QString)),  this,    SLOT(processMessage(QString)));
+    QObject::connect(btChat, SIGNAL(newUser(QString)),        this,    SIGNAL(newUser(QString)));
+    QObject::connect(btChat, SIGNAL(delUser(QString)),        this,    SIGNAL(delUser(QString)));
+    QObject::connect(this,    SIGNAL(returnPressed(QString)), btChat, SLOT(returnPressed(QString)));
 }
 
 void Bridge::stopBtChat() {
-
+    qDeleteAll(btChatObjects.begin(), btChatObjects.end());
+    btChatObjects.clear();
+    _btChatEnabled = false;
 }
 
-bool Bridge::hotspotEnabled() {
-    return netHotspot;
+void Bridge::showBtSelector() {
+    btChat->showBtSelector();
 }
 
 void Bridge::stopHotspot() {
@@ -61,7 +82,7 @@ void Bridge::stopHotspot() {
         ShellExecute(0, L"RUNAS", L"NETSH", L"WLAN STOP HOSTEDNETWORK", 0, SW_HIDE);
 
         stopNetChat();
-        netHotspot = false;
+        _netHotspot = false;
         return;
 #endif
 
@@ -69,7 +90,7 @@ void Bridge::stopHotspot() {
         /// FUNCTION TO STOP HOTSPOT
 
         stopNetChat();
-        netHotspot = false;
+        _netHotspot = false;
         return;
 #endif
 
@@ -77,7 +98,7 @@ void Bridge::stopHotspot() {
         /// FUNCTION TO STOP HOTSPOT
 
         stopNetChat();
-        netHotspot = false;
+        _netHotspot = false;
         return;
 #endif
 
@@ -85,7 +106,7 @@ void Bridge::stopHotspot() {
         /// FUNCTION TO STOP HOTSPOT
 
         stopNetChat();
-        netHotspot = false;
+        _netHotspot = false;
         return;
 #endif
 
@@ -93,7 +114,7 @@ void Bridge::stopHotspot() {
         /// FUNCTION TO STOP HOTSPOT
 
         stopNetChat();
-        netHotspot = false;
+        _netHotspot = false;
         return;
 #endif
     }
@@ -107,7 +128,7 @@ void Bridge::startHotspot(const QString &_ssid, const QString &_password) {
 
     startNetChat();
 
-    netHotspot = true;
+    _netHotspot = true;
     return;
 #endif
 
@@ -125,5 +146,5 @@ void Bridge::startHotspot(const QString &_ssid, const QString &_password) {
 }
 
 void Bridge::processMessage(const QString &text) {
-    newMessage(emotes->addEmotes(text, DeviceManager::ratio(16)));
+    newMessage(MessageManager::addEmotes(text, DeviceManager::ratio(14)));
 }

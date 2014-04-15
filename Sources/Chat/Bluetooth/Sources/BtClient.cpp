@@ -38,49 +38,34 @@
 **
 ****************************************************************************/
 
-#include "chatclient.h"
+#include "../Headers/BtClient.h"
 
-#include <qbluetoothsocket.h>
-
-ChatClient::ChatClient(QObject *parent)
-:   QObject(parent), socket(0)
-{
+BtClient::BtClient(QObject *parent) : QObject(parent), socket(0) {
+    setParent(parent);
 }
 
-ChatClient::~ChatClient()
-{
+BtClient::~BtClient() {
     stopClient();
 }
 
-//! [startClient]
-void ChatClient::startClient(const QBluetoothServiceInfo &remoteService)
-{
+void BtClient::startClient(const QBluetoothServiceInfo &remoteService) {
     if (socket)
         return;
 
-    // Connect to service
     socket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
-    qDebug() << "Create socket";
     socket->connectToService(remoteService);
-    qDebug() << "ConnectToService done";
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(readSocket()));
     connect(socket, SIGNAL(connected()), this, SLOT(connected()));
     connect(socket, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
 }
-//! [startClient]
 
-//! [stopClient]
-void ChatClient::stopClient()
-{
+void BtClient::stopClient() {
     delete socket;
     socket = 0;
 }
-//! [stopClient]
 
-//! [readSocket]
-void ChatClient::readSocket()
-{
+void BtClient::readSocket() {
     if (!socket)
         return;
 
@@ -90,19 +75,12 @@ void ChatClient::readSocket()
                              QString::fromUtf8(line.constData(), line.length()));
     }
 }
-//! [readSocket]
 
-//! [sendMessage]
-void ChatClient::sendMessage(const QString &message)
-{
-    QByteArray text = message.toUtf8() + '\n';
+void BtClient::sendMessage(const QString &message) {
+    QByteArray text = message.toUtf8();
     socket->write(text);
 }
-//! [sendMessage]
 
-//! [connected]
-void ChatClient::connected()
-{
+void BtClient::connected() {
     emit connected(socket->peerName());
 }
-//! [connected]

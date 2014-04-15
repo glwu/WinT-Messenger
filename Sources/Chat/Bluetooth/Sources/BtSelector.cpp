@@ -38,18 +38,9 @@
 **
 ****************************************************************************/
 
-#include "remoteselector.h"
-#include "ui_remoteselector.h"
+#include "../Headers/BtSelector.h"
 
-#include <qbluetoothdeviceinfo.h>
-#include <qbluetoothaddress.h>
-#include <qbluetoothlocaldevice.h>
-
-QT_USE_NAMESPACE
-
-RemoteSelector::RemoteSelector(const QBluetoothAddress &localAdapter, QWidget *parent)
-:   QDialog(parent), ui(new Ui::RemoteSelector)
-{
+BtSelector::BtSelector(const QBluetoothAddress &localAdapter, QWidget *parent) : QDialog(parent), ui(new Ui::RemoteSelector) {
     ui->setupUi(this);
 
     m_discoveryAgent = new QBluetoothServiceDiscoveryAgent(localAdapter);
@@ -60,14 +51,12 @@ RemoteSelector::RemoteSelector(const QBluetoothAddress &localAdapter, QWidget *p
     connect(m_discoveryAgent, SIGNAL(canceled()), this, SLOT(discoveryFinished()));
 }
 
-RemoteSelector::~RemoteSelector()
-{
+BtSelector::~BtSelector() {
     delete ui;
     delete m_discoveryAgent;
 }
 
-void RemoteSelector::startDiscovery(const QBluetoothUuid &uuid)
-{
+void BtSelector::startDiscovery(const QBluetoothUuid &uuid) {
     ui->status->setText(tr("Scanning..."));
     if (m_discoveryAgent->isActive())
         m_discoveryAgent->stop();
@@ -79,68 +68,47 @@ void RemoteSelector::startDiscovery(const QBluetoothUuid &uuid)
 
 }
 
-void RemoteSelector::stopDiscovery()
-{
-    if (m_discoveryAgent){
+void BtSelector::stopDiscovery() {
+    if (m_discoveryAgent)
         m_discoveryAgent->stop();
-    }
 }
 
-QBluetoothServiceInfo RemoteSelector::service() const
-{
+QBluetoothServiceInfo BtSelector::service() const {
     return m_service;
 }
 
-void RemoteSelector::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo)
-{
-#if 0
-    qDebug() << "Discovered service on"
-             << serviceInfo.device().name() << serviceInfo.device().address().toString();
-    qDebug() << "\tService name:" << serviceInfo.serviceName();
-    qDebug() << "\tDescription:"
-             << serviceInfo.attribute(QBluetoothServiceInfo::ServiceDescription).toString();
-    qDebug() << "\tProvider:"
-             << serviceInfo.attribute(QBluetoothServiceInfo::ServiceProvider).toString();
-    qDebug() << "\tL2CAP protocol service multiplexer:"
-             << serviceInfo.protocolServiceMultiplexer();
-    qDebug() << "\tRFCOMM server channel:" << serviceInfo.serverChannel();
-#endif
+void BtSelector::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
     QMapIterator<QListWidgetItem *, QBluetoothServiceInfo> i(m_discoveredServices);
-    while (i.hasNext()){
+    while (i.hasNext()) {
         i.next();
-        if (serviceInfo.device().address() == i.value().device().address()){
+
+        if (serviceInfo.device().address() == i.value().device().address())
             return;
-        }
     }
 
     QString remoteName;
     if (serviceInfo.device().name().isEmpty())
         remoteName = serviceInfo.device().address().toString();
+
     else
         remoteName = serviceInfo.device().name();
 
-    QListWidgetItem *item =
-        new QListWidgetItem(QString::fromLatin1("%1 %2").arg(remoteName,
-                                                             serviceInfo.serviceName()));
+    QListWidgetItem *item = new QListWidgetItem(QString::fromLatin1("%1 %2").arg(remoteName, serviceInfo.serviceName()));
 
     m_discoveredServices.insert(item, serviceInfo);
     ui->remoteDevices->addItem(item);
 }
 
-void RemoteSelector::discoveryFinished()
-{
+void BtSelector::discoveryFinished() {
     ui->status->setText(tr("Select the chat service to connect to."));
 }
 
-void RemoteSelector::on_remoteDevices_itemActivated(QListWidgetItem *item)
-{
-    qDebug() << "got click" << item->text();
+void BtSelector::on_remoteDevices_itemActivated(QListWidgetItem *item) {
     m_service = m_discoveredServices.value(item);
 
     accept();
 }
 
-void RemoteSelector::on_cancelButton_clicked()
-{
+void BtSelector::on_cancelButton_clicked() {
     reject();
 }

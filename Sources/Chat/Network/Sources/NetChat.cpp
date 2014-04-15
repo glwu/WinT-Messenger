@@ -7,38 +7,26 @@
 
 #include "../Headers/NetChat.h"
 
-using namespace std;
-
 NetChat::NetChat() {
     connect(&client, SIGNAL(newParticipant(QString)),  this, SLOT(newParticipant(QString)));
     connect(&client, SIGNAL(participantLeft(QString)), this, SLOT(participantLeft(QString)));
     connect(&client, SIGNAL(newMessage(QString)),      this, SIGNAL(newMessage(QString)));
-
-    QSettings *settings = new QSettings("WinT Messenger");
-    color = settings->value("userColor", "#00557f").toString();
 }
 
 void NetChat::returnPressed(QString text) {
-    client.sendMessage(prepareMessage(text));
-    newMessage(prepareMessage(text));
+    client.sendMessage(MessageManager::formatMessage(text, client.nickName()));
+    emit newMessage(MessageManager::formatMessage(text, client.nickName()));
 }
 
-void NetChat::sendFile(QString fileName) {
+void NetChat::shareFile() {
 }
 
 void NetChat::newParticipant(const QString &nick) {
-    newMessage(QString("<i><font color = 'gray'>%1 has joined</font></i>").arg(nick));
-    newUser(nick);
+    emit newMessage(MessageManager::formatNotification("%1 has joined").arg(nick));
+    emit newUser(nick);
 }
 
 void NetChat::participantLeft(const QString &nick) {
-    newMessage(QString("<i><font color = 'gray'>%1 has left</font></i>").arg(nick));
-    delUser(nick);
-}
-
-QString NetChat::prepareMessage(const QString message) {
-    return "<font color = '" + color + "'>"
-            + "[" + QDateTime::currentDateTime().toString("hh:mm:ss") + "] "
-            + "&lt;" + client.nickName() + "&gt;&nbsp; </font>"
-            + message;
+    emit newMessage(MessageManager::formatNotification("%1 has left").arg(nick));
+    emit delUser(nick);
 }

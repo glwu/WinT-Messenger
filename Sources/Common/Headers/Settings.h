@@ -1,13 +1,7 @@
-//
-//  This file is part of WinT Messenger
-//
-//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
-//  Please check the license.txt file for more information.
-//
-
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <QColorDialog>
 #include <QSettings>
 
 class Settings : public QObject {
@@ -23,6 +17,8 @@ public:
     Q_INVOKABLE bool firstLaunch();
     Q_INVOKABLE bool customizedUiColor();
     Q_INVOKABLE bool opaqueToolbar();
+
+    Q_INVOKABLE QString getDialogColor(const QString &originalColor);
 
 private:
     QSettings *settings;

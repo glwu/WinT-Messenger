@@ -5,23 +5,23 @@
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 import "../Widgets"
 
 Page {
     logoImageSource: "qrc:/images/Info.png"
     logoSubtitle: qsTr("Created by the WinT 3794 team")
-    logoTitle: qsTr("WinT Messenger 1.1 beta")
+    logoTitle: qsTr("WinT Messenger 1.0 beta")
     toolbarTitle: qsTr("About")
 
     Component.onCompleted: {
-        enableAboutButton(false)
-        enableSettingsButton(false)
+        toolbar.aboutButtonEnabled = false
+        toolbar.settingsButtonEnabled = false
     }
 
     onVisibleChanged: {
-        enableAboutButton(!visible)
-        enableSettingsButton(!visible)
+        toolbar.aboutButtonEnabled = !visible
+        toolbar.settingsButtonEnabled = !visible
     }
 
     Column {

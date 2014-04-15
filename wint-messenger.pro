@@ -14,8 +14,11 @@ QT += qml
 QT += quick
 QT += network
 QT += widgets
+QT += bluetooth
 
-# Additional options for iOS, Android, Windows & OS X
+android { ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Systems/Android }
+win32* { RC_FILE = Systems/Windows/manifest.rc }
+
 ios {
     QMAKE_INFO_PLIST   = Systems/iOS/info.plist
 
@@ -25,14 +28,6 @@ ios {
 
     QMAKE_BUNDLE_DATA += FONTS
     QMAKE_BUNDLE_DATA += ICONS
-}
-
-android {
-    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Systems/Android
-}
-
-win32* {
-    RC_FILE = Systems/Windows/manifest.rc
 }
 
 macx {
@@ -67,18 +62,21 @@ OTHER_FILES += \
 
 HEADERS += \
     Sources/Common/Headers/Bridge.h \
-    Sources/Common/Headers/Emotes.h \
     Sources/Common/Headers/Settings.h \
     Sources/Common/Headers/DeviceManager.h \
     Sources/Chat/Network/Headers/NetChat.h \
     Sources/Chat/Network/Headers/NetClient.h \
     Sources/Chat/Network/Headers/NetConnection.h \
     Sources/Chat/Network/Headers/NetPeerManager.h \
-    Sources/Chat/Network/Headers/NetServer.h
+    Sources/Chat/Network/Headers/NetServer.h \
+    Sources/Chat/Bluetooth/Headers/BtChat.h \
+    Sources/Chat/Bluetooth/Headers/BtClient.h \
+    Sources/Chat/Bluetooth/Headers/BtSelector.h \
+    Sources/Chat/Bluetooth/Headers/BtServer.h \
+    Sources/Common/Headers/MessageManager.h
 
 SOURCES += \
     Sources/Common/Sources/Bridge.cpp \
-    Sources/Common/Sources/Emotes.cpp \
     Sources/Common/Sources/Settings.cpp \
     Sources/Chat/Network/Sources/NetChat.cpp \
     Sources/Chat/Network/Sources/NetClient.cpp \
@@ -86,11 +84,19 @@ SOURCES += \
     Sources/Chat/Network/Sources/NetPeerManager.cpp \
     Sources/Chat/Network/Sources/NetServer.cpp \
     Sources/main.cpp \
-    Sources/Common/Sources/DeviceManager.cpp
+    Sources/Common/Sources/DeviceManager.cpp \
+    Sources/Chat/Bluetooth/Sources/BtChat.cpp \
+    Sources/Chat/Bluetooth/Sources/BtClient.cpp \
+    Sources/Chat/Bluetooth/Sources/BtSelector.cpp \
+    Sources/Chat/Bluetooth/Sources/BtServer.cpp \
+    Sources/Common/Sources/MessageManager.cpp
 
 RESOURCES += \
     Interface/Resources/Emotes/emotes.qrc \
     Interface/Resources/Images/images.qrc \
     Interface/Resources/Fonts/fonts.qrc \
     Interface/QML/qml.qrc
+
+FORMS += \
+    Sources/Chat/Bluetooth/Forms/remoteselector.ui
 

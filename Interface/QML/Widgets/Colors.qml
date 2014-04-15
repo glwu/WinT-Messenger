@@ -5,7 +5,7 @@
 //  Please check the license.txt file for more information.
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 
 QtObject {
     property string background: "#f7f7f7"
@@ -28,7 +28,7 @@ QtObject {
 
     property string buttonBackground: "#ededed"
     property string buttonForeground: "#222222"
-    property string userColor: Settings.value("userColor", "#00557f")
+    property string userColor: Settings.value("userColor", "#0081bd")
 
     property string buttonBackgroundHover: "#f2f2f2"
     property string borderColorHover: borderColor

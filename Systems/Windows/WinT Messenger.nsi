@@ -28,7 +28,7 @@
 ;--------------------------------
 ;Pages
 
-  !insertmacro MUI_PAGE_LICENSE "License.txt"
+  !insertmacro MUI_PAGE_LICENSE "WinT Messenger\License.txt"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
@@ -50,7 +50,7 @@ Section "WinT Messenger (required)" SecDummy
   SetOutPath "$INSTDIR"
   
   ;ADD YOUR OWN FILES HERE...
-  File /r "*"
+  File /r "WinT Messenger\*"
   
   ;Store installation folder
   WriteRegStr HKCU "Software\WinT Messenger" "" $INSTDIR
@@ -84,20 +84,14 @@ SectionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
-
-  ;ADD YOUR OWN FILES HERE...
-
-  Delete "$INSTDIR\Uninstall.exe"
-  Delete "$INSTDIR\License.txt"
-  Delete "$INSTDIR\WinT Messenger.exe"
   
   RMDir "$SMPROGRAMS\WinT Messenger"
   Delete "$SMPROGRAMS\WinT Messenger\Uninstall.lnk"
   Delete "$SMPROGRAMS\WinT Messenger\WinT Messenger.lnk"
   Delete "$SMPROGRAMS\WinT Messenger\License.lnk"
 
-  RMDir "$INSTDIR"
+  RMDir /r "$INSTDIR"
 
-  DeleteRegKey /ifempty HKCU "Software\WinT Messenger"
+  DeleteRegKey HKCU "Software\WinT Messenger"
 
 SectionEnd

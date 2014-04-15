@@ -5,12 +5,11 @@
 //  Please check the license.txt file for more information.
 //
 
-import QtQuick 2.2
+import QtQuick 2.0
 
 Flickable {
     id: page
 
-    property bool backButtonEnabled: true
     property bool flickable: true
     property bool logoEnabled: true
 
@@ -21,17 +20,8 @@ Flickable {
     property string toolbarTitle: qsTr("Title")
     property int arrangeFirstItem: logoEnabled ? 1.125 * (logo.y + logo.height + DeviceManager.ratio(12)): toolbar.height + DeviceManager.ratio(4)
 
-    Component.onCompleted: {
-        setBackButtonEnabled(backButtonEnabled)
-        setTitle(toolbarTitle)
-    }
-
-    onVisibleChanged: {
-        if (visible) {
-            setBackButtonEnabled(backButtonEnabled)
-            setTitle(toolbarTitle)
-        }
-    }
+    Component.onCompleted: toolbar.text = toolbarTitle
+    onVisibleChanged: if (visible) toolbar.text = toolbarTitle
 
     contentHeight: rootWindow.height
     interactive: flickable
@@ -49,9 +39,8 @@ Flickable {
             anchors.bottom: titleText.top
             anchors.bottomMargin: 18
             anchors.horizontalCenter: parent.horizontalCenter
-            height: 5 * titleText.height
+            height: DeviceManager.isMobile() ? 5 * titleText.height : 128
             width: height
-            //sourceSize: Qt.size(height, height)
             smooth: true
             asynchronous: true
         }
@@ -75,32 +64,6 @@ Flickable {
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             y: titleText.y + titleText.height + 8
-        }
-    }
-
-    MouseArea {
-        id: swipeDetector
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-
-        width: parent.width / 6
-
-        property int oldX: 0
-        property int oldY: 0
-
-        onPressed: {
-            oldX = mouseX
-            oldY = mouseY
-        }
-
-        onReleased: {
-            var xDiff = oldX - mouseX;
-            var yDiff = oldY - mouseY;
-
-            if(Math.abs(xDiff) > Math.abs(yDiff))
-                if(oldX < mouseX)
-                    stackView.pop()
         }
     }
 }

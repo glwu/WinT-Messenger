@@ -11,5 +11,6 @@
         <file>ToolbarIcons/Person.png</file>
         <file>ToolbarIcons/Group.png</file>
         <file>Info.png</file>
+        <file>ToolbarIcons/Bt.png</file>
     </qresource>
 </RCC>

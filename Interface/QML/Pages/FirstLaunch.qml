@@ -5,9 +5,8 @@
 //  Copyright (c) 2014 WinT 3794. Refer to Authors.txt for more infomration
 //
 
-import QtQuick 2.2
-import QtQuick.Dialogs 1.1
-import QtQuick.Controls 1.1
+import QtQuick 2.0
+import QtQuick.Controls 1.0
 import "../Widgets"
 
 Page {
@@ -17,8 +16,8 @@ Page {
     toolbarTitle: qsTr("Initial setup")
 
     Component.onCompleted: {
-        enableAboutButton(false)
-        enableSettingsButton(false)
+        toolbar.aboutButtonEnabled = false
+        toolbar.settingsButtonEnabled = false
     }
 
     Column {
@@ -40,6 +39,19 @@ Page {
                 anchors.right: colorRectangle.left
                 anchors.rightMargin: 2
                 placeholderText: qsTr("Type a nickname and choose a profile color")
+                Keys.onReturnPressed: {
+                    if (text.length > 0) {
+                        Settings.setValue("userName", textBox.text)
+                        Settings.setValue("userColor", colors.userColor)
+                        Settings.setValue("firstLaunch", false);
+                        Settings.setValue("customizedUiColor", customizedUiColor.checked)
+
+                        colors.userColor = colors.userColor
+
+                        finishSetup(textBox.text)
+                        Qt.inputMethod.hide()
+                    }
+                }
             }
 
             Rectangle {
@@ -48,7 +60,7 @@ Page {
                 height: textBox.height
                 width: height
                 border.width: 1
-                color: colorDialog.color
+                color: colors.userColor
                 border.color: {
                     if (mouseArea.containsMouse)
                         return colors.borderColorHover
@@ -59,8 +71,8 @@ Page {
                 }
 
                 onColorChanged: {
-                    Settings.setValue("userColor", colorDialog.color)
-                    colors.userColor = colorDialog.color
+                    Settings.setValue("userColor", colors.userColor)
+                    colors.userColor = colors.userColor
 
                     if (Settings.customizedUiColor())
                         colors.toolbarColor = colors.userColor
@@ -72,7 +84,7 @@ Page {
                     id: mouseArea
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked: colorDialog.open()
+                    onClicked: colors.userColor = Settings.getDialogColor(colors.userColor)
                 }
             }
         }
@@ -106,7 +118,7 @@ Page {
                 if (Settings.opaqueToolbar())
                     toolbar.opacity = 1
                 else
-                    toolbar.opacity = 0.9
+                    toolbar.opacity = 0.75
             }
 
             Label {
@@ -114,16 +126,6 @@ Page {
                 text: qsTr("Opaque toolbar")
                 anchors.verticalCenter: parent.verticalCenter
             }
-        }
-    }
-
-    ColorDialog {
-        id: colorDialog
-        title: qsTr("Chose profile color")
-        color: Settings.value("userColor", colors.userColor)
-        onAccepted: {
-            Settings.setValue("userColor", color)
-            colors.userColor = colorDialog.color
         }
     }
 
@@ -135,11 +137,9 @@ Page {
         enabled: textBox.length > 0 ? 1: 0
         onClicked: {
             Settings.setValue("userName", textBox.text)
-            Settings.setValue("userColor", colorDialog.color)
+            Settings.setValue("userColor", colors.userColor)
             Settings.setValue("firstLaunch", false);
             Settings.setValue("customizedUiColor", customizedUiColor.checked)
-
-            colors.userColor = colorDialog.color
 
             finishSetup(textBox.text)
             Qt.inputMethod.hide()
