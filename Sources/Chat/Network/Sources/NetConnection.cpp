@@ -80,7 +80,7 @@ void NetConnection::timerEvent(QTimerEvent *timerEvent) {
         abort();
         killTimer(transferTimerId);
         transferTimerId = 0;
-    }
+   }
 }
 
 void NetConnection::processReadyRead() {
@@ -91,9 +91,9 @@ void NetConnection::processReadyRead() {
         if (currentDataType != Greeting) {
             abort();
             return;
-        }
+       }
         state = ReadingGreeting;
-    }
+   }
 
     if (state == ReadingGreeting) {
         if (!hasEnoughData())
@@ -103,7 +103,7 @@ void NetConnection::processReadyRead() {
         if (buffer.size() != numBytesForCurrentDataType) {
             abort();
             return;
-        }
+       }
 
         username = QString(buffer) + '@' + peerAddress().toString();
         currentDataType = Undefined;
@@ -113,7 +113,7 @@ void NetConnection::processReadyRead() {
         if (!isValid()) {
             abort();
             return;
-        }
+       }
 
         if (!isGreetingMessageSent)
             sendGreetingMessage();
@@ -122,19 +122,19 @@ void NetConnection::processReadyRead() {
         pongTime.start();
         state = ReadyForUse;
         emit readyForUse();
-    }
+   }
 
     do {
         if (currentDataType == Undefined) {
             if (!readProtocolHeader())
                 return;
-        }
+       }
 
         if (!hasEnoughData())
             return;
 
         processData();
-    }
+   }
     while (bytesAvailable() > 0);
 }
 
@@ -142,7 +142,7 @@ void NetConnection::sendPing() {
     if (pongTime.elapsed() > PongTimeout) {
         abort();
         return;
-    }
+   }
 
     write("PING 1 p");
 }
@@ -162,13 +162,13 @@ int NetConnection::readDataIntoBuffer(int maxSize) {
     if (numBytesBeforeRead == MaxBufferSize) {
         abort();
         return 0;
-    }
+   }
 
     while (bytesAvailable() > 0 && buffer.size() < maxSize) {
         buffer.append(read(1));
         if (buffer.endsWith(SeparatorToken))
             break;
-    }
+   }
     return buffer.size() - numBytesBeforeRead;
 }
 
@@ -186,12 +186,12 @@ bool NetConnection::readProtocolHeader() {
     if (transferTimerId) {
         killTimer(transferTimerId);
         transferTimerId = 0;
-    }
+   }
 
     if (readDataIntoBuffer() <= 0) {
         transferTimerId = startTimer(TransferTimeout);
         return false;
-    }
+   }
 
     if (buffer == "PING ")
         currentDataType = Ping;
@@ -209,7 +209,7 @@ bool NetConnection::readProtocolHeader() {
         currentDataType = Undefined;
         abort();
         return false;
-    }
+   }
 
     buffer.clear();
     numBytesForCurrentDataType = dataLengthForCurrentDataType();
@@ -220,7 +220,7 @@ bool NetConnection::hasEnoughData() {
     if (transferTimerId) {
         QObject::killTimer(transferTimerId);
         transferTimerId = 0;
-    }
+   }
 
     if (numBytesForCurrentDataType <= 0)
         numBytesForCurrentDataType = dataLengthForCurrentDataType();
@@ -229,7 +229,7 @@ bool NetConnection::hasEnoughData() {
             || numBytesForCurrentDataType <= 0) {
         transferTimerId = startTimer(TransferTimeout);
         return false;
-    }
+   }
 
     return true;
 }
@@ -239,7 +239,7 @@ void NetConnection::processData() {
     if (buffer.size() != numBytesForCurrentDataType) {
         abort();
         return;
-    }
+   }
 
     switch (currentDataType) {
     case PlainText:
@@ -253,7 +253,7 @@ void NetConnection::processData() {
         break;
     default:
         break;
-    }
+   }
 
     currentDataType = Undefined;
     numBytesForCurrentDataType = 0;

@@ -6,22 +6,24 @@
 
 class Settings : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Settings();
+  Settings();
 
-    Q_INVOKABLE void setValue(const QString &key, const QVariant &value);
-    Q_INVOKABLE QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
+  Q_INVOKABLE void setValue(const QString &key, const QVariant &value);
+  Q_INVOKABLE QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
 
-    Q_INVOKABLE bool firstLaunch();
-    Q_INVOKABLE bool customizedUiColor();
-    Q_INVOKABLE bool opaqueToolbar();
+  Q_INVOKABLE bool firstLaunch();
+  Q_INVOKABLE bool customizedUiColor();
+  Q_INVOKABLE bool opaqueToolbar();
+  Q_INVOKABLE bool darkInterface();
+  Q_INVOKABLE bool fullscreen();
 
-    Q_INVOKABLE QString getDialogColor(const QString &originalColor);
+  Q_INVOKABLE QString getDialogColor(const QString &originalColor);
 
 private:
-    QSettings *settings;
+  QSettings *settings;
 };
 
 #endif

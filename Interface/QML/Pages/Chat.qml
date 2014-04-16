@@ -20,15 +20,15 @@ Page {
                                       qsTr("Select a device to connect to by clicking the \"Bluetooth\" button") :
                                       qsTr("Welcome to the chat room!"),
                                       "gray")
-    }
+   }
 
     onVisibleChanged: {
         toolbar.aboutButtonEnabled = !visible
         toolbar.settingsButtonEnabled = !visible
-    }
+   }
 
     ChatInterface {
         id: chatInterface
         anchors.topMargin: toolbar.height
-    }
+   }
 }

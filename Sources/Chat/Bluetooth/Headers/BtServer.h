@@ -15,32 +15,32 @@ QT_FORWARD_DECLARE_CLASS(QBluetoothSocket)
 
 class BtServer : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit BtServer(QObject *parent = 0);
-    ~BtServer();
+  explicit BtServer(QObject *parent = 0);
+  ~BtServer();
 
-    void startServer(const QBluetoothAddress &localAdapter = QBluetoothAddress());
-    void stopServer();
+  void startServer(const QBluetoothAddress &localAdapter = QBluetoothAddress());
+  void stopServer();
 
 public slots:
-    void sendMessage(const QString &message);
+  void sendMessage(const QString &message);
 
 signals:
-    void messageReceived(const QString &message);
-    void clientConnected(const QString &name);
-    void clientDisconnected(const QString &name);
+  void messageReceived(const QString &message);
+  void clientConnected(const QString &name);
+  void clientDisconnected(const QString &name);
 
 private slots:
-    void clientConnected();
-    void clientDisconnected();
-    void readSocket();
+  void clientConnected();
+  void clientDisconnected();
+  void readSocket();
 
 private:
-    QBluetoothServer *rfcommServer;
-    QBluetoothServiceInfo serviceInfo;
-    QList<QBluetoothSocket *> clientSockets;
+  QBluetoothServer *rfcommServer;
+  QBluetoothServiceInfo serviceInfo;
+  QList<QBluetoothSocket *> clientSockets;
 };
 
 #endif

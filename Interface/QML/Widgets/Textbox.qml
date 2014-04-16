@@ -29,7 +29,7 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             onClicked: parent.forceActiveFocus()
-        }
+       }
 
         onActiveFocusChanged: activeFocus ? Qt.inputMethod.show() : Qt.inputMethod.hide()
 
@@ -45,12 +45,12 @@ Item {
 
                     border.color: {
                         if (mouseArea.containsMouse || textField.focus)
-                            return colors.borderColorHover
+                            return colors.borderColor
                         else
                             return colors.borderColor
-                    }
-                }
-            }
-        }
-    }
+                   }
+               }
+           }
+       }
+   }
 }

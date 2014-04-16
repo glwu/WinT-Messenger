@@ -20,12 +20,12 @@ Page {
     Component.onCompleted: {
         toolbar.aboutButtonEnabled = false
         toolbar.settingsButtonEnabled = false
-    }
+   }
 
     onVisibleChanged: {
         toolbar.aboutButtonEnabled = !visible
         toolbar.settingsButtonEnabled = !visible
-    }
+   }
 
     Column {
         spacing: DeviceManager.ratio(8)
@@ -38,7 +38,7 @@ Page {
         Label {
             anchors.left: parent.left
             text: qsTr("Nickname and profile color:")
-        }
+       }
 
         Rectangle {
             anchors.left: parent.left
@@ -54,7 +54,7 @@ Page {
                 placeholderText: qsTr("Type a nickname and choose a profile color")
                 text: Settings.value("userName", "unknown")
                 onTextChanged: Settings.setValue("userName", text)
-            }
+           }
 
             Rectangle {
                 id: colorRectangle
@@ -71,36 +71,16 @@ Page {
                         colors.toolbarColor = colors.userColor
                     else
                         colors.toolbarColor = colors.toolbarColorStatic
-                }
+               }
 
                 MouseArea {
                     id: mouseArea
                     anchors.fill: parent
                     hoverEnabled: true
                     onClicked: colors.userColor = Settings.getDialogColor(colors.userColor);
-                }
-            }
-        }
-
-        CheckBox {
-            id: customizedUiColor
-            checked: Settings.customizedUiColor()
-            onCheckedChanged: {
-                Settings.setValue("customizedUiColor", checked)
-
-                if (Settings.customizedUiColor())
-                    colors.toolbarColor = colors.userColor
-                else
-                    colors.toolbarColor = colors.toolbarColorStatic
-            }
-
-            Label {
-                anchors.left: customizedUiColor.right
-                text: qsTr("Use the profile color to theme the app")
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: sizes.control
-            }
-        }
+               }
+           }
+       }
 
         CheckBox {
             id: opaqueToolbar
@@ -112,14 +92,47 @@ Page {
                     toolbar.opacity = 1
                 else
                     toolbar.opacity = 0.75
-            }
+           }
 
             Label {
                 anchors.left: opaqueToolbar.right
                 text: qsTr("Opaque toolbar")
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: sizes.control
-            }
-        }
-    }
+           }
+       }
+
+        CheckBox {
+            id: darkInterface
+            checked: Settings.darkInterface()
+            onCheckedChanged: {Settings.setValue("darkInterface", checked); colors.setColors();}
+
+            Label {
+                anchors.left: darkInterface.right
+                text: qsTr("Use a dark interface")
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: sizes.control
+           }
+       }
+
+        CheckBox {
+            id: customizedUiColor
+            checked: Settings.customizedUiColor()
+            onCheckedChanged: {
+                Settings.setValue("customizedUiColor", checked)
+
+                if (Settings.customizedUiColor())
+                    colors.toolbarColor = colors.userColor
+                else
+                    colors.toolbarColor = colors.toolbarColorStatic
+           }
+
+            Label {
+                anchors.left: customizedUiColor.right
+                text: qsTr("Use the profile color to theme the app")
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: sizes.control
+           }
+       }
+   }
 }

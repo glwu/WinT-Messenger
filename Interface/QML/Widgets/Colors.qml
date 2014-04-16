@@ -8,35 +8,42 @@
 import QtQuick 2.0
 
 QtObject {
-    property string background: "#f7f7f7"
-    property string disabled: "#cbcbcb"
-    property string borderColor: "#c7c7c7"
-
-    property string toolbarText: "#fff"
-    property string toolbarColor: Settings.customizedUiColor() ? userColor: "#333"
-    property string toolbarColorStatic: "#333"
-    property string toolbarPressedColor: "#666"
-
-    property string text: "#000"
-
-    property string logoTitle: toolbarColorStatic
-    property string logoSubtitle: "#666"
-
-    property string textFieldBackground: "#fdfdfd"
-    property string textFieldForeground: "#222"
-    property string textFieldPlaceholder: "#acacac"
-
-    property string buttonBackground: "#ededed"
-    property string buttonForeground: "#222222"
+    property string disabled : "#cbcbcb"
+    property string toolbarText : "#fff"
+    property string toolbarColor: Settings.customizedUiColor() ? userColor : "#333"
+    property string toolbarColorStatic : "#333"
+    property string textFieldPlaceholder: "#aaa"
     property string userColor: Settings.value("userColor", "#0081bd")
 
-    property string buttonBackgroundHover: "#f2f2f2"
-    property string borderColorHover: borderColor
+    property string background
+    property string borderColor
+    property string text
+    property string logoTitle
+    property string logoSubtitle
+    property string textFieldBackground
+    property string textFieldForeground
+    property string buttonBackground
+    property string buttonForeground
+    property string buttonBackgroundHover
+    property string buttonBackgroundPressed
+    property string buttonBackgroundDisabled
+    property string buttonForegroundDisabled
+    property string borderColorDisabled
 
-    property string buttonBackgroundPressed: "#e8e8e8"
-    property string borderColorPressed: borderColor
-
-    property string buttonBackgroundDisabled: "#efefef"
-    property string buttonForegroundDisabled: "#838383"
-    property string borderColorDisabled: "#d9d9d9"
+    function setColors() {
+        background = Settings.darkInterface() ? "#444" : "#f7f7f7"
+        borderColor = Settings.darkInterface() ? "#555" : "#c7c7c7"
+        text = Settings.darkInterface() ? "#eee" : "#000"
+        logoTitle = Settings.darkInterface() ? "#fff" : "#333"
+        logoSubtitle = Settings.darkInterface() ? "#ddd" : "#666"
+        textFieldBackground = Settings.darkInterface() ? "#333" : "#fdfdfd"
+        textFieldForeground = Settings.darkInterface() ? "#ddd" : "#222"
+        buttonBackground = Settings.darkInterface() ? "#333" : "#ededed"
+        buttonForeground = Settings.darkInterface() ? "#ddd" : "#222"
+        buttonBackgroundHover = Settings.darkInterface() ? "#3a3a3a" : "#f2f2f2"
+        buttonBackgroundPressed = Settings.darkInterface() ? "#222" : "#e8e8e8"
+        buttonBackgroundDisabled = Settings.darkInterface() ? "#444" : "#efefef"
+        buttonForegroundDisabled = Settings.darkInterface() ? "#888" : "#838383"
+        borderColorDisabled = Settings.darkInterface() ? borderColor : "#d9d9d9"
+   }
 }

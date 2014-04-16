@@ -18,7 +18,7 @@ Page {
     Component.onCompleted: {
         toolbar.aboutButtonEnabled = false
         toolbar.settingsButtonEnabled = false
-    }
+   }
 
     Column {
         spacing: DeviceManager.ratio(8)
@@ -32,6 +32,8 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             height: textBox.height
+
+            color: "transparent"
 
             Textbox {
                 id: textBox
@@ -50,9 +52,9 @@ Page {
 
                         finishSetup(textBox.text)
                         Qt.inputMethod.hide()
-                    }
-                }
-            }
+                   }
+               }
+           }
 
             Rectangle {
                 id: colorRectangle
@@ -63,12 +65,12 @@ Page {
                 color: colors.userColor
                 border.color: {
                     if (mouseArea.containsMouse)
-                        return colors.borderColorHover
+                        return colors.borderColor
                     else if (mouseArea.pressed)
-                        return colors.borderColorPressed
+                        return colors.borderColor
                     else
                         return colors.borderColor
-                }
+               }
 
                 onColorChanged: {
                     Settings.setValue("userColor", colors.userColor)
@@ -78,36 +80,16 @@ Page {
                         colors.toolbarColor = colors.userColor
                     else
                         colors.toolbarColor = colors.toolbarColorStatic
-                }
+               }
 
                 MouseArea {
                     id: mouseArea
                     anchors.fill: parent
                     hoverEnabled: true
                     onClicked: colors.userColor = Settings.getDialogColor(colors.userColor)
-                }
-            }
-        }
-
-        CheckBox {
-            id: customizedUiColor
-            checked: Settings.customizedUiColor()
-            onCheckedChanged: {
-                Settings.setValue("customizedUiColor", checked)
-
-                if (Settings.customizedUiColor())
-                    colors.toolbarColor = colors.userColor
-                else
-                    colors.toolbarColor = colors.toolbarColorStatic
-            }
-
-            Label {
-                anchors.left: customizedUiColor.right
-                text: qsTr("Use the profile color to theme the app")
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
+               }
+           }
+       }
 
         CheckBox {
             id: opaqueToolbar
@@ -119,15 +101,47 @@ Page {
                     toolbar.opacity = 1
                 else
                     toolbar.opacity = 0.75
-            }
+           }
 
             Label {
                 anchors.left: opaqueToolbar.right
                 text: qsTr("Opaque toolbar")
                 anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-    }
+           }
+       }
+
+        CheckBox {
+            id: darkInterface
+            checked: Settings.darkInterface()
+            onCheckedChanged: {Settings.setValue("darkInterface", checked); colors.setColors();}
+
+            Label {
+                anchors.left: darkInterface.right
+                text: qsTr("Use a dark interface")
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: sizes.control
+           }
+       }
+
+        CheckBox {
+            id: customizedUiColor
+            checked: Settings.customizedUiColor()
+            onCheckedChanged: {
+                Settings.setValue("customizedUiColor", checked)
+
+                if (Settings.customizedUiColor())
+                    colors.toolbarColor = colors.userColor
+                else
+                    colors.toolbarColor = colors.toolbarColorStatic
+           }
+
+            Label {
+                anchors.left: customizedUiColor.right
+                text: qsTr("Use the profile color to theme the app")
+                anchors.verticalCenter: parent.verticalCenter
+           }
+       }
+   }
 
     Button {
         anchors.bottom: parent.bottom
@@ -140,9 +154,10 @@ Page {
             Settings.setValue("userColor", colors.userColor)
             Settings.setValue("firstLaunch", false);
             Settings.setValue("customizedUiColor", customizedUiColor.checked)
+            Settings.setValue("darkInterface", darkInterface.checked)
 
             finishSetup(textBox.text)
             Qt.inputMethod.hide()
-        }
-    }
+       }
+   }
 }

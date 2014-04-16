@@ -17,31 +17,35 @@
 #include "Common/Headers/DeviceManager.h"
 
 int main(int argc, char **argv) {
-    QNetworkProxyFactory::setUseSystemConfiguration(true);
-    QApplication app(argc, argv);
+  QNetworkProxyFactory::setUseSystemConfiguration(true);
 
-    Bridge *bridge = new Bridge();
-    Settings *settings = new Settings();
-    DeviceManager *manager = new DeviceManager();
+  QApplication app(argc, argv);
+  app.setApplicationName("WinT Messenger");
+  app.setApplicationVersion("1.1.2");
 
-    QQmlApplicationEngine *engine = new QQmlApplicationEngine();
-    engine->rootContext()->setContextProperty("Settings", settings);
-    engine->rootContext()->setContextProperty("Bridge",   bridge);
-    engine->rootContext()->setContextProperty("DeviceManager",  manager);
+  Bridge *bridge = new Bridge();
+  Settings *settings = new Settings();
+  DeviceManager *manager = new DeviceManager();
 
-    QQmlComponent *component = new QQmlComponent(engine);
-    component->loadUrl(QUrl("qrc:/QML/main.qml"));
+  QQmlApplicationEngine *engine = new QQmlApplicationEngine();
+  engine->rootContext()->setContextProperty("Settings", settings);
+  engine->rootContext()->setContextProperty("Bridge",   bridge);
+  engine->rootContext()->setContextProperty("DeviceManager",  manager);
 
-    QObject *root = component->create();
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(root);
-    window->show();
+  QQmlComponent *component = new QQmlComponent(engine);
+  component->loadUrl(QUrl("qrc:/QML/main.qml"));
 
-    if (!DeviceManager::isMobile()) {
-        if (settings->firstLaunch()) {
-            window->setWidth(720);
-            window->setHeight(540);
-        }
-    }
+  QObject *root = component->create();
+  QQuickWindow *window = qobject_cast<QQuickWindow *>(root);
 
-    return app.exec();
+  settings->fullscreen() ? window->showFullScreen() : window->showNormal();
+
+  if (!DeviceManager::isMobile()) {
+      if (settings->firstLaunch()) {
+          window->setWidth(720);
+          window->setHeight(540);
+       }
+   }
+
+  return app.exec();
 }

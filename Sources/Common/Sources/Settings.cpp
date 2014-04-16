@@ -8,36 +8,44 @@
 #include "../Headers/Settings.h"
 
 Settings::Settings() {
-    settings = new QSettings("WinT Messenger");
+  settings = new QSettings("WinT Messenger");
 }
 
 void Settings::setValue(const QString &key, const QVariant &value) {
-    settings->setValue(key, value);
+  settings->setValue(key, value);
 }
 
 QVariant Settings::value(const QString &key, const QVariant &defaultValue) const {
-    return settings->value(key, defaultValue);
+  return settings->value(key, defaultValue);
 }
 
 bool Settings::firstLaunch() {
-    return settings->value("firstLaunch", true).toBool();
+  return settings->value("firstLaunch", true).toBool();
 }
 
 bool Settings::customizedUiColor() {
-    return settings->value("customizedUiColor", true).toBool();
+  return settings->value("customizedUiColor", true).toBool();
 }
 
 bool Settings::opaqueToolbar() {
-    return settings->value("opaqueToolbar", false).toBool();
+  return settings->value("opaqueToolbar", false).toBool();
+}
+
+bool Settings::darkInterface() {
+  return settings->value("darkInterface", false).toBool();
+}
+
+bool Settings::fullscreen() {
+  return settings->value("fullscreen", false).toBool();
 }
 
 QString Settings::getDialogColor(const QString &originalColor) {
-    QColorDialog dialog;
-    dialog.setCurrentColor(QColor(originalColor));
-    int ret = dialog.exec();
+  QColorDialog dialog;
+  dialog.setCurrentColor(QColor(originalColor));
+  int ret = dialog.exec();
 
-    if (ret == QColorDialog::Accepted)
-        return dialog.selectedColor().name();
+  if (ret == QColorDialog::Accepted)
+    return dialog.selectedColor().name();
 
-    return settings->value("userColor", "#0081bd").toString();
+  return settings->value("userColor", "#0081bd").toString();
 }

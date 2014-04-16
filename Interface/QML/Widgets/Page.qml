@@ -43,7 +43,7 @@ Flickable {
             width: height
             smooth: true
             asynchronous: true
-        }
+       }
 
         Label {
             id: titleText
@@ -53,7 +53,7 @@ Flickable {
             font.pixelSize: sizes.title
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-        }
+       }
 
         Label {
             id: subtitleText
@@ -64,6 +64,6 @@ Flickable {
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             y: titleText.y + titleText.height + 8
-        }
-    }
+       }
+   }
 }

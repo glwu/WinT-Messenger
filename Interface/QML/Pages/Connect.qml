@@ -21,6 +21,7 @@ Page {
 
         Button {
             text: qsTr("Bluetooth chat")
+            enabled: !DeviceManager.isMobile()
             onClicked: {
                 text = qsTr("Please wait...")
                 enabled = false
@@ -30,8 +31,8 @@ Page {
 
                 text = qsTr("Bluetooth chat")
                 enabled = true
-            }
-        }
+           }
+       }
 
         Button {
             text: qsTr("Network (LAN) chat")
@@ -44,14 +45,14 @@ Page {
 
                 text = qsTr("Network (LAN) chat")
                 enabled = true
-            }
-        }
+           }
+       }
 
         Button {
             onClicked: openPage("Pages/Hotspot/Wizard.qml")
             text: qsTr("Setup a wireless hotspot")
-        }
-    }
+       }
+   }
 
 
 }

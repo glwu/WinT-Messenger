@@ -16,8 +16,45 @@ QT += network
 QT += widgets
 QT += bluetooth
 
-android { ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Systems/Android }
-win32* { RC_FILE = Systems/Windows/manifest.rc }
+android {
+   ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Systems/Android
+
+   QT -= bluetooth
+
+   HEADERS -= \
+       Sources/Chat/Bluetooth/Headers/BtChat.h \
+       Sources/Chat/Bluetooth/Headers/BtClient.h \
+       Sources/Chat/Bluetooth/Headers/BtSelector.h \
+       Sources/Chat/Bluetooth/Headers/BtServer.h
+
+   SOURCES -= \
+       Sources/Chat/Bluetooth/Sources/BtChat.cpp \
+       Sources/Chat/Bluetooth/Sources/BtClient.cpp \
+       Sources/Chat/Bluetooth/Sources/BtSelector.cpp \
+       Sources/Chat/Bluetooth/Sources/BtServer.cpp
+
+   FORMS -= \
+       Sources/Chat/Bluetooth/Forms/remoteselector.ui
+}
+
+blackberry {
+   QT -= bluetooth
+
+   HEADERS -= \
+       Sources/Chat/Bluetooth/Headers/BtChat.h \
+       Sources/Chat/Bluetooth/Headers/BtClient.h \
+       Sources/Chat/Bluetooth/Headers/BtSelector.h \
+       Sources/Chat/Bluetooth/Headers/BtServer.h
+
+   SOURCES -= \
+       Sources/Chat/Bluetooth/Sources/BtChat.cpp \
+       Sources/Chat/Bluetooth/Sources/BtClient.cpp \
+       Sources/Chat/Bluetooth/Sources/BtSelector.cpp \
+       Sources/Chat/Bluetooth/Sources/BtServer.cpp
+
+   FORMS -= \
+       Sources/Chat/Bluetooth/Forms/remoteselector.ui
+}
 
 ios {
     QMAKE_INFO_PLIST   = Systems/iOS/info.plist
@@ -28,6 +65,27 @@ ios {
 
     QMAKE_BUNDLE_DATA += FONTS
     QMAKE_BUNDLE_DATA += ICONS
+
+    QT -= bluetooth
+
+    HEADERS -= \
+        Sources/Chat/Bluetooth/Headers/BtChat.h \
+        Sources/Chat/Bluetooth/Headers/BtClient.h \
+        Sources/Chat/Bluetooth/Headers/BtSelector.h \
+        Sources/Chat/Bluetooth/Headers/BtServer.h
+
+    SOURCES -= \
+        Sources/Chat/Bluetooth/Sources/BtChat.cpp \
+        Sources/Chat/Bluetooth/Sources/BtClient.cpp \
+        Sources/Chat/Bluetooth/Sources/BtSelector.cpp \
+        Sources/Chat/Bluetooth/Sources/BtServer.cpp
+
+    FORMS -= \
+        Sources/Chat/Bluetooth/Forms/remoteselector.ui
+}
+
+win32* {
+    RC_FILE = Systems/Windows/manifest.rc
 }
 
 macx {
@@ -47,7 +105,6 @@ OTHER_FILES += \
     Interface/QML/Widgets/Page.qml \
     Interface/QML/Widgets/Textbox.qml \
     Interface/QML/Widgets/Toolbar.qml \
-    Interface/QML/Widgets/UserInfo.qml \
     Interface/QML/Widgets/Sizes.qml \
     Interface/QML/Pages/About.qml \
     Interface/QML/Pages/Chat.qml \

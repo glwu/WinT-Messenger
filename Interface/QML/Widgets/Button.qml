@@ -24,7 +24,7 @@ Rectangle {
             return colors.buttonBackgroundDisabled
         else
             return colors.buttonBackground
-    }
+   }
 
     opacity: 0.8
     border.color: colors.borderColor
@@ -34,7 +34,7 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: button.clicked()
-    }
+   }
 
     Label {
         id: label
@@ -44,6 +44,6 @@ Rectangle {
                 return colors.buttonForegroundDisabled
             else
                 return colors.buttonForeground
-        }
-    }
+       }
+   }
 }

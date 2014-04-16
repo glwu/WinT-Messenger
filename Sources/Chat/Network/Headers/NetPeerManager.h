@@ -18,33 +18,33 @@ class NetConnection;
 
 class NetPeerManager : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    NetPeerManager(NetClient *client);
+  NetPeerManager(NetClient *client);
 
-    void setServerPort(int port);
-    QByteArray userName() const;
-    void startBroadcasting();
-    bool isLocalHostAddress(const QHostAddress &address);
+  void setServerPort(int port);
+  QByteArray userName() const;
+  void startBroadcasting();
+  bool isLocalHostAddress(const QHostAddress &address);
 
 signals:
-    void newConnection(NetConnection *connection);
+  void newConnection(NetConnection *connection);
 
 private slots:
-    void sendBroadcastDatagram();
-    void readBroadcastDatagram();
+  void sendBroadcastDatagram();
+  void readBroadcastDatagram();
 
 private:
-    void updateAddresses();
+  void updateAddresses();
 
-    NetClient *client;
-    QList<QHostAddress> broadcastAddresses;
-    QList<QHostAddress> ipAddresses;
-    QUdpSocket broadcastSocket;
-    QTimer broadcastTimer;
-    QByteArray username;
-    int serverPort;
+  NetClient *client;
+  QList<QHostAddress> broadcastAddresses;
+  QList<QHostAddress> ipAddresses;
+  QUdpSocket broadcastSocket;
+  QTimer broadcastTimer;
+  QByteArray username;
+  int serverPort;
 };
 
 #endif

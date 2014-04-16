@@ -24,16 +24,16 @@ Page {
         Button {
             onClicked: openPage("Pages/Connect.qml")
             text: qsTr("Connect")
-        }
+       }
 
         Button {
             onClicked: Qt.openUrlExternally("http://wint-im.sf.net/news.html")
             text: qsTr("News")
-        }
+       }
 
         Button {
             onClicked: openPage("Pages/Help/Help.qml")
             text: qsTr("Help")
-        }
-    }
+       }
+   }
 }

@@ -78,7 +78,7 @@ bool NetPeerManager::isLocalHostAddress(const QHostAddress &address) {
     foreach (QHostAddress localAddress, ipAddresses) {
         if (address == localAddress)
             return true;
-    }
+   }
     return false;
 }
 
@@ -92,7 +92,7 @@ void NetPeerManager::sendBroadcastDatagram() {
         if (broadcastSocket.writeDatagram(datagram, address,
                                           broadcastPort) == -1)
             validBroadcastAddresses = false;
-    }
+   }
 
     if (!validBroadcastAddresses)
         updateAddresses();
@@ -120,8 +120,8 @@ void NetPeerManager::readBroadcastDatagram() {
             NetConnection *connection = new NetConnection(this);
             emit newConnection(connection);
             connection->connectToHost(senderIp, senderServerPort);
-        }
-    }
+       }
+   }
 }
 
 void NetPeerManager::updateAddresses() {
@@ -133,7 +133,7 @@ void NetPeerManager::updateAddresses() {
             if (broadcastAddress != QHostAddress::Null && entry.ip() != QHostAddress::LocalHost) {
                 broadcastAddresses << broadcastAddress;
                 ipAddresses << entry.ip();
-            }
-        }
-    }
+           }
+       }
+   }
 }

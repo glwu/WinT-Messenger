@@ -8,11 +8,11 @@
 
 class DeviceManager : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    Q_INVOKABLE static bool isMobile();
-    Q_INVOKABLE static int ratio(int input);
+  Q_INVOKABLE static bool isMobile();
+  Q_INVOKABLE static int ratio(int input);
 };
 
 #endif

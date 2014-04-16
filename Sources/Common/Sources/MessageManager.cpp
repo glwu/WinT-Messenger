@@ -8,86 +8,86 @@
 #include "../Headers/MessageManager.h"
 
 QString MessageManager::formatMessage(const QString msg, const QString nick) {
-    return "<font color = '"
-            + QSettings("WinT Messenger").value("userColor", "#0081bd").toString()
-            + "'>[" + QDateTime::currentDateTime().toString("hh:mm:ss AP") + "] "
-            + "&lt;" + nick + "&gt;&nbsp; </font>"
-            + msg;
+  return "<font color = '"
+      + QSettings("WinT Messenger").value("userColor", "#0081bd").toString()
+      + "'>[" + QDateTime::currentDateTime().toString("hh:mm:ss AP") + "] "
+      + "&lt;" + nick + "&gt;&nbsp; </font>"
+      + msg;
 }
 
 QString MessageManager::formatNotification(const QString msg) {
-    return "<font color = 'gray'>["
-            + QDateTime::currentDateTime().toString("hh:mm:ss AP") + "]&nbsp;"
-            + msg
-            + "</font>";
+  return "<font color = 'gray'>["
+      + QDateTime::currentDateTime().toString("hh:mm:ss AP") + "]&nbsp;"
+      + msg
+      + "</font>";
 }
 
 QString MessageManager::addEmotes(QString msg, int size) {
-    QString path = "&nbsp;<img src = \"qrc:/emotes/";
-    QString end = QString(".png\" width=%1 height=%1>&nbsp;").arg(size);
+  QString path = "&nbsp;<img src = \"qrc:/emotes/";
+  QString end = QString(".png\" width=%1 height=%1>&nbsp;").arg(size);
 
-    msg.replace("x-(",  "*ANGRY*");
-    msg.replace(":-)",  "*SMILE*");
-    msg.replace("B-)",  "*COOL*");
-    msg.replace(":'(",  "*CRYING*");
-    msg.replace(">:-)", "*DEVIL*");
-    msg.replace(":->",  "*GRIN*");
-    msg.replace("=)",   "*HAPPY*");
-    msg.replace("<3",   "*HEART*");
-    msg.replace(":-*",  "*KISSING*");
-    msg.replace("=D",   "*LOL*");
-    msg.replace(":-[",  "*POUTY*");
-    msg.replace(":-(",  "*SAD*");
-    msg.replace(":-&",  "*SICK*");
-    msg.replace(":-O",  "*SURPRISED*");
-    msg.replace("x-|",  "*PINCHED*");
-    msg.replace(":-P",  "*TONGUE*");
-    msg.replace(":-?",  "*UNCERTAIN*");
-    msg.replace(";-)",  "*WINK*");
+  msg.replace("x-(",  "*angry*");
+  msg.replace(":-)",  "*smile*");
+  msg.replace("B-)",  "*cool*");
+  msg.replace(":'(",  "*crying*");
+  msg.replace(">:-)", "*devil*");
+  msg.replace(":->",  "*grin*");
+  msg.replace("=)",   "*happy*");
+  msg.replace("<3",   "*heart*");
+  msg.replace(":-*",  "*kissing*");
+  msg.replace("=D",   "*lol*");
+  msg.replace(":-[",  "*pouty*");
+  msg.replace(":-(",  "*sad*");
+  msg.replace(":-&",  "*sick*");
+  msg.replace(":-O",  "*surprised*");
+  msg.replace("x-|",  "*pinched*");
+  msg.replace(":-P",  "*tongue*");
+  msg.replace(":-?",  "*uncertain*");
+  msg.replace(";-)",  "*wink*");
 
-    msg.replace("x(",  "*ANGRY*");
-    msg.replace("B)",  "*COOL*");
-    msg.replace(">:)", "*DEVIL*");
-    msg.replace(":>",  "*GRIN*");
-    msg.replace("=)",  "*HAPPY*");
-    msg.replace("<3",  "*HEART*");
-    msg.replace("=D",  "*LOL*");
-    msg.replace(":[",  "*POUTY*");
-    msg.replace(":(",  "*SAD*");
-    msg.replace(":&",  "*SICK*");
-    msg.replace(":)",  "*SMILE*");
-    msg.replace(":O",  "*SURPRISED*");
-    msg.replace("x|",  "*PINCHED*");
-    msg.replace(":P",  "*TONGUE*");
-    msg.replace(":?",  "*UNCERTAIN*");
-    msg.replace(";)",  "*WINK*");
+  msg.replace("x(",  "*angry*");
+  msg.replace("B)",  "*cool*");
+  msg.replace(">:)", "*devil*");
+  msg.replace(":>",  "*grin*");
+  msg.replace("=)",  "*happy*");
+  msg.replace("<3",  "*heart*");
+  msg.replace("=D",  "*lol*");
+  msg.replace(":[",  "*pouty*");
+  msg.replace(":(",  "*sad*");
+  msg.replace(":&",  "*sick*");
+  msg.replace(":)",  "*smile*");
+  msg.replace(":O",  "*surprised*");
+  msg.replace("x|",  "*pinched*");
+  msg.replace(":P",  "*tongue*");
+  msg.replace(":?",  "*uncertain*");
+  msg.replace(";)",  "*wink*");
 
-    msg.replace("^_^",   "*JOYFUL*");
-    msg.replace("(.V.)", "*ALIEN*");
-    msg.replace("-_-",   "*SLEEPING*");
-    msg.replace("o.o?",  "*WONDERING*");
+  msg.replace("^_^",   "*joyful*");
+  msg.replace("(.V.)", "*alien*");
+  msg.replace("-_-",   "*sleeping*");
+  msg.replace("o.o?",  "*wondering*");
 
-    msg.replace("*ALIEN*",     path + "alien"     + end);
-    msg.replace("*ANGEL*",     path + "angel"     + end);
-    msg.replace("*ANGRY*",     path + "angry"     + end);
-    msg.replace("*COOL*",      path + "cool"      + end);
-    msg.replace("*CRYING*",    path + "crying"    + end);
-    msg.replace("*DEVIL*",     path + "devil"     + end);
-    msg.replace("*GRIN*",      path + "grin"      + end);
-    msg.replace("*HAPPY*",     path + "happy"     + end);
-    msg.replace("*HEART*",     path + "heart"     + end);
-    msg.replace("*JOYFUL*",    path + "joyful"    + end);
-    msg.replace("*KISSING*",   path + "kissing"   + end);
-    msg.replace("*LOL*",       path + "lol"       + end);
-    msg.replace("*POUTY*",     path + "pouty"     + end);
-    msg.replace("*SAD*",       path + "sad"       + end);
-    msg.replace("*SICK*",      path + "sick"      + end);
-    msg.replace("*SLEEPING*",  path + "sleeping"  + end);
-    msg.replace("*SMILE*",     path + "smile"     + end);
-    msg.replace("*PINCHED*",   path + "pinched"   + end);
-    msg.replace("*TONGUE*",    path + "tongue"    + end);
-    msg.replace("*UNCERTAIN*", path + "unsure"    + end);
-    msg.replace("*WINK*",      path + "wink"      + end);
-    msg.replace("*WONDERING*", path + "wondering" + end);
-    return msg;
+  msg.replace("*alien*",     path + "alien"     + end);
+  msg.replace("*angel*",     path + "angel"     + end);
+  msg.replace("*angry*",     path + "angry"     + end);
+  msg.replace("*cool*",      path + "cool"      + end);
+  msg.replace("*crying*",    path + "crying"    + end);
+  msg.replace("*devil*",     path + "devil"     + end);
+  msg.replace("*grin*",      path + "grin"      + end);
+  msg.replace("*happy*",     path + "happy"     + end);
+  msg.replace("*heart*",     path + "heart"     + end);
+  msg.replace("*joyful*",    path + "joyful"    + end);
+  msg.replace("*kissing*",   path + "kissing"   + end);
+  msg.replace("*lol*",       path + "lol"       + end);
+  msg.replace("*pouty*",     path + "pouty"     + end);
+  msg.replace("*sad*",       path + "sad"       + end);
+  msg.replace("*sick*",      path + "sick"      + end);
+  msg.replace("*sleeping*",  path + "sleeping"  + end);
+  msg.replace("*smile*",     path + "smile"     + end);
+  msg.replace("*pinched*",   path + "pinched"   + end);
+  msg.replace("*tongue*",    path + "tongue"    + end);
+  msg.replace("*uncertain*", path + "unsure"    + end);
+  msg.replace("*wink*",      path + "wink"      + end);
+  msg.replace("*wondering*", path + "wondering" + end);
+  return msg;
 }

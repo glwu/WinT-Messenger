@@ -30,7 +30,7 @@ Page {
                 contentY = r.y;
             else if (contentY+height <= r.y+r.height)
                 contentY = r.y+r.height-height;
-        }
+       }
 
         TextEdit {
             id: textView
@@ -138,7 +138,7 @@ Page {
                 // END OF HTML DOCUMENT
                         + "</body>"
                         + "</html>"
-            }
-        }
-    }
+           }
+       }
+   }
 }

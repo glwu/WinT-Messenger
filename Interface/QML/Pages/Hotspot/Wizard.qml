@@ -22,7 +22,7 @@ Page {
 
         else
             return false;
-    }
+   }
 
     function updateStatus() {
         if (Bridge.hotspotEnabled()) {
@@ -31,7 +31,7 @@ Page {
             passwordTextbox.enabled = false
             control.enabled = true
             control.setText(qsTr("Welcome to your chat room!"), "gray")
-        }
+       }
 
         else {
             connectButton.text = qsTr("Start hotspot")
@@ -45,15 +45,15 @@ Page {
                                  + "<li>Connect to the newly created hotspot and press the \"Local Network\" button on the connect screen.</li>"
                                  + "</ol>"
                                  + "<font color=blue><i><strong>NOTE:&nbsp;</strong>For the moment, you can create a wireless hotspot only on Windows. Support for other operating systems will come soon.</i></font>"
-                                 + "<p><font color=red><strong>This is an experimental feature and it may not work as expected!</font></p>"), "black")
-        }
-    }
+                                 + "<p><font color=red><strong>This is an experimental feature and it may not work as expected!</font></p>"), colors.text)
+       }
+   }
 
     Component.onCompleted: {
         toolbar.aboutButtonEnabled = false
         toolbar.settingsButtonEnabled = false
         updateStatus()
-    }
+   }
 
     onVisibleChanged: {
         toolbar.aboutButtonEnabled = !visible
@@ -63,7 +63,7 @@ Page {
             Bridge.stopHotspot()
 
         updateStatus()
-    }
+   }
 
     Rectangle {
         id: chatInterface
@@ -76,8 +76,8 @@ Page {
         ChatInterface {
             anchors.fill: parent
             id: control
-        }
-    }
+       }
+   }
 
     Rectangle {
         id: wizard
@@ -95,7 +95,7 @@ Page {
             anchors.right: parent.right
             anchors.margins: DeviceManager.ratio(4)
             placeholderText: qsTr("Enter your WiFi hotspot name here (SSID)...")
-        }
+       }
 
         Textbox {
             id: passwordTextbox
@@ -105,7 +105,7 @@ Page {
             y: ssidTextbox.y + ssidTextbox.height + DeviceManager.ratio(4)
             echoMode: TextInput.Password
             placeholderText: qsTr("Enter your password...")
-        }
+       }
 
         Button {
             id: connectButton
@@ -118,14 +118,14 @@ Page {
                         Bridge.startHotspot(ssidTextbox.text, passwordTextbox.text)
                         Settings.setValue("ssid", ssidTextbox.text)
                         updateStatus()
-                    }
-                }
+                   }
+               }
 
                 else {
                     Bridge.stopHotspot()
                     updateStatus()
-                }
-            }
-        }
-    }
+               }
+           }
+       }
+   }
 }

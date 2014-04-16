@@ -54,7 +54,7 @@ void NetClient::sendMessage(const QString &message) {
         QList<NetConnection *> connections = peers.values();
         foreach (NetConnection *connection, connections)
             connection->sendMessage(message);
-    }
+   }
 }
 
 QString NetClient::nickName() const {
@@ -72,7 +72,7 @@ bool NetClient::hasConnection(const QHostAddress &senderIp, int senderPort) cons
     foreach (NetConnection *connection, connections) {
         if (connection->peerPort() == senderPort)
             return true;
-    }
+   }
 
     return false;
 }
@@ -115,7 +115,7 @@ void NetClient::removeConnection(NetConnection *connection) {
         const QString &nick = connection->name();
         if (!nick.isEmpty())
             emit participantLeft(nick);
-    }
+   }
 
     connection->deleteLater();
 }

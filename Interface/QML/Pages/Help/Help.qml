@@ -22,16 +22,16 @@ Page {
         Button {
             onClicked: openPage("Pages/Help/Documentation.qml")
             text: qsTr("Help")
-        }
+       }
 
         Button {
             onClicked: Qt.openUrlExternally("http://en.wikipedia.org/wiki/Qt_(software)")
             text: qsTr("About Qt")
-        }
+       }
 
         Button {
             onClicked: Qt.openUrlExternally("https://www.gnu.org/copyleft/gpl.html")
             text: qsTr("About the GPL 3.0")
-        }
-    }
+       }
+   }
 }

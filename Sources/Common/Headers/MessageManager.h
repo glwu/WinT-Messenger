@@ -8,14 +8,14 @@
 
 class MessageManager : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    MessageManager();
+  MessageManager();
 
-    static QString formatMessage(const QString msg, const QString nick);
-    static QString formatNotification(const QString msg);
-    static QString addEmotes(QString msg, int size);
+  static QString formatMessage(const QString msg, const QString nick);
+  static QString formatNotification(const QString msg);
+  static QString addEmotes(QString msg, int size);
 };
 
 #endif

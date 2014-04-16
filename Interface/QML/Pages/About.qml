@@ -11,18 +11,18 @@ import "../Widgets"
 Page {
     logoImageSource: "qrc:/images/Info.png"
     logoSubtitle: qsTr("Created by the WinT 3794 team")
-    logoTitle: qsTr("WinT Messenger 1.0 beta")
+    logoTitle: qsTr("WinT Messenger 1.1.2")
     toolbarTitle: qsTr("About")
 
     Component.onCompleted: {
         toolbar.aboutButtonEnabled = false
         toolbar.settingsButtonEnabled = false
-    }
+   }
 
     onVisibleChanged: {
         toolbar.aboutButtonEnabled = !visible
         toolbar.settingsButtonEnabled = !visible
-    }
+   }
 
     Column {
         y: arrangeFirstItem + 10 + parent.height / 16
@@ -32,12 +32,12 @@ Page {
         Button {
             text: qsTr("Website")
             onClicked: Qt.openUrlExternally("http://wint-im.sf.net")
-        }
+       }
 
         Button {
             onClicked: Qt.openUrlExternally("http://wint-im.sf.net/donate.html")
             text: qsTr("Donate")
             enabled: false
-        }
-    }
+       }
+   }
 }

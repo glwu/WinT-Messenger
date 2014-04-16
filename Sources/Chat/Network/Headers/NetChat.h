@@ -6,26 +6,26 @@
 
 class NetChat : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    NetChat();
+  NetChat();
 
 signals:
-    void newMessage(const QString &text);
-    void newUser(const QString &nick);
-    void delUser(const QString &nick);
+  void newMessage(const QString &text);
+  void newUser(const QString &nick);
+  void delUser(const QString &nick);
 
 public slots:
-    void returnPressed(QString text);
-    void shareFile();
+  void returnPressed(QString text);
+  void shareFile();
 
 private slots:
-    void newParticipant(const QString &nick);
-    void participantLeft(const QString &nick);
+  void newParticipant(const QString &nick);
+  void participantLeft(const QString &nick);
 
 private:
-    NetClient client;
+  NetClient client;
 };
 
 #endif
