@@ -27,7 +27,7 @@ ApplicationWindow {
         y = Settings.value("y", 150)
         width = Settings.value("width", minimumWidth)
         height = Settings.value("height", minimumHeight)
-   }
+    }
 
     property string defaultFont: "Open Sans"
     property bool fullscreen: Settings.fullscreen()
@@ -36,19 +36,21 @@ ApplicationWindow {
         if (fullscreen) {
             showNormal()
             fullscreen = false
+            Settings.setValue("fullscreen", false)
             return;
-       }
+        }
 
         showFullScreen()
         fullscreen = true
-   }
+        Settings.setValue("fullscreen", true)
+    }
 
     function finishSetup() {
         toolbar.aboutButtonEnabled = true
         toolbar.settingsButtonEnabled = true
         stackView.clear()
         stackView.push(Qt.resolvedUrl("Pages/Start.qml"))
-   }
+    }
 
     function popStackView() {
         stackView.pop()
@@ -59,19 +61,18 @@ ApplicationWindow {
         if (!toolbar.aboutButtonEnabled || !toolbar.settingsButtonEnabled) {
             toolbar.aboutButtonEnabled = true
             toolbar.settingsButtonEnabled = true
-       }
-   }
+        }
+    }
 
     function openPage(page) {
         stackView.push(Qt.resolvedUrl(page))
-   }
+    }
 
     onClosing: {
         Bridge.stopHotspot()
         Bridge.stopBtChat()
         Bridge.stopNetChat()
-        Settings.setValue("fullscreen", fullscreen)
-   }
+    }
 
     onXChanged: Settings.setValue("x", x)
     onYChanged: Settings.setValue("y", y)
@@ -81,13 +82,13 @@ ApplicationWindow {
     FontLoader {
         id: loader
         source: "qrc:/Fonts/Regular.ttf"
-   }
+    }
 
     StackView {
         id: stackView
         anchors.fill: parent
         initialItem: Loader {source: Settings.firstLaunch() ? "Pages/FirstLaunch.qml" : "Pages/Start.qml";}
-   }
+    }
 
     Toolbar {id: toolbar}
 }
