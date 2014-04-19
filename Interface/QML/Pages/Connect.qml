@@ -9,50 +9,50 @@ import QtQuick 2.0
 import "../Widgets"
 
 Page {
-    logoImageSource: "qrc:/images/Connect.png"
-    logoTitle: qsTr("Connect")
-    toolbarTitle: qsTr("Connect")
-    logoSubtitle: qsTr("Please select a communication method")
+  logoImageSource: "qrc:/images/Connect.png"
+  logoTitle: qsTr("Connect")
+  toolbarTitle: qsTr("Connect")
+  logoSubtitle: qsTr("Please select a communication method")
 
-    Column {
-        spacing: DeviceManager.ratio(4)
-        y: arrangeFirstItem + parent.height / 32
-        anchors.horizontalCenter: parent.horizontalCenter
+  Column {
+    spacing: DeviceManager.ratio(4)
+    y: arrangeFirstItem + parent.height / 32
+    anchors.horizontalCenter: parent.horizontalCenter
 
-        Button {
-            text: qsTr("Bluetooth chat")
-            enabled: !DeviceManager.isMobile()
-            onClicked: {
-                text = qsTr("Please wait...")
-                enabled = false
+    Button {
+      text: qsTr("Bluetooth chat")
+      enabled: !DeviceManager.isMobile()
+      onClicked: {
+        text = qsTr("Please wait...")
+        enabled = false
 
-                Bridge.startBtChat()
-                openPage("Pages/Chat.qml")
+        Bridge.startBtChat()
+        openPage("Pages/Chat.qml")
 
-                text = qsTr("Bluetooth chat")
-                enabled = true
-           }
-       }
+        text = qsTr("Bluetooth chat")
+        enabled = true
+      }
+    }
 
-        Button {
-            text: qsTr("Network (LAN) chat")
-            onClicked: {
-                text = qsTr("Please wait...")
-                enabled = false
+    Button {
+      text: qsTr("Network (LAN) chat")
+      onClicked: {
+        text = qsTr("Please wait...")
+        enabled = false
 
-                Bridge.startNetChat()
-                openPage("Pages/Chat.qml")
+        Bridge.startNetChat()
+        openPage("Pages/Chat.qml")
 
-                text = qsTr("Network (LAN) chat")
-                enabled = true
-           }
-       }
+        text = qsTr("Network (LAN) chat")
+        enabled = true
+      }
+    }
 
-        Button {
-            onClicked: openPage("Pages/Hotspot/Wizard.qml")
-            text: qsTr("Setup a wireless hotspot")
-       }
-   }
+    Button {
+      onClicked: openPage("Pages/Hotspot/Wizard.qml")
+      text: qsTr("Setup a wireless hotspot")
+    }
+  }
 
 
 }

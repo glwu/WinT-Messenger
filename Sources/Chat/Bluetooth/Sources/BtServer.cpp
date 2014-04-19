@@ -40,7 +40,7 @@
 
 #include "../Headers/BtServer.h"
 
-static const QLatin1String serviceUuid("e8e10f95-1a70-4b27-9ccf-02010264e9c8");
+static const QLatin1String serviceUuid("3185c780-c66e-11e3-8cde-0002a5d5c51b");
 
 BtServer::BtServer(QObject *parent) :  QObject(parent), rfcommServer(0) {}
 
@@ -134,5 +134,5 @@ void BtServer::readSocket() {
   while (socket->canReadLine()) {
       QByteArray line = socket->readLine().trimmed();
       emit messageReceived(QString::fromUtf8(line.constData(), line.length()));
-   }
+    }
 }

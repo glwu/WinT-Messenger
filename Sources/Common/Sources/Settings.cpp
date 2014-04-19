@@ -19,20 +19,16 @@ QVariant Settings::value(const QString &key, const QVariant &defaultValue) const
   return settings->value(key, defaultValue);
 }
 
-bool Settings::firstLaunch() {
-  return settings->value("firstLaunch", true).toBool();
-}
-
 bool Settings::customizedUiColor() {
   return settings->value("customizedUiColor", true).toBool();
 }
 
-bool Settings::opaqueToolbar() {
-  return settings->value("opaqueToolbar", false).toBool();
-}
-
 bool Settings::darkInterface() {
   return settings->value("darkInterface", false).toBool();
+}
+
+bool Settings::firstLaunch() {
+  return settings->value("firstLaunch", true).toBool();
 }
 
 bool Settings::fullscreen() {

@@ -73,7 +73,7 @@ void BtClient::readSocket() {
       QByteArray line = socket->readLine();
       emit messageReceived(socket->peerName(),
                            QString::fromUtf8(line.constData(), line.length()));
-   }
+    }
 }
 
 void BtClient::sendMessage(const QString &message) {

@@ -40,51 +40,73 @@
 
 #include "../Headers/BtSelector.h"
 
+static const QLatin1String serviceUuid("3185c780-c66e-11e3-8cde-0002a5d5c51b");
+
 BtSelector::BtSelector(const QBluetoothAddress &localAdapter, QWidget *parent) : QDialog(parent), ui(new Ui::RemoteSelector) {
   ui->setupUi(this);
 
-  m_discoveryAgent = new QBluetoothServiceDiscoveryAgent(localAdapter);
+  discoveryAgent = new QBluetoothServiceDiscoveryAgent(localAdapter);
 
-  connect(m_discoveryAgent, SIGNAL(serviceDiscovered(QBluetoothServiceInfo)),
-          this, SLOT(serviceDiscovered(QBluetoothServiceInfo)));
-  connect(m_discoveryAgent, SIGNAL(finished()), this, SLOT(discoveryFinished()));
-  connect(m_discoveryAgent, SIGNAL(canceled()), this, SLOT(discoveryFinished()));
+  connect(discoveryAgent, SIGNAL(serviceDiscovered(QBluetoothServiceInfo)), this, SLOT(serviceDiscovered(QBluetoothServiceInfo)));
+  connect(discoveryAgent, SIGNAL(finished()), this, SLOT(discoveryFinished()));
+  connect(discoveryAgent, SIGNAL(canceled()), this, SLOT(discoveryFinished()));
+
+  connect(ui->stopButton,    SIGNAL(clicked()), this, SLOT(stopDiscovery()));
+  connect(ui->refreshButton, SIGNAL(clicked()), this, SLOT(startDiscovery()));
+
+  ui->busyAnimation->setMovie(new QMovie(":/images/Movies/Spinner.gif"));
+  ui->busyAnimation->movie()->start();
+  ui->busyAnimation->hide();
+
+  ui->statusLabel->setText("Click \"Search\" to search for chat services");
+  ui->refreshButton->setText("Search");
+  ui->stopButton->setEnabled(false);
 }
 
 BtSelector::~BtSelector() {
   delete ui;
-  delete m_discoveryAgent;
-}
-
-void BtSelector::startDiscovery(const QBluetoothUuid &uuid) {
-  ui->status->setText(tr("Scanning..."));
-  if (m_discoveryAgent->isActive())
-    m_discoveryAgent->stop();
-
-  ui->remoteDevices->clear();
-
-  m_discoveryAgent->setUuidFilter(uuid);
-  m_discoveryAgent->start();
-
-}
-
-void BtSelector::stopDiscovery() {
-  if (m_discoveryAgent)
-    m_discoveryAgent->stop();
+  delete discoveryAgent;
 }
 
 QBluetoothServiceInfo BtSelector::service() const {
   return m_service;
 }
 
-void BtSelector::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
-  QMapIterator<QListWidgetItem *, QBluetoothServiceInfo> i(m_discoveredServices);
-  while (i.hasNext()) {
-      i.next();
+void BtSelector::startDiscovery() {
+  ui->statusLabel->setText(tr("Scanning..."));
+  ui->refreshButton->setText("Refresh");
+  ui->stopButton->setEnabled(true);
+  ui->busyAnimation->show();
 
-      if (serviceInfo.device().address() == i.value().device().address())
+  if (discoveryAgent->isActive())
+    discoveryAgent->stop();
+
+  ui->remoteDevices->clear();
+
+  discoveryAgent->setUuidFilter(QBluetoothUuid(serviceUuid));
+  discoveryAgent->start();
+}
+
+void BtSelector::stopDiscovery() {
+  if (discoveryAgent) {
+      discoveryAgent->stop();
+
+      ui->statusLabel->setText("Click \"Search\" to search for chat services");
+      ui->refreshButton->setText("Search");
+      ui->stopButton->setEnabled(false);
+      ui->busyAnimation->hide();
+    }
+}
+
+void BtSelector::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
+  QMapIterator<QListWidgetItem *, QBluetoothServiceInfo> _services(discoveredServices);
+
+  while (_services.hasNext()) {
+      _services.next();
+
+      if (serviceInfo.device().address() == _services.value().device().address())
         return;
-   }
+    }
 
   QString remoteName;
   if (serviceInfo.device().name().isEmpty())
@@ -95,20 +117,16 @@ void BtSelector::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
 
   QListWidgetItem *item = new QListWidgetItem(QString::fromLatin1("%1 %2").arg(remoteName, serviceInfo.serviceName()));
 
-  m_discoveredServices.insert(item, serviceInfo);
+  discoveredServices.insert(item, serviceInfo);
   ui->remoteDevices->addItem(item);
 }
 
 void BtSelector::discoveryFinished() {
-  ui->status->setText(tr("Select the chat service to connect to."));
+  ui->statusLabel->setText(tr("Select the chat service to connect to"));
+  stopDiscovery();
 }
 
 void BtSelector::on_remoteDevices_itemActivated(QListWidgetItem *item) {
-  m_service = m_discoveredServices.value(item);
-
+  m_service = discoveredServices.value(item);
   accept();
-}
-
-void BtSelector::on_cancelButton_clicked() {
-  reject();
 }

@@ -7,15 +7,13 @@
 
 #include "../Headers/BtChat.h"
 
-static const QLatin1String serviceUuid("e8e10f95-1a70-4b27-9ccf-02010264e9c8");
-
 BtChat::BtChat(){
   localAdapters = QBluetoothLocalDevice::allDevices();
 
   if (localAdapters.count() > 2) {
       QBluetoothLocalDevice adapter(localAdapters.at(0).address());
       adapter.setHostMode(QBluetoothLocalDevice::HostDiscoverable);
-   }
+    }
 
   server = new BtServer(this);
   connect(server, SIGNAL(clientConnected(QString)),    this, SLOT(newParticipant(QString)));
@@ -31,23 +29,45 @@ BtChat::~BtChat() {
   delete server;
 }
 
-void BtChat::returnPressed(QString text) {
+void BtChat::returnPressed(const QString text) {
   emit insertMessage(MessageManager::formatMessage(text, nickname));
   emit sendMessage(MessageManager::formatMessage(text, nickname));
   server->sendMessage(MessageManager::formatMessage(text, nickname));
 }
 
-void BtChat::shareFile() {
+void BtChat::shareFile(const QString fileName) {
+  /*QBluetoothTransferManager mgr;
+  QBluetoothTransferRequest req(m_service.device().address());
+
+  m_file = new QFile(ui->fileName->text());
+
+  Progress *p = new Progress;
+  p->setStatus("Sending to: " + m_service.device().name(), "Waiting for start");
+  p->show();
+
+  QBluetoothTransferReply *reply = mgr.put(req, m_file);
+  //mgr is default parent
+  //ensure that mgr doesn't take reply down when leaving scope
+  reply->setParent(this);
+  if (reply->error()){
+      qDebug() << "Failed to send file";
+      p->finished(reply);
+      reply->deleteLater();
+      return;
+  }
+
+  connect(reply, SIGNAL(transferProgress(qint64,qint64)), p, SLOT(uploadProgress(qint64,qint64)));
+  connect(reply, SIGNAL(finished(QBluetoothTransferReply*)), p, SLOT(finished(QBluetoothTransferReply*)));
+  connect(p, SIGNAL(rejected()), reply, SLOT(abort()));*/
 }
 
 void BtChat::showBtSelector() {
   const QBluetoothAddress adapter = QBluetoothAddress();
-  BtSelector remoteSelector(adapter);
+  BtSelector *selector = new BtSelector(adapter);
+  selector->startDiscovery();
 
-  remoteSelector.startDiscovery(QBluetoothUuid(serviceUuid));
-
-  if (remoteSelector.exec() == QDialog::Accepted) {
-      QBluetoothServiceInfo service = remoteSelector.service();
+  if (selector->exec() == QDialog::Accepted) {
+      QBluetoothServiceInfo service = selector->service();
 
       BtClient *client = new BtClient(this);
       connect(client, SIGNAL(messageReceived(QString)), this,   SIGNAL(insertMessage(QString)));
@@ -57,7 +77,10 @@ void BtChat::showBtSelector() {
 
       client->startClient(service);
       clients.append(client);
-   }
+    }
+
+  else
+    selector->close();
 }
 
 void BtChat::newParticipant(const QString &nick) {
@@ -73,7 +96,7 @@ void BtChat::removeClients() {
   if (client) {
       clients.removeOne(client);
       client->deleteLater();
-   }
+    }
 }
 
 void BtChat::clientConnected(const QString &client) {

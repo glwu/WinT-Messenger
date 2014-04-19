@@ -2,8 +2,6 @@
 #define BRIDGE_H
 
 #include <QFileDialog>
-#include <QMessageBox>
-
 #include "MessageManager.h"
 #include "DeviceManager.h"
 

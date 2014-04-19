@@ -18,5 +18,7 @@
         <file>Widgets/Button.qml</file>
         <file>Widgets/Sizes.qml</file>
         <file>Pages/Hotspot/Wizard.qml</file>
+        <file>Widgets/Emotes.qml</file>
+        <file>Widgets/Users.qml</file>
     </qresource>
 </RCC>

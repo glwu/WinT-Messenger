@@ -25,6 +25,8 @@ public:
     Ping,
     Pong,
     Greeting,
+    Binary,
+    FileName,
     Undefined
  };
 
@@ -32,11 +34,14 @@ public:
 
   QString name() const;
   void setGreetingMessage(const QString &message);
+
   bool sendMessage(const QString &message);
+  bool sendFile(const QString &fileName);
 
 signals:
   void readyForUse();
   void newMessage(const QString &message);
+  void newFile(const QByteArray &buffer, const QString &fileName);
 
 protected:
   void timerEvent(QTimerEvent *timerEvent);
@@ -63,6 +68,8 @@ private:
   int numBytesForCurrentDataType;
   int transferTimerId;
   bool isGreetingMessageSent;
+
+  QString currentFileName;
 };
 
 #endif

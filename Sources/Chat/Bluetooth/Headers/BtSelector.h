@@ -1,6 +1,7 @@
 #ifndef BT_SELECTOR_H
 #define BT_SELECTOR_H
 
+#include <QMovie>
 #include <QDialog>
 #include <QBluetoothUuid>
 #include <QBluetoothAddress>
@@ -26,22 +27,26 @@ public:
   explicit BtSelector(const QBluetoothAddress &localAdapter, QWidget *parent = 0);
   ~BtSelector();
 
-  void startDiscovery(const QBluetoothUuid &uuid);
-  void stopDiscovery();
   QBluetoothServiceInfo service() const;
 
 private:
   Ui::RemoteSelector *ui;
 
-  QBluetoothServiceDiscoveryAgent *m_discoveryAgent;
+  QBluetoothServiceDiscoveryAgent *discoveryAgent;
   QBluetoothServiceInfo m_service;
-  QMap<QListWidgetItem *, QBluetoothServiceInfo> m_discoveredServices;
+  QMap<QListWidgetItem *, QBluetoothServiceInfo> discoveredServices;
+
+public slots:
+  void startDiscovery();
+  void stopDiscovery();
 
 private slots:
   void serviceDiscovered(const QBluetoothServiceInfo &serviceInfo);
   void discoveryFinished();
   void on_remoteDevices_itemActivated(QListWidgetItem *item);
-  void on_cancelButton_clicked();
+  //void on_cancelButton_clicked();
+  //void on_stopButton_clicked();
+  // void on_refreshButton_clicked();
 };
 
 #endif

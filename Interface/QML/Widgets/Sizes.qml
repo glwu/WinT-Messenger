@@ -8,11 +8,11 @@
 import QtQuick 2.0
 
 QtObject {
-    property int control: DeviceManager.ratio(12)
-    property int smallControl: DeviceManager.ratio(10)
-    property int title: DeviceManager.ratio(15)
-    property int subtitle: DeviceManager.ratio(13)
-    property int text: DeviceManager.ratio(12)
-    property int smallText: DeviceManager.ratio(11)
-    property int toolbarTitle: DeviceManager.ratio(22)
+  property int control: DeviceManager.ratio(12)
+  property int smallControl: DeviceManager.ratio(10)
+  property int title: DeviceManager.ratio(15)
+  property int subtitle: DeviceManager.ratio(13)
+  property int text: DeviceManager.ratio(12)
+  property int smallText: DeviceManager.ratio(11)
+  property int toolbarTitle: DeviceManager.ratio(22)
 }

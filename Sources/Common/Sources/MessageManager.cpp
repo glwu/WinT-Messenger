@@ -22,9 +22,9 @@ QString MessageManager::formatNotification(const QString msg) {
       + "</font>";
 }
 
-QString MessageManager::addEmotes(QString msg, int size) {
+QString MessageManager::addEmotes(QString msg) {
   QString path = "&nbsp;<img src = \"qrc:/emotes/";
-  QString end = QString(".png\" width=%1 height=%1>&nbsp;").arg(size);
+  QString end = QString(".png\">&nbsp;");
 
   msg.replace("x-(",  "*angry*");
   msg.replace(":-)",  "*smile*");
@@ -44,7 +44,6 @@ QString MessageManager::addEmotes(QString msg, int size) {
   msg.replace(":-P",  "*tongue*");
   msg.replace(":-?",  "*uncertain*");
   msg.replace(";-)",  "*wink*");
-
   msg.replace("x(",  "*angry*");
   msg.replace("B)",  "*cool*");
   msg.replace(">:)", "*devil*");
@@ -61,7 +60,6 @@ QString MessageManager::addEmotes(QString msg, int size) {
   msg.replace(":P",  "*tongue*");
   msg.replace(":?",  "*uncertain*");
   msg.replace(";)",  "*wink*");
-
   msg.replace("^_^",   "*joyful*");
   msg.replace("(.V.)", "*alien*");
   msg.replace("-_-",   "*sleeping*");
@@ -89,5 +87,6 @@ QString MessageManager::addEmotes(QString msg, int size) {
   msg.replace("*uncertain*", path + "unsure"    + end);
   msg.replace("*wink*",      path + "wink"      + end);
   msg.replace("*wondering*", path + "wondering" + end);
+
   return msg;
 }

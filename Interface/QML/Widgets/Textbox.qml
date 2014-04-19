@@ -10,47 +10,47 @@ import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.0
 
 Item {
-    height: DeviceManager.ratio(32)
+  height: DeviceManager.ratio(32)
 
-    property alias text: textField.text
-    property alias placeholderText: textField.placeholderText
-    property alias length: textField.length
-    property alias echoMode: textField.echoMode
+  property alias text: textField.text
+  property alias placeholderText: textField.placeholderText
+  property alias length: textField.length
+  property alias echoMode: textField.echoMode
 
-    TextField {
-        id: textField
-        font.family: defaultFont
-        style: textFieldStyle
-        font.pixelSize: sizes.text
-        anchors.fill: parent
+  TextField {
+    id: textField
+    font.family: defaultFont
+    style: textFieldStyle
+    font.pixelSize: sizes.text
+    anchors.fill: parent
 
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: parent.forceActiveFocus()
-       }
+    MouseArea {
+      id: mouseArea
+      anchors.fill: parent
+      hoverEnabled: true
+      onClicked: parent.forceActiveFocus()
+    }
 
-        onActiveFocusChanged: activeFocus ? Qt.inputMethod.show() : Qt.inputMethod.hide()
+    onActiveFocusChanged: activeFocus ? Qt.inputMethod.show() : Qt.inputMethod.hide()
 
-        Component {
-            id: textFieldStyle
+    Component {
+      id: textFieldStyle
 
-            TextFieldStyle {
-                textColor: colors.textFieldForeground
-                placeholderTextColor: colors.textFieldPlaceholder
+      TextFieldStyle {
+        textColor: colors.textFieldForeground
+        placeholderTextColor: colors.textFieldPlaceholder
 
-                background: Rectangle {
-                    color: textField.enabled ? colors.textFieldBackground: colors.buttonBackgroundDisabled
+        background: Rectangle {
+          color: textField.enabled ? colors.textFieldBackground: colors.buttonBackgroundDisabled
 
-                    border.color: {
-                        if (mouseArea.containsMouse || textField.focus)
-                            return colors.borderColor
-                        else
-                            return colors.borderColor
-                   }
-               }
-           }
-       }
-   }
+          border.color: {
+            if (mouseArea.containsMouse || textField.focus)
+              return colors.borderColor
+            else
+              return colors.borderColor
+          }
+        }
+      }
+    }
+  }
 }

@@ -10,85 +10,85 @@ import QtQuick.Controls 1.0
 import "Widgets"
 
 ApplicationWindow {
-    Colors  {id: colors }
-    Sizes   {id: sizes  }
+  Colors  {id: colors }
+  Sizes   {id: sizes  }
 
-    id: rootWindow
-    title: qsTr("WinT Messenger")
+  id: rootWindow
+  title: qsTr("WinT Messenger")
 
-    minimumHeight: 480
-    minimumWidth: 320
+  minimumHeight: 480
+  minimumWidth: 320
 
-    color: colors.background
+  color: colors.background
 
-    Component.onCompleted: {
-        colors.setColors()
-        x = Settings.value("x", 150)
-        y = Settings.value("y", 150)
-        width = Settings.value("width", minimumWidth)
-        height = Settings.value("height", minimumHeight)
+  Component.onCompleted: {
+    colors.setColors()
+    x = Settings.value("x", 150)
+    y = Settings.value("y", 150)
+    width = Settings.value("width", minimumWidth)
+    height = Settings.value("height", minimumHeight)
+  }
+
+  property string defaultFont: "Open Sans"
+  property bool fullscreen: Settings.fullscreen()
+
+  function toggleFullscreen() {
+    if (fullscreen) {
+      showNormal()
+      fullscreen = false
+      Settings.setValue("fullscreen", false)
+      return;
     }
 
-    property string defaultFont: "Open Sans"
-    property bool fullscreen: Settings.fullscreen()
+    showFullScreen()
+    fullscreen = true
+    Settings.setValue("fullscreen", true)
+  }
 
-    function toggleFullscreen() {
-        if (fullscreen) {
-            showNormal()
-            fullscreen = false
-            Settings.setValue("fullscreen", false)
-            return;
-        }
+  function finishSetup() {
+    toolbar.aboutButtonEnabled = true
+    toolbar.settingsButtonEnabled = true
+    stackView.clear()
+    stackView.push(Qt.resolvedUrl("Pages/Start.qml"))
+  }
 
-        showFullScreen()
-        fullscreen = true
-        Settings.setValue("fullscreen", true)
+  function popStackView() {
+    stackView.pop()
+    Bridge.stopNetChat()
+    Bridge.stopBtChat()
+    Bridge.stopHotspot()
+
+    if (!toolbar.aboutButtonEnabled || !toolbar.settingsButtonEnabled) {
+      toolbar.aboutButtonEnabled = true
+      toolbar.settingsButtonEnabled = true
     }
+  }
 
-    function finishSetup() {
-        toolbar.aboutButtonEnabled = true
-        toolbar.settingsButtonEnabled = true
-        stackView.clear()
-        stackView.push(Qt.resolvedUrl("Pages/Start.qml"))
-    }
+  function openPage(page) {
+    stackView.push(Qt.resolvedUrl(page))
+  }
 
-    function popStackView() {
-        stackView.pop()
-        Bridge.stopNetChat()
-        Bridge.stopBtChat()
-        Bridge.stopHotspot()
+  onClosing: {
+    Bridge.stopHotspot()
+    Bridge.stopBtChat()
+    Bridge.stopNetChat()
+  }
 
-        if (!toolbar.aboutButtonEnabled || !toolbar.settingsButtonEnabled) {
-            toolbar.aboutButtonEnabled = true
-            toolbar.settingsButtonEnabled = true
-        }
-    }
+  onXChanged: Settings.setValue("x", x)
+  onYChanged: Settings.setValue("y", y)
+  onWidthChanged: Settings.setValue("width", width)
+  onHeightChanged: Settings.setValue("height", height)
 
-    function openPage(page) {
-        stackView.push(Qt.resolvedUrl(page))
-    }
+  FontLoader {
+    id: loader
+    source: "qrc:/fonts/Regular.ttf"
+  }
 
-    onClosing: {
-        Bridge.stopHotspot()
-        Bridge.stopBtChat()
-        Bridge.stopNetChat()
-    }
+  StackView {
+    id: stackView
+    anchors.fill: parent
+    initialItem: Loader {source: Settings.firstLaunch() ? "Pages/FirstLaunch.qml" : "Pages/Start.qml";}
+  }
 
-    onXChanged: Settings.setValue("x", x)
-    onYChanged: Settings.setValue("y", y)
-    onWidthChanged: Settings.setValue("width", width)
-    onHeightChanged: Settings.setValue("height", height)
-
-    FontLoader {
-        id: loader
-        source: "qrc:/Fonts/Regular.ttf"
-    }
-
-    StackView {
-        id: stackView
-        anchors.fill: parent
-        initialItem: Loader {source: Settings.firstLaunch() ? "Pages/FirstLaunch.qml" : "Pages/Start.qml";}
-    }
-
-    Toolbar {id: toolbar}
+  Toolbar {id: toolbar}
 }

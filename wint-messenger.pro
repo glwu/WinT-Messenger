@@ -15,6 +15,7 @@ QT += quick
 QT += network
 QT += widgets
 QT += bluetooth
+QT += multimedia
 
 android {
    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Systems/Android
@@ -115,7 +116,10 @@ OTHER_FILES += \
     Interface/QML/Pages/Hotspot/Wizard.qml \
     Interface/QML/Pages/Help/Documentation.qml \
     Interface/QML/Pages/Help/Help.qml \
-    Interface/QML/main.qml
+    Interface/QML/main.qml \
+    Interface/QML/Widgets/Emotes.qml \
+    Interface/QML/Widgets/Users.qml \
+    Interface/Resources/Stylesheets/style.css
 
 HEADERS += \
     Sources/Common/Headers/Bridge.h \
@@ -152,7 +156,8 @@ RESOURCES += \
     Interface/Resources/Emotes/emotes.qrc \
     Interface/Resources/Images/images.qrc \
     Interface/Resources/Fonts/fonts.qrc \
-    Interface/QML/qml.qrc
+    Interface/QML/qml.qrc \
+    Interface/Resources/Stylesheets/stylesheets.qrc
 
 FORMS += \
     Sources/Chat/Bluetooth/Forms/remoteselector.ui

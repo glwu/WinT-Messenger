@@ -25,11 +25,14 @@ Bridge::~Bridge() {
 }
 
 void Bridge::attachFile() {
-  if (netChatEnabled())
-    netChat->shareFile();
+  QString file = QFileDialog::getOpenFileName(0, tr("Upload file"), QDir::homePath(), 0, 0, QFileDialog::DontUseNativeDialog);
+  if (!file.isEmpty()) {
+      if (netChatEnabled())
+        netChat->shareFile(file);
 
-  if (btChatEnabled())
-    btChat->shareFile();
+      if (btChatEnabled())
+        btChat->shareFile(file);
+    }
 }
 
 void Bridge::sendMessage(QString text) {
@@ -52,11 +55,14 @@ void Bridge::startNetChat() {
 void Bridge::stopNetChat() {
   qDeleteAll(netChatObjects.begin(), netChatObjects.end());
   netChatObjects.clear();
+
   _netChatEnabled = false;
 }
 
 void Bridge::startBtChat() {
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS) && !defined(Q_OS_BLACKBERRY)
+  stopBtChat();
+
   btChat = new BtChat();
   btChatObjects.append(btChat);
   _btChatEnabled = true;
@@ -64,7 +70,7 @@ void Bridge::startBtChat() {
   QObject::connect(btChat, SIGNAL(insertMessage(QString)),  this,    SLOT(processMessage(QString)));
   QObject::connect(btChat, SIGNAL(newUser(QString)),        this,    SIGNAL(newUser(QString)));
   QObject::connect(btChat, SIGNAL(delUser(QString)),        this,    SIGNAL(delUser(QString)));
-  QObject::connect(this,    SIGNAL(returnPressed(QString)), btChat, SLOT(returnPressed(QString)));
+  QObject::connect(this,   SIGNAL(returnPressed(QString)),  btChat, SLOT(returnPressed(QString)));
 #endif
 }
 
@@ -77,46 +83,19 @@ void Bridge::stopBtChat() {
 }
 
 void Bridge::showBtSelector() {
-  btChat->showBtSelector();
+  if (_btChatEnabled)
+    btChat->showBtSelector();
 }
 
 void Bridge::stopHotspot() {
-  if (hotspotEnabled()) {
 #ifdef Q_OS_WIN
-      ShellExecute(0, L"RUNAS", L"NETSH", L"WLAN STOP HOSTEDNETWORK", 0, SW_HIDE);
-      stopNetChat();
-      _netHotspot = false;
-      return;
+  ShellExecute(0, L"RUNAS", L"NETSH", L"WLAN STOP HOSTEDNETWORK", 0, SW_HIDE);
+#else
+  return;
 #endif
 
-#ifdef Q_OS_ANDROID
-      /// SOME FUNCTION TO STOP HOTSPOT
-      stopNetChat();
-      _netHotspot = false;
-      return;
-#endif
-
-#ifdef Q_OS_LINUX
-      /// SOME FUNCTION TO STOP HOTSPOT
-      stopNetChat();
-      _netHotspot = false;
-      return;
-#endif
-
-#ifdef Q_OS_MAC
-      /// SOME FUNCTION TO STOP HOTSPOT
-      stopNetChat();
-      _netHotspot = false;
-      return;
-#endif
-
-#ifdef Q_OS_IOS
-      /// SOME FUNCTION TO STOP HOTSPOT
-      stopNetChat();
-      _netHotspot = false;
-      return;
-#endif
-   }
+  stopNetChat();
+  _netHotspot = false;
 }
 
 void Bridge::startHotspot(const QString &_ssid, const QString &_password) {
@@ -124,27 +103,12 @@ void Bridge::startHotspot(const QString &_ssid, const QString &_password) {
   ShellExecute(0, L"RUNAS", L"NETSH", QString("WLAN SET HOSTED NETWORK MODE=ALLOW SSID=%1 KEY=%2").arg(_ssid, _password).toStdWString().c_str(), 0, SW_HIDE);
   ShellExecute(0, L"RUNAS", L"NETSH", L"WLAN REFRESH HOSTEDNETWORK KEY", 0, SW_HIDE);
   ShellExecute(0, L"RUNAS", L"NETSH", L"WLAN START HOSTEDNETWORK",       0, SW_HIDE);
-
-  startNetChat();
-  _netHotspot = true;
+#else
   return;
 #endif
 
-#ifdef Q_OS_ANDROID
-  /// SOME FUNCTION TO CREATE A HOTSPOT
-#endif
-
-#ifdef Q_OS_LINUX
-  /// SOME FUNCTION TO CREATE A HOTSPOT
-#endif
-
-#ifdef Q_OS_MAC
-  /// SOME FUNCTION TO CREATE A HOTSPOT
-#endif
-
-#ifdef Q_OS_IOS
-  /// SOME FUNCTION TO CREATE A HOTSPOT
-#endif
+  startNetChat();
+  _netHotspot = true;
 }
 
 bool Bridge::netChatEnabled() {
@@ -160,5 +124,5 @@ bool Bridge::btChatEnabled() {
 }
 
 void Bridge::processMessage(const QString &text) {
-  newMessage(MessageManager::addEmotes(text, DeviceManager::ratio(14)));
+  emit newMessage(MessageManager::addEmotes(text));
 }

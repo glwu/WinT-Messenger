@@ -10,6 +10,8 @@
 #include "NetConnection.h"
 #include "NetPeerManager.h"
 
+#include "../../../Common/Headers/MessageManager.h"
+
 class NetPeerManager;
 
 class NetClient : public QObject
@@ -21,17 +23,19 @@ public:
   NetPeerManager *peerManager;
 
   void sendMessage(const QString &message);
+  void sendFile(const QString &fileName);
+
   QString nickName() const;
   bool hasConnection(const QHostAddress &senderIp, int senderPort = -1) const;
-
-  int userCount;
 
 signals:
   void newMessage(const QString &message);
   void newParticipant(const QString &nick);
   void participantLeft(const QString &nick);
+  void newFile(const QByteArray &data, const QString &name);
 
 private slots:
+  void getFile(const QByteArray &fileData, const QString &fileName);
   void newConnection(NetConnection *connection);
   void connectionError(QAbstractSocket::SocketError socketError);
   void disconnected();

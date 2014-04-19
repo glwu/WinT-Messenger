@@ -16,6 +16,7 @@
 #include <QBluetoothServiceDiscoveryAgent>
 #include <QBluetoothDeviceInfo>
 #include <QBluetoothLocalDevice>
+#include <QBluetoothTransferManager>
 
 #include "../../../Common/Headers/MessageManager.h"
 
@@ -34,8 +35,8 @@ signals:
   void delUser(const QString &nick);
 
 public slots:
-  void returnPressed(QString text);
-  void shareFile();
+  void returnPressed(const QString text);
+  void shareFile(const QString fileName);
   void showBtSelector();
 
 private slots:

@@ -18,5 +18,8 @@
         <file>ToolbarIcons/Dark/Bluetooth.png</file>
         <file>ToolbarIcons/Common/Fullscreen.png</file>
         <file>ToolbarIcons/Common/Normal.png</file>
+        <file>Movies/Spinner.gif</file>
+        <file>ToolbarIcons/Dark/Save.png</file>
+        <file>ToolbarIcons/Light/Save.png</file>
     </qresource>
 </RCC>
