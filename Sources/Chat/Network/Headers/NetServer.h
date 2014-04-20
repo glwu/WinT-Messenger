@@ -8,16 +8,16 @@ class NetConnection;
 
 class NetServer : public QTcpServer
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  NetServer(QObject *parent = 0);
+    NetServer(QObject *parent = 0);
 
 signals:
-  void newConnection(NetConnection *connection);
+    void newConnection(NetConnection *connection);
 
 protected:
-  void incomingConnection(qintptr socketDescriptor);
+    void incomingConnection(qintptr socketDescriptor);
 };
 
 #endif

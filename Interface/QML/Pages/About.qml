@@ -9,35 +9,28 @@ import QtQuick 2.0
 import "../Widgets"
 
 Page {
-  logoImageSource: "qrc:/images/Info.png"
-  logoSubtitle: qsTr("Created by the WinT 3794 team")
-  logoTitle: "WinT Messenger 1.1.3"
-  toolbarTitle: qsTr("About")
+    toolbarTitle: qsTr("About")
+    logoTitle: "WinT Messenger 1.1.3"
+    logoImageSource: "qrc:/images/Info.png"
+    logoSubtitle: qsTr("Created by the WinT 3794 team")
 
-  Component.onCompleted: {
-    toolbar.aboutButtonEnabled = false
-    toolbar.settingsButtonEnabled = false
-  }
+    onVisibleChanged: toolbar.controlButtonsEnabled = !visible
+    Component.onCompleted: toolbar.controlButtonsEnabled = false
 
-  onVisibleChanged: {
-    toolbar.aboutButtonEnabled = !visible
-    toolbar.settingsButtonEnabled = !visible
-  }
+    Column {
+        spacing: DeviceManager.ratio(4)
+        y: arrangeFirstItem + 10 + parent.height / 16
+        anchors.horizontalCenter: parent.horizontalCenter
 
-  Column {
-    y: arrangeFirstItem + 10 + parent.height / 16
-    spacing: DeviceManager.ratio(4)
-    anchors.horizontalCenter: parent.horizontalCenter
+        Button {
+            text: qsTr("Website")
+            onClicked: Qt.openUrlExternally("http://wint-im.sf.net")
+        }
 
-    Button {
-      text: qsTr("Website")
-      onClicked: Qt.openUrlExternally("http://wint-im.sf.net")
+        Button {
+            enabled: false
+            text: qsTr("Donate")
+            onClicked: Qt.openUrlExternally("http://wint-im.sf.net/donate.html")
+        }
     }
-
-    Button {
-      onClicked: Qt.openUrlExternally("http://wint-im.sf.net/donate.html")
-      text: qsTr("Donate")
-      enabled: false
-    }
-  }
 }

@@ -15,7 +15,73 @@ QT += quick
 QT += network
 QT += widgets
 QT += bluetooth
-QT += multimedia
+
+HEADERS += \
+    Sources/Common/Headers/Bridge.h \
+    Sources/Common/Headers/Settings.h \
+    Sources/Common/Headers/DeviceManager.h \
+    Sources/Chat/Network/Headers/NetChat.h \
+    Sources/Chat/Network/Headers/NetClient.h \
+    Sources/Chat/Network/Headers/NetConnection.h \
+    Sources/Chat/Network/Headers/NetPeerManager.h \
+    Sources/Chat/Network/Headers/NetServer.h \
+    Sources/Chat/Bluetooth/Headers/BtChat.h \
+    Sources/Chat/Bluetooth/Headers/BtClient.h \
+    Sources/Chat/Bluetooth/Headers/BtSelector.h \
+    Sources/Chat/Bluetooth/Headers/BtServer.h \
+    Sources/Common/Headers/MessageManager.h \
+    Sources/Common/Headers/WindowLoader.h
+
+SOURCES += \
+    Sources/Common/Sources/Bridge.cpp \
+    Sources/Common/Sources/Settings.cpp \
+    Sources/Chat/Network/Sources/NetChat.cpp \
+    Sources/Chat/Network/Sources/NetClient.cpp \
+    Sources/Chat/Network/Sources/NetConnection.cpp \
+    Sources/Chat/Network/Sources/NetPeerManager.cpp \
+    Sources/Chat/Network/Sources/NetServer.cpp \
+    Sources/main.cpp \
+    Sources/Common/Sources/DeviceManager.cpp \
+    Sources/Chat/Bluetooth/Sources/BtChat.cpp \
+    Sources/Chat/Bluetooth/Sources/BtClient.cpp \
+    Sources/Chat/Bluetooth/Sources/BtSelector.cpp \
+    Sources/Chat/Bluetooth/Sources/BtServer.cpp \
+    Sources/Common/Sources/MessageManager.cpp \
+    Sources/Common/Sources/WindowLoader.cpp
+
+RESOURCES += \
+    Interface/Resources/Emotes/emotes.qrc \
+    Interface/Resources/Images/images.qrc \
+    Interface/Resources/Fonts/fonts.qrc \
+    Interface/QML/qml.qrc \
+    Interface/Resources/Stylesheets/stylesheets.qrc
+
+FORMS += \
+    Sources/Chat/Bluetooth/Forms/remoteselector.ui
+
+OTHER_FILES += \
+    Interface/QML/Widgets/Button.qml \
+    Interface/QML/Widgets/ChatInterface.qml \
+    Interface/QML/Widgets/Colors.qml \
+    Interface/QML/Widgets/Label.qml \
+    Interface/QML/Widgets/Page.qml \
+    Interface/QML/Widgets/Textbox.qml \
+    Interface/QML/Widgets/Toolbar.qml \
+    Interface/QML/Widgets/Sizes.qml \
+    Interface/QML/Pages/About.qml \
+    Interface/QML/Pages/Chat.qml \
+    Interface/QML/Pages/Connect.qml \
+    Interface/QML/Pages/FirstLaunch.qml \
+    Interface/QML/Pages/Preferences.qml \
+    Interface/QML/Pages/Start.qml \
+    Interface/QML/Pages/Hotspot/Wizard.qml \
+    Interface/QML/Pages/Help/Documentation.qml \
+    Interface/QML/Pages/Help/Help.qml \
+    Interface/QML/main.qml \
+    Interface/QML/Widgets/Emotes.qml \
+    Interface/QML/Widgets/Users.qml \
+    Interface/Resources/Stylesheets/style.css \
+    Interface/QML/Widgets/Checkbox.qml
 
 android {
    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Systems/Android
@@ -97,68 +163,4 @@ macx {
     CONFIG += app_bundle
     TARGET = "WinT Messenger"
 }
-
-OTHER_FILES += \
-    Interface/QML/Widgets/Button.qml \
-    Interface/QML/Widgets/ChatInterface.qml \
-    Interface/QML/Widgets/Colors.qml \
-    Interface/QML/Widgets/Label.qml \
-    Interface/QML/Widgets/Page.qml \
-    Interface/QML/Widgets/Textbox.qml \
-    Interface/QML/Widgets/Toolbar.qml \
-    Interface/QML/Widgets/Sizes.qml \
-    Interface/QML/Pages/About.qml \
-    Interface/QML/Pages/Chat.qml \
-    Interface/QML/Pages/Connect.qml \
-    Interface/QML/Pages/FirstLaunch.qml \
-    Interface/QML/Pages/Preferences.qml \
-    Interface/QML/Pages/Start.qml \
-    Interface/QML/Pages/Hotspot/Wizard.qml \
-    Interface/QML/Pages/Help/Documentation.qml \
-    Interface/QML/Pages/Help/Help.qml \
-    Interface/QML/main.qml \
-    Interface/QML/Widgets/Emotes.qml \
-    Interface/QML/Widgets/Users.qml \
-    Interface/Resources/Stylesheets/style.css
-
-HEADERS += \
-    Sources/Common/Headers/Bridge.h \
-    Sources/Common/Headers/Settings.h \
-    Sources/Common/Headers/DeviceManager.h \
-    Sources/Chat/Network/Headers/NetChat.h \
-    Sources/Chat/Network/Headers/NetClient.h \
-    Sources/Chat/Network/Headers/NetConnection.h \
-    Sources/Chat/Network/Headers/NetPeerManager.h \
-    Sources/Chat/Network/Headers/NetServer.h \
-    Sources/Chat/Bluetooth/Headers/BtChat.h \
-    Sources/Chat/Bluetooth/Headers/BtClient.h \
-    Sources/Chat/Bluetooth/Headers/BtSelector.h \
-    Sources/Chat/Bluetooth/Headers/BtServer.h \
-    Sources/Common/Headers/MessageManager.h
-
-SOURCES += \
-    Sources/Common/Sources/Bridge.cpp \
-    Sources/Common/Sources/Settings.cpp \
-    Sources/Chat/Network/Sources/NetChat.cpp \
-    Sources/Chat/Network/Sources/NetClient.cpp \
-    Sources/Chat/Network/Sources/NetConnection.cpp \
-    Sources/Chat/Network/Sources/NetPeerManager.cpp \
-    Sources/Chat/Network/Sources/NetServer.cpp \
-    Sources/main.cpp \
-    Sources/Common/Sources/DeviceManager.cpp \
-    Sources/Chat/Bluetooth/Sources/BtChat.cpp \
-    Sources/Chat/Bluetooth/Sources/BtClient.cpp \
-    Sources/Chat/Bluetooth/Sources/BtSelector.cpp \
-    Sources/Chat/Bluetooth/Sources/BtServer.cpp \
-    Sources/Common/Sources/MessageManager.cpp
-
-RESOURCES += \
-    Interface/Resources/Emotes/emotes.qrc \
-    Interface/Resources/Images/images.qrc \
-    Interface/Resources/Fonts/fonts.qrc \
-    Interface/QML/qml.qrc \
-    Interface/Resources/Stylesheets/stylesheets.qrc
-
-FORMS += \
-    Sources/Chat/Bluetooth/Forms/remoteselector.ui
 

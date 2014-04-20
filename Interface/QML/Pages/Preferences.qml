@@ -6,113 +6,86 @@
 //
 
 import QtQuick 2.0
-import QtQuick.Controls 1.0
 import "../Widgets"
 
 Page {
-  id: preferences
+    id: preferences
+    logoTitle: qsTr("Settings")
+    toolbarTitle: qsTr("Settings")
+    logoImageSource: "qrc:/images/Settings.png"
+    logoSubtitle: qsTr("Customize WinT Messenger")
 
-  logoImageSource: "qrc:/images/Settings.png"
-  logoSubtitle: qsTr("Customize WinT Messenger")
-  logoTitle: qsTr("Settings")
-  toolbarTitle: qsTr("Settings")
+    onVisibleChanged: toolbar.controlButtonsEnabled = !visible
+    Component.onCompleted: toolbar.controlButtonsEnabled = false
 
-  Component.onCompleted: {
-    toolbar.aboutButtonEnabled = false
-    toolbar.settingsButtonEnabled = false
-  }
+    Column {
+        y: arrangeFirstItem
+        spacing: DeviceManager.ratio(8)
+        anchors {left: parent.left; right: parent.right; leftMargin: DeviceManager.ratio(24); rightMargin: DeviceManager.ratio(24);}
 
-  onVisibleChanged: {
-    toolbar.aboutButtonEnabled = !visible
-    toolbar.settingsButtonEnabled = !visible
-  }
-
-  Column {
-    spacing: DeviceManager.ratio(8)
-    y: arrangeFirstItem
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.leftMargin: 48
-    anchors.rightMargin: 48
-
-    Label {
-      anchors.left: parent.left
-      text: qsTr("Nickname and profile color:")
-    }
-
-    Rectangle {
-      anchors.left: parent.left
-      anchors.right: parent.right
-      height: textBox.height
-      color: colors.background
-
-      Textbox {
-        id: textBox
-        anchors.left: parent.left
-        anchors.right: colorRectangle.left
-        anchors.rightMargin: 2
-        placeholderText: qsTr("Type a nickname and choose a profile color")
-        text: Settings.value("userName", "unknown")
-        onTextChanged: Settings.setValue("userName", text)
-      }
-
-      Rectangle {
-        id: colorRectangle
-        anchors.right: parent.right
-        height: textBox.height
-        width: height
-        border.width: 1
-        color: colors.userColor
-        border.color: colors.borderColor
-        onColorChanged: {
-          Settings.setValue("userColor", colors.userColor)
-
-          if (Settings.customizedUiColor())
-            colors.toolbarColor = colors.userColor
-          else
-            colors.toolbarColor = colors.toolbarColorStatic
+        Label {
+            anchors.left: parent.left
+            text: qsTr("Nickname and profile color:")
         }
 
-        MouseArea {
-          id: mouseArea
-          anchors.fill: parent
-          hoverEnabled: true
-          onClicked: colors.userColor = Settings.getDialogColor(colors.userColor);
+        Rectangle {
+            height: textBox.height
+            color: colors.background
+            anchors {left: parent.left; right: parent.right;}
+
+            Textbox {
+                id: textBox
+                text: Settings.value("userName", "unknown")
+                onTextChanged: Settings.setValue("userName", text)
+                placeholderText: qsTr("Type a nickname and choose a profile color")
+                anchors {left: parent.left; right: colorRectangle.left; rightMargin: 2;}
+            }
+
+            Rectangle {
+                width: height
+                id: colorRectangle
+                height: textBox.height
+                color: colors.userColor
+                anchors.right: parent.right
+                border.color: colors.borderColor
+                onColorChanged: {
+                    Settings.setValue("userColor", colors.userColor)
+
+                    if (Settings.customizedUiColor())
+                        colors.toolbarColor = colors.userColor
+                    else
+                        colors.toolbarColor = colors.toolbarColorStatic
+                }
+
+                MouseArea {
+                    id: mouseArea
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    onClicked: colors.userColor = Settings.getDialogColor(colors.userColor);
+                }
+            }
         }
-      }
+
+        Checkbox {
+            width: height
+            id: darkInterface
+            checked: Settings.darkInterface()
+            labelText: qsTr("Use a dark interface theme")
+            onCheckedChanged: {Settings.setValue("darkInterface", checked); colors.setColors();}
+        }
+
+        Checkbox {
+            id: customizedUiColor
+            checked: Settings.customizedUiColor()
+            labelText: qsTr("Use the profile color to theme the app")
+            onCheckedChanged: {
+                Settings.setValue("customizedUiColor", checked)
+
+                if (Settings.customizedUiColor())
+                    colors.toolbarColor = colors.userColor
+                else
+                    colors.toolbarColor = colors.toolbarColorStatic
+            }
+        }
     }
-
-    CheckBox {
-      id: darkInterface
-      checked: Settings.darkInterface()
-      onCheckedChanged: {Settings.setValue("darkInterface", checked); colors.setColors();}
-
-      Label {
-        anchors.left: darkInterface.right
-        text: qsTr("Use a dark interface")
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: sizes.control
-      }
-    }
-
-    CheckBox {
-      id: customizedUiColor
-      checked: Settings.customizedUiColor()
-      onCheckedChanged: {
-        Settings.setValue("customizedUiColor", checked)
-
-        if (Settings.customizedUiColor())
-          colors.toolbarColor = colors.userColor
-        else
-          colors.toolbarColor = colors.toolbarColorStatic
-      }
-
-      Label {
-        anchors.left: customizedUiColor.right
-        text: qsTr("Use the profile color to theme the app")
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: sizes.control
-      }
-    }
-  }
 }

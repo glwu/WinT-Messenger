@@ -9,50 +9,36 @@ import QtQuick 2.0
 import "../Widgets"
 
 Page {
-  logoImageSource: "qrc:/images/Connect.png"
-  logoTitle: qsTr("Connect")
-  toolbarTitle: qsTr("Connect")
-  logoSubtitle: qsTr("Please select a communication method")
+    logoTitle: qsTr("Connect")
+    toolbarTitle: qsTr("Connect")
+    logoImageSource: "qrc:/images/Connect.png"
+    logoSubtitle: qsTr("Please select a communication method")
 
-  Column {
-    spacing: DeviceManager.ratio(4)
-    y: arrangeFirstItem + parent.height / 32
-    anchors.horizontalCenter: parent.horizontalCenter
+    Column {
+        spacing: DeviceManager.ratio(4)
+        y: arrangeFirstItem + parent.height / 32
+        anchors.horizontalCenter: parent.horizontalCenter
 
-    Button {
-      text: qsTr("Bluetooth chat")
-      enabled: !DeviceManager.isMobile()
-      onClicked: {
-        text = qsTr("Please wait...")
-        enabled = false
+        Button {
+            text: qsTr("Bluetooth chat")
+            enabled: !DeviceManager.isMobile()
+            onClicked: {
+                Bridge.startBtChat()
+                openPage("qrc:/QML/Pages/Chat.qml")
+            }
+        }
 
-        Bridge.startBtChat()
-        openPage("Pages/Chat.qml")
+        Button {
+            text: qsTr("Network (LAN) chat")
+            onClicked: {
+                Bridge.startNetChat()
+                openPage("qrc:/QML/Pages/Chat.qml")
+            }
+        }
 
-        text = qsTr("Bluetooth chat")
-        enabled = true
-      }
+        Button {
+            text: qsTr("Setup a wireless hotspot")
+            onClicked: openPage("qrc:/QML/Pages/Hotspot/Wizard.qml")
+        }
     }
-
-    Button {
-      text: qsTr("Network (LAN) chat")
-      onClicked: {
-        text = qsTr("Please wait...")
-        enabled = false
-
-        Bridge.startNetChat()
-        openPage("Pages/Chat.qml")
-
-        text = qsTr("Network (LAN) chat")
-        enabled = true
-      }
-    }
-
-    Button {
-      onClicked: openPage("Pages/Hotspot/Wizard.qml")
-      text: qsTr("Setup a wireless hotspot")
-    }
-  }
-
-
 }

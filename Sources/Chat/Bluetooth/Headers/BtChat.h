@@ -22,37 +22,37 @@
 
 class BtChat : public QObject {
 
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  BtChat();
-  ~BtChat();
+    BtChat();
+    ~BtChat();
 
 signals:
-  void sendMessage(const QString &text);
-  void insertMessage(const QString &text);
-  void newUser(const QString &nick);
-  void delUser(const QString &nick);
+    void sendMessage(const QString &text);
+    void insertMessage(const QString &text);
+    void newUser(const QString &nick);
+    void delUser(const QString &nick);
 
 public slots:
-  void returnPressed(const QString text);
-  void shareFile(const QString fileName);
-  void showBtSelector();
+    void returnPressed(const QString text);
+    void shareFile(const QString fileName);
+    void showBtSelector();
 
 private slots:
-  void newParticipant(const QString &nick);
-  void participantLeft(const QString &nick);
+    void newParticipant(const QString &nick);
+    void participantLeft(const QString &nick);
 
-  void removeClients();
-  void clientConnected(const QString &client);
+    void removeClients();
+    void clientConnected(const QString &client);
 
 private:
-  BtServer *server;
-  QString nickname;
+    BtServer *server;
+    QString nickname;
 
-  QList<BtClient *> clients;
-  QList<QBluetoothHostInfo> localAdapters;
-  int currentAdapterIndex;
+    QList<BtClient *> clients;
+    QList<QBluetoothHostInfo> localAdapters;
+    int currentAdapterIndex;
 };
 
 #endif

@@ -8,42 +8,36 @@
 import QtQuick 2.0
 
 Rectangle {
-  id: button
-  height: 1.9 * label.height
-  width: label.width > (6 * height) ? (1.5 * label.width): (6 * height)
+    id: button
+    opacity: 0.8
+    height: 1.9 * label.height
+    border.color: colors.borderColor
+    width: label.width > (6 * height) ? (1.5 * label.width): (6 * height)
 
-  signal clicked
-  property alias text: label.text
+    signal clicked
+    property alias text: label.text
 
-  color: {
-    if (mouseArea.containsMouse && !mouseArea.pressed)
-      return colors.buttonBackgroundHover
-    else if (mouseArea.pressed)
-      return colors.buttonBackgroundPressed
-    else if (!button.enabled)
-      return colors.buttonBackgroundDisabled
-    else
-      return colors.buttonBackground
-  }
-
-  opacity: 0.8
-  border.color: colors.borderColor
-
-  MouseArea {
-    id: mouseArea
-    anchors.fill: parent
-    hoverEnabled: true
-    onClicked: button.clicked()
-  }
-
-  Label {
-    id: label
-    anchors.centerIn: parent
     color: {
-      if (!button.enabled)
-        return colors.buttonForegroundDisabled
-      else
-        return colors.buttonForeground
+        if (mouseArea.containsMouse && !mouseArea.pressed)
+            return colors.buttonBackgroundHover
+        else if (mouseArea.pressed)
+            return colors.buttonBackgroundPressed
+        else if (!button.enabled)
+            return colors.buttonBackgroundDisabled
+        else
+            return colors.buttonBackground
     }
-  }
+
+    MouseArea {
+        id: mouseArea
+        hoverEnabled: true
+        anchors.fill: parent
+        onClicked: button.clicked()
+    }
+
+    Label {
+        id: label
+        anchors.centerIn: parent
+        color: parent.enabled ? colors.buttonForeground : colors.buttonForegroundDisabled
+    }
 }

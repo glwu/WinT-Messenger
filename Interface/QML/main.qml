@@ -10,85 +10,45 @@ import QtQuick.Controls 1.0
 import "Widgets"
 
 ApplicationWindow {
-  Colors  {id: colors }
-  Sizes   {id: sizes  }
+    id: rootWindow
+    minimumHeight: 480
+    minimumWidth : 320
+    width: Settings.width()
+    color: colors.background
+    height: Settings.height()
+    title: qsTr("WinT Messenger")
+    x: DeviceManager.isMobile() ? 0 : Settings.value("x", 150)
+    y: DeviceManager.isMobile() ? 0 : Settings.value("y", 150)
 
-  id: rootWindow
-  title: qsTr("WinT Messenger")
+    property string defaultFont: "Open Sans"
 
-  minimumHeight: 480
-  minimumWidth: 320
+    StackView  {id: stackView}
+    Colors     {id: colors }
+    Sizes      {id: sizes  }
+    Toolbar    {id: toolbar}
 
-  color: colors.background
+    Component.onCompleted: Settings.firstLaunch() ? stackView.push("qrc:/QML/Pages/FirstLaunch.qml") :
+                                                    stackView.push("qrc:/QML/Pages/Start.qml")
 
-  Component.onCompleted: {
-    colors.setColors()
-    x = Settings.value("x", 150)
-    y = Settings.value("y", 150)
-    width = Settings.value("width", minimumWidth)
-    height = Settings.value("height", minimumHeight)
-  }
+    function popStackView() {
+        stackView.pop()
 
-  property string defaultFont: "Open Sans"
-  property bool fullscreen: Settings.fullscreen()
+        if (stackView.currentItem.toString() === "qrc:/QML/Pages/Chat.qml") {
+            Bridge.stopNetChat()
+            Bridge.stopBtChat()
+            Bridge.stopHotspot()
+        }
 
-  function toggleFullscreen() {
-    if (fullscreen) {
-      showNormal()
-      fullscreen = false
-      Settings.setValue("fullscreen", false)
-      return;
+        if (!toolbar.controlButtonsEnabled)
+            toolbar.controlButtonsEnabled = true
     }
 
-    showFullScreen()
-    fullscreen = true
-    Settings.setValue("fullscreen", true)
-  }
-
-  function finishSetup() {
-    toolbar.aboutButtonEnabled = true
-    toolbar.settingsButtonEnabled = true
-    stackView.clear()
-    stackView.push(Qt.resolvedUrl("Pages/Start.qml"))
-  }
-
-  function popStackView() {
-    stackView.pop()
-    Bridge.stopNetChat()
-    Bridge.stopBtChat()
-    Bridge.stopHotspot()
-
-    if (!toolbar.aboutButtonEnabled || !toolbar.settingsButtonEnabled) {
-      toolbar.aboutButtonEnabled = true
-      toolbar.settingsButtonEnabled = true
+    function openPage(page) {
+        stackView.push(page)
     }
-  }
 
-  function openPage(page) {
-    stackView.push(Qt.resolvedUrl(page))
-  }
-
-  onClosing: {
-    Bridge.stopHotspot()
-    Bridge.stopBtChat()
-    Bridge.stopNetChat()
-  }
-
-  onXChanged: Settings.setValue("x", x)
-  onYChanged: Settings.setValue("y", y)
-  onWidthChanged: Settings.setValue("width", width)
-  onHeightChanged: Settings.setValue("height", height)
-
-  FontLoader {
-    id: loader
-    source: "qrc:/fonts/Regular.ttf"
-  }
-
-  StackView {
-    id: stackView
-    anchors.fill: parent
-    initialItem: Loader {source: Settings.firstLaunch() ? "Pages/FirstLaunch.qml" : "Pages/Start.qml";}
-  }
-
-  Toolbar {id: toolbar}
+    onXChanged: Settings.setValue("x", x)
+    onYChanged: Settings.setValue("y", y)
+    onWidthChanged: if (!toolbar.fullscreen)  Settings.setValue("width", width)
+    onHeightChanged: if (!toolbar.fullscreen) Settings.setValue("height", height)
 }

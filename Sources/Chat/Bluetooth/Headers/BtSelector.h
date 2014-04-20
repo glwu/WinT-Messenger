@@ -21,32 +21,32 @@ QT_END_NAMESPACE
 
 class BtSelector : public QDialog {
 
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit BtSelector(const QBluetoothAddress &localAdapter, QWidget *parent = 0);
-  ~BtSelector();
+    explicit BtSelector(const QBluetoothAddress &localAdapter, QWidget *parent = 0);
+    ~BtSelector();
 
-  QBluetoothServiceInfo service() const;
+    QBluetoothServiceInfo service() const;
 
 private:
-  Ui::RemoteSelector *ui;
+    Ui::RemoteSelector *ui;
 
-  QBluetoothServiceDiscoveryAgent *discoveryAgent;
-  QBluetoothServiceInfo m_service;
-  QMap<QListWidgetItem *, QBluetoothServiceInfo> discoveredServices;
+    QBluetoothServiceDiscoveryAgent *discoveryAgent;
+    QBluetoothServiceInfo m_service;
+    QMap<QListWidgetItem *, QBluetoothServiceInfo> discoveredServices;
 
 public slots:
-  void startDiscovery();
-  void stopDiscovery();
+    void startDiscovery();
+    void stopDiscovery();
 
 private slots:
-  void serviceDiscovered(const QBluetoothServiceInfo &serviceInfo);
-  void discoveryFinished();
-  void on_remoteDevices_itemActivated(QListWidgetItem *item);
-  //void on_cancelButton_clicked();
-  //void on_stopButton_clicked();
-  // void on_refreshButton_clicked();
+    void serviceDiscovered(const QBluetoothServiceInfo &serviceInfo);
+    void discoveryFinished();
+    void on_remoteDevices_itemActivated(QListWidgetItem *item);
+    //void on_cancelButton_clicked();
+    //void on_stopButton_clicked();
+    // void on_refreshButton_clicked();
 };
 
 #endif

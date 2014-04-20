@@ -41,46 +41,46 @@
 #include "../Headers/BtClient.h"
 
 BtClient::BtClient(QObject *parent) : QObject(parent), socket(0) {
-  setParent(parent);
+    setParent(parent);
 }
 
 BtClient::~BtClient() {
-  stopClient();
+    stopClient();
 }
 
 void BtClient::startClient(const QBluetoothServiceInfo &remoteService) {
-  if (socket)
-    return;
+    if (socket)
+        return;
 
-  socket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
-  socket->connectToService(remoteService);
+    socket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
+    socket->connectToService(remoteService);
 
-  connect(socket, SIGNAL(readyRead()), this, SLOT(readSocket()));
-  connect(socket, SIGNAL(connected()), this, SLOT(connected()));
-  connect(socket, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readSocket()));
+    connect(socket, SIGNAL(connected()), this, SLOT(connected()));
+    connect(socket, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
 }
 
 void BtClient::stopClient() {
-  delete socket;
-  socket = 0;
+    delete socket;
+    socket = 0;
 }
 
 void BtClient::readSocket() {
-  if (!socket)
-    return;
+    if (!socket)
+        return;
 
-  while (socket->canReadLine()) {
-      QByteArray line = socket->readLine();
-      emit messageReceived(socket->peerName(),
-                           QString::fromUtf8(line.constData(), line.length()));
+    while (socket->canReadLine()) {
+        QByteArray line = socket->readLine();
+        emit messageReceived(socket->peerName(),
+                             QString::fromUtf8(line.constData(), line.length()));
     }
 }
 
 void BtClient::sendMessage(const QString &message) {
-  QByteArray text = message.toUtf8();
-  socket->write(text);
+    QByteArray text = message.toUtf8();
+    socket->write(text);
 }
 
 void BtClient::connected() {
-  emit connected(socket->peerName());
+    emit connected(socket->peerName());
 }

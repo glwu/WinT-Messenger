@@ -9,26 +9,22 @@ import QtQuick 2.0
 import "../Widgets"
 
 Page {
-  flickable: false
-  logoEnabled: false
-  toolbarTitle: Bridge.btChatEnabled() ? qsTr("Bluetooth chat") : qsTr("Network chat")
+    flickable: false
+    logoEnabled: false
+    toolbarTitle: Bridge.btChatEnabled() ? qsTr("Bluetooth chat") : qsTr("Network chat")
 
-  Component.onCompleted: {
-    toolbar.aboutButtonEnabled = false
-    toolbar.settingsButtonEnabled = false
-    chatInterface.setText(Bridge.btChatEnabled() ?
-                            qsTr("Select a device to connect to by clicking the \"Bluetooth\" button") :
-                            qsTr("Welcome to the chat room!"),
-                            "gray")
-  }
+    Component.onCompleted: {
+        toolbar.controlButtonsEnabled = false
+        chatInterface.setText(Bridge.btChatEnabled() ?
+                                  qsTr("Select a device to connect to by clicking the \"Bluetooth\" button") :
+                                  qsTr("Welcome to the chat room!"),
+                                  "gray")
+    }
 
-  onVisibleChanged: {
-    toolbar.aboutButtonEnabled = !visible
-    toolbar.settingsButtonEnabled = !visible
-  }
+    onVisibleChanged: toolbar.controlButtonsEnabled = !visible
 
-  ChatInterface {
-    id: chatInterface
-    anchors.topMargin: toolbar.height
-  }
+    ChatInterface {
+        id: chatInterface
+        anchors.topMargin: toolbar.height
+    }
 }

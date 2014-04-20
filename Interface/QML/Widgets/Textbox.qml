@@ -10,47 +10,39 @@ import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.0
 
 Item {
-  height: DeviceManager.ratio(32)
+    height: DeviceManager.ratio(32)
 
-  property alias text: textField.text
-  property alias placeholderText: textField.placeholderText
-  property alias length: textField.length
-  property alias echoMode: textField.echoMode
+    property alias text: textField.text
+    property alias length: textField.length
+    property alias echoMode: textField.echoMode
+    property alias placeholderText: textField.placeholderText
 
-  TextField {
-    id: textField
-    font.family: defaultFont
-    style: textFieldStyle
-    font.pixelSize: sizes.text
-    anchors.fill: parent
+    TextField {
+        id: textField
+        anchors.fill: parent
+        style: textFieldStyle
+        font {family: defaultFont; pixelSize: sizes.text;}
+        onActiveFocusChanged: activeFocus ? Qt.inputMethod.show() : Qt.inputMethod.hide()
 
-    MouseArea {
-      id: mouseArea
-      anchors.fill: parent
-      hoverEnabled: true
-      onClicked: parent.forceActiveFocus()
-    }
-
-    onActiveFocusChanged: activeFocus ? Qt.inputMethod.show() : Qt.inputMethod.hide()
-
-    Component {
-      id: textFieldStyle
-
-      TextFieldStyle {
-        textColor: colors.textFieldForeground
-        placeholderTextColor: colors.textFieldPlaceholder
-
-        background: Rectangle {
-          color: textField.enabled ? colors.textFieldBackground: colors.buttonBackgroundDisabled
-
-          border.color: {
-            if (mouseArea.containsMouse || textField.focus)
-              return colors.borderColor
-            else
-              return colors.borderColor
-          }
+        MouseArea {
+            id: mouseArea
+            hoverEnabled: true
+            anchors.fill: parent
+            onClicked: parent.forceActiveFocus()
         }
-      }
+
+        Component {
+            id: textFieldStyle
+
+            TextFieldStyle {
+                textColor: colors.textFieldForeground
+                placeholderTextColor: colors.textFieldPlaceholder
+
+                background: Rectangle {
+                    border.color: colors.borderColor
+                    color: textField.enabled ? colors.textFieldBackground: colors.buttonBackgroundDisabled
+                }
+            }
+        }
     }
-  }
 }

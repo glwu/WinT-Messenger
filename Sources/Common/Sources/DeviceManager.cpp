@@ -9,25 +9,25 @@
 
 bool DeviceManager::isMobile() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
-  return true;
+    return true;
 #else
-  return false;
+    return false;
 #endif
 }
 
 int DeviceManager::ratio(int input) {
-  double multiplicationRatio = 1;
-  double screenRatio = 1;
+    double multiplicationRatio = 1;
+    double screenRatio = 1;
 
 #if defined(Q_ANDROID)
-  multiplicationRatio = 1.8;
-  screenRatio = qMin(qMax(qApp->primaryScreen()->geometry().width(),
-                          qApp->primaryScreen()->geometry().height()) / 1136.,
-                     qMin(qApp->primaryScreen()->geometry().width(),
-                          qApp->primaryScreen()->geometry().height()) / 640.);
+    multiplicationRatio = 1.8;
+    screenRatio = qMin(qMax(qApp->primaryScreen()->geometry().width(),
+                            qApp->primaryScreen()->geometry().height()) / 1136.,
+                       qMin(qApp->primaryScreen()->geometry().width(),
+                            qApp->primaryScreen()->geometry().height()) / 640.);
 #elif defined(Q_OS_IOS)
-  multiplicationRatio = 1.2;
+    multiplicationRatio = 1.2;
 #endif
 
-  return input * multiplicationRatio * screenRatio;
+    return input * multiplicationRatio * screenRatio;
 }

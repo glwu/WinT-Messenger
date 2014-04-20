@@ -45,94 +45,94 @@ static const QLatin1String serviceUuid("3185c780-c66e-11e3-8cde-0002a5d5c51b");
 BtServer::BtServer(QObject *parent) :  QObject(parent), rfcommServer(0) {}
 
 BtServer::~BtServer() {
-  stopServer();
+    stopServer();
 }
 
 void BtServer::startServer(const QBluetoothAddress& localAdapter) {
-  if (rfcommServer)
-    return;
+    if (rfcommServer)
+        return;
 
-  rfcommServer = new QBluetoothServer(QBluetoothServiceInfo::RfcommProtocol, this);
-  connect(rfcommServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
-  bool result = rfcommServer->listen(localAdapter);
+    rfcommServer = new QBluetoothServer(QBluetoothServiceInfo::RfcommProtocol, this);
+    connect(rfcommServer, SIGNAL(newConnection()), this, SLOT(clientConnected()));
+    bool result = rfcommServer->listen(localAdapter);
 
-  if (!result)
-    return;
+    if (!result)
+        return;
 
-  QBluetoothServiceInfo::Sequence classId;
+    QBluetoothServiceInfo::Sequence classId;
 
-  classId << QVariant::fromValue(QBluetoothUuid(QBluetoothUuid::SerialPort));
-  serviceInfo.setAttribute(QBluetoothServiceInfo::BluetoothProfileDescriptorList, classId);
+    classId << QVariant::fromValue(QBluetoothUuid(QBluetoothUuid::SerialPort));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::BluetoothProfileDescriptorList, classId);
 
-  classId.prepend(QVariant::fromValue(QBluetoothUuid(serviceUuid)));
-  serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceClassIds, classId);
+    classId.prepend(QVariant::fromValue(QBluetoothUuid(serviceUuid)));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceClassIds, classId);
 
-  serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceName, tr("WinT Messenger"));
-  serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceDescription, tr("WinT Messenger Bluetooth messenger"));
-  serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("WinT 3794"));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceName, tr("WinT Messenger"));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceDescription, tr("WinT Messenger Bluetooth messenger"));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("WinT 3794"));
 
-  serviceInfo.setServiceUuid(QBluetoothUuid(serviceUuid));
+    serviceInfo.setServiceUuid(QBluetoothUuid(serviceUuid));
 
-  serviceInfo.setAttribute(QBluetoothServiceInfo::BrowseGroupList, QBluetoothUuid(QBluetoothUuid::PublicBrowseGroup));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::BrowseGroupList, QBluetoothUuid(QBluetoothUuid::PublicBrowseGroup));
 
-  QBluetoothServiceInfo::Sequence protocolDescriptorList;
-  QBluetoothServiceInfo::Sequence protocol;
-  protocol << QVariant::fromValue(QBluetoothUuid(QBluetoothUuid::L2cap));
-  protocolDescriptorList.append(QVariant::fromValue(protocol));
-  protocol.clear();
-  protocol << QVariant::fromValue(QBluetoothUuid(QBluetoothUuid::Rfcomm))
-           << QVariant::fromValue(quint8(rfcommServer->serverPort()));
-  protocolDescriptorList.append(QVariant::fromValue(protocol));
-  serviceInfo.setAttribute(QBluetoothServiceInfo::ProtocolDescriptorList,
-                           protocolDescriptorList);
+    QBluetoothServiceInfo::Sequence protocolDescriptorList;
+    QBluetoothServiceInfo::Sequence protocol;
+    protocol << QVariant::fromValue(QBluetoothUuid(QBluetoothUuid::L2cap));
+    protocolDescriptorList.append(QVariant::fromValue(protocol));
+    protocol.clear();
+    protocol << QVariant::fromValue(QBluetoothUuid(QBluetoothUuid::Rfcomm))
+             << QVariant::fromValue(quint8(rfcommServer->serverPort()));
+    protocolDescriptorList.append(QVariant::fromValue(protocol));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::ProtocolDescriptorList,
+                             protocolDescriptorList);
 
-  serviceInfo.registerService(localAdapter);
+    serviceInfo.registerService(localAdapter);
 }
 
 void BtServer::stopServer() {
-  serviceInfo.unregisterService();
-  qDeleteAll(clientSockets);
-  delete rfcommServer;
-  rfcommServer = 0;
+    serviceInfo.unregisterService();
+    qDeleteAll(clientSockets);
+    delete rfcommServer;
+    rfcommServer = 0;
 }
 
 void BtServer::sendMessage(const QString &message) {
-  QByteArray text = message.toUtf8();
+    QByteArray text = message.toUtf8();
 
-  foreach (QBluetoothSocket *socket, clientSockets)
-    socket->write(text);
+    foreach (QBluetoothSocket *socket, clientSockets)
+        socket->write(text);
 }
 
 void BtServer::clientConnected() {
-  QBluetoothSocket *socket = rfcommServer->nextPendingConnection();
-  if (!socket)
-    return;
+    QBluetoothSocket *socket = rfcommServer->nextPendingConnection();
+    if (!socket)
+        return;
 
-  connect(socket, SIGNAL(readyRead()), this, SLOT(readSocket()));
-  connect(socket, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
-  clientSockets.append(socket);
-  emit clientConnected(socket->peerName());
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readSocket()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
+    clientSockets.append(socket);
+    emit clientConnected(socket->peerName());
 }
 
 void BtServer::clientDisconnected() {
-  QBluetoothSocket *socket = qobject_cast<QBluetoothSocket *>(sender());
-  if (!socket)
-    return;
+    QBluetoothSocket *socket = qobject_cast<QBluetoothSocket *>(sender());
+    if (!socket)
+        return;
 
-  emit clientDisconnected(socket->peerName());
+    emit clientDisconnected(socket->peerName());
 
-  clientSockets.removeOne(socket);
+    clientSockets.removeOne(socket);
 
-  socket->deleteLater();
+    socket->deleteLater();
 }
 
 void BtServer::readSocket() {
-  QBluetoothSocket *socket = qobject_cast<QBluetoothSocket *>(sender());
-  if (!socket)
-    return;
+    QBluetoothSocket *socket = qobject_cast<QBluetoothSocket *>(sender());
+    if (!socket)
+        return;
 
-  while (socket->canReadLine()) {
-      QByteArray line = socket->readLine().trimmed();
-      emit messageReceived(QString::fromUtf8(line.constData(), line.length()));
+    while (socket->canReadLine()) {
+        QByteArray line = socket->readLine().trimmed();
+        emit messageReceived(QString::fromUtf8(line.constData(), line.length()));
     }
 }

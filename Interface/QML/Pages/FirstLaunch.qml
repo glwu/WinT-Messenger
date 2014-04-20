@@ -6,139 +6,110 @@
 //
 
 import QtQuick 2.0
-import QtQuick.Controls 1.0
 import "../Widgets"
 
 Page {
-  logoImageSource: "qrc:/images/Logo.png"
-  logoSubtitle: qsTr("Customize your setup")
-  logoTitle: qsTr("Initial setup")
-  toolbarTitle: qsTr("Initial setup")
+    logoTitle: qsTr("Initial setup")
+    toolbarTitle: qsTr("Initial setup")
+    logoImageSource: "qrc:/images/Logo.png"
+    logoSubtitle: qsTr("Customize your setup")
 
-  Component.onCompleted: {
-    toolbar.aboutButtonEnabled = false
-    toolbar.settingsButtonEnabled = false
-  }
+    Component.onCompleted: toolbar.controlButtonsEnabled = false
 
-  Column {
-    spacing: DeviceManager.ratio(8)
-    y: arrangeFirstItem
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.leftMargin: 24
-    anchors.rightMargin: 24
-
-    Rectangle {
-      anchors.left: parent.left
-      anchors.right: parent.right
-      height: textBox.height
-
-      color: "transparent"
-
-      Textbox {
-        id: textBox
-        anchors.left: parent.left
-        anchors.right: colorRectangle.left
-        anchors.rightMargin: 2
-        placeholderText: qsTr("Type a nickname and choose a profile color")
-        Keys.onReturnPressed: {
-          if (text.length > 0) {
+    function finishSetup() {
+        if (textBox.length > 0) {
             Settings.setValue("userName", textBox.text)
             Settings.setValue("userColor", colors.userColor)
-            Settings.setValue("firstLaunch", false);
+            Settings.setValue("firstLaunch", false)
             Settings.setValue("customizedUiColor", customizedUiColor.checked)
+            Settings.setValue("darkInterface", darkInterface.checked)
 
-            colors.userColor = colors.userColor
+            toolbar.controlButtonsEnabled = true
+            stackView.clear()
+            stackView.push("qrc:/QML/Pages/Start.qml")
 
-            finishSetup(textBox.text)
             Qt.inputMethod.hide()
-          }
         }
-      }
-
-      Rectangle {
-        id: colorRectangle
-        anchors.right: parent.right
-        height: textBox.height
-        width: height
-        border.width: 1
-        color: colors.userColor
-        border.color: {
-          if (mouseArea.containsMouse)
-            return colors.borderColor
-          else if (mouseArea.pressed)
-            return colors.borderColor
-          else
-            return colors.borderColor
-        }
-
-        onColorChanged: {
-          Settings.setValue("userColor", colors.userColor)
-          colors.userColor = colors.userColor
-
-          if (Settings.customizedUiColor())
-            colors.toolbarColor = colors.userColor
-          else
-            colors.toolbarColor = colors.toolbarColorStatic
-        }
-
-        MouseArea {
-          id: mouseArea
-          anchors.fill: parent
-          hoverEnabled: true
-          onClicked: colors.userColor = Settings.getDialogColor(colors.userColor)
-        }
-      }
     }
 
-    CheckBox {
-      id: darkInterface
-      checked: Settings.darkInterface()
-      onCheckedChanged: {Settings.setValue("darkInterface", checked); colors.setColors();}
+    Column {
+        y: arrangeFirstItem
+        spacing: DeviceManager.ratio(8)
+        anchors {left: parent.left; right: parent.right; leftMargin: DeviceManager.ratio(24); rightMargin: DeviceManager.ratio(24);}
 
-      Label {
-        anchors.left: darkInterface.right
-        text: qsTr("Use a dark interface")
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: sizes.control
-      }
+        Rectangle {
+            color: "transparent"
+            height: textBox.height
+            anchors {left: parent.left; right: parent.right;}
+
+            Textbox {
+                id: textBox
+                Keys.onReturnPressed: finishSetup()
+                placeholderText: qsTr("Type a nickname and choose a profile color")
+                anchors {left: parent.left; right: colorRectangle.left; rightMargin: DeviceManager.ratio(2)}
+            }
+
+            Rectangle {
+                id: colorRectangle
+                width: height
+                border.width: 1
+                height: textBox.height
+                color: colors.userColor
+                anchors.right: parent.right
+                border.color: {
+                    if (mouseArea.containsMouse)
+                        return colors.borderColor
+                    else if (mouseArea.pressed)
+                        return colors.borderColor
+                    else
+                        return colors.borderColor
+                }
+
+                onColorChanged: {
+                    Settings.setValue("userColor", colors.userColor)
+
+                    if (Settings.customizedUiColor())
+                        colors.toolbarColor = colors.userColor
+                    else
+                        colors.toolbarColor = colors.toolbarColorStatic
+                }
+
+                MouseArea {
+                    id: mouseArea
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    onClicked: colors.userColor = Settings.getDialogColor(colors.userColor)
+                }
+            }
+        }
+
+        Checkbox {
+            width: height
+            id: darkInterface
+            checked: Settings.darkInterface()
+            labelText: qsTr("Use a dark interface theme")
+            onCheckedChanged: {Settings.setValue("darkInterface", checked); colors.setColors();}
+        }
+
+        Checkbox {
+            id: customizedUiColor
+            checked: Settings.customizedUiColor()
+            labelText: qsTr("Use the profile color to theme the app")
+            onCheckedChanged: {
+                Settings.setValue("customizedUiColor", checked)
+
+                if (Settings.customizedUiColor())
+                    colors.toolbarColor = colors.userColor
+                else
+                    colors.toolbarColor = colors.toolbarColorStatic
+            }
+        }
     }
 
-    CheckBox {
-      id: customizedUiColor
-      checked: Settings.customizedUiColor()
-      onCheckedChanged: {
-        Settings.setValue("customizedUiColor", checked)
-
-        if (Settings.customizedUiColor())
-          colors.toolbarColor = colors.userColor
-        else
-          colors.toolbarColor = colors.toolbarColorStatic
-      }
-
-      Label {
-        anchors.left: customizedUiColor.right
-        text: qsTr("Use the profile color to theme the app")
-        anchors.verticalCenter: parent.verticalCenter
-      }
+    Button {
+        text: qsTr("Done")
+        onClicked: finishSetup()
+        enabled: textBox.length > 0 ? 1: 0
+        anchors {bottom: parent.bottom; bottomMargin: 10 + parent.height / 16; horizontalCenter: parent.horizontalCenter;}
     }
-  }
-
-  Button {
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: 10 + parent.height / 16
-    anchors.horizontalCenter: parent.horizontalCenter
-    text: qsTr("Done")
-    enabled: textBox.length > 0 ? 1: 0
-    onClicked: {
-      Settings.setValue("userName", textBox.text)
-      Settings.setValue("userColor", colors.userColor)
-      Settings.setValue("firstLaunch", false);
-      Settings.setValue("customizedUiColor", customizedUiColor.checked)
-      Settings.setValue("darkInterface", darkInterface.checked)
-
-      finishSetup(textBox.text)
-      Qt.inputMethod.hide()
-    }
-  }
 }

@@ -43,90 +43,90 @@
 static const QLatin1String serviceUuid("3185c780-c66e-11e3-8cde-0002a5d5c51b");
 
 BtSelector::BtSelector(const QBluetoothAddress &localAdapter, QWidget *parent) : QDialog(parent), ui(new Ui::RemoteSelector) {
-  ui->setupUi(this);
+    ui->setupUi(this);
 
-  discoveryAgent = new QBluetoothServiceDiscoveryAgent(localAdapter);
+    discoveryAgent = new QBluetoothServiceDiscoveryAgent(localAdapter);
 
-  connect(discoveryAgent, SIGNAL(serviceDiscovered(QBluetoothServiceInfo)), this, SLOT(serviceDiscovered(QBluetoothServiceInfo)));
-  connect(discoveryAgent, SIGNAL(finished()), this, SLOT(discoveryFinished()));
-  connect(discoveryAgent, SIGNAL(canceled()), this, SLOT(discoveryFinished()));
+    connect(discoveryAgent, SIGNAL(serviceDiscovered(QBluetoothServiceInfo)), this, SLOT(serviceDiscovered(QBluetoothServiceInfo)));
+    connect(discoveryAgent, SIGNAL(finished()), this, SLOT(discoveryFinished()));
+    connect(discoveryAgent, SIGNAL(canceled()), this, SLOT(discoveryFinished()));
 
-  connect(ui->stopButton,    SIGNAL(clicked()), this, SLOT(stopDiscovery()));
-  connect(ui->refreshButton, SIGNAL(clicked()), this, SLOT(startDiscovery()));
+    connect(ui->stopButton,    SIGNAL(clicked()), this, SLOT(stopDiscovery()));
+    connect(ui->refreshButton, SIGNAL(clicked()), this, SLOT(startDiscovery()));
 
-  ui->busyAnimation->setMovie(new QMovie(":/images/Movies/Spinner.gif"));
-  ui->busyAnimation->movie()->start();
-  ui->busyAnimation->hide();
+    ui->busyAnimation->setMovie(new QMovie(":/images/Movies/Spinner.gif"));
+    ui->busyAnimation->movie()->start();
+    ui->busyAnimation->hide();
 
-  ui->statusLabel->setText("Click \"Search\" to search for chat services");
-  ui->refreshButton->setText("Search");
-  ui->stopButton->setEnabled(false);
+    ui->statusLabel->setText("Click \"Search\" to search for chat services");
+    ui->refreshButton->setText("Search");
+    ui->stopButton->setEnabled(false);
 }
 
 BtSelector::~BtSelector() {
-  delete ui;
-  delete discoveryAgent;
+    delete ui;
+    delete discoveryAgent;
 }
 
 QBluetoothServiceInfo BtSelector::service() const {
-  return m_service;
+    return m_service;
 }
 
 void BtSelector::startDiscovery() {
-  ui->statusLabel->setText(tr("Scanning..."));
-  ui->refreshButton->setText("Refresh");
-  ui->stopButton->setEnabled(true);
-  ui->busyAnimation->show();
+    ui->statusLabel->setText(tr("Scanning..."));
+    ui->refreshButton->setText("Refresh");
+    ui->stopButton->setEnabled(true);
+    ui->busyAnimation->show();
 
-  if (discoveryAgent->isActive())
-    discoveryAgent->stop();
+    if (discoveryAgent->isActive())
+        discoveryAgent->stop();
 
-  ui->remoteDevices->clear();
+    ui->remoteDevices->clear();
 
-  discoveryAgent->setUuidFilter(QBluetoothUuid(serviceUuid));
-  discoveryAgent->start();
+    discoveryAgent->setUuidFilter(QBluetoothUuid(serviceUuid));
+    discoveryAgent->start();
 }
 
 void BtSelector::stopDiscovery() {
-  if (discoveryAgent) {
-      discoveryAgent->stop();
+    if (discoveryAgent) {
+        discoveryAgent->stop();
 
-      ui->statusLabel->setText("Click \"Search\" to search for chat services");
-      ui->refreshButton->setText("Search");
-      ui->stopButton->setEnabled(false);
-      ui->busyAnimation->hide();
+        ui->statusLabel->setText("Click \"Search\" to search for chat services");
+        ui->refreshButton->setText("Search");
+        ui->stopButton->setEnabled(false);
+        ui->busyAnimation->hide();
     }
 }
 
 void BtSelector::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
-  QMapIterator<QListWidgetItem *, QBluetoothServiceInfo> _services(discoveredServices);
+    QMapIterator<QListWidgetItem *, QBluetoothServiceInfo> _services(discoveredServices);
 
-  while (_services.hasNext()) {
-      _services.next();
+    while (_services.hasNext()) {
+        _services.next();
 
-      if (serviceInfo.device().address() == _services.value().device().address())
-        return;
+        if (serviceInfo.device().address() == _services.value().device().address())
+            return;
     }
 
-  QString remoteName;
-  if (serviceInfo.device().name().isEmpty())
-    remoteName = serviceInfo.device().address().toString();
+    QString remoteName;
+    if (serviceInfo.device().name().isEmpty())
+        remoteName = serviceInfo.device().address().toString();
 
-  else
-    remoteName = serviceInfo.device().name();
+    else
+        remoteName = serviceInfo.device().name();
 
-  QListWidgetItem *item = new QListWidgetItem(QString::fromLatin1("%1 %2").arg(remoteName, serviceInfo.serviceName()));
+    QListWidgetItem *item = new QListWidgetItem(QString::fromLatin1("%1 %2").arg(remoteName, serviceInfo.serviceName()));
 
-  discoveredServices.insert(item, serviceInfo);
-  ui->remoteDevices->addItem(item);
+    discoveredServices.insert(item, serviceInfo);
+    ui->remoteDevices->addItem(item);
 }
 
 void BtSelector::discoveryFinished() {
-  ui->statusLabel->setText(tr("Select the chat service to connect to"));
-  stopDiscovery();
+    ui->statusLabel->setText(tr("Select the chat service to connect to"));
+    stopDiscovery();
 }
 
 void BtSelector::on_remoteDevices_itemActivated(QListWidgetItem *item) {
-  m_service = discoveredServices.value(item);
-  accept();
+    m_service = discoveredServices.value(item);
+    accept();
 }

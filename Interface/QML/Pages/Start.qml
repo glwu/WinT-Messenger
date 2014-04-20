@@ -11,29 +11,29 @@ import QtQuick.Dialogs 1.0
 import "../Widgets"
 
 Page {
-  logoImageSource: "qrc:/images/Logo.png"
-  logoSubtitle: qsTr("Please choose an option")
-  logoTitle: qsTr("Welcome")
-  toolbarTitle: qsTr("Start")
+    logoTitle: qsTr("Welcome")
+    toolbarTitle: qsTr("Start")
+    logoImageSource: "qrc:/images/Logo.png"
+    logoSubtitle: qsTr("Please choose an option")
 
-  Column {
-    spacing: DeviceManager.ratio(4)
-    y: arrangeFirstItem + parent.height / 32
-    anchors.horizontalCenter: parent.horizontalCenter
+    Column {
+        spacing: DeviceManager.ratio(4)
+        y: arrangeFirstItem + parent.height / 32
+        anchors.horizontalCenter: parent.horizontalCenter
 
-    Button {
-      onClicked: openPage("Pages/Connect.qml")
-      text: qsTr("Connect")
+        Button {
+            onClicked: openPage("qrc:/QML/Pages/Connect.qml")
+            text: qsTr("Connect")
+        }
+
+        Button {
+            onClicked: Qt.openUrlExternally("http://wint-im.sf.net/index.html#news")
+            text: qsTr("News")
+        }
+
+        Button {
+            onClicked: openPage("qrc:/QML/Pages/Help/Help.qml")
+            text: qsTr("Help")
+        }
     }
-
-    Button {
-      onClicked: Qt.openUrlExternally("http://wint-im.sf.net/index.html#news")
-      text: qsTr("News")
-    }
-
-    Button {
-      onClicked: openPage("Pages/Help/Help.qml")
-      text: qsTr("Help")
-    }
-  }
 }

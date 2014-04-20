@@ -42,11 +42,11 @@
 #include "../Headers/NetConnection.h"
 
 NetServer::NetServer(QObject *parent) : QTcpServer(parent) {
-  listen(QHostAddress::Any);
+    listen(QHostAddress::Any);
 }
 
 void NetServer::incomingConnection(qintptr socketDescriptor) {
-  NetConnection *connection = new NetConnection(this);
-  connection->setSocketDescriptor(socketDescriptor);
-  emit newConnection(connection);
+    NetConnection *connection = new NetConnection(this);
+    connection->setSocketDescriptor(socketDescriptor);
+    emit newConnection(connection);
 }

@@ -20,5 +20,6 @@
         <file>Pages/Hotspot/Wizard.qml</file>
         <file>Widgets/Emotes.qml</file>
         <file>Widgets/Users.qml</file>
+        <file>Widgets/Checkbox.qml</file>
     </qresource>
 </RCC>

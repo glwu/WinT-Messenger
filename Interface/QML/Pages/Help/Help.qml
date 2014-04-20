@@ -9,29 +9,29 @@ import QtQuick 2.0
 import "../../Widgets"
 
 Page {
-  logoImageSource: "qrc:/images/Help.png"
-  logoSubtitle: qsTr("Learn the basics of this app")
-  logoTitle: qsTr("Help")
-  toolbarTitle: qsTr("Help")
+    logoTitle: qsTr("Help")
+    toolbarTitle: qsTr("Help")
+    logoImageSource: "qrc:/images/Help.png"
+    logoSubtitle: qsTr("Learn the basics of this app")
 
-  Column {
-    spacing: DeviceManager.ratio(4)
-    y: arrangeFirstItem + parent.height / 32
-    anchors.horizontalCenter: parent.horizontalCenter
+    Column {
+        spacing: DeviceManager.ratio(4)
+        y: arrangeFirstItem + parent.height / 32
+        anchors.horizontalCenter: parent.horizontalCenter
 
-    Button {
-      onClicked: openPage("Pages/Help/Documentation.qml")
-      text: qsTr("Help")
+        Button {
+            text: qsTr("Help")
+            onClicked: openPage("qrc:/QML/Pages/Help/Documentation.qml")
+        }
+
+        Button {
+            text: qsTr("About Qt")
+            onClicked: Qt.openUrlExternally("http://en.wikipedia.org/wiki/Qt_(software)")
+        }
+
+        Button {
+            text: qsTr("About the GPL 3.0")
+            onClicked: Qt.openUrlExternally("https://www.gnu.org/copyleft/gpl.html")
+        }
     }
-
-    Button {
-      onClicked: Qt.openUrlExternally("http://en.wikipedia.org/wiki/Qt_(software)")
-      text: qsTr("About Qt")
-    }
-
-    Button {
-      onClicked: Qt.openUrlExternally("https://www.gnu.org/copyleft/gpl.html")
-      text: qsTr("About the GPL 3.0")
-    }
-  }
 }
