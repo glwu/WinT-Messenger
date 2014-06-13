@@ -20,8 +20,8 @@ ApplicationWindow {
     x: settings.x()
     y: settings.y()
 
-    minimumWidth: device.ratio(320)
-    minimumHeight: device.ratio(480)
+    minimumWidth: 320
+    minimumHeight: 480
 
     width: settings.width()
     height: settings.height()
