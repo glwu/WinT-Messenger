@@ -1,7 +1,6 @@
 # WinT Messenger
 
-
-WinT Messenger is a practical instant messaging application that can be used inside a local area network to allow communication between connected workstations. WinT Messenger connects to your local network and allows anyone that uses it to join the automatically generated chat room. As such, you won't have to register in order to use it. Its future strategy is to allow cross-platform communication between devices in the same network or via Bluetooth and/or by using WiFi hot-spots created by the application.
+WinT Messenger is a practical instant messaging application that its developed by a small team of students working in the WinT 3794 team. The application is written in QML/C++ and can be used with the most popular desktop and mobile operating systems.
 
 You can see how the whole app works here, or even write code to make it better!
 
@@ -21,9 +20,9 @@ You can see how the whole app works here, or even write code to make it better!
 	* [http://learn.github.com](http://learn.github.com)
 2. Install the Qt SDK from [http://qt-project.org/downloads](http://qt-project.org/downloads).
 3. Download the source code.
-4. Open the wint-messenger.pro file.
+4. Open the wint-im.pro file.
 5. Configure the project.
 6. Hack the source code.
 7. Compile it and have fun.
 8. (Optional) debug your hacks.
-
+9. Have fun!
