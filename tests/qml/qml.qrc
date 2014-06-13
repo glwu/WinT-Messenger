@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>main.qml</file>
+        <file>controls/Button.qml</file>
+        <file>controls/CheckBox.qml</file>
+        <file>controls/LineEdit.qml</file>
+        <file>controls/Page.qml</file>
+        <file>controls/ToolBar.qml</file>
+        <file>controls/UserMenu.qml</file>
+        <file>pages/chat.qml</file>
+        <file>pages/connect.qml</file>
+        <file>pages/help.qml</file>
+        <file>pages/start.qml</file>
+        <file>controls/EmotesMenu.qml</file>
+        <file>controls/Label.qml</file>
+        <file>controls/About.qml</file>
+        <file>controls/Settings.qml</file>
+    </qresource>
+</RCC>
