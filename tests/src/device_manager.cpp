@@ -5,7 +5,6 @@
 //  Please check the license.txt file for more information.
 //
 
-#include <QDebug>
 #include "device_manager.h"
 
 //===========================================================================//
@@ -21,17 +20,18 @@ bool DeviceManager::isMobile() {
 }
 
 int DeviceManager::ratio(int value) {
-    double multiplicationRatio = 1;
-    double screenRatio = qMin(qMax(qApp->primaryScreen()->geometry().width(),
-                                   qApp->primaryScreen()->geometry().height())
-                              / 1136.,
-                              qMin(qApp->primaryScreen()->geometry().width(),
-                                   qApp->primaryScreen()->geometry().height())
-                              / 640.);
+    double screenRatio = 1;
 
 #if defined(Q_OS_ANDROID)
-    multiplicationRatio = 1.8;
+    screenRatio = 1.8 * qMin(qMax(qApp->primaryScreen()->geometry().width(),
+                                  qApp->primaryScreen()->geometry().height())
+                             / 1136.,
+                             qMin(qApp->primaryScreen()->geometry().width(),
+                                  qApp->primaryScreen()->geometry().height())
+                             / 640.);
+#elif defined(Q_OS_IOS)
+    screenRatio = 1.2;
 #endif
 
-    return value * screenRatio * multiplicationRatio;
+    return value * screenRatio;
 }
