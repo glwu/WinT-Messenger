@@ -56,7 +56,7 @@ void Chat::participantLeft(const QString &nick) {
 
 void Chat::receivedFile(const QByteArray &data, const QString &fileName) {
     QFile file(downloadPath + fileName);
-    if (file.open(QFile::ReadWrite))
+    if (file.open(QFile::WriteOnly))
         file.write(data);
 
     emit newMessage(0, "system/package.png",
