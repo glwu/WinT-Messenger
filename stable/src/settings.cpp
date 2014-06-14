@@ -11,10 +11,6 @@ Settings::Settings() {
     settings = new QSettings("WinT 3794", "WinT Messenger");
 }
 
-//=============================================================//
-//The following functions implement a QSettings wrapper for QML//
-//=============================================================//
-
 void Settings::setValue(const QString &key, const QVariant &value) {
     settings->setValue(key, value);
 }
@@ -22,10 +18,6 @@ void Settings::setValue(const QString &key, const QVariant &value) {
 QVariant Settings::value(const QString &key, const QVariant &defaultValue) const {
     return settings->value(key, defaultValue);
 }
-
-//=========================================================================//
-//The folowing values are decided based on the device type (mobile/desktop)//
-//=========================================================================//
 
 int Settings::x() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
@@ -58,10 +50,6 @@ int Settings::height() {
     return settings->value("height", 540).toInt();
 #endif
 }
-
-//============================================================================//
-//QML cannot convert QVariants to booleans in some operating systems (Windows)//
-//============================================================================//
 
 bool Settings::maximized() {
     return settings->value("maximized", false).toBool();

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest android:installLocation="auto" package="org.wint.messenger" android:versionName="1.1.4" android:versionCode="1" xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest android:installLocation="auto" package="org.wint.messenger" android:versionName="1.2.0" android:versionCode="1" xmlns:android="http://schemas.android.com/apk/res/android">
     <application android:icon="@drawable/icon" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="WinT Messenger">
         <activity android:name="org.qtproject.qt5.android.bindings.QtActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:screenOrientation="unspecified">
             <intent-filter>

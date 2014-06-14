@@ -7,11 +7,6 @@
 
 #include "device_manager.h"
 
-//===========================================================================//
-//The following functions are used by the QML interface to make decicions and//
-//resize the UI to match the device's screen (this applies mostly to Android)//
-//===========================================================================//
-
 bool DeviceManager::isMobile() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
     return 1;

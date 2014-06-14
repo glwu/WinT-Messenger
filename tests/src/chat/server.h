@@ -8,12 +8,12 @@
 
 class Connection;
 
-//============================================================================//
-//Why the heck does this class exist?                                         //
-//----------------------------------------------------------------------------//
-//This class is in charge to listen for any incoming connections and emit a   //
-//SIGNAL when it detects a peer.                                              //
-//============================================================================//
+/*==============================================================================*
+ * What does this class do?                                                     *
+ *------------------------------------------------------------------------------*
+ * This class is in charge to listen for any incoming connections and emit a    *
+ * SIGNAL when a new peer is discovered.                                        *
+ *==============================================================================*/
 
 class Server : public QTcpServer
 {

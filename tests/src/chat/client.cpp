@@ -11,15 +11,15 @@
 ** "Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions are
 ** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Digia Plc and its Subsidiary(-ies) nor the names
-**     of its contributors may be used to endorse or promote products derived
-**     from this software without specific prior written permission.
+** Redistributions of source code must retain the above copyright
+** notice, this list of conditions and the following disclaimer.
+** Redistributions in binary form must reproduce the above copyright
+** notice, this list of conditions and the following disclaimer in
+** the documentation and/or other materials provided with the
+** distribution.
+** Neither the name of Digia Plc and its Subsidiary(-ies) nor the names
+** of its contributors may be used to endorse or promote products derived
+** from this software without specific prior written permission.
 **
 **
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -40,10 +40,6 @@
 
 #include "client.h"
 
-//============================================================================//
-//Configure the peerManager & connect SIGNALS from the peerManager and server.//
-//============================================================================//
-
 Client::Client() {
     peerManager = new PeerManager(this);
     peerManager->setServerPort(server.serverPort());
@@ -54,10 +50,6 @@ Client::Client() {
     QObject::connect(&server, SIGNAL(newConnection(Connection*)),
                      this, SLOT(newConnection(Connection*)));
 }
-
-//===============================================================//
-//These functions send messages and files to the connected peers.//
-//===============================================================//
 
 void Client::sendMessage(const QString &message) {
     if (!message.isEmpty()) {
@@ -81,25 +73,13 @@ void Client::sendFile(const QString &fileName) {
     }
 }
 
-//====================================================================//
-//This function allows other classes to know the nickname of the user.//
-//====================================================================//
-
 QString Client::nickName() const {
     return QString(peerManager->userName());
 }
 
-//=================================================//
-//Notify the Chat class when we receive a new file.//
-//=================================================//
-
 void Client::getFile(const QByteArray &fileData, const QString &fileName) {
     emit newFile(fileData, fileName);
 }
-
-//======================================================================//
-//The following functions manage connections (incoming/outcoming peers).//
-//======================================================================//
 
 bool Client::hasConnection(const QHostAddress &senderIp, int senderPort) const {
     if (senderPort == -1)
@@ -116,10 +96,6 @@ bool Client::hasConnection(const QHostAddress &senderIp, int senderPort) const {
 
     return false;
 }
-
-//===============================================================//
-//These functions are used when creating a new connection (peer).//
-//===============================================================//
 
 void Client::newConnection(Connection *connection) {
     connection->setGreetingMessage(peerManager->userName() + "@" +
@@ -148,10 +124,6 @@ void Client::readyForUse() {
     peers.insert(connection->peerAddress(), connection);
     emit newParticipant(connection->name(), connection->face());
 }
-
-//============================================================================//
-//These functions are used when removing a connection (ex: when a peer leaves)//
-//============================================================================//
 
 void Client::disconnected() {
     if (Connection *connection = qobject_cast<Connection *>(sender()))

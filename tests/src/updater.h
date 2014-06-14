@@ -18,16 +18,17 @@
 #include <QSslConfiguration>
 #include <QNetworkAccessManager>
 
-//============================================================================//
-//Why the heck does this class exist?                                         //
-//----------------------------------------------------------------------------//
-//This class is in charge of notifying the QML interface if a new update is   //
-//available. Basically, we download a text file from GitHub and compare it    //
-//With the application version that we have.                                  //
-//The format of the text file is RELEASE_NUMBER;APPLICATION_VERSION.          //
-//The semicolon (;) is used to split the string and use the RELEASE_NUMBER to //
-//determine if a newer release is available.                                  //
-//============================================================================//
+
+/*==============================================================================*
+ * What does this class do?                                                     *
+ *------------------------------------------------------------------------------*
+ * This class is in charge of notifying the QML interface if a new update is    *
+ * available. Basically, we download a text file from GitHub and compare it     *
+ * With the application version that we have.                                   *
+ * The format of the text file is RELEASE_NUMBER;APPLICATION_VERSION.           *
+ * The semicolon (;) is used to split the string and use the RELEASE_NUMBER to  *
+ * determine if a newer release is available.                                   *
+ *==============================================================================*/
 
 class Updater : public QObject {
 

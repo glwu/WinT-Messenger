@@ -12,14 +12,14 @@
 
 class PeerManager;
 
-//============================================================================//
-//Why the heck does this class exist?                                         //
-//----------------------------------------------------------------------------//
-//This class is in charge of managing new and existing connections.           //
-//For example, when this class is instructed to send a message, it prepares   //
-//the message and uses a loop to send it to all connected peers. Also, this   //
-//class notifies the Chat class when an user enters or leaves the room.       //
-//============================================================================//
+/*==============================================================================*
+ * What does this class do?                                                     *
+ *------------------------------------------------------------------------------*
+ * This class is in charge of managing new and existing connections.            *
+ * For example, when this class is instructed to send a message, it prepares    *
+ * the message and uses a loop to send it to all connected peers. Also, this    *
+ * class notifies the Chat class when an user enters or leaves the room.        *
+ *==============================================================================*/
 
 class Client : public QObject
 {

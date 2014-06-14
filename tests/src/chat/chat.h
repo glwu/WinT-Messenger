@@ -4,15 +4,16 @@
 #include <QFile>
 #include "client.h"
 
-//============================================================================//
-//Why the heck does this class exist?                                         //
-//----------------------------------------------------------------------------//
-//This class provides an easy and customizable layer between the BRIGDE and   //
-//the rest of the LAN chat classes. Also, this class receives instructions    //
-//from the BRIDGE and "parses" them to rest of the LAN chat classes.          //
-//Examples of this proccess are found when sending a message and/or preparing //
-//a file to be sent to the other peers.                                       //
-//============================================================================//
+/*==============================================================================*
+ * What does this class do?                                                     *
+ *------------------------------------------------------------------------------*
+ * This class provides an easy and customizable layer between the BRIGDE and    *
+ * the rest of the LAN chat classes. Also, this class receives instructions     *
+ * from the BRIDGE and "parses" them to rest of the LAN chat classes.           *
+ * Examples of this proccess are found when sending a message and/or preparing  *
+ * a file to be sent to the other peers.                                        *
+ *==============================================================================*/
+
 
 class Chat : public QObject {
 

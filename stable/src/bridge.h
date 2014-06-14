@@ -11,13 +11,13 @@
 #include "chat/chat.h"
 #include "device_manager.h"
 
-//============================================================================//
-//Why the heck does this class exist?                                         //
-//----------------------------------------------------------------------------//
-//This class is in charge to communicate the QML interface with the Chat class//
-//We communitcate the QML interface with the Chat class directly because the  //
-//chat class must be destroyed everytime that the user leaves the chat room.  //
-//============================================================================//
+/*==============================================================================*
+ * What does this class do?                                                     *
+ *------------------------------------------------------------------------------*
+ * This class is in charge to communicate the QML interface with the Chat class *
+ * We communitcate the QML interface with the Chat class directly because the   *
+ * chat class must be destroyed everytime that the user leaves the chat room.   *
+ *==============================================================================*/
 
 class Bridge : public QObject {
 

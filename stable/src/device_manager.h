@@ -12,12 +12,13 @@
 #include <QScreen>
 #include <QGuiApplication>
 
-//============================================================================//
-//Why the heck does this class exist?                                         //
-//----------------------------------------------------------------------------//
-//This class is in charge to tell the program if the device is mobile or not, //
-//Also, this class resizes UI elements depending on the device's screen ratio.//
-//============================================================================//
+/*==============================================================================*
+ * What does this class do?                                                     *
+ *------------------------------------------------------------------------------*
+ * This class is in charge to tell the program if the device is mobile or not,  *
+ * Also, this class resizes UI elemtens depending on the device's screen ratio. *
+ *==============================================================================*/
+
 
 class DeviceManager : public QObject {
 

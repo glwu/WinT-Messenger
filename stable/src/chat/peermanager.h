@@ -16,13 +16,13 @@
 class Client;
 class Connection;
 
-//============================================================================//
-//Why the heck does this class exist?                                         //
-//----------------------------------------------------------------------------//
-//This class is in charge of discoverying new peers and establishing a        //
-//connection with them and notify the Client class when a peer enters/leaves  //
-//the chat room.                                                              //
-//============================================================================//
+/*==============================================================================*
+ * What does this class do?                                                     *
+ *------------------------------------------------------------------------------*
+ * This class is in charge of discoverying new peers and establishing a         *
+ * connection with them and notify the Client class when a peer enters/leaves   *
+ * the chat room.                                                               *
+ *==============================================================================*/
 
 class PeerManager : public QObject
 {

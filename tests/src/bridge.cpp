@@ -11,10 +11,6 @@ Bridge::Bridge() {
     lan_chat = false;
 }
 
-//======================================//
-//LAN Chat initialization/stop functions//
-//======================================//
-
 void Bridge::stopChat() {
     qDeleteAll(chatObjects.begin(), chatObjects.end());
     chatObjects.clear();
@@ -40,10 +36,6 @@ void Bridge::startChat() {
     lan_chat = true;
 }
 
-//=============================//
-//File sharing/saving functions//
-//=============================//
-
 QString Bridge::getDownloadPath() {
 #if defined(Q_OS_ANDROID)
     return "/sdcard/Download/";
@@ -62,10 +54,6 @@ void Bridge::shareFile(const QString path) {
         if (lan_chat)
             chat->shareFile(fixedPath);
 }
-
-//===================================//
-//Message sending/receiving functions//
-//===================================//
 
 void Bridge::sendMessage(const QString message) {
     emit returnPressed(message);

@@ -10,13 +10,13 @@
 
 static const int MaxBufferSize = 1024000;
 
-//============================================================================//
-//Why the heck does this class exist?                                         //
-//----------------------------------------------------------------------------//
-//This class communicates us to another peer (individually) and is in charge  //
-//of getting the peer's name and profile picture. This class also is in charge//
-//of the actual data transfer between us and the connected peer.              //
-//============================================================================//
+/*==============================================================================*
+ * What does this class do?                                                     *
+ *------------------------------------------------------------------------------*
+ * This class communicates us to another peer (individually) and is in charge   *
+ * of getting the peer's name and profile picture. This class also is in charge *
+ * of the actual data transfer between us and the connected peer.               *
+ *==============================================================================*/
 
 class Connection : public QTcpSocket {
     Q_OBJECT

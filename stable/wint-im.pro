@@ -13,6 +13,7 @@ CODECFORSRC = UTF-8
 # Import required Qt modules
 QT += gui
 QT += qml
+QT += svg
 QT += core
 QT += quick
 QT += widgets

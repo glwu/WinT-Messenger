@@ -11,15 +11,15 @@
 ** "Redistribution and use in source and binary forms, with or without
 ** modification, are permitted provided that the following conditions are
 ** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Digia Plc and its Subsidiary(-ies) nor the names
-**     of its contributors may be used to endorse or promote products derived
-**     from this software without specific prior written permission.
+** Redistributions of source code must retain the above copyright
+** notice, this list of conditions and the following disclaimer.
+** Redistributions in binary form must reproduce the above copyright
+** notice, this list of conditions and the following disclaimer in
+** the documentation and/or other materials provided with the
+** distribution.
+** Neither the name of Digia Plc and its Subsidiary(-ies) nor the names
+** of its contributors may be used to endorse or promote products derived
+** from this software without specific prior written permission.
 **
 **
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -63,11 +63,6 @@ Connection::Connection(QObject *parent) : QTcpSocket(parent) {
                      SLOT(sendGreetingMessage()));
 }
 
-//============================================================================//
-//These functions are used to get information from the connected peer, such as//
-//their nickname and their profile picture.                                   //
-//============================================================================//
-
 QString Connection::name() const {
     return username;
 }
@@ -76,18 +71,9 @@ QString Connection::face() const {
     return userface;
 }
 
-//===========================================================================//
-//The greeting message is the first thing that we send to a detected peer, it//
-//contains our nickname and our profile picrure.                             //
-//===========================================================================//
-
 void Connection::setGreetingMessage(const QString &message) {
     greetingMessage = message;
 }
-
-//========================================================================//
-//The following functions are used to send messages and files to the peer.//
-//========================================================================//
 
 bool Connection::sendMessage(const QString &message) {
     QByteArray data = "MESSAGE " + QByteArray::number(message.toUtf8().size())
@@ -110,10 +96,6 @@ bool Connection::sendFile(const QString &fileName) {
     return (write(fileData) == fileData.size() && write(msg) == msg.size());
 }
 
-//===================================================//
-//The timer coordinates every function in this class.//
-//===================================================//
-
 void Connection::timerEvent(QTimerEvent *timerEvent) {
     if (timerEvent->timerId() == transferTimerId) {
         abort();
@@ -121,13 +103,6 @@ void Connection::timerEvent(QTimerEvent *timerEvent) {
         transferTimerId = 0;
     }
 }
-
-//====================================================================//
-//This function is used to respond to a greeting and to get the peer's//
-//information, such as his/her nickname and profile picture.          //
-//When this function is completed, we can begin to send/receive       //
-//messages and files from the peer.                                   //
-//====================================================================//
 
 void Connection::processReadyRead() {
     if (state == WaitingForGreeting) {
@@ -190,10 +165,6 @@ void Connection::processReadyRead() {
     }
 }
 
-//========================================================================//
-//The following functions send PINGs and the GREETING MESSAGE to the peer.//
-//========================================================================//
-
 void Connection::sendPing() {
     if (pongTime.elapsed() > PongTimeout) {
         abort();
@@ -212,12 +183,6 @@ void Connection::sendGreetingMessage() {
     if (write(greetingData) == greetingData.size())
         isGreetingMessageSent = true;
 }
-
-//========================================================================//
-//The following functions are used to read the received data (QByteArrays)//
-//and indentify them based on their HEADER, which is a short string at the//
-//begginning of each data. For example, messages have the MESSAGE header. //
-//========================================================================//
 
 int Connection::readDataIntoBuffer(int maxSize) {
     if (maxSize > MaxBufferSize)
@@ -267,10 +232,6 @@ bool Connection::hasEnoughData() {
     return true;
 }
 
-//====================================================================//
-//This funcitons indentifies the received data depending on its HEADER//
-//====================================================================//
-
 bool Connection::readProtocolHeader() {
     if (transferTimerId) {
         killTimer(transferTimerId);
@@ -306,10 +267,6 @@ bool Connection::readProtocolHeader() {
     numBytesForCurrentDataType = dataLengthForCurrentDataType();
     return true;
 }
-
-//========================================//
-//Based on the type of data, do an action.//
-//========================================//
 
 void Connection::processData() {
     buffer = read(numBytesForCurrentDataType);

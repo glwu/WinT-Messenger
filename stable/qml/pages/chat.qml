@@ -119,7 +119,7 @@ Controls.Page {
 
                 Component.onCompleted: {
                     if (text.paintedWidth > (page.width * 0.8 - 2 * image.width))
-                        width = page.width * 0.8 - 2 * image.width + device.ratio(24)
+                        width = page.width * 0.95 - 2 * image.width + device.ratio(24)
                     else
                         width = text.paintedWidth + device.ratio(24)
                 }

@@ -7,11 +7,6 @@
 
 #include "updater.h"
 
-//===========================================================================//
-//The updater downloads a file from GitHub with the latest release number and//
-//version number and compares it to the program's release number.            //
-//===========================================================================//
-
 Updater::Updater() {
     newUpdate = false;
     releaseNumber = "0";
@@ -28,11 +23,6 @@ Updater::Updater() {
         checkForUpdates();
 }
 
-//============================================================================//
-//This function downloads a text file from GitHub and calls the fileDownloaded//
-//function to compare the downloaded text file's data with the program's data.//
-//============================================================================//
-
 bool Updater::checkForUpdates() {
     QNetworkRequest req(QUrl("https://raw.githubusercontent.com/"
                              "WinT-3794/WinT-Messenger/updater/current.txt"));
@@ -43,11 +33,6 @@ bool Updater::checkForUpdates() {
     accessManager->get(req);
     return newUpdate;
 }
-
-//=========================================================================//
-//This function transforms the downloaded file into a string, splits it and//
-//compares the downloaded release number with the program's release number.//
-//=========================================================================//
 
 void Updater::fileDownloaded(QNetworkReply* reply) {
     QByteArray d = reply->readAll();
@@ -70,10 +55,6 @@ void Updater::fileDownloaded(QNetworkReply* reply) {
         }
     }
 }
-
-//===========================================================================//
-//This function ensures that the download is not interrupted by an SSL error.//
-//===========================================================================//
 
 void Updater::ignoreSslErrors(QNetworkReply *reply, QList<QSslError> error) {
     reply->ignoreSslErrors(error);
