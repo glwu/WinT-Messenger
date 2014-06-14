@@ -11,6 +11,10 @@
 #include "chat/chat.h"
 #include "device_manager.h"
 
+#ifndef Q_OS_IOS
+#include "updater.h"
+#endif
+
 /*==============================================================================*
  * What does this class do?                                                     *
  *------------------------------------------------------------------------------*
@@ -28,6 +32,7 @@ public:
 
     Q_INVOKABLE void stopChat();
     Q_INVOKABLE void startChat();
+    Q_INVOKABLE bool checkForUpdates();
     Q_INVOKABLE QString getDownloadPath();
     Q_INVOKABLE void shareFile(const QString path);
     Q_INVOKABLE void sendMessage(const QString message);
@@ -41,7 +46,12 @@ private:
     DeviceManager manager;
     QList<Chat*> chatObjects;
 
+#ifndef Q_OS_IOS
+    Updater* updater;
+#endif
+
 signals:
+    void updateAvailable();
     void delUser(const QString &nick);
     void returnPressed(const QString &message);
     void newUser(const QString &nick, const QString &face);

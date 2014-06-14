@@ -19,6 +19,30 @@ QT += quick
 QT += widgets
 QT += network
 
+# Import C++ code
+HEADERS += \
+    src/bridge.h \
+    src/device_manager.h \
+    src/settings.h \
+    src/chat/chat.h \
+    src/chat/client.h \
+    src/chat/connection.h \
+    src/chat/peermanager.h \
+    src/chat/server.h \
+    src/updater.h
+
+SOURCES += \
+    src/main.cpp \
+    src/chat/chat.cpp \
+    src/chat/client.cpp \
+    src/chat/connection.cpp \
+    src/chat/peermanager.cpp \
+    src/chat/server.cpp \
+    src/bridge.cpp \
+    src/device_manager.cpp \
+    src/settings.cpp \
+    src/updater.cpp
+
 # OS related stuff
 android {
     # Load manifest.xml file and icons
@@ -36,6 +60,9 @@ ios {
     # Copy icons and fonts into application folder
     QMAKE_BUNDLE_DATA += FONTS
     QMAKE_BUNDLE_DATA += ICONS
+
+    HEADERS -= src/updater.h
+    SOURCES -= src/updater.cpp
 }
 
 win32* {
@@ -61,30 +88,6 @@ macx {
     CONFIG += app_bundle
     TARGET = "WinT Messenger"
 }
-
-# Import C++ code
-HEADERS += \
-    src/bridge.h \
-    src/device_manager.h \
-    src/settings.h \
-    src/chat/chat.h \
-    src/chat/client.h \
-    src/chat/connection.h \
-    src/chat/peermanager.h \
-    src/chat/server.h \
-    src/updater.h
-
-SOURCES += \
-    src/main.cpp \
-    src/chat/chat.cpp \
-    src/chat/client.cpp \
-    src/chat/connection.cpp \
-    src/chat/peermanager.cpp \
-    src/chat/server.cpp \
-    src/bridge.cpp \
-    src/device_manager.cpp \
-    src/settings.cpp \
-    src/updater.cpp
 
 # Import resources
 RESOURCES += \

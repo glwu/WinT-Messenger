@@ -9,6 +9,11 @@
 
 Bridge::Bridge() {
     lan_chat = false;
+
+#ifndef Q_OS_IOS
+    updater = new Updater();
+    connect(updater, SIGNAL(updateAvailable()), this, SIGNAL(updateAvailable()));
+#endif
 }
 
 void Bridge::stopChat() {
@@ -34,6 +39,14 @@ void Bridge::startChat() {
                      this, SLOT(messageRecieved(QString, QString, QString, bool)));
 
     lan_chat = true;
+}
+
+bool Bridge::checkForUpdates() {
+#ifndef Q_OS_IOS
+    return updater->checkForUpdates();
+#else
+    return false;
+#endif
 }
 
 QString Bridge::getDownloadPath() {

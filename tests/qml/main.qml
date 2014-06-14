@@ -34,10 +34,9 @@ ApplicationWindow {
 
 
     Connections {
-        target: updater
+        target: bridge
         onUpdateAvailable: {
             if (settings.notifyUpdates()) {
-                updateMessage.version = version
                 updateMessage.open()
             }
         }
@@ -70,14 +69,11 @@ ApplicationWindow {
     }
 
     MessageDialog {
-        property string version
-
         id: updateMessage
         icon: StandardIcon.Information
         title: qsTr("Update available")
         standardButtons: StandardButton.Ignore | StandardButton.Close | StandardButton.Open
-        text: qsTr("A new version of WinT Messenger was released (" + version
-                   + "), do you want to open the official website to install it?")
+        text: qsTr("An update of WinT Messenger is available, do you want to open the official website to install it?")
         onButtonClicked: {
             if (clickedButton === StandardButton.Ignore)
                 settings.setValue("notifyUpdates", false)

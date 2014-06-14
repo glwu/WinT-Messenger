@@ -12,7 +12,6 @@
 #include <QQmlComponent>
 
 #include "bridge.h"
-#include "updater.h"
 #include "settings.h"
 #include "device_manager.h"
 
@@ -32,7 +31,6 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
     Bridge bridge;
-    Updater updater;
     Settings settings;
     DeviceManager device;
 
@@ -42,7 +40,6 @@ int main(int argc, char *argv[]) {
 
     engine->rootContext()->setContextProperty("bridge", &bridge);
     engine->rootContext()->setContextProperty("device", &device);
-    engine->rootContext()->setContextProperty("updater", &updater);
     engine->rootContext()->setContextProperty("settings", &settings);
 
     component->loadUrl(QUrl("qrc:/qml/main.qml"));

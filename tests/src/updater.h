@@ -48,7 +48,7 @@ private:
     QNetworkAccessManager *accessManager;
 
 signals:
-    void updateAvailable(const QString &version);
+    void updateAvailable();
 };
 
 #endif

@@ -9,7 +9,7 @@
 
 Updater::Updater() {
     newUpdate = false;
-    releaseNumber = "0";
+    releaseNumber = "1";
     accessManager = new QNetworkAccessManager(this);
 
     connect(accessManager, SIGNAL(finished(QNetworkReply*)), this,
@@ -35,23 +35,12 @@ bool Updater::checkForUpdates() {
 }
 
 void Updater::fileDownloaded(QNetworkReply* reply) {
-    QByteArray d = reply->readAll();
-    QString data = QString::fromUtf8(d);
+    QString data = QString::fromUtf8(reply->readAll());
 
     if (!data.isEmpty()) {
-        QList<QString> list = data.split(";");
-
-        QString release;
-        QString version;
-
-        if (list.count() > 1) {
-            release = list.at(0);
-            version = list.at(1);
-        }
-
-        if (release.toInt() > releaseNumber.toInt()) {
+        if (data.toInt() > releaseNumber.toInt()) {
             newUpdate = true;
-            updateAvailable(version);
+            updateAvailable();
         }
     }
 }

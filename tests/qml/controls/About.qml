@@ -107,7 +107,7 @@ Rectangle {
             Button {
                 text: qsTr("Check for updates")
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: updater.checkForUpdates() ? newUpdateMessage.open() : noUpdatesMessage.open()
+                onClicked: bridge.checkForUpdates() ? newUpdateMessage.open() : noUpdatesMessage.open()
             }
 
             Button {
