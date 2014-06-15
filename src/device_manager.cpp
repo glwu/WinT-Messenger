@@ -7,6 +7,18 @@
 
 #include "device_manager.h"
 
+DeviceManager::DeviceManager() {
+    rect = qApp->primaryScreen()->geometry();
+#if defined(Q_OS_ANDROID)
+    screenRatio = 1.8 * qMin(qMax(rect.width(), rect.height())/1136. , qMin(rect.width(), rect.height())/640.);
+#elif defined(Q_OS_IOS)
+    screenRatio = 1.0;
+#else
+    screenRatio = 1.0;
+#endif
+
+}
+
 bool DeviceManager::isMobile() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
     return 1;
@@ -15,13 +27,5 @@ bool DeviceManager::isMobile() {
 }
 
 qreal DeviceManager::ratio(int value) {
-    double screenRatio = 1;
-
-#if defined(Q_OS_ANDROID)
-    screenRatio = 1.8 * qMin(qMax(rect.width(), rect.height())/1136. , qMin(rect.width(), rect.height())/640.);
-#elif defined(Q_OS_IOS)
-    screenRatio = 1.2;
-#endif
-
     return value * screenRatio;
 }

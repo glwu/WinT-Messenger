@@ -25,8 +25,14 @@ class DeviceManager : public QObject {
     Q_OBJECT
 
 public:
+    DeviceManager();
+
     Q_INVOKABLE bool isMobile();
     Q_INVOKABLE qreal ratio(int value);
+
+private:
+    QRect rect;
+    double screenRatio;
 };
 
 #endif

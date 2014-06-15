@@ -24,32 +24,33 @@
  *==============================================================================*/
 
 class Bridge : public QObject {
-
+    
     Q_OBJECT
-
+    
 public:
     Bridge();
-
+    
     Q_INVOKABLE void stopChat();
     Q_INVOKABLE void startChat();
+    Q_INVOKABLE QString getFontPath();
     Q_INVOKABLE bool checkForUpdates();
     Q_INVOKABLE QString getDownloadPath();
     Q_INVOKABLE void shareFile(const QString path);
     Q_INVOKABLE void sendMessage(const QString message);
-
+    
 private slots:
     void messageRecieved(const QString &from, const QString &face, const QString &message, bool localUser);
-
+    
 private:
     Chat* chat;
     bool lan_chat;
     DeviceManager manager;
     QList<Chat*> chatObjects;
-
+    
 #ifndef Q_OS_IOS
     Updater* updater;
 #endif
-
+    
 signals:
     void updateAvailable();
     void delUser(const QString &nick);

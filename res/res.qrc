@@ -89,5 +89,6 @@
         <file>icons/Logo.svg</file>
         <file>faces/system/globe.png</file>
         <file>fonts/thin.ttf</file>
+        <file>fonts/regular.ttf</file>
     </qresource>
 </RCC>

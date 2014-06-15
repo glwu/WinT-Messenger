@@ -49,11 +49,17 @@ bool Bridge::checkForUpdates() {
 #endif
 }
 
+QString Bridge::getFontPath() {
+#ifdef Q_OS_IOS
+    return "qrc:/fonts/regular.ttf";
+#else
+    return "qrc:/fonts/thin.ttf";
+#endif
+}
+
 QString Bridge::getDownloadPath() {
 #if defined(Q_OS_ANDROID)
     return "/sdcard/Download/";
-#elif defined(Q_OS_IOS)
-    return "/";
 #else
     return QDir::tempPath() + "/";
 #endif

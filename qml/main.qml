@@ -37,7 +37,7 @@ ApplicationWindow {
 
     FontLoader {
         id: loader
-        source: "qrc:/fonts/thin.ttf"
+        source: bridge.getFontPath()
     }
 
     Connections {
