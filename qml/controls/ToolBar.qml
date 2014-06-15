@@ -13,6 +13,21 @@ Rectangle {
     color: colors.userColor
     anchors {left: parent.left; right: parent.right; top: parent.top;}
 
+    /*Rectangle {
+        color: Qt.lighter(parent.color, 1.2)
+        height: 1
+        width: parent.width
+        anchors.bottomMargin: 1
+        anchors.bottom: parent.bottom
+    }
+
+    Rectangle {
+        height: 1
+        width: parent.width
+        anchors.bottom: parent.bottom
+        color: Qt.darker(parent.color, 1.6)
+    }*/
+
     property alias title: label.text
     property bool extraPages: true
 
@@ -108,6 +123,20 @@ Rectangle {
         y: (stackView.height - height) / 2
 
         Behavior on opacity {NumberAnimation{duration: 250}}
+
+        Rectangle {
+            color: "transparent"
+            anchors.fill: parent
+            border.width: device.ratio(2)
+            border.color: Qt.lighter(parent.color, 1.2)
+        }
+
+        Rectangle {
+            color: "transparent"
+            anchors.fill: parent
+            border.width: device.ratio(1)
+            border.color: Qt.darker(parent.color, 1.6)
+        }
 
         Column {
             id: column

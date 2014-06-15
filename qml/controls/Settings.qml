@@ -66,6 +66,20 @@ Rectangle {
         
         Behavior on opacity {NumberAnimation{duration: 250}}
         MouseArea {anchors.fill: parent; enabled: !settings.firstLaunch()}
+
+        Rectangle {
+            color: "transparent"
+            anchors.fill: parent
+            border.width: device.ratio(2)
+            border.color: Qt.lighter(parent.color, 1.2)
+        }
+
+        Rectangle {
+            color: "transparent"
+            anchors.fill: parent
+            border.width: device.ratio(1)
+            border.color: Qt.darker(parent.color, 1.6)
+        }
         
         Column {
             anchors.centerIn: parent

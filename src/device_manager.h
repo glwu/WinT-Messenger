@@ -26,7 +26,7 @@ class DeviceManager : public QObject {
 
 public:
     Q_INVOKABLE bool isMobile();
-    Q_INVOKABLE int ratio(int value);
+    Q_INVOKABLE qreal ratio(int value);
 };
 
 #endif

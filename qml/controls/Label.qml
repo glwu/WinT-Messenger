@@ -8,9 +8,8 @@
 import QtQuick 2.2
 
 Text {
+    smooth: true
     color: colors.text
-    font {
-        family: global.font
-        pixelSize: sizes.medium
-    }
+    antialiasing: true
+    font.pixelSize: sizes.medium
 }

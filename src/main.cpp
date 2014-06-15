@@ -22,9 +22,17 @@
  * (in the header files) that explains what does that specific class do.        *
  * On the other hand, the source files will seldomly contain comments.          *
  *                                                                              *
+ * If you are trying to compile this program under Linux, you may get an error  *
+ * similar to "peerManager.h" not found in the file client.h, around line 11.   *
+ * If so, simply change "peerManager.h" to "peermanager.h" and everything       *
+ * should work fine. Also, you will need to have the mesa-common-dev package    *
+ * installed in order to avoid the fatal error of "GL/gl.h missing".            *
+ *                                                                              *
  * Suggestions are always welcome, send me an email to alex.racotta@gmail.com   *
  * or post something at the mailing lists:                                      *
  * https://groups.google.com/forum/#!forum/wint-messenger-developers            *
+ *                                                                              *
+ * Greetings!                                                                   *
  *==============================================================================*/
 
 int main(int argc, char *argv[]) {

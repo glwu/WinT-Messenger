@@ -126,17 +126,18 @@ Controls.Page {
 
                 Text {
                     id: text
+                    smooth: true
                     color: colors.text
                     anchors.fill: parent
                     opacity: parent.opacity
                     textFormat: Text.RichText
                     onLinkActivated: openUrl(link)
                     wrapMode: TextEdit.WrapAnywhere
+                    font.pixelSize: device.ratio(15)
                     renderType: Text.NativeRendering
                     anchors.margins: device.ratio(12)
                     width: parent.width - device.ratio(24)
                     height: parent.height - device.ratio(24)
-                    font {family: global.font; pixelSize: device.ratio(15)}
                     text: message + dateAlign + "<font size=" + sizes.x_small + "px color=gray>"
                           + userName + Qt.formatDateTime(new Date(), "hh:mm:ss AP") + "</font></right></p>"
 

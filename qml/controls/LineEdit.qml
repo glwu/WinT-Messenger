@@ -21,10 +21,7 @@ Item {
         id: textField
         anchors.fill: parent
         style: textFieldStyle
-        font {
-            family: global.font
-            pixelSize: sizes.medium
-        }
+        font.pixelSize: sizes.medium
 
         Component {
             id: textFieldStyle

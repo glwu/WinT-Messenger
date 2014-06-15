@@ -32,7 +32,6 @@ ApplicationWindow {
     onHeightChanged: settings.setValue("height", height)
     Component.onCompleted: stackView.push("qrc:/qml/pages/start.qml")
 
-
     Connections {
         target: bridge
         onUpdateAvailable: {
@@ -42,14 +41,19 @@ ApplicationWindow {
         }
     }
 
-    FontLoader {
-        id: font
-        source: "qrc:/fonts/regular.ttf"
-    }
-
     StackView {
         id: stackView
         anchors {fill: parent; topMargin: toolbar.height;}
+
+        Keys.onReleased: {
+            if (event.key === Qt.Key_Back ||
+                    (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier))) {
+                if (stackView.depth > 1) {
+                    event.accepted = true
+                    stackView.pop()
+                }
+            }
+        }
     }
 
     Controls.ToolBar {
@@ -83,17 +87,12 @@ ApplicationWindow {
     }
 
     QtObject {
-        id: global
-        property string font: "Lato"
-    }
-
-    QtObject {
         id: sizes
-        property int small: device.ratio(12)
-        property int large: device.ratio(18)
-        property int medium: device.ratio(14)
-        property int x_large: device.ratio(22)
-        property int x_small: device.ratio(11)
+        property int small: device.ratio(11)
+        property int large: device.ratio(17)
+        property int medium: device.ratio(13)
+        property int x_large: device.ratio(20)
+        property int x_small: device.ratio(10)
     }
 
     QtObject {
