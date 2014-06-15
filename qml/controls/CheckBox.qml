@@ -38,6 +38,7 @@ CheckBox {
         color: colors.text
         antialiasing: true
         x: device.ratio(20)
+        font.family: global.font
         font.pixelSize: sizes.medium
         y: (control.height - height) / 2
 

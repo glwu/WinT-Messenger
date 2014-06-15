@@ -30,7 +30,15 @@ ApplicationWindow {
     onYChanged: settings.setValue("y", y)
     onWidthChanged: settings.setValue("width", width)
     onHeightChanged: settings.setValue("height", height)
-    Component.onCompleted: stackView.push("qrc:/qml/pages/start.qml")
+    Component.onCompleted: {
+        stackView.push("qrc:/qml/pages/start.qml")
+        loader.status == FontLoader.Ready ? console.log("Font Loaded") : console.log("Error loading font")
+    }
+
+    FontLoader {
+        id: loader
+        source: "qrc:/fonts/thin.ttf"
+    }
 
     Connections {
         target: bridge
@@ -84,6 +92,11 @@ ApplicationWindow {
             else if (clickedButton === StandardButton.Open)
                 Qt.openUrlExternally("http://wint-im.sf.net")
         }
+    }
+
+    QtObject {
+        id: global
+        property string font: "Roboto"
     }
 
     QtObject {

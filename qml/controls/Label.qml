@@ -11,5 +11,6 @@ Text {
     smooth: true
     color: colors.text
     antialiasing: true
+    font.family: global.font
     font.pixelSize: sizes.medium
 }

@@ -130,6 +130,7 @@ Controls.Page {
                     color: colors.text
                     anchors.fill: parent
                     opacity: parent.opacity
+                    font.family: global.font
                     textFormat: Text.RichText
                     onLinkActivated: openUrl(link)
                     wrapMode: TextEdit.WrapAnywhere

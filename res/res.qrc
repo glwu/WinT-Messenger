@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>fonts/regular.ttf</file>
         <file>icons/ToolbarIcons/Common/Back.png</file>
         <file>icons/ToolbarIcons/Common/Menu.png</file>
         <file>icons/ToolbarIcons/Dark/Attach.png</file>
@@ -89,5 +88,6 @@
         <file>icons/Help.svg</file>
         <file>icons/Logo.svg</file>
         <file>faces/system/globe.png</file>
+        <file>fonts/thin.ttf</file>
     </qresource>
 </RCC>
