@@ -20,6 +20,7 @@ Controls.Page {
     property bool emotesRectangleEnabled: false
 
     function openUrl(url) {
+        console.log(url)
         Qt.openUrlExternally(url)
         if (device.isMobile()) {
             if (url.search("file:///") !== -1) {

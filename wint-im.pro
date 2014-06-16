@@ -10,7 +10,9 @@ CODECFORSRC = UTF-8
 
 QT += gui
 QT += qml
+QT += sql
 QT += svg
+QT += xml
 QT += core
 QT += quick
 QT += widgets
@@ -54,6 +56,8 @@ ios {
 }
 
 win32* {
+    LIBS += -L"C:/OpenSSL-Win32/lib" -llibeay32
+    CONFIG += openssl-linked
     RC_FILE = sys/windows/manifest.rc
     TARGET = "WinT Messenger"
 }

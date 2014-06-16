@@ -32,7 +32,7 @@ Rectangle {
         anchors.centerIn: parent
         color: colors.background
         height: device.ratio(384)
-        width: device.ratio(300)
+        width: device.ratio(320)
         border.color: colors.borderColor
 
         MouseArea {anchors.fill: parent}

@@ -38,7 +38,7 @@ void Chat::shareFile(const QString &fileName) {
 
     QFile file(fileName);
     emit newMessage(0,"system/package.png",
-                    QString("You shared <a href='file://%1'>%2</a>")
+                    QString("You shared <a href='file:///%1'>%2</a>")
                     .arg(fileName, QFileInfo(file).fileName()), 1);
 }
 
@@ -60,7 +60,7 @@ void Chat::receivedFile(const QByteArray &data, const QString &fileName) {
         file.write(data);
 
     emit newMessage(0, "system/package.png",
-                    QString("Received <a href='file://%1'>%2</a>")
+                    QString("Received <a href='file:///%1'>%2</a>")
                     .arg(file.fileName())
                     .arg(fileName), 0);
 

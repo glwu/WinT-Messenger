@@ -67,7 +67,12 @@ QString Bridge::getDownloadPath() {
 
 void Bridge::shareFile(const QString path) {
     QString fixedPath = path;
+
+#if defined(Q_OS_WIN)
+    fixedPath.replace("file:///", "");
+#else
     fixedPath.replace("file:///", "/");
+#endif
 
     if (!fixedPath.isEmpty())
         if (lan_chat)

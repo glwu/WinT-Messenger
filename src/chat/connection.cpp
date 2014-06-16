@@ -85,13 +85,15 @@ bool Connection::sendFile(const QString &fileName) {
     QFile file(fileName);
     file.open(QFile::ReadOnly);
     QByteArray data = file.readAll();
-    file.close();
+
+    qDebug() << file.fileName();
 
     QByteArray msg = "BINARY " + QByteArray::number(data.size()) + ' ' + data;
-
     QByteArray fileBA = QFileInfo(file).fileName().toUtf8();
     QByteArray fileData = "FILENAME " + QByteArray::number(fileBA.size())
             + ' ' + fileBA;
+
+    file.close();
 
     return (write(fileData) == fileData.size() && write(msg) == msg.size());
 }
