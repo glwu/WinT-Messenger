@@ -11,8 +11,6 @@ DeviceManager::DeviceManager() {
     rect = qApp->primaryScreen()->geometry();
 #if defined(Q_OS_ANDROID)
     screenRatio = 1.8 * qMin(qMax(rect.width(), rect.height())/1136. , qMin(rect.width(), rect.height())/640.);
-#elif defined(Q_OS_IOS)
-    screenRatio = 1.0;
 #else
     screenRatio = 1.0;
 #endif
