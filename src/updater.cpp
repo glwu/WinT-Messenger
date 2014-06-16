@@ -24,11 +24,10 @@ Updater::Updater() {
 }
 
 bool Updater::checkForUpdates() {
-    QNetworkRequest req(QUrl("https://raw.githubusercontent.com/"
-                             "WinT-3794/WinT-Messenger/updater/current.txt"));
+    QNetworkRequest req(QUrl("https://raw.githubusercontent.com/WinT-3794/WinT-Messenger/updater/current.txt"));
 
     QSslConfiguration config = QSslConfiguration::defaultConfiguration();
-    config.setProtocol(QSsl::TlsV1_0);
+    config.setProtocol(QSsl::AnyProtocol);
     req.setSslConfiguration(config);
     accessManager->get(req);
     return newUpdate;

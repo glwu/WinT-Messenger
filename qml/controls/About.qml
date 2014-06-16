@@ -31,7 +31,7 @@ Rectangle {
         opacity: 0
         anchors.centerIn: parent
         color: colors.background
-        height: device.ratio(384)
+        height: device.ratio(420)
         width: device.ratio(320)
         border.color: colors.borderColor
 

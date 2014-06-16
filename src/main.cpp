@@ -52,20 +52,19 @@ int main(int argc, char *argv[]) {
 
     component->loadUrl(QUrl("qrc:/qml/main.qml"));
     QQuickWindow* window = qobject_cast<QQuickWindow*>(component->create());
-    window->setDefaultAlphaBuffer(true);
+    //window->setDefaultAlphaBuffer(true);
     window->setScreen(app.primaryScreen());
 
-    if (device.isMobile())
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+    window->showMaximized();
+#else
+    if (settings.fullscreen())
         window->showFullScreen();
-
-    else {
-        if (settings.fullscreen())
-            window->showFullScreen();
-        else if (settings.maximized())
-            window->showMaximized();
-        else
-            window->showNormal();
-    }
+    else if (settings.maximized())
+        window->showMaximized();
+    else
+        window->showNormal();
+#endif
 
     return app.exec();
 }

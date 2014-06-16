@@ -17,14 +17,14 @@ ApplicationWindow {
     color: colors.background
     title: qsTr("WinT Messenger")
 
-    x: settings.x()
-    y: settings.y()
+    //x: settings.x()
+    //y: settings.y()
 
     minimumWidth: 320
     minimumHeight: 480
 
-    width: settings.width()
-    height: settings.height()
+    //width: settings.width()
+    //height: settings.height()
 
     onXChanged: settings.setValue("x", x)
     onYChanged: settings.setValue("y", y)

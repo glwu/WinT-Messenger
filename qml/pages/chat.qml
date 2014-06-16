@@ -100,7 +100,7 @@ Controls.Page {
                 visible: false
                 text: message
                 id: hiddenLabel
-                font.pixelSize: device.ratio(15)
+                font.pixelSize: device.ratio(14)
             }
 
             Rectangle {
@@ -135,7 +135,7 @@ Controls.Page {
                     textFormat: Text.RichText
                     onLinkActivated: openUrl(link)
                     wrapMode: TextEdit.WrapAnywhere
-                    font.pixelSize: device.ratio(15)
+                    font.pixelSize: device.ratio(14)
                     renderType: Text.NativeRendering
                     anchors.margins: device.ratio(12)
                     width: parent.width - device.ratio(24)
