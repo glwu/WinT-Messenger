@@ -34,8 +34,8 @@ Updater::Updater() {
  * \brief Updater::checkForUpdates
  * \return
  *
- * Downloads a file from <a href=https://raw.githubusercontent.com/WinT-3794/WinT-Messenger/updater/current.txt>
- * GitHub</a> and calls \c Updater::fileDownloaded() and returns the value of /c newUpdate.
+ * Downloads a file from <a href=https://raw.githubusercontent.com/WinT-3794/WinT-Messenger/updater\current.txt>
+ * GitHub</a> and calls \c Updater::fileDownloaded() and returns the value of \c newUpdate.
  */
 
 bool Updater::checkForUpdates() {
@@ -54,7 +54,7 @@ bool Updater::checkForUpdates() {
  *
  * Converts the \c reply parameter into a string and compares the
  * current version with the downloaded version and changes the value
- * of /c newUpdate to true if there is a new version available.
+ * of \c newUpdate to true if there is a new version available.
  */
 
 void Updater::fileDownloaded(QNetworkReply* reply) {
@@ -73,7 +73,7 @@ void Updater::fileDownloaded(QNetworkReply* reply) {
  * \param reply
  * \param error
  *
- * Tells the /c accessManager to ignore all SSL errors.
+ * Tells the \c accessManager to ignore all SSL errors.
  */
 
 void Updater::ignoreSslErrors(QNetworkReply *reply, QList<QSslError> error) {

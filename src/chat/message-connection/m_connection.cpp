@@ -137,7 +137,7 @@ void MConnection::timerEvent(QTimerEvent *timerEvent) {
  * \brief MConnection::processReadyRead
  *
  * This function allows us to acknowledge the \c Greeting from our peer
- * and begin sending /c pings and /c pongs after the \c Greeting is complete
+ * and begin sending \c pings and \c pongs after the \c Greeting is complete
  */
 
 void MConnection::processReadyRead() {
@@ -306,7 +306,7 @@ bool MConnection::hasEnoughData() {
  *  - Greeting
  *  - Message
  *
- * If the function detects another kind of file, it assings the /c Undefined flag
+ * If the function detects another kind of file, it assings the \c Undefined flag
  * to the receied data.
  */
 

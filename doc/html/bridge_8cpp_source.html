@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.7"/>
-<title>WinT Messenger: src/bridge.cpp Source File</title>
+<title>WinT Messenger: /Users/Alex/Documents/Developing/Projects/C++/wint-im/src/bridge.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -153,51 +153,51 @@ $(document).ready(function(){initNavTree('bridge_8cpp_source.html','');});
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    QSound::play(<span class="stringliteral">&quot;:/sounds/message.wav&quot;</span>);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="class_bridge.html#aa902ff335c9c13b0255d085812b1b5eb">   81</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="class_bridge.html#aa902ff335c9c13b0255d085812b1b5eb">Bridge::checkForUpdates</a>() {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">#ifndef Q_OS_IOS</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordflow">return</span> updater-&gt;<a class="code" href="class_updater.html#ac8244e223cb3b8fd39a23a23143f2e38">checkForUpdates</a>();</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="class_bridge.html#a96bba2d5f555e643f5e5e7895b24e6ab">   98</a></span>&#160;QString <a class="code" href="class_bridge.html#a96bba2d5f555e643f5e5e7895b24e6ab">Bridge::getDownloadPath</a>() {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">#if defined(Q_OS_ANDROID)</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;/sdcard/Download/&quot;</span>;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">return</span> QDir::tempPath() + <span class="stringliteral">&quot;/&quot;</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="class_bridge.html#a68c94727946b8e7992da4aa2b278e6c9">  113</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_bridge.html#a68c94727946b8e7992da4aa2b278e6c9">Bridge::shareFiles</a>() {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordflow">if</span> (lan_chat) {</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        QStringList filenames = QFileDialog::getOpenFileNames(0, tr(<span class="stringliteral">&quot;Select files&quot;</span>), QDir::homePath());</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">int</span> count = filenames.count();</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">int</span> toUpload = filenames.count();</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordflow">while</span> (toUpload &gt; 0) {</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordflow">if</span> (!filenames.at(count - toUpload).isEmpty())</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                chat-&gt;<a class="code" href="class_chat.html#a37749c8b88f7c8e5fcbef688739d3244">shareFile</a>(filenames.at(count - toUpload));</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            toUpload -= 1;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        }</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;}</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00135"></a><span class="lineno"><a class="line" href="class_bridge.html#afc8992571757478669be3e4553c2f41d">  135</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_bridge.html#afc8992571757478669be3e4553c2f41d">Bridge::sendMessage</a>(<span class="keyword">const</span> QString message) {</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    emit <a class="code" href="class_bridge.html#a11c1da282ff48b247eed3c5b0fc19f9c">returnPressed</a>(message);</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="keywordtype">void</span> Bridge::messageRecieved(<span class="keyword">const</span> QString &amp;from, <span class="keyword">const</span> QString &amp;face,</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                             <span class="keyword">const</span> QString &amp;message, <span class="keywordtype">bool</span> localUser) {</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    QString msg = message;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    msg.replace(<span class="stringliteral">&quot;[s]&quot;</span>, QString(<span class="stringliteral">&quot;&lt;img src=qrc:/emotes/&quot;</span>));</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    msg.replace(<span class="stringliteral">&quot;[/s]&quot;</span>, <span class="stringliteral">&quot;.png&gt;&quot;</span>);</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    msg.replace(QRegExp(<span class="stringliteral">&quot;((?:https?)://\\S+)&quot;</span>), <span class="stringliteral">&quot;&lt;a href=\\1&gt;\\1&lt;/a&gt;&quot;</span>);</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    emit <a class="code" href="class_bridge.html#ac180ca0699b6d8ce997b9ca392058a04">drawMessage</a>(from, face, msg, localUser);</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;}</div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="class_bridge.html#aa902ff335c9c13b0255d085812b1b5eb">   82</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="class_bridge.html#aa902ff335c9c13b0255d085812b1b5eb">Bridge::checkForUpdates</a>() {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#ifndef Q_OS_IOS</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">return</span> updater-&gt;<a class="code" href="class_updater.html#ac8244e223cb3b8fd39a23a23143f2e38">checkForUpdates</a>();</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="class_bridge.html#a96bba2d5f555e643f5e5e7895b24e6ab">   99</a></span>&#160;QString <a class="code" href="class_bridge.html#a96bba2d5f555e643f5e5e7895b24e6ab">Bridge::getDownloadPath</a>() {</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#if defined(Q_OS_ANDROID)</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;/sdcard/Download/&quot;</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordflow">return</span> QDir::tempPath() + <span class="stringliteral">&quot;/&quot;</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="class_bridge.html#a68c94727946b8e7992da4aa2b278e6c9">  114</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_bridge.html#a68c94727946b8e7992da4aa2b278e6c9">Bridge::shareFiles</a>() {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordflow">if</span> (lan_chat) {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        QStringList filenames = QFileDialog::getOpenFileNames(0, tr(<span class="stringliteral">&quot;Select files&quot;</span>), QDir::homePath());</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">int</span> count = filenames.count();</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordtype">int</span> toUpload = filenames.count();</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">while</span> (toUpload &gt; 0) {</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <span class="keywordflow">if</span> (!filenames.at(count - toUpload).isEmpty())</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                chat-&gt;<a class="code" href="class_chat.html#a37749c8b88f7c8e5fcbef688739d3244">shareFile</a>(filenames.at(count - toUpload));</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            toUpload -= 1;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;}</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00136"></a><span class="lineno"><a class="line" href="class_bridge.html#afc8992571757478669be3e4553c2f41d">  136</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="class_bridge.html#afc8992571757478669be3e4553c2f41d">Bridge::sendMessage</a>(<span class="keyword">const</span> QString message) {</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    emit <a class="code" href="class_bridge.html#a11c1da282ff48b247eed3c5b0fc19f9c">returnPressed</a>(message);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="keywordtype">void</span> Bridge::messageRecieved(<span class="keyword">const</span> QString &amp;from, <span class="keyword">const</span> QString &amp;face,</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                             <span class="keyword">const</span> QString &amp;message, <span class="keywordtype">bool</span> localUser) {</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    QString msg = message;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    msg.replace(<span class="stringliteral">&quot;[s]&quot;</span>, QString(<span class="stringliteral">&quot;&lt;img src=qrc:/emotes/&quot;</span>));</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    msg.replace(<span class="stringliteral">&quot;[/s]&quot;</span>, <span class="stringliteral">&quot;.png&gt;&quot;</span>);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    msg.replace(QRegExp(<span class="stringliteral">&quot;((?:https?)://\\S+)&quot;</span>), <span class="stringliteral">&quot;&lt;a href=\\1&gt;\\1&lt;/a&gt;&quot;</span>);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    emit <a class="code" href="class_bridge.html#ac180ca0699b6d8ce997b9ca392058a04">drawMessage</a>(from, face, msg, localUser);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;}</div>
 <div class="ttc" id="class_bridge_html_af587924e83d8a09e7fc7153f48f59f41"><div class="ttname"><a href="class_bridge.html#af587924e83d8a09e7fc7153f48f59f41">Bridge::stopChat</a></div><div class="ttdeci">Q_INVOKABLE void stopChat()</div><div class="ttdoc">Bridge::stopChat. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00032">bridge.cpp:32</a></div></div>
 <div class="ttc" id="class_bridge_html_abd4b0918d031c2e72a44466d05fe4cda"><div class="ttname"><a href="class_bridge.html#abd4b0918d031c2e72a44466d05fe4cda">Bridge::delUser</a></div><div class="ttdeci">void delUser(const QString &amp;nick)</div></div>
 <div class="ttc" id="class_bridge_html_a11c1da282ff48b247eed3c5b0fc19f9c"><div class="ttname"><a href="class_bridge.html#a11c1da282ff48b247eed3c5b0fc19f9c">Bridge::returnPressed</a></div><div class="ttdeci">void returnPressed(const QString &amp;message)</div></div>
@@ -205,14 +205,14 @@ $(document).ready(function(){initNavTree('bridge_8cpp_source.html','');});
 <div class="ttc" id="class_bridge_html_ac180ca0699b6d8ce997b9ca392058a04"><div class="ttname"><a href="class_bridge.html#ac180ca0699b6d8ce997b9ca392058a04">Bridge::drawMessage</a></div><div class="ttdeci">void drawMessage(const QString &amp;from, const QString &amp;face, const QString &amp;message, bool localUser)</div></div>
 <div class="ttc" id="class_bridge_html_a32bcb7460561a979cf27a1f1e4a813ef"><div class="ttname"><a href="class_bridge.html#a32bcb7460561a979cf27a1f1e4a813ef">Bridge::startChat</a></div><div class="ttdeci">Q_INVOKABLE void startChat()</div><div class="ttdoc">Bridge::startChat. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00044">bridge.cpp:44</a></div></div>
 <div class="ttc" id="class_bridge_html_a275f54dafc95c9b5bbaba5e904c4fa9a"><div class="ttname"><a href="class_bridge.html#a275f54dafc95c9b5bbaba5e904c4fa9a">Bridge::Bridge</a></div><div class="ttdeci">Bridge()</div><div class="ttdoc">Bridge::Bridge. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00017">bridge.cpp:17</a></div></div>
-<div class="ttc" id="class_bridge_html_aa902ff335c9c13b0255d085812b1b5eb"><div class="ttname"><a href="class_bridge.html#aa902ff335c9c13b0255d085812b1b5eb">Bridge::checkForUpdates</a></div><div class="ttdeci">Q_INVOKABLE bool checkForUpdates()</div><div class="ttdoc">Bridge::checkForUpdates. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00081">bridge.cpp:81</a></div></div>
+<div class="ttc" id="class_bridge_html_aa902ff335c9c13b0255d085812b1b5eb"><div class="ttname"><a href="class_bridge.html#aa902ff335c9c13b0255d085812b1b5eb">Bridge::checkForUpdates</a></div><div class="ttdeci">Q_INVOKABLE bool checkForUpdates()</div><div class="ttdoc">Bridge::checkForUpdates. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00082">bridge.cpp:82</a></div></div>
 <div class="ttc" id="class_bridge_html_acbdb61e3bae402bcb04651e25a9385c4"><div class="ttname"><a href="class_bridge.html#acbdb61e3bae402bcb04651e25a9385c4">Bridge::newUser</a></div><div class="ttdeci">void newUser(const QString &amp;nick, const QString &amp;face)</div></div>
 <div class="ttc" id="class_bridge_html_a7011c4650ec30ab1c515a36fcd19570f"><div class="ttname"><a href="class_bridge.html#a7011c4650ec30ab1c515a36fcd19570f">Bridge::updateAvailable</a></div><div class="ttdeci">void updateAvailable()</div></div>
-<div class="ttc" id="class_bridge_html_a96bba2d5f555e643f5e5e7895b24e6ab"><div class="ttname"><a href="class_bridge.html#a96bba2d5f555e643f5e5e7895b24e6ab">Bridge::getDownloadPath</a></div><div class="ttdeci">Q_INVOKABLE QString getDownloadPath()</div><div class="ttdoc">Bridge::getDownloadPath. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00098">bridge.cpp:98</a></div></div>
+<div class="ttc" id="class_bridge_html_a96bba2d5f555e643f5e5e7895b24e6ab"><div class="ttname"><a href="class_bridge.html#a96bba2d5f555e643f5e5e7895b24e6ab">Bridge::getDownloadPath</a></div><div class="ttdeci">Q_INVOKABLE QString getDownloadPath()</div><div class="ttdoc">Bridge::getDownloadPath. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00099">bridge.cpp:99</a></div></div>
 <div class="ttc" id="class_updater_html_ac8244e223cb3b8fd39a23a23143f2e38"><div class="ttname"><a href="class_updater.html#ac8244e223cb3b8fd39a23a23143f2e38">Updater::checkForUpdates</a></div><div class="ttdeci">Q_INVOKABLE bool checkForUpdates()</div><div class="ttdoc">Updater::checkForUpdates. </div><div class="ttdef"><b>Definition:</b> <a href="updater_8cpp_source.html#l00041">updater.cpp:41</a></div></div>
 <div class="ttc" id="class_chat_html_a37749c8b88f7c8e5fcbef688739d3244"><div class="ttname"><a href="class_chat.html#a37749c8b88f7c8e5fcbef688739d3244">Chat::shareFile</a></div><div class="ttdeci">void shareFile(const QString &amp;path)</div><div class="ttdoc">Chat::shareFile. </div><div class="ttdef"><b>Definition:</b> <a href="chat_8cpp_source.html#l00067">chat.cpp:67</a></div></div>
-<div class="ttc" id="class_bridge_html_a68c94727946b8e7992da4aa2b278e6c9"><div class="ttname"><a href="class_bridge.html#a68c94727946b8e7992da4aa2b278e6c9">Bridge::shareFiles</a></div><div class="ttdeci">Q_INVOKABLE void shareFiles()</div><div class="ttdoc">Bridge::shareFiles. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00113">bridge.cpp:113</a></div></div>
-<div class="ttc" id="class_bridge_html_afc8992571757478669be3e4553c2f41d"><div class="ttname"><a href="class_bridge.html#afc8992571757478669be3e4553c2f41d">Bridge::sendMessage</a></div><div class="ttdeci">Q_INVOKABLE void sendMessage(const QString message)</div><div class="ttdoc">Bridge::sendMessage. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00135">bridge.cpp:135</a></div></div>
+<div class="ttc" id="class_bridge_html_a68c94727946b8e7992da4aa2b278e6c9"><div class="ttname"><a href="class_bridge.html#a68c94727946b8e7992da4aa2b278e6c9">Bridge::shareFiles</a></div><div class="ttdeci">Q_INVOKABLE void shareFiles()</div><div class="ttdoc">Bridge::shareFiles. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00114">bridge.cpp:114</a></div></div>
+<div class="ttc" id="class_bridge_html_afc8992571757478669be3e4553c2f41d"><div class="ttname"><a href="class_bridge.html#afc8992571757478669be3e4553c2f41d">Bridge::sendMessage</a></div><div class="ttdeci">Q_INVOKABLE void sendMessage(const QString message)</div><div class="ttdoc">Bridge::sendMessage. </div><div class="ttdef"><b>Definition:</b> <a href="bridge_8cpp_source.html#l00136">bridge.cpp:136</a></div></div>
 <div class="ttc" id="bridge_8h_html"><div class="ttname"><a href="bridge_8h.html">bridge.h</a></div></div>
 <div class="ttc" id="class_chat_html"><div class="ttname"><a href="class_chat.html">Chat</a></div><div class="ttdef"><b>Definition:</b> <a href="chat_8h_source.html#l00007">chat.h:7</a></div></div>
 <div class="ttc" id="class_chat_html_abe16aa468e803dbbbdb5f0840c76e056"><div class="ttname"><a href="class_chat.html#abe16aa468e803dbbbdb5f0840c76e056">Chat::setDownloadPath</a></div><div class="ttdeci">void setDownloadPath(const QString &amp;path)</div><div class="ttdoc">Chat::setDownloadPath. </div><div class="ttdef"><b>Definition:</b> <a href="chat_8cpp_source.html#l00036">chat.cpp:36</a></div></div>
@@ -223,7 +223,7 @@ $(document).ready(function(){initNavTree('bridge_8cpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="bridge_8cpp.html">bridge.cpp</a></li>
-    <li class="footer">Generated on Thu Jun 19 2014 00:54:58 for WinT Messenger by
+    <li class="footer">Generated on Thu Jun 19 2014 02:26:11 for WinT Messenger by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.7 </li>
   </ul>

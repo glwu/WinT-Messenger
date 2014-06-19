@@ -110,7 +110,7 @@ void FConnection::timerEvent(QTimerEvent *timerEvent) {
  * \brief FConnection::processReadyRead
  *
  * This function allows us to acknowledge the \c Greeting from our peer
- * and begin sending /c pings and /c pongs after the \c Greeting is complete
+ * and begin sending \c pings and \c pongs after the \c Greeting is complete
  */
 
 void FConnection::processReadyRead() {
@@ -273,7 +273,7 @@ bool FConnection::hasEnoughData() {
  *  - Binary
  *  - Filename
  *
- * If the function detects another kind of file, it assings the /c Undefined flag
+ * If the function detects another kind of file, it assings the \c Undefined flag
  * to the receied data.
  */
 
@@ -315,7 +315,7 @@ bool FConnection::readProtocolHeader() {
  * Based on the data, the function does a different action:
  *  - If data is a \c Ping, we write a \c Pong
  *  - If data is a \c Pong, we send a \c Ping
- *  - If data is a \c FileName, we change the value of /c currentFileName
+ *  - If data is a \c FileName, we change the value of \c currentFileName
  *  - If data is a \c Binary, we notify the \c Client that we received a new file.
  */
 

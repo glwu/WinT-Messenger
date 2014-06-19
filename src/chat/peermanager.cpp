@@ -80,8 +80,8 @@ PeerManager::PeerManager(Client *client) : QObject(client) {
  * \brief PeerManager::setFileServerPort
  * \param port
  *
- * Changes the value of /c f_serverPort based on the
- * /c port parameter.
+ * Changes the value of \c f_serverPort based on the
+ * \c port parameter.
  */
 
 void PeerManager::setFileServerPort(int port) {
@@ -92,8 +92,8 @@ void PeerManager::setFileServerPort(int port) {
  * \brief PeerManager::setMessageServerPort
  * \param port
  *
- * Changes the value of /c m_serverPort based on the
- * /c port parameter.
+ * Changes the value of \c m_serverPort based on the
+ * \c port parameter.
  */
 
 void PeerManager::setMessageServerPort(int port) {
@@ -104,7 +104,7 @@ void PeerManager::setMessageServerPort(int port) {
  * \brief PeerManager::userName
  * \return
  *
- * Returns the value of /c username.
+ * Returns the value of \c username.
  */
 
 QByteArray PeerManager::userName() const {
@@ -115,7 +115,7 @@ QByteArray PeerManager::userName() const {
  * \brief PeerManager::face
  * \return
  *
- * Returns the value of /c userface.
+ * Returns the value of \c userface.
  */
 
 QByteArray PeerManager::face() const {
@@ -125,7 +125,7 @@ QByteArray PeerManager::face() const {
 /*!
  * \brief PeerManager::startBroadcasting
  *
- * Starts the /c broadcastTimer, thus allowing the program
+ * Starts the \c broadcastTimer, thus allowing the program
  * to send broadcast datagrams.
  */
 
@@ -138,7 +138,7 @@ void PeerManager::startBroadcasting() {
  * \param address
  * \return
  *
- * Returns /c true if /c address is from local computer (localhost).
+ * Returns \c true if \c address is from local computer (localhost).
  */
 
 bool PeerManager::isLocalHostAddress(const QHostAddress &address) {
@@ -178,7 +178,7 @@ void PeerManager::sendBroadcastDatagram() {
  * \brief PeerManager::readBroadcastDatagram
  *
  * Reads a broadcast datagram, extracts the IP of the sender and
- * its /c FServer and /c MServer ports. Then the function tries to
+ * its \c FServer and \c MServer ports. Then the function tries to
  * establish a connection with the sender of the datagram.
  */
 

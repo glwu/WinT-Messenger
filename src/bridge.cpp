@@ -10,8 +10,8 @@
 /*!
  * \brief Bridge::Bridge
  *
- * Initializes the /c Bridge and (if the OS is not iOS),
- * configures the /c Updater.
+ * Initializes the \c Bridge and (if the OS is not iOS),
+ * configures the \c Updater.
  */
 
 Bridge::Bridge() {
@@ -26,7 +26,7 @@ Bridge::Bridge() {
 /*!
  * \brief Bridge::stopChat
  *
- * Stops the current /c Chat object and deletes it.
+ * Stops the current \c Chat object and deletes it.
  */
 
 void Bridge::stopChat() {
@@ -38,7 +38,7 @@ void Bridge::stopChat() {
 /*!
  * \brief Bridge::startChat
  *
- * Creates and configures a new /c Chat object.
+ * Creates and configures a new \c Chat object.
  */
 
 void Bridge::startChat() {
@@ -74,8 +74,9 @@ void Bridge::playSound() {
  * \brief Bridge::checkForUpdates
  * \return
  *
- * Tells the /c Updater to check for updates
- * using the /c Updater::checkForUpdates() function.
+ * Tells the \c Updater to check for updates
+ * using the \
+ c Updater::checkForUpdates() function.
  */
 
 bool Bridge::checkForUpdates() {

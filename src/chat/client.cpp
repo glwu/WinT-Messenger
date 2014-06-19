@@ -90,7 +90,7 @@ void Client::sendMessage(const QString &message) {
  * Sends the path of the file to be shared to all connected peers
  * by using a list of \c FConnections.
  *
- * Then, we send a message to all connected peers (with the /c sendMessage(QString) function)
+ * Then, we send a message to all connected peers (with the \c sendMessage(QString) function)
  * that notifies the connected peers that we shared a file.
  */
 
@@ -109,7 +109,7 @@ void Client::sendFile(const QString &path) {
  * \brief Client::nickName
  * \return
  *
- * Returns the value of /c peerManager->userName().
+ * Returns the value of \c peerManager->userName().
  */
 
 QString Client::nickName() const {
@@ -173,7 +173,7 @@ void Client::newFileConnection(FConnection *fc) {
  * \param mc
  *
  * Does the same as \c Cluent::newFileConnection(FConenction) and
- * configures the greeting message of the new /c MConnection with the
+ * configures the greeting message of the new \c MConnection with the
  * format of username@profilepicture (the "@" is used later on to split the
  * greeting messages and obtain two \c QStrings).
  */
@@ -213,13 +213,13 @@ void Client::readyForUseMsg() {
 /*!
  * \brief Client::disconnectedMsg
  *
- * Removes the selected MConnection using the /c Client::removeConnectionMsg() function.
+ * Removes the selected MConnection using the \c Client::removeConnectionMsg() function.
  */
 
 /*!
  * \brief Client::disconnectedMsg
  *
- * Removes the selected MConnection using the /c Client::removeConnectionMsg() function.
+ * Removes the selected MConnection using the \c Client::removeConnectionMsg() function.
  */
 
 void Client::disconnectedMsg() {
@@ -230,7 +230,7 @@ void Client::disconnectedMsg() {
 /*!
  * \brief Client::connectionErrorMsg
  *
- * Removes the selected MConnection using the /c Client::removeConnectionMsg() function.
+ * Removes the selected MConnection using the \c Client::removeConnectionMsg() function.
  */
 
 void Client::connectionErrorMsg(QAbstractSocket::SocketError) {
@@ -262,7 +262,7 @@ void Client::readyForUseFile() {
 /*!
  * \brief Client::disconnectedFile
  *
- * Removes the selected FConnection using the /c Client::removeConnectionFile() function.
+ * Removes the selected FConnection using the \c Client::removeConnectionFile() function.
  */
 
 void Client::disconnectedFile() {
@@ -273,7 +273,7 @@ void Client::disconnectedFile() {
 /*!
  * \brief Client::connectionErrorFile
  *
- * Removes the selected FConnection using the /c Client::removeConnectionFile() function.
+ * Removes the selected FConnection using the \c Client::removeConnectionFile() function.
  */
 
 void Client::connectionErrorFile(QAbstractSocket::SocketError) {
@@ -285,7 +285,7 @@ void Client::connectionErrorFile(QAbstractSocket::SocketError) {
  * \brief Client::removeConnectionMsg
  * \param connection
  *
- * Removes the selected FConnection using the /c Client::removeConnectionFile() function.
+ * Removes the selected FConnection using the \c Client::removeConnectionFile() function.
  */
 
 void Client::removeConnectionMsg(MConnection *connection) {
@@ -301,7 +301,7 @@ void Client::removeConnectionMsg(MConnection *connection) {
  * \brief Client::removeConnectionFile
  * \param connection
  *
- * Removes the selected FConnection using the /c Client::removeConnectionFile() function.
+ * Removes the selected FConnection using the \c Client::removeConnectionFile() function.
  */
 
 void Client::removeConnectionFile(FConnection *connection) {
