@@ -1,25 +1,20 @@
 #ifndef NET_CLIENT_H
 #define NET_CLIENT_H
 
+#include <math.h>
+
 #include <QHash>
 #include <QtNetwork>
 #include <QHostAddress>
 #include <QAbstractSocket>
 
-#include "server.h"
-#include "connection.h"
 #include "peerManager.h"
+#include "file-connection/f_server.h"
+#include "message-connection/m_server.h"
+#include "file-connection/f_connection.h"
+#include "message-connection/m_connection.h"
 
 class PeerManager;
-
-/*==============================================================================*
- * What does this class do?                                                     *
- *------------------------------------------------------------------------------*
- * This class is in charge of managing new and existing connections.            *
- * For example, when this class is instructed to send a message, it prepares    *
- * the message and uses a loop to send it to all connected peers. Also, this    *
- * class notifies the Chat class when an user enters or leaves the room.        *
- *==============================================================================*/
 
 class Client : public QObject
 {
@@ -30,7 +25,7 @@ public:
     PeerManager *peerManager;
 
     QString nickName() const;
-    void sendFile(const QString &fileName);
+    void sendFile(const QString &path);
     void sendMessage(const QString &message);
     bool hasConnection(const QHostAddress &senderIp, int senderPort = -1) const;
 
@@ -41,16 +36,27 @@ signals:
     void newMessage(const QString &from, const QString &face, const QString &message);
 
 private slots:
-    void readyForUse();
-    void disconnected();
-    void newConnection(Connection *connection);
-    void connectionError(QAbstractSocket::SocketError socketError);
+    void readyForUseMsg();
+    void disconnectedMsg();
+    void connectionErrorMsg(QAbstractSocket::SocketError socketError);
+
+    void readyForUseFile();
+    void disconnectedFile();
+    void connectionErrorFile(QAbstractSocket::SocketError socketError);
+
+    void newFileConnection(FConnection *fc);
+    void newMessageConnection(MConnection *mc);
     void getFile(const QByteArray &fileData, const QString &fileName);
 
 private:
-    Server server;
-    QMultiHash<QHostAddress, Connection *> peers;
-    void removeConnection(Connection *connection);
+    MServer m_server;
+    FServer f_server;
+
+    QMultiHash<QHostAddress, FConnection *> file_peers;
+    QMultiHash<QHostAddress, MConnection *> message_peers;
+
+    void removeConnectionFile(FConnection *connection);
+    void removeConnectionMsg(MConnection *connection);
 };
 
 #endif

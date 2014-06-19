@@ -18,21 +18,6 @@
 #include <QSslConfiguration>
 #include <QNetworkAccessManager>
 
-
-/*==============================================================================*
- * What does this class do?                                                     *
- *------------------------------------------------------------------------------*
- * This class is in charge of notifying the QML interface if a new update is    *
- * available. Basically, we download a text file from GitHub and compare it     *
- * With the application version that we have.                                   *
- * The format of the text file is RELEASE_NUMBER;APPLICATION_VERSION.           *
- * The semicolon (;) is used to split the string and use the RELEASE_NUMBER to  *
- * determine if a newer release is available.                                   *
- * Please note that this class requires you to have OpenSSL installed on your   *
- * system in order to work. Also, this class does not work on iOS due that iOS  *
- * does not come with OpenSSL (Apple uses their own Crypto API).                *
- *==============================================================================*/
-
 class Updater : public QObject {
 
     Q_OBJECT

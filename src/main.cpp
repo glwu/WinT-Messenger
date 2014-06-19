@@ -15,25 +15,15 @@
 #include "settings.h"
 #include "device_manager.h"
 
-/*==============================================================================*
- * Welcome to the code! (if there's a better way to say it, please tell me)     *
- *------------------------------------------------------------------------------*
- * You will find a comment on the beggining of the declaration of each class    *
- * (in the header files) that explains what does that specific class do.        *
- * On the other hand, the source files will seldomly contain comments.          *
- *                                                                              *
- * If you are trying to compile this program under Linux, you may get an error  *
- * similar to "peerManager.h" not found in the file client.h, around line 11.   *
- * If so, simply change "peerManager.h" to "peermanager.h" and everything       *
- * should work fine. Also, you will need to have the mesa-common-dev package    *
- * installed in order to avoid the fatal error of "GL/gl.h missing".            *
- *                                                                              *
- * Suggestions are always welcome, send me an email to alex.racotta@gmail.com   *
- * or post something at the mailing lists:                                      *
- * https://groups.google.com/forum/#!forum/wint-messenger-developers            *
- *                                                                              *
- * Greetings!                                                                   *
- *==============================================================================*/
+/*!
+ * \brief main
+ * \param argc
+ * \param argv
+ * \return
+ *
+ * Creates a new \c QApplication, configures and loads the QML interface,
+ * creates a new \c QQuickWindow to draw the QML interface and executes the \c qApp.
+ */
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -52,7 +42,6 @@ int main(int argc, char *argv[]) {
 
     component->loadUrl(QUrl("qrc:/qml/main.qml"));
     QQuickWindow* window = qobject_cast<QQuickWindow*>(component->create());
-    //window->setDefaultAlphaBuffer(true);
     window->setScreen(app.primaryScreen());
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)

@@ -11,18 +11,10 @@
 #include <QHostAddress>
 
 #include "client.h"
-#include "connection.h"
+#include "file-connection/f_connection.h"
+#include "message-connection/m_connection.h"
 
 class Client;
-class Connection;
-
-/*==============================================================================*
- * What does this class do?                                                     *
- *------------------------------------------------------------------------------*
- * This class is in charge of discoverying new peers and establishing a         *
- * connection with them and notify the Client class when a peer enters/leaves   *
- * the chat room.                                                               *
- *==============================================================================*/
 
 class PeerManager : public QObject
 {
@@ -34,11 +26,14 @@ public:
     QByteArray face() const;
     void startBroadcasting();
     QByteArray userName() const;
-    void setServerPort(int port);
+
+    void setFileServerPort(int port);
+    void setMessageServerPort(int port);
     bool isLocalHostAddress(const QHostAddress &address);
 
 signals:
-    void newConnection(Connection *connection);
+    void newFileConnection(FConnection *mc);
+    void newMessageConnection(MConnection *mc);
 
 private slots:
     void sendBroadcastDatagram();
@@ -48,13 +43,19 @@ private:
     void updateAddresses();
 
     Client *client;
-    int serverPort;
+
+    int m_serverPort;
+    int f_serverPort;
+
     QByteArray username;
     QByteArray userface;
     QTimer broadcastTimer;
     QUdpSocket broadcastSocket;
     QList<QHostAddress> ipAddresses;
     QList<QHostAddress> broadcastAddresses;
+
+    static const qint32 BroadcastInterval = 2000;
+    static const unsigned broadcastPort = 45000;
 };
 
 #endif

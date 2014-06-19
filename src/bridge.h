@@ -8,20 +8,15 @@
 #ifndef BRIDGE_H
 #define BRIDGE_H
 
+#include <QSound>
+#include <QFileDialog>
+
 #include "chat/chat.h"
 #include "device_manager.h"
 
 #ifndef Q_OS_IOS
 #include "updater.h"
 #endif
-
-/*==============================================================================*
- * What does this class do?                                                     *
- *------------------------------------------------------------------------------*
- * This class is in charge to communicate the QML interface with the Chat class *
- * We communitcate the QML interface with the Chat class directly because the   *
- * chat class must be destroyed everytime that the user leaves the chat room.   *
- *==============================================================================*/
 
 class Bridge : public QObject {
     
@@ -32,10 +27,10 @@ public:
     
     Q_INVOKABLE void stopChat();
     Q_INVOKABLE void startChat();
-    Q_INVOKABLE QString getFontPath();
+    Q_INVOKABLE void playSound();
     Q_INVOKABLE bool checkForUpdates();
     Q_INVOKABLE QString getDownloadPath();
-    Q_INVOKABLE void shareFile(const QString path);
+    Q_INVOKABLE void shareFiles();
     Q_INVOKABLE void sendMessage(const QString message);
     
 private slots:
@@ -46,6 +41,7 @@ private:
     bool lan_chat;
     DeviceManager manager;
     QList<Chat*> chatObjects;
+    QSound *sound;
     
 #ifndef Q_OS_IOS
     Updater* updater;

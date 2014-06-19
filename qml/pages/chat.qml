@@ -61,6 +61,9 @@ Controls.Page {
         onDrawMessage: {
             listModel.append({"from": from, "face": face, "message": message, "localUser": localUser})
             listView.positionViewAtEnd()
+
+            if (settings.soundsEnabled())
+                bridge.playSound()
         }
     }
 
@@ -134,12 +137,12 @@ Controls.Page {
                     font.family: global.font
                     textFormat: Text.RichText
                     onLinkActivated: openUrl(link)
-                    wrapMode: TextEdit.WrapAnywhere
                     font.pixelSize: device.ratio(14)
                     renderType: Text.NativeRendering
                     anchors.margins: device.ratio(12)
                     width: parent.width - device.ratio(24)
                     height: parent.height - device.ratio(24)
+                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                     text: message + dateAlign + "<font size=" + sizes.x_small + "px color=gray>"
                           + userName + Qt.formatDateTime(new Date(), "hh:mm:ss AP") + "</font></right></p>"
 
@@ -186,7 +189,7 @@ Controls.Page {
         Controls.Button {
             id: attachButton
             width: parent.height
-            onClicked: fileDialog.open()
+            onClicked: bridge.shareFiles()
             anchors {
                 top: parent.top
                 left: parent.left
@@ -252,12 +255,6 @@ Controls.Page {
                 sendTextbox.text = ""
             }
         }
-    }
-
-    FileDialog {
-        id: fileDialog
-        title: "Please choose a file"
-        onAccepted: bridge.shareFile(fileUrl)
     }
 
     ListModel {id: listModel}

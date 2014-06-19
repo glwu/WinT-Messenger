@@ -13,16 +13,6 @@
 #include <QSettings>
 #include <QGuiApplication>
 
-/*==============================================================================*
- * What does this class do?                                                     *
- *------------------------------------------------------------------------------*
- * This class allows the QML interface to access the program's settings in a    *
- * reliable way. You may notice a lot of booleans here, I implemented those     *
- * functions because the QML interface could not convert a QVariant into a bool *
- * in Microsoft Windows (at least with Qt 5.2.1).                               *
- *==============================================================================*/
-
-
 class Settings : public QObject {
 
     Q_OBJECT
@@ -42,6 +32,7 @@ public:
     Q_INVOKABLE bool firstLaunch();
     Q_INVOKABLE bool darkInterface();
     Q_INVOKABLE bool notifyUpdates();
+    Q_INVOKABLE bool soundsEnabled();
 
 private:
     QSettings* settings;

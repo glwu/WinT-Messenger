@@ -71,7 +71,7 @@ Rectangle {
             Label {
                 color: colors.logoTitle
                 font.pixelSize: sizes.large
-                text: "WinT Messenger v1.2.0"
+                text: "WinT Messenger v1.2.1"
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -152,4 +152,3 @@ Rectangle {
         text: qsTr("Congratulations, you are running the latest version of WinT Messenger!")
     }
 }
-

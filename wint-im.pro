@@ -17,6 +17,7 @@ QT += core
 QT += quick
 QT += widgets
 QT += network
+QT += multimedia
 
 HEADERS += \
     src/bridge.h \
@@ -24,22 +25,26 @@ HEADERS += \
     src/settings.h \
     src/chat/chat.h \
     src/chat/client.h \
-    src/chat/connection.h \
     src/chat/peermanager.h \
-    src/chat/server.h \
-    src/updater.h
+    src/updater.h \
+    src/chat/file-connection/f_connection.h \
+    src/chat/file-connection/f_server.h \
+    src/chat/message-connection/m_server.h \
+    src/chat/message-connection/m_connection.h
 
 SOURCES += \
     src/main.cpp \
     src/chat/chat.cpp \
     src/chat/client.cpp \
-    src/chat/connection.cpp \
     src/chat/peermanager.cpp \
-    src/chat/server.cpp \
     src/bridge.cpp \
     src/device_manager.cpp \
     src/settings.cpp \
-    src/updater.cpp
+    src/updater.cpp \
+    src/chat/file-connection/f_connection.cpp \
+    src/chat/file-connection/f_server.cpp \
+    src/chat/message-connection/m_connection.cpp \
+    src/chat/message-connection/m_server.cpp
 
 android {
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/sys/android

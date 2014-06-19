@@ -7,6 +7,13 @@
 
 #include "bridge.h"
 
+/*!
+ * \brief Bridge::Bridge
+ *
+ * Initializes the /c Bridge and (if the OS is not iOS),
+ * configures the /c Updater.
+ */
+
 Bridge::Bridge() {
     lan_chat = false;
 
@@ -16,11 +23,23 @@ Bridge::Bridge() {
 #endif
 }
 
+/*!
+ * \brief Bridge::stopChat
+ *
+ * Stops the current /c Chat object and deletes it.
+ */
+
 void Bridge::stopChat() {
     qDeleteAll(chatObjects.begin(), chatObjects.end());
     chatObjects.clear();
     lan_chat = false;
 }
+
+/*!
+ * \brief Bridge::startChat
+ *
+ * Creates and configures a new /c Chat object.
+ */
 
 void Bridge::startChat() {
     stopChat();
@@ -41,6 +60,24 @@ void Bridge::startChat() {
     lan_chat = true;
 }
 
+/*!
+ * \brief Bridge::playSound
+ *
+ * Plays a sound when we receive a message.
+ */
+
+void Bridge::playSound() {
+    QSound::play(":/sounds/message.wav");
+}
+
+/*!
+ * \brief Bridge::checkForUpdates
+ * \return
+ *
+ * Tells the /c Updater to check for updates
+ * using the /c Updater::checkForUpdates() function.
+ */
+
 bool Bridge::checkForUpdates() {
 #ifndef Q_OS_IOS
     return updater->checkForUpdates();
@@ -49,13 +86,14 @@ bool Bridge::checkForUpdates() {
 #endif
 }
 
-QString Bridge::getFontPath() {
-#ifdef Q_OS_IOS
-    return "qrc:/fonts/regular.ttf";
-#else
-    return "qrc:/fonts/thin.ttf";
-#endif
-}
+/*!
+ * \brief Bridge::getDownloadPath
+ * \return
+ *
+ * Returns a directory to write the downloaded files:
+ *  - "/sdcard/Download/" on Android
+ *  - Temporary files directory on other operating systems
+ */
 
 QString Bridge::getDownloadPath() {
 #if defined(Q_OS_ANDROID)
@@ -65,23 +103,51 @@ QString Bridge::getDownloadPath() {
 #endif
 }
 
-void Bridge::shareFile(const QString path) {
-    QString fixedPath = path;
+/*!
+ * \brief Bridge::shareFiles
+ *
+ * Creates a new \c QFileDialog and sends the selected files to
+ * the \c Chat object using the \c Chat::shareFile() function.
+ */
 
-#if defined(Q_OS_WIN)
-    fixedPath.replace("file:///", "");
-#else
-    fixedPath.replace("file:///", "/");
-#endif
+void Bridge::shareFiles() {
+    if (lan_chat) {
+        QStringList filenames = QFileDialog::getOpenFileNames(0, tr("Select files"), QDir::homePath());
 
-    if (!fixedPath.isEmpty())
-        if (lan_chat)
-            chat->shareFile(fixedPath);
+        int count = filenames.count();
+        int toUpload = filenames.count();
+
+        while (toUpload > 0) {
+            if (!filenames.at(count - toUpload).isEmpty())
+                chat->shareFile(filenames.at(count - toUpload));
+            toUpload -= 1;
+        }
+    }
 }
+
+/*!
+ * \brief Bridge::sendMessage
+ * \param message
+ *
+ * Emits a \c returnPressed() when called.
+ */
 
 void Bridge::sendMessage(const QString message) {
     emit returnPressed(message);
 }
+
+/*!
+ * \brief Bridge::messageRecieved
+ * \param from
+ * \param face
+ * \param message
+ * \param localUser
+ *
+ * Prepares and formats the message in HTML and then sends it to QML interface.
+ * The output message contains:
+ *  - Emoticons
+ *  - Auto-generated HTML links
+ */
 
 void Bridge::messageRecieved(const QString &from, const QString &face,
                              const QString &message, bool localUser) {

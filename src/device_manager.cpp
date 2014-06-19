@@ -7,6 +7,12 @@
 
 #include "device_manager.h"
 
+/*!
+ * \brief DeviceManager::DeviceManager
+ *
+ * Initializes the \c DeviceManager and calculates the screen ratio
+ */
+
 DeviceManager::DeviceManager() {
     rect = qApp->primaryScreen()->geometry();
 #if defined(Q_OS_ANDROID)
@@ -17,12 +23,30 @@ DeviceManager::DeviceManager() {
 
 }
 
+/*!
+ * \brief DeviceManager::isMobile
+ * \return
+ *
+ * Returns \c true if detected operating system is one of the following:
+ *  - Android
+ *  - iOS
+ *  - BlackBerry
+ */
+
 bool DeviceManager::isMobile() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
     return 1;
 #endif
     return 0;
 }
+
+/*!
+ * \brief DeviceManager::ratio
+ * \param value
+ * \return
+ *
+ * Returns the product of \c value and \c screenRatio.
+ */
 
 qreal DeviceManager::ratio(int value) {
     return value * screenRatio;

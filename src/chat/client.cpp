@@ -40,56 +40,113 @@
 
 #include "client.h"
 
+/*!
+ * \brief Client::Client
+ *
+ * Initializes the \c Client, configures the \c PeerManager and
+ * connects functions between the \c PeerManager, the \c MServer,
+ * the \c FServer and the \c Client.
+ */
+
 Client::Client() {
     peerManager = new PeerManager(this);
-    peerManager->setServerPort(server.serverPort());
+    peerManager->setFileServerPort(f_server.serverPort());
+    peerManager->setMessageServerPort(m_server.serverPort());
     peerManager->startBroadcasting();
 
-    QObject::connect(peerManager, SIGNAL(newConnection(Connection*)),
-                     this, SLOT(newConnection(Connection*)));
-    QObject::connect(&server, SIGNAL(newConnection(Connection*)),
-                     this, SLOT(newConnection(Connection*)));
+    QObject::connect(peerManager, SIGNAL(newMessageConnection(MConnection*)),
+                     this, SLOT(newMessageConnection(MConnection*)));
+
+    QObject::connect(peerManager, SIGNAL(newFileConnection(FConnection*)),
+                     this, SLOT(newFileConnection(FConnection*)));
+
+    QObject::connect(&m_server, SIGNAL(newConnection(MConnection*)),
+                     this, SLOT(newMessageConnection(MConnection*)));
+
+    QObject::connect(&f_server, SIGNAL(newConnection(FConnection*)),
+                     this, SLOT(newFileConnection(FConnection*)));
 }
+
+/*!
+ * \brief Client::sendMessage
+ * \param message
+ *
+ * Sends a a message to all connected peers by using a list
+ * of \c MConnections.
+ */
 
 void Client::sendMessage(const QString &message) {
     if (!message.isEmpty()) {
-        QList<Connection *> connections = peers.values();
-        foreach (Connection *connection, connections)
+        QList<MConnection *> connections = message_peers.values();
+        foreach (MConnection *connection, connections)
             connection->sendMessage(message);
     }
 }
 
-void Client::sendFile(const QString &fileName) {
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        QList<Connection *> connections = peers.values();
-        foreach (Connection *connection, connections) {
-            connection->sendMessage(QString("%1 shared %2")
-                                    .arg(nickName())
-                                    .arg(QFileInfo(file).fileName()));
+/*!
+ * \brief Client::sendFile
+ * \param path
+ *
+ * Sends the path of the file to be shared to all connected peers
+ * by using a list of \c FConnections.
+ *
+ * Then, we send a message to all connected peers (with the /c sendMessage(QString) function)
+ * that notifies the connected peers that we shared a file.
+ */
 
-            connection->sendFile(fileName);
-        }
+void Client::sendFile(const QString &path) {
+    if (!path.isEmpty()) {
+        QList<FConnection *> file_connections = file_peers.values();
+        foreach (FConnection *connection, file_connections)
+            connection->sendFile(path);
+
+        QFile file(path);
+        sendMessage(QString("Shared %1").arg(QFileInfo(file).fileName()));
     }
 }
+
+/*!
+ * \brief Client::nickName
+ * \return
+ *
+ * Returns the value of /c peerManager->userName().
+ */
 
 QString Client::nickName() const {
     return QString(peerManager->userName());
 }
 
+/*!
+ * \brief Client::getFile
+ * \param fileData
+ * \param fileName
+ *
+ * Emits a signal that notifies the \c Chat that we received a new file.
+ */
+
 void Client::getFile(const QByteArray &fileData, const QString &fileName) {
     emit newFile(fileData, fileName);
 }
 
+/*!
+ * \brief Client::hasConnection
+ * \param senderIp
+ * \param senderPort
+ * \return
+ *
+ * Verifies that we have a valid connection with a specific IP (\c senderIp)
+ * and a specific port (\c senderPort).
+ */
+
 bool Client::hasConnection(const QHostAddress &senderIp, int senderPort) const {
     if (senderPort == -1)
-        return peers.contains(senderIp);
+        return message_peers.contains(senderIp);
 
-    if (!peers.contains(senderIp))
+    if (!message_peers.contains(senderIp))
         return false;
 
-    QList<Connection *> connections = peers.values(senderIp);
-    foreach (Connection *connection, connections) {
+    QList<MConnection *> connections = message_peers.values(senderIp);
+    foreach (MConnection *connection, connections) {
         if (connection->peerPort() == senderPort)
             return true;
     }
@@ -97,47 +154,159 @@ bool Client::hasConnection(const QHostAddress &senderIp, int senderPort) const {
     return false;
 }
 
-void Client::newConnection(Connection *connection) {
-    connection->setGreetingMessage(peerManager->userName() + "@" +
-                                   peerManager->face());
+/*!
+ * \brief Client::newFileConnection
+ * \param fc
+ *
+ * Configures the new \c FConnection by connected some selected functions.
+ */
 
-    connect(connection, SIGNAL(readyForUse()), this, SLOT(readyForUse()));
-    connect(connection, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    connect(connection, SIGNAL(error(QAbstractSocket::SocketError)), this,
-            SLOT(connectionError(QAbstractSocket::SocketError)));
+void Client::newFileConnection(FConnection *fc) {
+    connect(fc, SIGNAL(readyForUse()),  this, SLOT(readyForUseFile()));
+    connect(fc, SIGNAL(disconnected()), this, SLOT(disconnectedFile()));
+    connect(fc, SIGNAL(error(QAbstractSocket::SocketError)),
+            this, SLOT(connectionErrorFile(QAbstractSocket::SocketError)));
 }
 
-void Client::readyForUse() {
-    Connection *connection = qobject_cast<Connection *>(sender());
+/*!
+ * \brief Client::newMessageConnection
+ * \param mc
+ *
+ * Does the same as \c Cluent::newFileConnection(FConenction) and
+ * configures the greeting message of the new /c MConnection with the
+ * format of username@profilepicture (the "@" is used later on to split the
+ * greeting messages and obtain two \c QStrings).
+ */
+
+void Client::newMessageConnection(MConnection *mc) {
+    mc->setGreetingMessage(peerManager->userName() + "@" + peerManager->face());
+    connect(mc, SIGNAL(readyForUse()),  this, SLOT(readyForUseMsg()));
+    connect(mc, SIGNAL(disconnected()), this, SLOT(disconnectedMsg()));
+    connect(mc, SIGNAL(error(QAbstractSocket::SocketError)),
+            this, SLOT(connectionErrorMsg(QAbstractSocket::SocketError)));
+}
+
+/*!
+ * \brief Client::readyForUseMsg
+ *
+ * Returns \c true if the new MConnection has been established correctly.
+ * If so, we do some aditional configuration to the MConnection so that we
+ * can receive messages from that connection.
+ */
+
+void Client::readyForUseMsg() {
+    MConnection *connection = qobject_cast<MConnection *>(sender());
     if (!connection || hasConnection(connection->peerAddress(),
                                      connection->peerPort()))
         return;
 
-    if (peers.contains(connection->peerAddress()))
+    if (message_peers.contains(connection->peerAddress()))
         return;
 
-    connect(connection, SIGNAL(newFile(QByteArray,QString)), this,
-            SLOT(getFile(QByteArray,QString)));
     connect(connection, SIGNAL(newMessage(QString,QString, QString)), this,
             SIGNAL(newMessage(QString,QString, QString )));
 
-    peers.insert(connection->peerAddress(), connection);
+    message_peers.insert(connection->peerAddress(), connection);
     emit newParticipant(connection->name(), connection->face());
 }
 
-void Client::disconnected() {
-    if (Connection *connection = qobject_cast<Connection *>(sender()))
-        removeConnection(connection);
+/*!
+ * \brief Client::disconnectedMsg
+ *
+ * Removes the selected MConnection using the /c Client::removeConnectionMsg() function.
+ */
+
+/*!
+ * \brief Client::disconnectedMsg
+ *
+ * Removes the selected MConnection using the /c Client::removeConnectionMsg() function.
+ */
+
+void Client::disconnectedMsg() {
+    if (MConnection *connection = qobject_cast<MConnection *>(sender()))
+        removeConnectionMsg(connection);
 }
 
-void Client::removeConnection(Connection *connection) {
-    if (peers.contains(connection->peerAddress())) {
-        peers.remove(connection->peerAddress());
+/*!
+ * \brief Client::connectionErrorMsg
+ *
+ * Removes the selected MConnection using the /c Client::removeConnectionMsg() function.
+ */
+
+void Client::connectionErrorMsg(QAbstractSocket::SocketError) {
+    if (MConnection *connection = qobject_cast<MConnection *>(sender()))
+        removeConnectionMsg(connection);
+}
+
+/*!
+ * \brief Client::readyForUseFile
+ *
+ * Returns \c true if the new FConnection has been established correctly.
+ * If so, we do some aditional configuration to the FConnection so that we
+ * can receive files from that connection.
+ */
+
+void Client::readyForUseFile() {
+    FConnection *connection = qobject_cast<FConnection *>(sender());
+    if (!connection || hasConnection(connection->peerAddress(),
+                                     connection->peerPort()))
+        return;
+
+    if (file_peers.contains(connection->peerAddress()))
+        return;
+
+    connect(connection, SIGNAL(newFile(QByteArray,QString)), this, SLOT(getFile(QByteArray,QString)));
+    file_peers.insert(connection->peerAddress(), connection);
+}
+
+/*!
+ * \brief Client::disconnectedFile
+ *
+ * Removes the selected FConnection using the /c Client::removeConnectionFile() function.
+ */
+
+void Client::disconnectedFile() {
+    if (FConnection *connection = qobject_cast<FConnection *>(sender()))
+        removeConnectionFile(connection);
+}
+
+/*!
+ * \brief Client::connectionErrorFile
+ *
+ * Removes the selected FConnection using the /c Client::removeConnectionFile() function.
+ */
+
+void Client::connectionErrorFile(QAbstractSocket::SocketError) {
+    if (FConnection *connection = qobject_cast<FConnection *>(sender()))
+        removeConnectionFile(connection);
+}
+
+/*!
+ * \brief Client::removeConnectionMsg
+ * \param connection
+ *
+ * Removes the selected FConnection using the /c Client::removeConnectionFile() function.
+ */
+
+void Client::removeConnectionMsg(MConnection *connection) {
+    if (message_peers.contains(connection->peerAddress())) {
+        message_peers.remove(connection->peerAddress());
         emit participantLeft(connection->name());
     }
+
     connection->deleteLater();
 }
-void Client::connectionError(QAbstractSocket::SocketError) {
-    if (Connection *connection = qobject_cast<Connection *>(sender()))
-        removeConnection(connection);
+
+/*!
+ * \brief Client::removeConnectionFile
+ * \param connection
+ *
+ * Removes the selected FConnection using the /c Client::removeConnectionFile() function.
+ */
+
+void Client::removeConnectionFile(FConnection *connection) {
+    if (file_peers.contains(connection->peerAddress()))
+        file_peers.remove(connection->peerAddress());
+
+    connection->deleteLater();
 }

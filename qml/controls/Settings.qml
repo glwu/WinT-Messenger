@@ -26,6 +26,7 @@ Rectangle {
         colorDialog.color = colors.userColor
         darkInterface.checked = settings.darkInterface()
         notifyUpdates.checked = settings.notifyUpdates()
+        soundsEnabled.checked = settings.soundsEnabled()
         
         if (settings.firstLaunch())
             closeButton.text = qsTr("Done")
@@ -60,7 +61,7 @@ Rectangle {
         opacity: 0
         anchors.centerIn: parent
         color: colors.background
-        height: device.ratio(248)
+        height: device.ratio(296)
         width: parent.width * 0.95
         border.color: colors.borderColor
         
@@ -171,7 +172,13 @@ Rectangle {
                 text: qsTr("Other settings:")
             }
             
-            
+            CheckBox {
+                width: height
+                id: soundsEnabled
+                labelText: qsTr("Enable sound effects")
+                onCheckedChanged: settings.setValue("soundsEnabled", checked)
+            }
+
             CheckBox {
                 width: height
                 id: darkInterface

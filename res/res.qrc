@@ -88,7 +88,7 @@
         <file>icons/Help.svg</file>
         <file>icons/Logo.svg</file>
         <file>faces/system/globe.png</file>
-        <file>fonts/thin.ttf</file>
         <file>fonts/regular.ttf</file>
+        <file>sounds/message.wav</file>
     </qresource>
 </RCC>
