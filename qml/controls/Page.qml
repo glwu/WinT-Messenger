@@ -10,25 +10,37 @@ import QtQuick 2.2
 Flickable {
     id: page
 
+    // Make the page flickable
     property bool flickable: true
+
+    // Enable/disable the lofo
     property bool logoEnabled: true
 
+    // Logo properties
     property alias title: titleText.text
     property alias imageSource: image.source
     property alias subtitle: subtitleText.text
 
+    // Toolbar properties
     property string toolbarTitle: qsTr("Title")
-    property int arrangeFirstItem: logoEnabled ? 
-                                       1.125 * (logo.y + logo.height + device.ratio(24)) : 
+
+    // Arrange the first item based on the visibility of the logo
+    property int arrangeFirstItem: logoEnabled ?
+                                       1.125 *
+                                       (logo.y + logo.height +
+                                        device.ratio(24)) :
                                        toolbar.height + device.ratio(4)
 
+    // Update the title of the toolbar when we become visible
     Component.onCompleted: toolbar.title = toolbarTitle
     onVisibleChanged: if (visible) toolbar.title = toolbarTitle
 
+    // Flickable properties
     interactive: flickable
     contentHeight: stackView.height
     flickableDirection: Flickable.VerticalFlick
 
+    // Create the logo (where an icon, a title and a subtitle are shown)
     Item {
         id: logo
         anchors.centerIn: parent
@@ -40,7 +52,11 @@ Flickable {
             asynchronous: true
             height: device.ratio(128)
             sourceSize: Qt.size(device.ratio(128), device.ratio(128))
-            anchors {bottom: titleText.top; bottomMargin: 18; horizontalCenter: parent.horizontalCenter;}
+            anchors {
+                bottomMargin: 18
+                bottom: titleText.top
+                horizontalCenter: parent.horizontalCenter
+            }
         }
 
         Label {

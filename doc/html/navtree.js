@@ -1,6 +1,9 @@
 var NAVTREE =
 [
   [ "WinT Messenger", "index.html", [
+    [ "Introduction", "index.html#Introduction", null ],
+    [ "Contributing", "index.html#Contributing", null ],
+    [ "Setup", "index.html#Setup", null ],
     [ "Classes", null, [
       [ "Class List", "annotated.html", "annotated" ],
       [ "Class Index", "classes.html", null ],

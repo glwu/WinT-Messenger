@@ -10,6 +10,7 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
       [ "DeviceManager", "class_device_manager.html", "class_device_manager" ]
     ] ],
     [ "main.cpp", "main_8cpp.html", "main_8cpp" ],
+    [ "message_manager.h", "message__manager_8h.html", null ],
     [ "settings.cpp", "settings_8cpp.html", null ],
     [ "settings.h", "settings_8h.html", [
       [ "Settings", "class_settings.html", "class_settings" ]

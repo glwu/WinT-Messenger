@@ -8,57 +8,25 @@
 import QtQuick 2.2
 import QtQuick.Dialogs 1.1
 
-Rectangle {
-    x: 0
-    y: 0
-    color: "#80000000"
-    opacity: menu.opacity
-    width: mainWindow.width
-    height: mainWindow.height
-    enabled: menu.opacity > 0 ? 1 : 0
+Dialog {
+    id: dialog
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: menu.opacity = 0
-    }
+    // Set the size of the dialog
+    dWidth: device.ratio(320)
+    dHeight: device.ratio(420)
 
-    function show() {
-        menu.opacity = 1
-    }
-
-    Rectangle {
-        id: menu
-        opacity: 0
+    // This are the actual conents of the dialog
+    contents: Item {
         anchors.centerIn: parent
-        color: colors.background
-        height: device.ratio(420)
-        width: device.ratio(320)
-        border.color: colors.borderColor
-
-        MouseArea {anchors.fill: parent}
-        Behavior on opacity {NumberAnimation{duration: 250}}
-
-        Rectangle {
-            color: "transparent"
-            anchors.fill: parent
-            border.width: device.ratio(2)
-            border.color: Qt.lighter(parent.color, 1.2)
-        }
-
-        Rectangle {
-            color: "transparent"
-            anchors.fill: parent
-            border.width: device.ratio(1)
-            border.color: Qt.darker(parent.color, 1.6)
-        }
+        width: parent.width * 0.8
+        height: parent.height * 0.8
 
         Column {
-            anchors.centerIn: parent
+            enabled: dialog.enabled
             spacing: device.ratio(4)
-            width: parent.width * 0.8
-            height: parent.height * 0.8
-            enabled: menu.opacity > 0 ? 1 : 0
+            anchors.centerIn: parent
 
+            // This image is used to draw the application icon
             Image {
                 width: height
                 asynchronous: true
@@ -68,6 +36,7 @@ Rectangle {
                 sourceSize: Qt.size(device.ratio(128), device.ratio(128))
             }
 
+            // This label is used to draw the application name & version
             Label {
                 color: colors.logoTitle
                 font.pixelSize: sizes.large
@@ -77,6 +46,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
+            // This label is used to draw the one-line description of the app.
             Label {
                 color: colors.logoSubtitle
                 font.pixelSize: device.ratio(14)
@@ -88,6 +58,7 @@ Rectangle {
             }
 
 
+            // This rectangle is used as a separator
             Rectangle {
                 width: height
                 color: "transparent"
@@ -95,6 +66,8 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
+            // This label us used to give credit to the Tango project and the
+            // Android icons as they are used in this application.
             Label {
                 color: colors.logoSubtitle
                 font.pixelSize: device.ratio(10)
@@ -102,9 +75,11 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("This project uses icons from the Tango project and Android")
+                text: qsTr("This project uses icons from the Tango " +
+                           "project and Android")
             }
 
+            // This rectangle is used as a separator
             Rectangle {
                 width: height
                 color: "transparent"
@@ -112,43 +87,58 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
+            // This button is used to open the official website in the user's
+            // web browser.
             Button {
                 text: qsTr("Visit website")
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: Qt.openUrlExternally("http://wint-im.sf.net")
             }
 
+            // This button is used to check for updates (and if appliable) to
+            // notify the user about a new update.
             Button {
                 text: qsTr("Check for updates")
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: bridge.checkForUpdates() ? newUpdateMessage.open() : noUpdatesMessage.open()
+                onClicked: bridge.checkForUpdates() ?
+                               newUpdateMessage.open() : noUpdatesMessage.open()
             }
 
+            // This button is used to hide the dialog.
             Button {
                 text: qsTr("Close")
-                onClicked: menu.opacity = 0
+                onClicked: hide()
                 anchors.horizontalCenter: parent.horizontalCenter
             }
         }
-    }
 
-    MessageDialog {
-        id: newUpdateMessage
-        icon: StandardIcon.Information
-        title: qsTr("Update available")
-        standardButtons: StandardButton.No | StandardButton.Yes
-        text: qsTr("An update of WinT Messenger is available, do you want to open the official website to install it?")
-        onButtonClicked: {
-            if (clickedButton === StandardButton.Yes)
-                Qt.openUrlExternally("http://wint-im.sf.net")
+        // This message dialog is used to tell the user that a new update is
+        // available.
+        MessageDialog {
+            id: newUpdateMessage
+            icon: StandardIcon.Information
+            title: qsTr("Update available")
+            standardButtons: StandardButton.No | StandardButton.Yes
+
+            text: qsTr("An update of WinT Messenger is available, " +
+                       "do you want to open the official website " +
+                       "to install it?")
+
+            onButtonClicked: {
+                if (clickedButton === StandardButton.Yes)
+                    Qt.openUrlExternally("http://wint-im.sf.net")
+            }
         }
-    }
 
-    MessageDialog {
-        id: noUpdatesMessage
-        icon: StandardIcon.Information
-        standardButtons: StandardButton.Ok
-        title: qsTr("No updates available")
-        text: qsTr("Congratulations, you are running the latest version of WinT Messenger!")
+        // This message dialog is used to tell the user that there are no
+        // updates available.
+        MessageDialog {
+            id: noUpdatesMessage
+            icon: StandardIcon.Information
+            standardButtons: StandardButton.Ok
+            title: qsTr("No updates available")
+            text: qsTr("Congratulations, you are running the latest " +
+                       "version of WinT Messenger!")
+        }
     }
 }

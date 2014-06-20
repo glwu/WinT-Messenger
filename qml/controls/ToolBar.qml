@@ -13,32 +13,15 @@ Rectangle {
     color: colors.userColor
     anchors {left: parent.left; right: parent.right; top: parent.top;}
 
-    /*Rectangle {
-        color: Qt.lighter(parent.color, 1.2)
-        height: 1
-        width: parent.width
-        anchors.bottomMargin: 1
-        anchors.bottom: parent.bottom
-    }
-
-    Rectangle {
-        height: 1
-        width: parent.width
-        anchors.bottom: parent.bottom
-        color: Qt.darker(parent.color, 1.6)
-    }*/
-
     property alias title: label.text
     property bool extraPages: true
 
-    function setMenuEnabled(enabled) {
-        menuButton.enabled = enabled
-    }
-
+    // A wrapper used in main.qml to load the settings
     function updateSettings() {
         settingsControl.updateValues()
     }
 
+    // This image is used to go to the previous page in the stackview
     Image {
         id: backButton
         asynchronous: true
@@ -60,6 +43,7 @@ Rectangle {
         Behavior on opacity {NumberAnimation{}}
     }
 
+    // This label is used to draw the toolbar title
     Label {
         id: label
         color: colors.toolbarText
@@ -75,6 +59,7 @@ Rectangle {
         }
     }
 
+    // This image is used to show the application menu
     Image {
         id: menuButton
         asynchronous: true
@@ -92,112 +77,82 @@ Rectangle {
 
         MouseArea {
             anchors.fill: parent
-            onClicked: menu.opacity = 1
+            onClicked: dialog.show()
         }
     }
 
-    Rectangle {
-        x: 0
-        y: 0
-        color: "#80000000"
-        opacity: menu.opacity
-        width: mainWindow.width
-        height: mainWindow.height
-        enabled: menu.opacity > 0 ? 1 : 0
+    // This dialog allows us to open the about dialog, the settings dialog
+    // and access other features.
+    Dialog {
+        id: dialog
+        dWidth: column.width + device.ratio(16)
+        dHeight: column.height + device.ratio(16)
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: menu.opacity = 0
-        }
-    }
-
-    Rectangle {
-        id: menu
-        opacity: 0
-        color: colors.background
-        border.color: colors.borderColor
-        width: column.width + device.ratio(16)
-        height: column.height + device.ratio(16)
-
-        x: (stackView.width - width)   / 2
-        y: (stackView.height - height) / 2
-
-        Behavior on opacity {NumberAnimation{duration: 250}}
-
-        Rectangle {
-            color: "transparent"
-            anchors.fill: parent
-            border.width: device.ratio(2)
-            border.color: Qt.lighter(parent.color, 1.2)
-        }
-
-        Rectangle {
-            color: "transparent"
-            anchors.fill: parent
-            border.width: device.ratio(1)
-            border.color: Qt.darker(parent.color, 1.6)
-        }
-
-        Column {
-            id: column
+        contents: Item {
             anchors.centerIn: parent
-            spacing: device.ratio(-1)
-            enabled: menu.opacity > 0 ? 1 : 0
 
-            Button {
-                text: qsTr("About")
-                onClicked: {
-                    menu.opacity = 0
-                    aboutControl.show()
-                }
-            }
+            Column {
+                id: column
+                enabled: dialog.enabled
+                anchors.centerIn: parent
+                spacing: device.ratio(-1)
 
-            Button {
-                visible: extraPages
-                text: qsTr("Settings")
-                onClicked: {
-                    menu.opacity = 0
-                    settingsControl.show()
-                }
-            }
-
-            Button {
-                visible: !device.isMobile()
-                text: settings.fullscreen() ? qsTr("Normal window") :
-                                              qsTr("Fullscreen window")
-
-                onClicked: {
-                    menu.opacity = 0
-                    settings.setValue("fullscreen", !settings.fullscreen())
-
-                    if (settings.fullscreen()) {
-                        quitButton.visible = true
-                        mainWindow.showFullScreen()
-                        text = qsTr("Normal window")
-                    }
-
-                    else {
-                        mainWindow.showNormal()
-                        quitButton.visible = false
-                        text = qsTr("Fullscreen window")
+                Button {
+                    text: qsTr("About")
+                    onClicked: {
+                        dialog.hide()
+                        aboutControl.show()
                     }
                 }
-            }
 
-            Button {
-                text: qsTr("Cancel")
-                onClicked: menu.opacity = 0
-            }
+                Button {
+                    visible: extraPages
+                    text: qsTr("Settings")
+                    onClicked: {
+                        dialog.hide()
+                        settingsControl.show()
+                    }
+                }
 
-            Button {
-                id: quitButton
-                text: qsTr("Quit")
-                onClicked: Qt.quit()
-                visible: device.isMobile() ? false : settings.fullscreen()
+                Button {
+                    visible: !device.isMobile()
+                    text: settings.fullscreen() ? qsTr("Normal window") :
+                                                  qsTr("Fullscreen window")
+
+                    onClicked: {
+                        dialog.hide()
+                        settings.setValue("fullscreen", !settings.fullscreen())
+
+                        if (settings.fullscreen()) {
+                            quitButton.visible = true
+                            mainWindow.showFullScreen()
+                            text = qsTr("Normal window")
+                        }
+
+                        else {
+                            mainWindow.showNormal()
+                            quitButton.visible = false
+                            text = qsTr("Fullscreen window")
+                        }
+                    }
+                }
+
+                Button {
+                    text: qsTr("Cancel")
+                    onClicked: dialog.hide()
+                }
+
+                Button {
+                    id: quitButton
+                    text: qsTr("Quit")
+                    onClicked: Qt.quit()
+                    visible: device.isMobile() ? false : settings.fullscreen()
+                }
             }
         }
     }
 
+    // Create the about and settings dialog
     About {id: aboutControl}
     Settings {id: settingsControl}
 }

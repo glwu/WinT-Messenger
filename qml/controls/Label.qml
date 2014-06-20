@@ -7,6 +7,7 @@
 
 import QtQuick 2.2
 
+// Create a text with the app's standard pixel size and font
 Text {
     smooth: true
     color: colors.text

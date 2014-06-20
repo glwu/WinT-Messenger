@@ -12,6 +12,7 @@ import QtQuick.Controls.Styles 1.1
 Item {
     height: device.ratio(32)
 
+    // Allow the programmer to assign values to the TextField
     property alias text: textField.text
     property alias length: textField.length
     property alias echoMode: textField.echoMode
@@ -23,6 +24,7 @@ Item {
         style: textFieldStyle
         font.pixelSize: sizes.medium
 
+        // Integrate the text field's style with the rest of the app
         Component {
             id: textFieldStyle
 
@@ -32,7 +34,8 @@ Item {
 
                 background: Rectangle {
                     border.color: colors.borderColor
-                    color: textField.enabled ? colors.textFieldBackground: colors.buttonBackgroundDisabled
+                    color: textField.enabled ? colors.textFieldBackground :
+                                               colors.buttonBackgroundDisabled
                 }
             }
         }

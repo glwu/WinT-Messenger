@@ -9,24 +9,38 @@ import QtQuick 2.0
 
 Rectangle {
     id: button
+
+    // Make the button semi-transparent
     opacity: 0.85
+
+    // Set the background color of the button
     color: colors.buttonBackground
-    height: 1.9 * label.height
+
+    // Set the border color of the button
     border.color: colors.borderColor
+
+    // Have a consisted height/width ratio
+    height: 1.9 * label.height
     width: label.width > (6 * height) ? (1.5 * label.width) : (6 * height)
 
+    // Allow the programmer to use the onClicked() function
     signal clicked
-    property bool checked: false
-    property bool checkable: false
+
+    // Allow the programmer to change the caption of the button
     property alias text: label.text
 
+    // This rectangle allows the button to change is color if the
+    // mouse area is hovered or pressed.
     Rectangle {
         anchors.fill: parent
-        border.color: mouseArea.containsMouse || mouseArea.pressed ? colors.userColor : colors.borderColor
+
+        // Change the border color
+        border.color: mouseArea.containsMouse || mouseArea.pressed ?
+                          colors.userColor : colors.borderColor
+
+        // Change the color
         color: {
-            if (checked)
-                return colors.userColor
-            else if (mouseArea.containsMouse || mouseArea.pressed)
+            if (mouseArea.containsMouse || mouseArea.pressed)
                 return colors.userColor
             else if (!button.enabled)
                 return colors.buttonBackgroundDisabled
@@ -34,23 +48,24 @@ Rectangle {
                 return colors.buttonBackground
         }
 
+        // Make the button "stand out" when pressed
         opacity: mouseArea.pressed ? 0.2 : 0.1
     }
 
+    // The mouse area allows the button to change its appearance and to
+    // emit the clicked() signal when pressed.
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: !device.isMobile()
-        onClicked: {
-            if (checkable)
-                checked = !checked
-            button.clicked()
-        }
+        onClicked: button.clicked()
     }
 
+    // This label is used to draw the caption of the button
     Label {
         id: label
         anchors.centerIn: parent
-        color: parent.enabled ? colors.buttonForeground : colors.buttonForegroundDisabled
+        color: parent.enabled ? colors.buttonForeground :
+                                colors.buttonForegroundDisabled
     }
 }
