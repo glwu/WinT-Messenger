@@ -1,5 +1,9 @@
 # WinT Messenger
 
+*Simple and lightweight messaging application*
+
+---
+
 WinT Messenger is a practical instant messaging application that its developed by a small team of students working in the WinT 3794 team. The application is written in QML/C++ and can be used with the most popular desktop and mobile operating systems.
 
 You can see how the whole app works here, or even write code to make it better!
@@ -26,3 +30,7 @@ You can see how the whole app works here, or even write code to make it better!
 7. Compile it and have fun.
 8. (Optional) debug your hacks.
 9. Have fun!
+
+## Developer's documentation
+
+You can find the developer documentation (Doxygen) by at [http://wint-im.sf.net/dev-doc/html/index.html](http://wint-im.sf.net/dev-doc/html/index.html)
