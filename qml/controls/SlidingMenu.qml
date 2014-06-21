@@ -10,9 +10,9 @@ import QtQuick.Controls 1.1
 
 Rectangle {
     id: menu
-    color: "#444"
     enabled: false
-    opacity: enabled ? 1 : 0
+    opacity: enabled ? 0.85 : 0
+    color: Qt.darker(colors.background, 1.2)
 
     anchors {
         fill: parent
@@ -41,27 +41,12 @@ Rectangle {
     property alias cellWidth: gridView.cellWidth
     property alias cellHeight: gridView.cellHeight
 
-    // Add a scrollbar to the slider menu
-    ScrollView {
-        anchors {
-            fill: parent
-            margins: device.ratio(6)
-            topMargin: captionRectangle.height + device.ratio(12)
-        }
-
-        GridView {
-            id: gridView
-            anchors {
-                fill: parent
-            }
-        }
-    }
-
     // Add a caption and a close button to the menu
     Rectangle {
         id: captionRectangle
         height: toolbar.height
-        color: colors.darkGray
+        color: toolbar.color
+        opacity: toolbar.opacity
         anchors {left: parent.left; right: parent.right; top: parent.top;}
 
         Label {
@@ -98,6 +83,21 @@ Rectangle {
                     menu.anchors.topMargin = pageHeight
                 }
             }
+        }
+    }
+
+    // Add a scrollbar to the slider menu
+    ScrollView {
+        anchors {
+            fill: parent
+            topMargin: captionRectangle.height
+        }
+
+        GridView {
+            id: gridView
+            anchors.centerIn: parent
+            anchors.topMargin: device.ratio(6)
+            anchors.leftMargin: device.ratio(6)
         }
     }
 }

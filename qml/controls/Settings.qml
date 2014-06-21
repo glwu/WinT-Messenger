@@ -29,7 +29,7 @@ Dialog {
             closeButton.text = qsTr("Close")
 
         if (settings.firstLaunch())
-            menu.opacity = 1
+            show()
         else
             textBox.text = settings.value("userName", "unknown")
     }
@@ -54,7 +54,7 @@ Dialog {
                 text: qsTr("User profile:")
             }
 
-            // This rectanglle is used as a separator
+            // This rectangle is used as a separator
             Rectangle {
                 width: height
                 color: "transparent"
@@ -106,13 +106,9 @@ Dialog {
                     width: height
                     id: colorRectangle
                     height: textBox.height
-                    color: colorDialog.color
+                    color: colors.userColor
                     anchors.right: parent.right
                     border.color: colors.borderColor
-
-                    onColorChanged: {
-                        settings.setValue("userColor", colors.userColor)
-                    }
 
                     MouseArea {
                         id: mouseArea
@@ -198,6 +194,7 @@ Dialog {
         cellWidth: device.ratio(72)
         title: qsTr("Choose a profile picture")
 
+        // Load all profile images
         model: ListModel {
             ListElement {name: "astronaut.jpg"}
             ListElement {name: "cat-eye.jpg"}
@@ -225,11 +222,19 @@ Dialog {
             ListElement {name: "tennis-ball.png"}
         }
 
+        // Create a rectangle with the image and a mouse area
+        // that changes the profile picture when clicked
         delegate: Rectangle {
             width: height
+            color: "transparent"
             height: device.ratio(64)
-            color: avatarMouseArea.containsMouse ?
-                       colors.darkGray : "transparent"
+
+            Rectangle {
+                anchors.fill: parent
+                color: toolbar.color
+                Behavior on opacity {NumberAnimation{duration:100}}
+                opacity: avatarMouseArea.containsMouse ? toolbar.opacity : 0
+            }
 
             Image {
                 height: width

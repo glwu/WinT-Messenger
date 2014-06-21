@@ -170,4 +170,8 @@ ApplicationWindow {
             borderColorDisabled = settings.darkInterface() ? borderColor : "#d9d9d9"
         }
     }
+
+    // Create the about and settings dialog
+    Controls.About {id: aboutControl}
+    Controls.Settings {id: settingsControl}
 }

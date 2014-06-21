@@ -83,14 +83,12 @@ Controls.Page {
     ScrollView {
         anchors {
             fill: parent
-            margins: device.ratio(6)
-            bottomMargin: sendRectangle.height + device.ratio(12)
+            bottomMargin: sendRectangle.height
         }
 
         ListView {
             id: listView
             anchors.fill: parent
-            anchors.margins: device.ratio(6)
 
             // The list model with the message data
             model: ListModel {
@@ -197,8 +195,14 @@ Controls.Page {
         delegate: Rectangle {
             width: height
             height: device.ratio(30)
-            color: emotesMouseArea.containsMouse ?
-                       colors.darkGray : "transparent"
+            color: "transparent"
+
+            Rectangle {
+                anchors.fill: parent
+                color: toolbar.color
+                Behavior on opacity {NumberAnimation{duration:100}}
+                opacity: emotesMouseArea.containsMouse ? toolbar.opacity : 0
+            }
 
             // The image of each emoticon
             Image {

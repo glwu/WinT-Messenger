@@ -46,6 +46,7 @@ Flickable {
         anchors.centerIn: parent
         visible: page.logoEnabled
 
+        // This image is used to show the logo
         Image {
             id: image
             width: height
@@ -59,6 +60,7 @@ Flickable {
             }
         }
 
+        // This label is used to show the title
         Label {
             id: titleText
             color: colors.logoTitle
@@ -68,6 +70,7 @@ Flickable {
             horizontalAlignment: Text.AlignHCenter
         }
 
+        // This label is used to show the subtitle
         Label {
             id: subtitleText
             color: colors.logoSubtitle

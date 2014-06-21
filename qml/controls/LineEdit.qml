@@ -18,6 +18,7 @@ Item {
     property alias echoMode: textField.echoMode
     property alias placeholderText: textField.placeholderText
 
+    // Create the actual text field and change its style
     TextField {
         id: textField
         anchors.fill: parent

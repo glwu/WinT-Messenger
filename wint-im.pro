@@ -8,6 +8,8 @@ VERSION = 1.2.0
 CODECFORTR  = UTF-8
 CODECFORSRC = UTF-8
 
+CONFIG += c++11
+
 QT += gui
 QT += qml
 QT += sql

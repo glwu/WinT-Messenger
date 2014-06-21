@@ -151,8 +151,4 @@ Rectangle {
             }
         }
     }
-
-    // Create the about and settings dialog
-    About {id: aboutControl}
-    Settings {id: settingsControl}
 }

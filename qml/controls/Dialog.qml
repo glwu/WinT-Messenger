@@ -11,15 +11,16 @@ Rectangle {
     // Fill the main window
     x: 0
     y: 0
-    width: mainWindow.width
-    height: mainWindow.height
-
-    // Set the color and opacity of the background
     color: "#80000000"
-    opacity: menu.opacity
+    width: mainWindow.width
+    opacity: enabled ? 1 : 0
+    height: mainWindow.height
 
     // Disable the background if the menu is not visible
     enabled: menu.opacity > 0 ? 1 : 0
+
+    // This behavior allows us to have a nice fading animation
+    Behavior on opacity {NumberAnimation{duration: 250}}
 
     // Custom properties of the dialog
     property Item contents
@@ -27,19 +28,14 @@ Rectangle {
     property alias dHeight: menu.height
     property bool closeOnBackgroundClicked: true
 
-    // This mouse area is used to hide the dialog when we press anywhere outside
-    // the dialog (the dark area).
+    // Disable all the background controls
     MouseArea {
         anchors.fill: parent
-        onClicked: {
-            if (closeOnBackgroundClicked)
-                hide()
-        }
     }
 
     // Show the menu with a nice fade animation
     function show() {
-        menu.opacity = 1
+        menu.opacity = 0.85
     }
 
     // Hide the menu with a nice fade animation
@@ -51,8 +47,8 @@ Rectangle {
     Rectangle {
         id: menu
         opacity: 0
-        anchors.centerIn: parent
         color: colors.background
+        anchors.centerIn: parent
         border.color: colors.borderColor
 
         // This mouse area avoids hiding the dialog when we click it
