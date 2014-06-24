@@ -48,6 +48,9 @@ Rectangle {
                 return colors.buttonBackground
         }
 
+        // Fade between colors
+        Behavior on color {ColorAnimation{}}
+
         // Make the button "stand out" when pressed
         opacity: mouseArea.pressed ? 0.2 : 0.1
     }
