@@ -85,4 +85,4 @@ RESOURCES += \
 OTHER_FILES += \
     qml/*.qml \
     qml/controls/*.qml \
-    qml/pages/*.qml
+    qml/controls/ListItems/*.qml

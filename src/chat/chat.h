@@ -15,7 +15,7 @@ public:
 signals:
     void delUser(const QString &nick);
     void newUser(const QString &nick, const QString &face);
-    void newMessage(const QString &from, const QString &face, const QString &message, bool localUser);
+    void newMessage(const QString &from, const QString &face, const QString &message, char localUser);
 
 public slots:
     void shareFile(const QString &path);

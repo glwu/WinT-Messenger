@@ -34,7 +34,7 @@ public:
     Q_INVOKABLE void sendMessage(const QString message);
 
 private slots:
-    void messageRecieved(const QString &from, const QString &face, const QString &message, bool localUser);
+    void messageRecieved(const QString &from, const QString &face, const QString &message, char localUser);
 
 private:
     Chat* chat;

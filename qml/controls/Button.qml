@@ -1,74 +1,93 @@
-//
-//  This file is part of Leaf Tips
-//
-//  Copyright (c) 2014 Alex Spataru <alex.racotta@gmail.com>
-//  Please check the license.txt file for more information.
-//
+/*
+ * QML Air - A lightweight and mostly flat UI widget collection for QML
+ * Copyright (C) 2014 Michael Spencer
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+import QtQuick 2.2
+import QtGraphicalEffects 1.0
 
-import QtQuick 2.0
-
-Rectangle {
+Widget {
     id: button
 
-    // Make the button semi-transparent
-    opacity: 0.85
+    // Create the color properties
+    property color iconColor: textColor
+    property color textColor: style === "default" ? theme.textColor : "white"
+    property color background: style === "default" ? theme.buttonBackground : theme.getStyleColor(style)
+    property color background_mouseOver: style == "default" ? Qt.darker(background, 1.1) : Qt.darker(background, 1.15)
+    property color borderColor: theme.borderColor
 
-    // Set the background color of the button
-    color: colors.buttonBackground
+    // Create the size properties
+    property int horizPadding: units.gu(2)
+    property int minWidth: units.gu(10)
 
-    // Set the border color of the button
-    border.color: colors.borderColor
+    // Create the style properties
+    property bool primary
+    property bool selected
+    property bool hidden
+    property bool flat: false
 
-    // Have a consisted height/width ratio
-    height: 1.9 * label.height
-    width: label.width > (6 * height) ? (1.5 * label.width) : (6 * height)
-
-    // Allow the programmer to use the onClicked() function
-    signal clicked
-
-    // Allow the programmer to change the caption of the button
+    // Create the text and iconName properties
     property alias text: label.text
+    property alias iconName: icon.name
 
-    // This rectangle allows the button to change is color if the
-    // mouse area is hovered or pressed.
-    Rectangle {
-        anchors.fill: parent
+    // Set the size and style of the button
+    height: units.gu(4)
+    radius: units.gu(0.25)
+    style: primary ? "primary" : "default"
+    width: text === "" ? height : Math.max(minWidth, row.width + 2 * horizPadding)
 
-        // Change the border color
-        border.color: mouseArea.containsMouse || mouseArea.pressed ?
-                          colors.userColor : colors.borderColor
+    // Set the opacity of the button based on the state of the button
+    opacity: enabled ? 1 : 0.5
 
-        // Change the color
-        color: {
-            if (mouseArea.containsMouse || mouseArea.pressed)
-                return colors.userColor
-            else if (!button.enabled)
-                return colors.buttonBackgroundDisabled
-            else
-                return colors.buttonBackground
+    // Set the color of the button and its border based on its state
+    border.color: !flat && (mouseOver || !hidden) ? borderColor : "transparent"
+    color: {
+        if (flat)
+            return "transparent"
+        else if (selected || mouseOver)
+            return background_mouseOver
+        else
+            return background
+    }
+
+    // Play some animations while changing states
+    Behavior on opacity {NumberAnimation {}}
+
+    // Create a row with the icon and the text
+    Row {
+        id: row
+
+        // Center the row
+        anchors.centerIn: parent
+
+        // Set a spacing of 8 pixels between the icon and the text
+        spacing: units.gu(1)
+
+        // Create the icon
+        Icon {
+            id: icon
+            color: button.iconColor
+            fontSize: device.ratio(24)
+            anchors.verticalCenter: parent.verticalCenter
         }
 
-        // Fade between colors
-        Behavior on color {ColorAnimation{}}
-
-        // Make the button "stand out" when pressed
-        opacity: mouseArea.pressed ? 0.2 : 0.1
-    }
-
-    // The mouse area allows the button to change its appearance and to
-    // emit the clicked() signal when pressed.
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: !device.isMobile()
-        onClicked: button.clicked()
-    }
-
-    // This label is used to draw the caption of the button
-    Label {
-        id: label
-        anchors.centerIn: parent
-        color: parent.enabled ? colors.buttonForeground :
-                                colors.buttonForegroundDisabled
+        // Create the text
+        Label {
+            id: label
+            color: button.textColor
+            anchors.verticalCenter: parent.verticalCenter
+        }
     }
 }

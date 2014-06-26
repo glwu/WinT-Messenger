@@ -6,13 +6,13 @@
 //
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 1.1 as Controls
 
 Rectangle {
     id: menu
     enabled: false
-    opacity: enabled ? 0.85 : 0
-    color: Qt.darker(colors.background, 1.2)
+    opacity: enabled ? 1 : 0
+    color: theme.background
 
     anchors {
         fill: parent
@@ -35,7 +35,7 @@ Rectangle {
 
     // Allow the programmer to customize the slider menu
     property alias model: gridView.model
-    property int pageHeight: parent.height
+    property int pageHeight: app.height
     property alias title: captionText.text
     property alias delegate: gridView.delegate
     property alias cellWidth: gridView.cellWidth
@@ -44,16 +44,35 @@ Rectangle {
     // Add a caption and a close button to the menu
     Rectangle {
         id: captionRectangle
-        height: toolbar.height
-        color: toolbar.color
-        opacity: toolbar.opacity
+        height: units.gu(6)
+        color: theme.panel
         anchors {left: parent.left; right: parent.right; top: parent.top;}
+
+        // Top border
+        Rectangle {
+            color: theme.borderColor
+
+            height: device.ratio(1)
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
+
+        // Bottom border
+        Rectangle {
+            color: theme.borderColor
+
+            height: device.ratio(1)
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+        }
 
         Label {
             id: captionText
             height: device.ratio(48)
-            color: colors.toolbarText
-            font.pixelSize: sizes.large
+            font.pixelSize: units.fontSize("x-large")
+
             verticalAlignment: Text.AlignVCenter
             anchors {
                 margins: 12;
@@ -62,13 +81,14 @@ Rectangle {
             }
         }
 
-        Image {
+        Button {
+            flat: true
             width: height
             id: closeButton
-            asynchronous: true
-            height: device.ratio(48)
             opacity: opacity
-            source: "qrc:/icons/ToolbarIcons/Common/Close.png"
+            iconName: "chevron-down"
+            height: device.ratio(48)
+
             anchors {
                 right: parent.right;
                 margins: device.ratio(12);
@@ -87,7 +107,7 @@ Rectangle {
     }
 
     // Add a scrollbar to the slider menu
-    ScrollView {
+    Controls.ScrollView {
         anchors {
             fill: parent
             topMargin: captionRectangle.height

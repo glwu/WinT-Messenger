@@ -1,13 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/ToolbarIcons/Common/Back.png</file>
-        <file>icons/ToolbarIcons/Common/Menu.png</file>
-        <file>icons/ToolbarIcons/Dark/Attach.png</file>
-        <file>icons/ToolbarIcons/Dark/Grid.png</file>
-        <file>icons/ToolbarIcons/Light/Attach.png</file>
-        <file>icons/ToolbarIcons/Light/Grid.png</file>
-        <file>icons/ToolbarIcons/Common/Close.png</file>
-        <file>icons/ToolbarIcons/Common/Person.png</file>
         <file>emotes/angel.png</file>
         <file>emotes/angry.png</file>
         <file>emotes/aww.png</file>
@@ -90,5 +82,6 @@
         <file>faces/system/globe.png</file>
         <file>fonts/regular.ttf</file>
         <file>sounds/message.wav</file>
+        <file>fonts/font_awesome.otf</file>
     </qresource>
 </RCC>

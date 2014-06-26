@@ -23,20 +23,20 @@ Item {
         id: textField
         anchors.fill: parent
         style: textFieldStyle
-        font.pixelSize: sizes.medium
+        font.pixelSize: units.fontSize("medium")
 
         // Integrate the text field's style with the rest of the app
         Component {
             id: textFieldStyle
 
             TextFieldStyle {
-                textColor: colors.textFieldForeground
-                placeholderTextColor: colors.textFieldPlaceholder
+                textColor: theme.textFieldForeground
+                placeholderTextColor: theme.textFieldPlaceholder
 
                 background: Rectangle {
-                    border.color: colors.borderColor
-                    color: textField.enabled ? colors.textFieldBackground :
-                                               colors.buttonBackgroundDisabled
+                    border.color: theme.borderColor
+                    color: textField.enabled ? theme.textFieldBackground:
+                                               theme.buttonBackgroundDisabled
                 }
             }
         }

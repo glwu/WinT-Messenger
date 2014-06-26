@@ -1,19 +1,39 @@
 <RCC>
     <qresource prefix="/qml">
         <file>main.qml</file>
+        <file>controls/AboutSheet.qml</file>
+        <file>controls/Action.qml</file>
+        <file>controls/ActionPopover.qml</file>
+        <file>controls/Application.qml</file>
         <file>controls/Button.qml</file>
         <file>controls/CheckBox.qml</file>
-        <file>controls/LineEdit.qml</file>
-        <file>controls/Page.qml</file>
-        <file>controls/ToolBar.qml</file>
-        <file>pages/chat.qml</file>
-        <file>pages/connect.qml</file>
-        <file>pages/help.qml</file>
-        <file>pages/start.qml</file>
+        <file>controls/Icon.qml</file>
         <file>controls/Label.qml</file>
-        <file>controls/About.qml</file>
-        <file>controls/Settings.qml</file>
-        <file>controls/Dialog.qml</file>
+        <file>controls/NavigationBar.qml</file>
+        <file>controls/Notification.qml</file>
+        <file>controls/Page.qml</file>
+        <file>controls/PageApplication.qml</file>
+        <file>controls/Popover.qml</file>
+        <file>controls/PopupBase.qml</file>
+        <file>controls/Sheet.qml</file>
+        <file>controls/TextField.qml</file>
+        <file>controls/Theme.qml</file>
+        <file>controls/Widget.qml</file>
+        <file>controls/ListItems/Footer.qml</file>
+        <file>controls/ListItems/Header.qml</file>
+        <file>controls/ListItems/ItemSelector.qml</file>
+        <file>controls/ListItems/MessageItem.qml</file>
+        <file>controls/ListItems/SingleValue.qml</file>
+        <file>controls/ListItems/Standard.qml</file>
+        <file>controls/ListItems/ThinDivider.qml</file>
+        <file>controls/Logo.qml</file>
+        <file>controls/ListItems/BaseListItem.qml</file>
+        <file>controls/ListItemBackground.qml</file>
+        <file>controls/PageStack.qml</file>
+        <file>controls/OpenFileDialog.qml</file>
+        <file>controls/PreferencesSheet.qml</file>
         <file>controls/SlidingMenu.qml</file>
+        <file>controls/Chat.qml</file>
+        <file>controls/Sidebar.qml</file>
     </qresource>
 </RCC>

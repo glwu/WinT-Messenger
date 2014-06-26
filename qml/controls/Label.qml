@@ -1,17 +1,17 @@
-//
-//  This file is part of WinT Messenger
-//
-//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
-//  Please check the license.txt file for more information.
-//
-
 import QtQuick 2.2
 
-// Create a text with the app's standard pixel size and font
+// Draw a text with some common properties
 Text {
-    smooth: true
-    color: colors.text
-    antialiasing: true
+
+    // Create the properties
+    property string fontSize: "small"
+    property string style: "default"
+
+    // Set the font properties
     font.family: global.font
-    font.pixelSize: sizes.medium
+    font.pixelSize: units.fontSize(fontSize)
+
+    // Set the color properties
+    linkColor: Qt.darker(theme.primary, 1.2)
+    color: style === "default" ? theme.textColor : theme.getStyleColor(style)
 }

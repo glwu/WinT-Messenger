@@ -54,8 +54,8 @@ void Bridge::startChat() {
                      SLOT(returnPressed(QString)));
     QObject::connect(chat, SIGNAL(newUser(QString, QString)), this,
                      SIGNAL(newUser(QString, QString)));
-    QObject::connect(chat, SIGNAL(newMessage(QString, QString, QString, bool)),
-                     this, SLOT(messageRecieved(QString, QString, QString, bool)));
+    QObject::connect(chat, SIGNAL(newMessage(QString, QString, QString, char)),
+                     this, SLOT(messageRecieved(QString, QString, QString, char)));
 
     lan_chat = true;
 }
@@ -151,12 +151,14 @@ void Bridge::sendMessage(const QString message) {
  */
 
 void Bridge::messageRecieved(const QString &from, const QString &face,
-                             const QString &message, bool localUser) {
+                             const QString &message, char localUser) {
     QString msg = message;
 
     msg.replace("[s]", QString("<img src=qrc:/emotes/"));
     msg.replace("[/s]", ".png>");
     msg.replace(QRegExp("((?:https?)://\\S+)"), "<a href=\\1>\\1</a>");
+
+    qDebug() << localUser;
 
     emit drawMessage(from, face, msg, localUser);
 }
