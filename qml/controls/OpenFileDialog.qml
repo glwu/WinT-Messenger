@@ -38,6 +38,11 @@ Sheet {
         border.color: theme.borderColor
         anchors.topMargin: controls.height + units.gu(1)
         anchors.bottomMargin: rectangle.height + units.gu(1)
+
+        Label {
+            anchors.centerIn: parent
+            text: qsTr("Work in progress!")
+        }
     }
 
     Rectangle {

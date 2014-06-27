@@ -33,26 +33,6 @@ PageApplication {
             preferencesSheet.open()
     }
 
-    property alias preferencesMenuEnabled: preferences.enabled
-    property var menu: ActionPopover {
-        actions: [
-            Action {
-                name: "About"
-                onTriggered: aboutSheet.open()
-            },
-
-            Action {
-                id: preferences
-                name: "Preferences"
-                onTriggered: preferencesSheet.open()
-            },
-
-            Action {
-                name: "Donate"
-            }
-        ]
-    }
-
     Connections {
         target: bridge
         onUpdateAvailable: notification.show("A new version of WinT Messenger is available!")
@@ -135,11 +115,7 @@ PageApplication {
         website: "http://wint-im.sf.net"
         contactEmail: "alex.racotta@gmail.com"
         appMotto: "Simple and lightweight IM client"
-        copyright: "Copyright &copy; 2014 the WinT 3794 team"
+        copyright: "Copyright (C) 2014 the WinT 3794 team"
         reportABug: "https://github.com/WinT-3794/WinT-Messenger/issues/new"
-    }
-
-    PreferencesSheet {
-        id: preferencesSheet
     }
 }

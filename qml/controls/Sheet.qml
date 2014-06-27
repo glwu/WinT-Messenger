@@ -59,6 +59,7 @@ PopupBase {
     radius: units.gu(0.7)
     anchors.centerIn: parent
     overlayColor: Qt.rgba(0,0,0,0.4)
+    anchors.verticalCenterOffset: -units.gu(3)
     width: parent.width * 0.95 > units.gu(60) ? units.gu(60) : parent.width * 0.95
     height: Math.min(Math.max(minHeight, contentHeight + titleBar.height + 2 * sheet.margins), maxHeight)
 

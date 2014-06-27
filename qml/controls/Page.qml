@@ -29,6 +29,26 @@ Rectangle {
 
     property list<Item> rightWidgets
 
+    property alias preferencesMenuEnabled: preferences.enabled
+    property var menu: ActionPopover {
+        actions: [
+            Action {
+                name: "About"
+                onTriggered: aboutSheet.open()
+            },
+
+            Action {
+                id: preferences
+                name: "Preferences"
+                onTriggered: preferencesSheet.open()
+            },
+
+            Action {
+                name: "Donate"
+            }
+        ]
+    }
+
     function push() {
         z = pageStack.count
         pushAnimation.start()
@@ -89,5 +109,10 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: menu.close()
+    }
+
+    PreferencesSheet {
+        z: 100
+        id: preferencesSheet
     }
 }

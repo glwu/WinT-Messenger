@@ -14,8 +14,8 @@ Page {
     property alias subtitle: sTitle.text
     property int firstItem: sTitle.y + sTitle.height + units.gu(2)
 
-    // Load the default menu button
-    rightWidgets: [
+    // Create the bar icon
+    rightWidgets:  [
         Button {
             flat: true
             iconName: "bars"

@@ -35,7 +35,7 @@ Widget {
     property alias header: headerItem.text
     property color borderColor: theme.borderColor
     default property alias contents: contents.data
-    property color background: Qt.darker(theme.background, 1.1)
+    property color background: theme.buttonBackgroundHover
 
     // Set the properties of the widget
     color: background

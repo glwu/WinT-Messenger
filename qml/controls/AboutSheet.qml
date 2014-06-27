@@ -65,7 +65,7 @@ Sheet {
         // This label is used to draw the name of the application
         Label {
             fontSize: "x-large"
-            text: appName
+            text: appName + " " + version
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -101,19 +101,15 @@ Sheet {
             text: "<a href=\"" + reportABug +"\">Report a Bug</a> • " +
                   "<a href=\"" + website + "\">Website</a>"
         }
-
-        // Draw the application version
-        Label {
-            text: qsTr("Version") + " <b>" + version + "</b>"
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
     }
 
     // Draw the copyright of the application
     Label {
         text: qsTr(copyright)
+
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: units.gu(0.5)
+        anchors.bottomMargin: units.gu(0.4)
+        color: Qt.lighter(theme.textColor, 1.5)
         font.pixelSize: units.fontSize("small")
         anchors.horizontalCenter: parent.horizontalCenter
     }

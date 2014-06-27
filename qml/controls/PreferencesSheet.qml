@@ -35,9 +35,6 @@ Rectangle {
         title: "Preferences"
         height: column.height + closeButton.height + units.gu(8)
 
-        // This properties are used to draw information about the application
-        property bool firstLaunch
-
         // Read the settings when the dialog is created
         Component.onCompleted: updateValues()
         onVisibleChanged: updateValues()
@@ -99,6 +96,12 @@ Rectangle {
                     width: device.ratio(48)
                     anchors.left: separator.right
                     anchors.verticalCenter: parent.verticalCenter
+
+                    Rectangle {
+                        color: "transparent"
+                        anchors.fill: parent
+                        border.color: theme.borderColor
+                    }
 
                     source: "qrc:/faces/" +
                             settings.value("face", "astronaut.jpg")

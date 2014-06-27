@@ -19,7 +19,10 @@ Page {
             flat: true
             iconName: "user"
             onClicked: userSidebar.toggle()
+            onVisibleChanged: visible ? opacity = 1 : opacity = 0
             textColor: userSidebar.expanded ? theme.info : theme.textColor
+
+            Behavior on opacity {NumberAnimation{}}
         },
 
         Button {
@@ -124,16 +127,28 @@ Page {
                         anchors.margins: device.ratio(12)
                         anchors.left:  if (localUser != 1) return parent.left
                         anchors.right: if (localUser == 1) return parent.right
+
+                        // Draw a border around the image only if its not transparent
+                        Rectangle {
+                            color: "transparent"
+                            anchors.fill: parent
+                            border.color: {
+                                if (image.source.toString().search(".png") == -1)
+                                    return theme.borderColor
+                                else
+                                    return "transparent"
+                            }
+                        }
                     }
 
                     // This is the background rectangle of each message
                     Rectangle {
                         smooth: true
                         id: background
+                        color: theme.panel
                         radius: device.ratio(2)
                         anchors.top: parent.top
                         opacity: parent.opacity
-                        color: theme.buttonBackground
                         border.color: theme.borderColor
                         anchors.topMargin: device.ratio(12)
                         anchors.leftMargin: device.ratio(12)
@@ -306,7 +321,8 @@ Page {
                 id: attachButton
                 width: parent.height
                 iconName: "file"
-                onClicked: dialog.open()
+                onClicked: device.isMobile() ? dialog.open() : bridge.shareFiles()
+
                 anchors {
                     top: parent.top
                     left: parent.left
