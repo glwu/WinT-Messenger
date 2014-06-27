@@ -35,6 +35,7 @@ Sheet {
         color: theme.panel
         anchors.fill: parent
         radius: units.gu(0.5)
+        border.width: device.ratio(1)
         border.color: theme.borderColor
         anchors.topMargin: controls.height + units.gu(1)
         anchors.bottomMargin: rectangle.height + units.gu(1)

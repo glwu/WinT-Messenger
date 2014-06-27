@@ -73,7 +73,7 @@ Widget {
 
     // Create the border
     Rectangle {
-        height: 1
+        height: device.ratio(1)
         color: theme.borderColor
 
         anchors {

@@ -110,9 +110,4 @@ Rectangle {
         anchors.fill: parent
         onClicked: menu.close()
     }
-
-    PreferencesSheet {
-        z: 100
-        id: preferencesSheet
-    }
 }

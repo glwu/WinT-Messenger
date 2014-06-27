@@ -28,11 +28,6 @@ PageApplication {
 
     initialPage: start
 
-    Component.onCompleted: {
-        if (settings.firstLaunch())
-            preferencesSheet.open()
-    }
-
     Connections {
         target: bridge
         onUpdateAvailable: notification.show("A new version of WinT Messenger is available!")
@@ -117,5 +112,10 @@ PageApplication {
         appMotto: "Simple and lightweight IM client"
         copyright: "Copyright (C) 2014 the WinT 3794 team"
         reportABug: "https://github.com/WinT-3794/WinT-Messenger/issues/new"
+    }
+
+    PreferencesSheet {
+        z: 100
+        id: preferencesSheet
     }
 }

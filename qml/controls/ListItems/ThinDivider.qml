@@ -7,5 +7,5 @@ Rectangle {
     }
 
     color: theme.borderColor
-    height: 1
+    height: device.ratio(1)
 }

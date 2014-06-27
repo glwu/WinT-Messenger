@@ -89,7 +89,7 @@ Widget {
 
     Rectangle {
         anchors.top: parent.top
-        height: 1
+        height: device.ratio(1)
         width: parent.width
         visible: showDivider
         color: theme.borderColor

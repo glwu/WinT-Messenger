@@ -34,6 +34,7 @@ Item {
                 placeholderTextColor: theme.textFieldPlaceholder
 
                 background: Rectangle {
+                    border.width: device.ratio(1)
                     border.color: theme.borderColor
                     color: textField.enabled ? theme.textFieldBackground:
                                                theme.buttonBackgroundDisabled

@@ -27,6 +27,11 @@ Rectangle {
         sheet.open()
     }
 
+    Component.onCompleted: {
+        if (settings.firstLaunch())
+            sheet.open()
+    }
+
     Sheet {
         z: 1
         id: sheet
@@ -48,13 +53,14 @@ Rectangle {
             notifyUpdates.selected = settings.notifyUpdates()
             soundsEnabled.selected = settings.soundsEnabled()
 
-            if (settings.firstLaunch())
+            if (settings.firstLaunch()) {
                 closeButton.text = qsTr("Done")
-            else
-                closeButton.text = qsTr("Close")
+            }
 
-            if (!settings.firstLaunch())
+            else {
+                closeButton.text = qsTr("Close")
                 textBox.text = settings.value("userName", "unknown")
+            }
         }
 
         // Create a column with the widgets used to display the information about
@@ -100,6 +106,7 @@ Rectangle {
                     Rectangle {
                         color: "transparent"
                         anchors.fill: parent
+                        border.width: device.ratio(1)
                         border.color: theme.borderColor
                     }
 

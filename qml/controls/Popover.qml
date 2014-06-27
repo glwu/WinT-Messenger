@@ -36,7 +36,7 @@ PopupBase {
     radius: units.gu(0.6)
 
     border.color: borderColor
-    border.width: 0.5
+    border.width: device.ratio(1)
     color: background
 
     property int offset: 0
@@ -101,6 +101,7 @@ PopupBase {
     }
 
     Rectangle {
+        border.width: device.ratio(1)
         border.color: borderColor
         color: background
         width: units.gu(2)

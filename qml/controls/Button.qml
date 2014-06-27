@@ -52,6 +52,7 @@ Widget {
     opacity: enabled ? 1 : 0.5
 
     // Set the color of the button and its border based on its state
+    border.width: device.ratio(1)
     border.color: !flat && (mouseOver || !hidden) ? borderColor : "transparent"
     color: {
         if (flat)

@@ -132,6 +132,7 @@ Page {
                         Rectangle {
                             color: "transparent"
                             anchors.fill: parent
+                            border.width: device.ratio(1)
                             border.color: {
                                 if (image.source.toString().search(".png") == -1)
                                     return theme.borderColor
@@ -308,6 +309,7 @@ Page {
         Rectangle {
             id: sendRectangle
             color: theme.buttonBackground
+            border.width: device.ratio(1)
             border.color: theme.borderColor
             height: device.ratio(32)
             anchors {

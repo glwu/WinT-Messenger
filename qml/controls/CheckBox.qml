@@ -26,6 +26,7 @@ Widget {
         height: units.gu(2)
         radius: units.gu(0.25)
         border.color: borderColor
+        border.width: device.ratio(1)
         color: mouseOver ? background_mouseOver : background
 
         anchors {

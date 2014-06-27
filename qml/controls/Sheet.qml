@@ -80,7 +80,7 @@ PopupBase {
         radius: sheet.radius
         color: sheet.background
         border.color: borderColor
-        border.width: device.ratio(0.5)
+        border.width: device.ratio(1)
     }
 
     // Create the titlebar
@@ -158,7 +158,7 @@ PopupBase {
 
         // Create the border
         Rectangle {
-            height: 1
+            height: device.ratio(1)
             color: borderColor
 
             anchors {

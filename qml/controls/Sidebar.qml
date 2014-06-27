@@ -39,9 +39,9 @@ Widget {
 
     // Set the properties of the widget
     color: background
-    width: units.gu(25)
     anchors.leftMargin: expanded ? 0 : -width
     anchors.rightMargin: expanded ? 0 : -width
+    width: app.width > (1.3 * app.height) ? units.gu(25) : app.width
 
     anchors {
         left: mode === "left" ? parent.left : undefined
