@@ -127,6 +127,26 @@ void Bridge::shareFiles() {
 }
 
 /*!
+ * \brief Bridge::saveChat
+ *
+ * Creates a new \c QFileDialog, creates a new file and writes the contents
+ * of the chat log in that file.
+ */
+
+void Bridge::saveChat(const QString chat) {
+    QString filename = QFileDialog::getSaveFileName(0, tr("Save chat"), QDir::homePath(), "*.html");
+
+    if (!filename.isEmpty()) {
+        QFile file(filename);
+
+        if (file.open(QIODevice::WriteOnly))
+            file.write(chat.toUtf8());
+
+        file.close();
+    }
+}
+
+/*!
  * \brief Bridge::sendMessage
  * \param message
  *

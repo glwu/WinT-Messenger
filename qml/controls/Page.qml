@@ -23,8 +23,8 @@ Rectangle {
             flat: true
             iconName: "chevron-left"
             onClicked: pageStack.pop()
+            textColor: theme.navigationBarText
             visible: pageStack.count > 1 && pageStack.count == page.z
-            textColor: menu.visible ? theme.getSelectedColor(true) : theme.navigationBarText
         }
     ]
 

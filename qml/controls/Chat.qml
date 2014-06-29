@@ -30,8 +30,30 @@ Page {
         return Qt.formatDateTime(new Date(), "hh:mm:ss AP")
     }
 
+    // Show a warning message on mobile devices if
+    // the user tries to open a local file
+    function openUrl(url) {
+        console.log(url)
+        Qt.openUrlExternally(url)
+        if (device.isMobile()) {
+            if (url.search("file:///") !== -1) {
+                warningMessage.open()
+                warningMessage.text = qsTr("Cannot open file directly from WinT Messenger, " +
+                                           "the requested URL was: " + url)
+            }
+        }
+    }
+
     // Create the right widgets, such as the user menu and the app menu
     rightWidgets: [
+
+        // Make a button that allows the user to save the chat file
+        Button {
+            flat: true
+            iconName: "save"
+            textColor: theme.navigationBarText
+            onClicked: device.isMobile() ? dialog.open() : bridge.saveChat(textEdit.text)
+        },
 
         // Make a button that allows the user to toggle the user menu
         Button {
@@ -76,13 +98,15 @@ Page {
     // Here is the item with all the chat dialogs and controls
     // Here be dragons.
     Item {
-
         // Anchor the chat item to the window and the sidebar
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.right: userSidebar.left
+        anchors.topMargin: 0
+        anchors.leftMargin: device.ratio(5)
         anchors.rightMargin: device.ratio(-1)
+        anchors.bottomMargin: sendRectangle.height + device.ratio(5)
 
         // Append a new message when the Bridge notifies us about a new message
         Connections {
@@ -120,7 +144,6 @@ Page {
             // Set the anchors of the object
             anchors.fill: parent
             anchors.margins: device.ratio(5)
-            anchors.bottomMargin: sendRectangle.height
 
             // Create a flickable with the text edit
             Flickable  {
@@ -129,7 +152,6 @@ Page {
 
                 // Set the anchors of the flickable
                 anchors.fill: parent
-                anchors.margins: device.ratio(7)
 
                 // Set the size of the flickable
                 contentWidth: textEdit.paintedWidth
@@ -157,8 +179,8 @@ Page {
                     enabled: parent.enabled
                     font.family: global.font
                     textFormat: TextEdit.RichText
+                    onLinkActivated: openUrl(link)
                     font.pixelSize: units.fontSize("medium")
-                    onLinkActivated: Qt.openUrlExternally(link)
                     onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
                 }
             }
@@ -168,11 +190,8 @@ Page {
         Controls.ScrollView {
 
             // Set the anchors of the object
-            anchors {
-                fill: parent
-                margins: device.ratio(5)
-                bottomMargin: sendRectangle.height
-            }
+            anchors.fill: parent
+            anchors.rightMargin: device.ratio(6)
 
             // Show this widget when the text-based interface is disabled.
             enabled: !textChat
@@ -181,6 +200,7 @@ Page {
             ListView {
                 id: listView
                 anchors.fill: parent
+                anchors.bottomMargin: device.ratio(1)
 
                 // Show this widget when the text-based interface is disabled.
                 visible: parent.visible
@@ -298,7 +318,7 @@ Page {
                             anchors.fill: parent
                             font.family: global.font
                             textFormat: Text.RichText
-                            onLinkActivated: Qt.openUrlExternally(link)
+                            onLinkActivated: openUrl(link)
                             font.pixelSize: device.ratio(14)
                             renderType: Text.NativeRendering
                             anchors.margins: device.ratio(12)
@@ -315,196 +335,196 @@ Page {
                 }
             }
         }
+    }
 
-        // This is the emoticon menu
-        SlidingMenu {
-            id: emotesMenu
-            title: qsTr("Emotes")
-            cellWidth: device.ratio(42)
-            cellHeight: device.ratio(42)
-            anchors.bottomMargin: sendRectangle.height
+    // This is the emoticon menu
+    SlidingMenu {
+        id: emotesMenu
+        title: qsTr("Emotes")
+        cellWidth: device.ratio(42)
+        cellHeight: device.ratio(42)
+        anchors.bottomMargin: sendRectangle.height
 
-            // This is the emoticon button control
-            delegate: Rectangle {
-                width: height
-                height: device.ratio(30)
-                color: "transparent"
+        // This is the emoticon button control
+        delegate: Rectangle {
+            width: height
+            height: device.ratio(30)
+            color: "transparent"
 
-                // Show a rectangle while a emote is hovered
-                Rectangle {
-                    color: theme.panel
-                    anchors.fill: parent
-                    opacity: emotesMouseArea.containsMouse ?  1 : 0
-                }
-
-                // The image of each emoticon
-                Image {
-                    height: width
-                    asynchronous: true
-                    width: device.ratio(15)
-                    anchors.centerIn: parent
-                    source: "qrc:/emotes/" + name + ".png"
-                }
-
-                // This mouse area inserts the selected emoticon in the textbox
-                MouseArea {
-                    id: emotesMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: !device.isMobile()
-                    onClicked: {
-                        emotesMenu.toggle()
-                        sendTextbox.text = sendTextbox.text +
-                                " [s]" +
-                                name +
-                                "[/s] "
-                    }
-                }
+            // Show a rectangle while a emote is hovered
+            Rectangle {
+                color: theme.panel
+                anchors.fill: parent
+                opacity: emotesMouseArea.containsMouse ?  1 : 0
             }
 
-            // A list model with all registered emoticons
-            model: ListModel {
-                ListElement {name: "angel"}
-                ListElement {name: "angry"}
-                ListElement {name: "aww"}
-                ListElement {name: "blushing"}
-                ListElement {name: "confused"}
-                ListElement {name: "cool"}
-                ListElement {name: "creepy"}
-                ListElement {name: "crying"}
-                ListElement {name: "cthulhu"}
-                ListElement {name: "cute_winking"}
-                ListElement {name: "cute"}
-                ListElement {name: "devil"}
-                ListElement {name: "frowning"}
-                ListElement {name: "gasping"}
-                ListElement {name: "greedy"}
-                ListElement {name: "grinning"}
-                ListElement {name: "happy_smiling"}
-                ListElement {name: "happy"}
-                ListElement {name: "heart"}
-                ListElement {name: "irritated_2"}
-                ListElement {name: "irritated"}
-                ListElement {name: "kissing"}
-                ListElement {name: "laughing"}
-                ListElement {name: "lips_sealed"}
-                ListElement {name: "madness"}
-                ListElement {name: "malicious"}
-                ListElement {name: "naww"}
-                ListElement {name: "pouting"}
-                ListElement {name: "shy"}
-                ListElement {name: "sick"}
-                ListElement {name: "smiling"}
-                ListElement {name: "speechless"}
-                ListElement {name: "spiteful"}
-                ListElement {name: "stupid"}
-                ListElement {name: "surprised_2"}
-                ListElement {name: "surprised"}
-                ListElement {name: "terrified"}
-                ListElement {name: "thumbs_down"}
-                ListElement {name: "thumbs_up"}
-                ListElement {name: "tired"}
-                ListElement {name: "tongue_out_laughing"}
-                ListElement {name: "tongue_out_left"}
-                ListElement {name: "tongue_out_up_left"}
-                ListElement {name: "tongue_out_up"}
-                ListElement {name: "tongue_out"}
-                ListElement {name: "unsure_2"}
-                ListElement {name: "unsure"}
-                ListElement {name: "winking_grinning"}
-                ListElement {name: "winking_tongue_out"}
-                ListElement {name: "winking"}
+            // The image of each emoticon
+            Image {
+                height: width
+                asynchronous: true
+                width: device.ratio(15)
+                anchors.centerIn: parent
+                source: "qrc:/emotes/" + name + ".png"
+            }
+
+            // This mouse area inserts the selected emoticon in the textbox
+            MouseArea {
+                id: emotesMouseArea
+                anchors.fill: parent
+                hoverEnabled: !device.isMobile()
+                onClicked: {
+                    emotesMenu.toggle()
+                    sendTextbox.text = sendTextbox.text +
+                            " [s]" +
+                            name +
+                            "[/s] "
+                }
             }
         }
 
-        // This rectangle stores the messaging controls, such as the
-        // send button and the message textbox
-        Rectangle {
-            id: sendRectangle
-            color: theme.buttonBackground
-            border.width: device.ratio(1)
-            border.color: theme.borderColor
-            height: device.ratio(32)
+        // A list model with all registered emoticons
+        model: ListModel {
+            ListElement {name: "angel"}
+            ListElement {name: "angry"}
+            ListElement {name: "aww"}
+            ListElement {name: "blushing"}
+            ListElement {name: "confused"}
+            ListElement {name: "cool"}
+            ListElement {name: "creepy"}
+            ListElement {name: "crying"}
+            ListElement {name: "cthulhu"}
+            ListElement {name: "cute_winking"}
+            ListElement {name: "cute"}
+            ListElement {name: "devil"}
+            ListElement {name: "frowning"}
+            ListElement {name: "gasping"}
+            ListElement {name: "greedy"}
+            ListElement {name: "grinning"}
+            ListElement {name: "happy_smiling"}
+            ListElement {name: "happy"}
+            ListElement {name: "heart"}
+            ListElement {name: "irritated_2"}
+            ListElement {name: "irritated"}
+            ListElement {name: "kissing"}
+            ListElement {name: "laughing"}
+            ListElement {name: "lips_sealed"}
+            ListElement {name: "madness"}
+            ListElement {name: "malicious"}
+            ListElement {name: "naww"}
+            ListElement {name: "pouting"}
+            ListElement {name: "shy"}
+            ListElement {name: "sick"}
+            ListElement {name: "smiling"}
+            ListElement {name: "speechless"}
+            ListElement {name: "spiteful"}
+            ListElement {name: "stupid"}
+            ListElement {name: "surprised_2"}
+            ListElement {name: "surprised"}
+            ListElement {name: "terrified"}
+            ListElement {name: "thumbs_down"}
+            ListElement {name: "thumbs_up"}
+            ListElement {name: "tired"}
+            ListElement {name: "tongue_out_laughing"}
+            ListElement {name: "tongue_out_left"}
+            ListElement {name: "tongue_out_up_left"}
+            ListElement {name: "tongue_out_up"}
+            ListElement {name: "tongue_out"}
+            ListElement {name: "unsure_2"}
+            ListElement {name: "unsure"}
+            ListElement {name: "winking_grinning"}
+            ListElement {name: "winking_tongue_out"}
+            ListElement {name: "winking"}
+        }
+    }
+
+    // This rectangle stores the messaging controls, such as the
+    // send button and the message textbox
+    Rectangle {
+        id: sendRectangle
+        color: theme.buttonBackground
+        border.width: device.ratio(1)
+        border.color: theme.borderColor
+        height: device.ratio(32)
+        anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+
+        // This button is used to share files
+        Button {
+            id: attachButton
+            width: parent.height
+            iconName: "clip"
+            onClicked: device.isMobile() ? dialog.open() : bridge.shareFiles()
+
             anchors {
+                top: parent.top
                 left: parent.left
-                right: parent.right
                 bottom: parent.bottom
             }
+        }
 
-            // This button is used to share files
-            Button {
-                id: attachButton
-                width: parent.height
-                iconName: "clip"
-                onClicked: device.isMobile() ? dialog.open() : bridge.shareFiles()
+        // This line edit is used to type our message
+        TextField {
+            id: sendTextbox
+            placeholderText: qsTr("Type a message...")
 
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    bottom: parent.bottom
-                }
+            anchors {
+                left: attachButton.right
+                right: emotesButton.left
+                bottom: parent.bottom
+                top: parent.top
+                rightMargin: device.ratio(-1)
+                leftMargin: device.ratio(-1)
             }
 
-            // This line edit is used to type our message
-            TextField {
-                id: sendTextbox
-                placeholderText: qsTr("Type a message...")
-
-                anchors {
-                    left: attachButton.right
-                    right: emotesButton.left
-                    bottom: parent.bottom
-                    top: parent.top
-                    rightMargin: device.ratio(-1)
-                    leftMargin: device.ratio(-1)
-                }
-
-                Keys.onReturnPressed: {
-                    if (length > 0) {
-                        bridge.sendMessage(text)
-                        text = ""
-                    }
-                }
-            }
-
-            // This button is used to add emoticons to our message
-            Button {
-                id: emotesButton
-                width: parent.height
-                iconName: "smile-o"
-                onClicked: emotesMenu.toggle()
-                anchors {
-                    top: parent.top;
-                    bottom: parent.bottom;
-                    right: sendButton.left;
-                    rightMargin: device.ratio(-1);
-                }
-            }
-
-            // This button is used to send the message written in sendTextbox
-            Button {
-                id: sendButton
-                text: qsTr("Send")
-                iconName: "send"
-                width: device.ratio(72)
-                enabled: sendTextbox.length > 0 ? 1: 0
-
-                anchors {
-                    right: parent.right
-                    bottom: parent.bottom
-                    top: parent.top
-                }
-
-                onClicked: {
-                    bridge.sendMessage(sendTextbox.text)
-                    sendTextbox.text = ""
+            Keys.onReturnPressed: {
+                if (length > 0) {
+                    bridge.sendMessage(text)
+                    text = ""
                 }
             }
         }
 
-        // This dialog is used to share a file to the peers
-        OpenFileDialog {
-            id: dialog
+        // This button is used to add emoticons to our message
+        Button {
+            id: emotesButton
+            width: parent.height
+            iconName: "smile-o"
+            onClicked: emotesMenu.toggle()
+            anchors {
+                top: parent.top;
+                bottom: parent.bottom;
+                right: sendButton.left;
+                rightMargin: device.ratio(-1);
+            }
         }
+
+        // This button is used to send the message written in sendTextbox
+        Button {
+            id: sendButton
+            text: qsTr("Send")
+            iconName: "send"
+            width: device.ratio(72)
+            enabled: sendTextbox.length > 0 ? 1: 0
+
+            anchors {
+                right: parent.right
+                bottom: parent.bottom
+                top: parent.top
+            }
+
+            onClicked: {
+                bridge.sendMessage(sendTextbox.text)
+                sendTextbox.text = ""
+            }
+        }
+    }
+
+    // This dialog is used to share a file to the peers
+    OpenFileDialog {
+        id: dialog
     }
 
     // This is the side bar with a list of users
@@ -517,6 +537,51 @@ Page {
         // Toggle the visibility of the connected users
         function toggle() {
             expanded = !expanded
+        }
+    }
+
+    // This is the fucking warning message
+    Sheet {
+        id: warningMessage
+        buttonsEnabled: false
+        title: qsTr("Warning")
+
+        property alias text: label.text
+
+        Column {
+            spacing: units.gu(0.75)
+            anchors.centerIn: parent
+            anchors.margins: device.ratio(12)
+            anchors.verticalCenterOffset: -units.gu(6)
+
+            Icon {
+                name: "cancel"
+                fontSize: units.gu(10)
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Label {
+                fontSize: "x-large"
+                text: qsTr("Cannot open file")
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Label {
+                id: label
+                width: warningMessage.width * 0.7
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
+
+        Button {
+            style: "primary"
+            text: qsTr("Close")
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: units.gu(4)
+            onClicked: warningMessage.close()
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 }

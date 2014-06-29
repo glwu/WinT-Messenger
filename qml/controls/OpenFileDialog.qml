@@ -42,7 +42,13 @@ Sheet {
 
         Label {
             anchors.centerIn: parent
-            text: qsTr("Work in progress!")
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("Work in progress! Tap me to open a dialog!")
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: bridge.shareFiles()
         }
     }
 

@@ -45,32 +45,35 @@ Rectangle {
     Rectangle {
         id: captionRectangle
         height: units.gu(6)
-        color: theme.panel
+        color: theme.navigationBar
         anchors {left: parent.left; right: parent.right; top: parent.top;}
 
         // Top border
         Rectangle {
-            color: theme.borderColor
-
             height: device.ratio(1)
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
+            color: settings.customColor() ?
+                       Qt.lighter(theme.navigationBar, 1.2) :
+                       theme.borderColor
         }
 
         // Bottom border
         Rectangle {
-            color: theme.borderColor
-
             height: device.ratio(1)
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
+            color: settings.customColor() ?
+                       Qt.lighter(theme.navigationBar, 1.2) :
+                       theme.borderColor
         }
 
         Label {
             id: captionText
             height: device.ratio(48)
+            color: theme.navigationBarText
             font.pixelSize: units.fontSize("x-large")
 
             verticalAlignment: Text.AlignVCenter
@@ -88,6 +91,7 @@ Rectangle {
             opacity: opacity
             iconName: "chevron-down"
             height: device.ratio(48)
+            textColor: theme.navigationBarText
 
             anchors {
                 right: parent.right;

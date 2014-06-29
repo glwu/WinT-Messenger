@@ -146,7 +146,7 @@ bool Settings::fullscreen() {
  */
 
 bool Settings::customColor() {
-    return settings->value("customColor", true).toBool();
+    return settings->value("customColor", false).toBool();
 }
 
 /*!

@@ -32,19 +32,31 @@ PopupBase {
     property int horizPadding: units.gu(2)
     property alias __leftButton: leftButton
     property alias __rightButton: rightButton
-    property color background: theme.background
     property int titleAlignment: Qt.AlignCenter
     property int footerAlignment: Qt.AlignRight
-    property color borderColor: theme.borderColor
     property int contentHeight: units.gu(40)
     property alias title: titleLabel.text
     default property alias data: contents.data
     property int maxHeight: sheet.parent.height - units.gu(4)
-    property color titleColor: style === "default" ? theme.textColor : theme.getStyleColor(style)
+
+    // Create the values used for the colors
+    property color background
+    property color titleColor
+    property color borderColor
 
     // Create the signals (for onAccepted() & onRejected())
     signal accepted
     signal rejected
+
+    // Update the colors when the theme changes
+    Connections {
+        target: theme
+        onThemeChanged: {
+            background = theme.background
+            titleColor = theme.navigationBarText
+            borderColor = settings.customColor() ? Qt.lighter(theme.navigationBar, 1.2) : theme.borderColor
+        }
+    }
 
     function defaultAction() {
         for (var i = 0; i < footer.children.length; i++) {
@@ -99,9 +111,9 @@ PopupBase {
         Rectangle {
             anchors.fill: parent
             anchors.bottomMargin: -radius
-            color: theme.panel
-            border.color: borderColor
+            color: theme.navigationBar
             radius: sheet.radius
+            border.color: borderColor
         }
 
         // Create the title label
@@ -112,13 +124,15 @@ PopupBase {
             anchors.centerIn: parent
         }
 
-        // Create the left button (non-primary)
+        // Create the left button
         Button {
+            flat: true
             id: leftButton
-            radius: units.gu(0.5)
+            textColor: titleColor
+            iconName: confirmButton ? "cancel" : "confirm"
+
             enabled: buttonsEnabled
             visible: buttonsEnabled
-            text: confirmButton ? "Cancel" : "Done"
 
             anchors {
                 verticalCenter: parent.verticalCenter
@@ -128,19 +142,17 @@ PopupBase {
 
             onClicked: {
                 sheet.close()
-
-                if (confirmButton)
-                    rejected()
-                else
-                    accepted()
+                confirmButton ? accepted() : rejected()
             }
         }
 
-        // Create the right button (primary)
+        // Create the right button
         Button {
-            text: "Confirm"
+            flat: true
             id: rightButton
-            style: "primary"
+            iconName: "confirm"
+            textColor: titleColor
+
             enabled: buttonsEnabled
             visible: buttonsEnabled ? confirmButton : 0
 

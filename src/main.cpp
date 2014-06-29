@@ -77,7 +77,11 @@ int main(int argc, char *argv[]) {
     engine->rootContext()->setContextProperty("device", &device);
     engine->rootContext()->setContextProperty("settings", &settings);
 
-    component->loadUrl(QUrl("qrc:/qml/main.qml"));
+    if (device.isMobile())
+        component->loadUrl(QUrl("qrc:/qml/mobileApp.qml"));
+    else
+        component->loadUrl(QUrl("qrc:/qml/desktopApp.qml"));
+
     QQuickWindow* window = qobject_cast<QQuickWindow*>(component->create());
     window->setScreen(app.primaryScreen());
 

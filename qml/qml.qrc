@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/qml">
-        <file>main.qml</file>
         <file>controls/AboutSheet.qml</file>
         <file>controls/Action.qml</file>
         <file>controls/ActionPopover.qml</file>
@@ -35,5 +34,7 @@
         <file>controls/SlidingMenu.qml</file>
         <file>controls/Chat.qml</file>
         <file>controls/Sidebar.qml</file>
+        <file>desktopApp.qml</file>
+        <file>mobileApp.qml</file>
     </qresource>
 </RCC>

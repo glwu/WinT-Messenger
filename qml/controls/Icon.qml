@@ -94,7 +94,10 @@ Widget {
                 "help" : "",
                 "heart": "",
                 "send": "",
-                "refresh": ""
+                "refresh": "",
+                "confirm": "",
+                "cancel": "",
+                "save": ""
     }
 
     // Load the Font Awesome font

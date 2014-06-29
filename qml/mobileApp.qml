@@ -7,33 +7,22 @@
 
 import "controls"
 import QtQuick 2.2
-import QtWebKit 3.0
 import QtQuick.Controls 1.1 as Controls
 
 //------------------------------------------------------------------------------------//
 // This file loads and configures the QML interface and displays it in the QML Window //
 //------------------------------------------------------------------------------------//
 
+//---------------------------------------------------------------------------------------//
+// The difference between the mobile app and the desktop app is that the URLs are opened //
+// differently: mobiles open URLs by defualt in their web browser and desktops open it   //
+// in the integrated web viewer.                                                         //
+// There also other changes related to the window geometry settings.                     //
+//---------------------------------------------------------------------------------------//
+
 PageApplication {
     id: app
     title: "WinT Messenger"
-
-    // Set the geometry of the window based on the saved settings
-    x: settings.x()
-    y: settings.y()
-    width: settings.width()
-    height: settings.height()
-
-    // Update the window geometry settings when the geometry of the window changes
-    onXChanged: settings.setValue("x", x)
-    onYChanged: settings.setValue("y", y)
-    onWidthChanged: settings.setValue("width", width)
-    onHeightChanged: settings.setValue("height", height)
-
-    // Set the minimum size of the window so that we inhibit the user to fuck up
-    // the QML interface
-    minimumWidth: units.gu(40)
-    minimumHeight: units.gu(60)
 
     // Load the \c start page first
     initialPage: start
@@ -84,7 +73,7 @@ PageApplication {
             Button {
                 text: qsTr("News")
                 width: units.gu(24)
-                onClicked: webViewer.open(qsTr("News"), "http://wint-im.sf.net/news.html")
+                onClicked: Qt.openUrlExternally("http://wint-im.sf.net/news.html")
             }
 
             // Create a button that will allow the user to navigate to the \c Help page
@@ -117,86 +106,21 @@ PageApplication {
             Button {
                 width: units.gu(24)
                 text: qsTr("About Qt")
-                onClicked: webViewer.open(qsTr("About Qt"), "http://en.wikipedia.org/wiki/Qt_(software)")
+                onClicked: Qt.openUrlExternally("http://en.wikipedia.org/wiki/Qt_(software)")
             }
 
             // Create a button that will open the web viewer with the user's documentation
             Button {
                 width: units.gu(24)
                 text: qsTr("Documentation")
-                onClicked: webViewer.open(qsTr("Documentation"), "http://wint-im.sf.net/doc/doc.html")
+                onClicked: Qt.openUrlExternally("http://wint-im.sf.net/doc/doc.html")
             }
 
             // Create a button that will open the web viewer with the dev's documentation
             Button {
                 width: units.gu(24)
                 text: qsTr("Dev's documentation")
-                onClicked: webViewer.open(qsTr("Dev's Documentation"), "http://wint-im.sf.net/dev-doc/html/index.html")
-            }
-        }
-    }
-
-    // Create the web viewer page, used for displaying web pages
-    Page {
-        id: webViewer
-
-        // Create the control icons
-        rightWidgets:  [
-
-            // Create a button that opens the link in an external browser
-            Button {
-                flat: true
-                iconName: "link"
-                onClicked: Qt.openUrlExternally(webView.url)
-                textColor: webViewer.menu.visible ? theme.info : theme.navigationBarText
-            },
-
-            // Create a button that refereshes the current page
-            Button {
-                flat: true
-                iconName: "refresh"
-                onClicked: webView.reload()
-                textColor: webViewer.menu.visible ? theme.info : theme.navigationBarText
-            },
-
-            // Create a button that opens the application menu
-            Button {
-                flat: true
-                iconName: "bars"
-                onClicked: webViewer.menu.toggle(caller)
-                textColor: webViewer.menu.visible ? theme.info : theme.navigationBarText
-            }
-        ]
-
-        // Update the title and URL of the page
-        function open(_title, url) {
-            title = _title
-            app.push(webViewer)
-            webView.url = url
-        }
-
-        // Create the web view widget inside a scrollView
-        Controls.ScrollView {
-            anchors.fill: parent
-
-            // Create a new web view
-            WebView {
-                id: webView
-                smooth: true
-                anchors.fill: parent
-
-                // Create a progressbar
-                Rectangle {
-                    x: 0
-                    y: 0
-                    color: theme.primary
-                    height: device.ratio(2)
-                    opacity: width >= webView.width ? 0 : 1
-                    width: webView.width * (webView.loadProgress / 100)
-
-                    Behavior on width {NumberAnimation{}}
-                    Behavior on opacity {NumberAnimation{duration: 200}}
-                }
+                onClicked: Qt.openUrlExternally("http://wint-im.sf.net/dev-doc/html/index.html")
             }
         }
     }

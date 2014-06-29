@@ -36,6 +36,7 @@ Widget {
     property bool selected
     property bool hidden
     property bool flat: false
+    property bool modified: false
 
     // Create the text and iconName properties
     property alias text: label.text
@@ -45,7 +46,7 @@ Widget {
     Connections {
         target: theme
         onThemeChanged: {
-            if (!flat) {
+            if (!flat && !modified) {
                 textColor = style === "default" ? theme.textColor : "white"
                 background = style === "default" ? theme.buttonBackground : theme.getStyleColor(style)
                 background_mouseOver = style == "default" ? Qt.darker(background, 1.1) : Qt.darker(background, 1.15)
