@@ -82,6 +82,6 @@
         <file>faces/system/globe.png</file>
         <file>fonts/regular.ttf</file>
         <file>sounds/message.wav</file>
-        <file>fonts/font_awesome.otf</file>
+        <file>fonts/font_awesome.ttf</file>
     </qresource>
 </RCC>

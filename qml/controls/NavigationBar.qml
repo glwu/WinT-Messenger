@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.2
 
 Widget {
     id: navbar
@@ -23,7 +23,7 @@ Widget {
     // Create the properties of the navigation bar
     property int spacing: units.gu(1)
     property string title: currentPage.title
-    property color background: theme.panel
+    property color background: theme.navigationBar
     property color borderColor: theme.borderColor
     property alias leftWidgets: leftItem.children
     property alias rightWidgets: rightItem.children
@@ -89,6 +89,7 @@ Widget {
         text: navbar.title
         fontSize: "x-large"
         anchors.centerIn: parent
+        color: theme.navigationBarText
     }
 
     // Create the label for the second page
@@ -98,6 +99,7 @@ Widget {
         text: navbar.title
         fontSize: "x-large"
         anchors.centerIn: parent
+        color: theme.navigationBarText
     }
 
     // Create the left widgets

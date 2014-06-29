@@ -52,7 +52,7 @@ signals:
     void delUser(const QString &nick);
     void returnPressed(const QString &message);
     void newUser(const QString &nick, const QString &face);
-    void drawMessage(const QString &from, const QString &face, const QString &message, bool localUser);
+    void drawMessage(QString from, QString face, QString message, QString color, bool localUser);
 };
 
 #endif

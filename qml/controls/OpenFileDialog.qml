@@ -9,7 +9,7 @@ Sheet {
     Item {
         id: controls
         width: parent.width
-        height: childrenRect.height
+        height: upButton.height
 
         Button {
             id: upButton

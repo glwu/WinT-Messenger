@@ -16,5 +16,9 @@
 *.pro.user.*
 moc_*.cpp
 qrc_*.cpp
+
+# OS X Finder files
+*.DS_Store
+
 Makefile
 *-build-*

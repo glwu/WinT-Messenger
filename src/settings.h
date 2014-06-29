@@ -27,8 +27,10 @@ public:
     Q_INVOKABLE int y();
     Q_INVOKABLE int width();
     Q_INVOKABLE int height();
+    Q_INVOKABLE bool textChat();
     Q_INVOKABLE bool maximized();
     Q_INVOKABLE bool fullscreen();
+    Q_INVOKABLE bool customColor();
     Q_INVOKABLE bool firstLaunch();
     Q_INVOKABLE bool darkInterface();
     Q_INVOKABLE bool notifyUpdates();

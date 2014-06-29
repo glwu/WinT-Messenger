@@ -15,7 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.2
+
+//--------------------------------------------------------------------//
+// This object gives access to widgets to a common database of colors //
+// that can be easilly changed to form a theme.                       //
+// This approach allows the programmer to make a change only once and //
+// it will be applied everywhere.                                     //
+//--------------------------------------------------------------------//
 
 QtObject {
     // These are the static colors
@@ -29,18 +36,20 @@ QtObject {
     property string toolbarText: "#fff"
     property color secondaryColor: "#888"
     property string textFieldPlaceholder: "#aaa"
-    property string userColor: settings.value("userColor", "#00557f")
+    property string userColor: settings.value("userColor", primary)
 
     // This are the colors that vary depending if the user choosed to
     // use a dark interface or a light interface
     property string panel
     property string textColor
     property string logoTitle
-    property string logoSubtitle
     property string background
     property string borderColor
+    property string logoSubtitle
+    property string navigationBar
     property string buttonBackground
     property string buttonForeground
+    property string navigationBarText
     property string borderColorDisabled
     property string textFieldBackground
     property string textFieldForeground
@@ -52,8 +61,12 @@ QtObject {
     // Call the setColors() function when this object is created
     Component.onCompleted: setColors()
 
+    // Allow other widgets to redraw themselves
+    signal themeChanged()
+
     // Set the colors depending on the theme (dark interface or light)
     function setColors() {
+        // Change the colors based on the theme setting (dark theme or light theme)
         panel                    = settings.darkInterface() ? "#383838" : "#ededed"
         textColor                = settings.darkInterface() ? "#aaaaaa" : "#666666"
         logoTitle                = settings.darkInterface() ? "#eeeeee" : "#333333"
@@ -69,21 +82,69 @@ QtObject {
         buttonBackgroundDisabled = settings.darkInterface() ? "#444444" : "#efefef"
         buttonForegroundDisabled = settings.darkInterface() ? "#888888" : "#838383"
         borderColorDisabled      = settings.darkInterface() ? "#292929" : "#d9d9d9"
+
+        // These values are dependend on other colors, so we set them at the end
+        navigationBar            = settings.customColor()   ? userColor : panel
+        navigationBarText        = settings.customColor()   ? "#ffffff" : textColor
+
+        // Alert all widgets that the theme has changed
+        themeChanged()
     }
 
     // Return the a color based on the input string
     function getStyleColor(style) {
-        if (style === "primary")
-            return primary
+
+        // Return a different color based on the
+        // current theme colors.
+        if (style === "primary") {
+            if (settings.customColor())
+                return userColor
+            else
+                return primary
+        }
+
+        // Return a greenish color
         else if (style === "success")
             return success
+
+        // Return an orange-ish color
         else if (style === "warning")
             return warning
+
+        // Return a redish color
         else if (style === "danger")
             return danger
+
+        // Return a bluish color
         else if (style === "info")
             return info
+
+        // Return the value of textColor
         else
             return textColor
+    }
+
+    // Based on the current settings, return a color for highlighted
+    // wisgets.
+    function getSelectedColor(lighter) {
+
+        // Return a lighter color in the navigation bar buttons, and
+        // return the normal \c userColor on normal widgets, such as
+        // checkboxes and buttons
+        if (settings.customColor()) {
+            if (lighter)
+                return Qt.lighter(userColor, 1.5)
+            else
+                return userColor
+        }
+
+        // Return the pre-fabricated colors if the user's settings
+        // are set to use the default theme colors.
+        else {
+            if (lighter)
+                return info
+            else
+                return primary
+        }
     }
 }

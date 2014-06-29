@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.2
 
 Widget {
 
@@ -6,12 +6,26 @@ Widget {
     property bool selected
     property var fontSize: "medium"
     property alias text: label.text
-    property color dot: theme.primary
-    property color textColor: theme.textColor
-    property color background: theme.background
-    property color borderColor: theme.borderColor
     property int margin: label.text !== "" ? units.gu(2) : 0
-    property color background_mouseOver: theme.buttonBackgroundHover
+
+    // Set the colors of the checkbox
+    property color dot
+    property color textColor
+    property color background
+    property color borderColor
+    property color background_mouseOver
+
+    // Update the colors of the widget when the theme is changed
+    Connections {
+        target: theme
+        onThemeChanged: {
+            dot = theme.getSelectedColor(false)
+            textColor = theme.textColor
+            background = theme.background
+            borderColor =  theme.borderColor
+            background_mouseOver = theme.buttonBackgroundHover
+        }
+    }
 
     // Set the properties of the widget
     height: label.height
@@ -36,9 +50,9 @@ Widget {
 
         // Create the checked icon
         Icon {
+            color: dot
             anchors.centerIn: parent
             name: "check"
-            color: theme.primary
             opacity: selected ? 1 : 0
             size: parent.height * 1.25
             anchors.horizontalCenterOffset: units.gu(0.25)

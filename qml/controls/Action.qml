@@ -1,4 +1,10 @@
-import QtQuick 2.0
+import QtQuick 2.2
+
+//------------------------------------------------------------//
+// This object allows us to create something similar to a     //
+// QAction. As the QAction, this object can be customized to  //
+// be displayed in many ways, such as a menu, a toolbar, etc. //
+//------------------------------------------------------------//
 
 QtObject {
     // Set the properties of the action

@@ -2,6 +2,8 @@
 #define NET_CHAT_H
 
 #include <QFile>
+#include <QSettings>
+
 #include "client.h"
 
 class Chat : public QObject {
@@ -30,6 +32,7 @@ private slots:
 private:
     Client client;
     QString downloadPath;
+    QString userColor;
 };
 
 #endif

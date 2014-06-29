@@ -49,9 +49,13 @@ Rectangle {
 
         // This function is used to get the values of QSettings and apply them
         function updateValues() {
+            textChat.selected = settings.textChat()
+            customColor.selected = settings.customColor()
             darkInterface.selected = settings.darkInterface()
             notifyUpdates.selected = settings.notifyUpdates()
             soundsEnabled.selected = settings.soundsEnabled()
+
+            colorDialog.color = theme.userColor
 
             if (settings.firstLaunch()) {
                 closeButton.text = qsTr("Done")
@@ -124,10 +128,27 @@ Rectangle {
                     id: textBox
                     anchors.margins: units.gu(1)
                     anchors.left: avatarImage.right
-                    anchors.right: parent.right
+                    anchors.right: colorRectangle.left
                     anchors.verticalCenter: avatarImage.verticalCenter
                     onTextChanged: settings.setValue("userName", text)
                     placeholderText: qsTr("Type a nickname") + "..."
+                }
+
+                // This rectangle is used to change the profile color
+                Rectangle {
+                    width: height
+                    id: colorRectangle
+                    height: textBox.height
+                    color: theme.userColor
+                    anchors.right: parent.right
+                    border.color: theme.borderColor
+                    anchors.verticalCenter: avatarImage.verticalCenter
+
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        onClicked: colorDialog.open()
+                    }
                 }
             }
 
@@ -182,12 +203,31 @@ Rectangle {
                         }
                     }
 
+                    // This check box is used to toggle the text chat interface
+                    CheckBox {
+                        width: height
+                        id: textChat
+                        text: qsTr("Enable a text-based chat interface")
+                        onSelectedChanged: settings.setValue("textChat", selected)
+                    }
+
                     // This check box is used to toggle the auto-updater feature
                     CheckBox {
                         width: height
                         id: notifyUpdates
                         text: qsTr("Notify me when a new update is released")
                         onSelectedChanged: settings.setValue("notifyUpdates", selected)
+                    }
+
+                    // This check box is used to toggle the auto-updater feature
+                    CheckBox {
+                        width: height
+                        id: customColor
+                        text: qsTr("Use the profile color to theme the app")
+                        onSelectedChanged: {
+                            settings.setValue("customColor", selected)
+                            theme.setColors()
+                        }
                     }
                 }
             }
@@ -291,6 +331,18 @@ Rectangle {
                     avatarImage.source = "qrc:/faces/" + name
                 }
             }
+        }
+    }
+
+    // This is the color dialog used to change the profile color
+    ColorDialog {
+        id: colorDialog
+        title: qsTr("Chose profile color")
+        onRejected: color = theme.userColor
+        onAccepted : {
+            theme.userColor = color
+            settings.setValue("userColor", theme.userColor)
+            theme.setColors()
         }
     }
 }

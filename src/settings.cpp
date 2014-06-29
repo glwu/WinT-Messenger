@@ -106,6 +106,17 @@ int Settings::height() {
 }
 
 /*!
+ * \brief Settings::textChat
+ * \return
+ *
+ * Returns the value of "textChat".
+ */
+
+bool Settings::textChat() {
+    return settings->value("textChat", false).toBool();
+}
+
+/*!
  * \brief Settings::maximized
  * \return
  *
@@ -125,6 +136,17 @@ bool Settings::maximized() {
 
 bool Settings::fullscreen() {
     return settings->value("fullscreen", false).toBool();
+}
+
+/*!
+ * \brief Settings::customColor
+ * \return
+ *
+ * Returns the value of "customColor".
+ */
+
+bool Settings::customColor() {
+    return settings->value("customColor", true).toBool();
 }
 
 /*!

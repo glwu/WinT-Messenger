@@ -16,17 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
-import QtGraphicalEffects 1.0
 
 Widget {
     id: button
 
     // Create the color properties
     property color iconColor: textColor
-    property color textColor: style === "default" ? theme.textColor : "white"
-    property color background: style === "default" ? theme.buttonBackground : theme.getStyleColor(style)
-    property color background_mouseOver: style == "default" ? Qt.darker(background, 1.1) : Qt.darker(background, 1.15)
-    property color borderColor: theme.borderColor
+    property color textColor
+    property color background
+    property color background_mouseOver
+    property color borderColor
 
     // Create the size properties
     property int horizPadding: units.gu(2)
@@ -41,6 +40,19 @@ Widget {
     // Create the text and iconName properties
     property alias text: label.text
     property alias iconName: icon.name
+
+    // Update the colors of the widget when the theme changes
+    Connections {
+        target: theme
+        onThemeChanged: {
+            if (!flat) {
+                textColor = style === "default" ? theme.textColor : "white"
+                background = style === "default" ? theme.buttonBackground : theme.getStyleColor(style)
+                background_mouseOver = style == "default" ? Qt.darker(background, 1.1) : Qt.darker(background, 1.15)
+                borderColor = theme.borderColor
+            }
+        }
+    }
 
     // Set the size and style of the button
     height: units.gu(4)

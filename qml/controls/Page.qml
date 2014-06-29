@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.2
 
 Rectangle {
     id: page
@@ -24,6 +24,7 @@ Rectangle {
             iconName: "chevron-left"
             onClicked: pageStack.pop()
             visible: pageStack.count > 1 && pageStack.count == page.z
+            textColor: menu.visible ? theme.getSelectedColor(true) : theme.navigationBarText
         }
     ]
 
@@ -34,17 +35,20 @@ Rectangle {
         actions: [
             Action {
                 name: "About"
+                iconName: "about"
                 onTriggered: aboutSheet.open()
             },
 
             Action {
                 id: preferences
                 name: "Preferences"
+                iconName: "settings"
                 onTriggered: preferencesSheet.open()
             },
 
             Action {
                 name: "Donate"
+                iconName: "heart"
             }
         ]
     }

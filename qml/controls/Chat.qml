@@ -5,96 +5,177 @@
 //  Please check the license.txt file for more information.
 //
 
-import QtQuick 2.0
-import QtQuick.Controls 1.0 as Controls
+import QtQuick 2.2
+import QtQuick.Controls 1.1 as Controls
+
+//--------------------------------------------------------------------------//
+// This page allows the user to read and send messages through the network. //
+// Please note that this page only sends and reads data from the \c Bridge, //
+// this means that this control can be easilly implemented to support many  //
+// chat platforms and is not limited to the LAN chat feature.               //
+//--------------------------------------------------------------------------//
 
 Page {
     id: chat
     title: qsTr("Chat")
     anchors.fill: parent
-    property string iconPath
 
+    // Create the properties of the page
+    property string iconPath
+    property bool textChat
+
+    // Return the current date and time. This function is used while drawing
+    // the messages on the screen.
+    function dateTime() {
+        return Qt.formatDateTime(new Date(), "hh:mm:ss AP")
+    }
+
+    // Create the right widgets, such as the user menu and the app menu
     rightWidgets: [
+
+        // Make a button that allows the user to toggle the user menu
         Button {
             flat: true
             iconName: "user"
             onClicked: userSidebar.toggle()
-            onVisibleChanged: visible ? opacity = 1 : opacity = 0
-            textColor: userSidebar.expanded ? theme.info : theme.textColor
-
-            Behavior on opacity {NumberAnimation{}}
+            textColor: userSidebar.expanded ? theme.getSelectedColor(true) : theme.navigationBarText
         },
 
+        // Make a button that allows the user to show/hide the application menu
         Button {
             flat: true
             iconName: "bars"
             onClicked: menu.toggle(caller)
-            textColor: menu.visible ? theme.info : theme.textColor
+            textColor: menu.visible ? theme.getSelectedColor(true) : theme.navigationBarText
         }
     ]
 
     // Refresh the chat interface when we enter and exit the room
     onVisibleChanged: {
 
-        // Stop the chat interface and clear the messages
+        // Stop the chat interface and clear the messages when we go
+        // back to the previous page.
         if (!visible) {
             preferencesMenuEnabled = true
             bridge.stopChat()
             listModel.clear()
+            textEdit.text = ""
         }
 
-        // Start the chat inteface and welcome the user
+        // Start the chat inteface and welcome the user when the user
+        // opens this page.
         else {
+            textChat = settings.textChat()
             preferencesMenuEnabled = false
             bridge.startChat()
-            listModel.append(
-                        {
-                            "from": "",
-                            "face": "/system/globe.png",
-                            "message": "Welcome to the chat room!",
-                            "localUser": false
-                        })
+            textEdit.append(qsTr("Welcome to the chat room!") + "<br/><br/>")
+            listModel.append({"from": "","face": "/system/globe.png","message": "Welcome to the chat room!", "localUser": false})
         }
     }
 
     // Here is the item with all the chat dialogs and controls
-    // Here be dragons
+    // Here be dragons.
     Item {
+
+        // Anchor the chat item to the window and the sidebar
         anchors.top: parent.top
-        anchors.right: userSidebar.left
-        anchors.bottom: parent.bottom
         anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.right: userSidebar.left
         anchors.rightMargin: device.ratio(-1)
 
         // Append a new message when the Bridge notifies us about a new message
         Connections {
             target: bridge
             onDrawMessage: {
-                listModel.append(
-                            {
-                                "from": from,
-                                "face": face,
-                                "message": message,
-                                "localUser": localUser
-                            })
-
+                // Append the message to the bubble messages
+                listModel.append({"from": from,"face": face,"message": message,"localUser": localUser})
                 listView.positionViewAtEnd()
 
+                // Append the message to the text-based interface
+                var msg = "<font color=\"" + color + "\">[" + dateTime() + "] &lt;" + from + "&gt;</font> " + message
+                textEdit.append(msg)
+
+                // Play a sound when the message is drawn
                 if (settings.soundsEnabled())
                     bridge.playSound()
             }
         }
 
-        // This list view shows all the messages (with a scrollbar)
+        // Show all the messages in a text-based environment
         Controls.ScrollView {
+            // Show this widget when the text-based interface is enabled.
+            visible: textChat
+            enabled: textChat
+
+            // Set the anchors of the object
+            anchors.fill: parent
+            anchors.margins: device.ratio(5)
+            anchors.bottomMargin: sendRectangle.height
+
+            // Create a flickable with the text edit
+            Flickable  {
+                id: flick
+                clip: true
+
+                // Set the anchors of the flickable
+                anchors.fill: parent
+                anchors.margins: device.ratio(7)
+
+                // Set the size of the flickable
+                contentWidth: textEdit.paintedWidth
+                contentHeight: textEdit.paintedHeight
+
+                // Enable autoscrolling when a new message is appended
+                function ensureVisible(r) {
+                    if (contentX >= r.x)
+                        contentX = r.x;
+                    else if (contentX + width <= r.x + r.width)
+                        contentX = r.x + r.width-width;
+                    if (contentY >= r.y)
+                        contentY = r.y;
+                    else if (contentY + height <= r.y + r.height)
+                        contentY = r.y + r.height-height;
+                }
+
+                // Create the text edit
+                TextEdit {
+                    id: textEdit
+                    readOnly: true
+                    anchors.fill: parent
+                    color: theme.textColor
+                    visible: parent.visible
+                    enabled: parent.enabled
+                    font.family: global.font
+                    textFormat: TextEdit.RichText
+                    font.pixelSize: units.fontSize("medium")
+                    onLinkActivated: Qt.openUrlExternally(link)
+                    onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+                }
+            }
+        }
+
+        // This list view shows all the bubble messages (with a scrollbar)
+        Controls.ScrollView {
+
+            // Set the anchors of the object
             anchors {
                 fill: parent
+                margins: device.ratio(5)
                 bottomMargin: sendRectangle.height
             }
+
+            // Show this widget when the text-based interface is disabled.
+            enabled: !textChat
+            visible: !textChat
 
             ListView {
                 id: listView
                 anchors.fill: parent
+
+                // Show this widget when the text-based interface is disabled.
+                visible: parent.visible
+                enabled: parent.enabled
 
                 // The list model with the message data
                 model: ListModel {
@@ -103,30 +184,48 @@ Page {
 
                 // This is the message itself
                 delegate: Rectangle {
-                    opacity: 0
                     color: "transparent"
-                    anchors.left:  if (localUser != 1) return parent.left
-                    anchors.right: if (localUser == 1) return parent.right
 
+                    // Show the rectangle to the left if the message is not from
+                    // the local user.
+                    anchors.left:  localUser != 1 ? parent.left : undefined
+
+                    // Show the rectangle to the right if the message is from the
+                    // local user.
+                    anchors.right: localUser == 1 ? parent.right : undefined
+
+                    // Make the rectangle higher if the contents of the text do not fit
+                    // in the standard rectangle
                     height: background.height > device.ratio(80) ?
-                                background.height + device.ratio(16) :
-                                device.ratio(80)
-
-                    Component.onCompleted: opacity = 1
-                    Behavior on opacity{NumberAnimation{duration:250}}
+                                background.height + device.ratio(16) : device.ratio(80)
 
                     // This is the profile picture of each message
                     Image {
                         id: image
+
+                        // Set the size of the image
                         height: width
-                        asynchronous: true
                         width: device.ratio(64)
-                        opacity: parent.opacity
-                        anchors.top: parent.top
+
+                        // Improve the speed of the program by telling
+                        // it that it can draw the bubble before the image
+                        // is completely loaded.
+                        asynchronous: true
+
+                        // Set the source of the image
                         source: "qrc:/faces/" + face
+
+                        // Set the anchors of the image
+                        anchors.top: parent.top
                         anchors.margins: device.ratio(12)
-                        anchors.left:  if (localUser != 1) return parent.left
-                        anchors.right: if (localUser == 1) return parent.right
+
+                        // Show the image to the left if the message is not from
+                        // the local user.
+                        anchors.left:  localUser != 1 ? parent.left : undefined
+
+                        // Show the image to the right if the message is from the
+                        // local user.
+                        anchors.right: localUser == 1 ? parent.right : undefined
 
                         // Draw a border around the image only if its not transparent
                         Rectangle {
@@ -144,26 +243,40 @@ Page {
 
                     // This is the background rectangle of each message
                     Rectangle {
-                        smooth: true
                         id: background
+
+                        // Set the background color, the border color and
+                        // the radius of the rectangle
                         color: theme.panel
                         radius: device.ratio(2)
-                        anchors.top: parent.top
-                        opacity: parent.opacity
                         border.color: theme.borderColor
+
+                        // Set the height of the rectangle based on the painted height
+                        // of the text
+                        height: text.paintedHeight + device.ratio(24)
+
+                        // Set the anchors of the rectangle
+                        anchors.top: parent.top
                         anchors.topMargin: device.ratio(12)
                         anchors.leftMargin: device.ratio(12)
                         anchors.rightMargin: device.ratio(12)
-                        height: text.paintedHeight + device.ratio(24)
-                        anchors.right: if (localUser == 1) return image.left
-                        anchors.left:  if (localUser != 1) return image.right
+
+                        // Show the rectangle to the left if the message is not from
+                        // the local user.
+                        anchors.left:  localUser != 1 ? image.right : undefined
+
+                        // Show the rectangle to the right if the message is from the
+                        // local user.
+                        anchors.right: localUser == 1 ? image.left : undefined
 
                         // Resize the rectangle according to the length of the message
                         Component.onCompleted: {
-                            if (text.paintedWidth >
-                                    (chat.width * 0.8 - 2 * image.width))
-                                width = chat.width * 0.95 - 2 * image.width +
-                                        device.ratio(24)
+                            // The text is longer than what the standard rectangle can contain,
+                            // so we resize the rectangle to show the text completely
+                            if (text.paintedWidth > (chat.width * 0.8 - 2 * image.width))
+                                width = chat.width * 0.95 - 2 * image.width + device.ratio(24)
+
+                            // The text fits in the standard rectangle
                             else
                                 width = text.paintedWidth + device.ratio(24)
                         }
@@ -174,30 +287,20 @@ Page {
                             smooth: true
                             color: theme.textColor
                             anchors.fill: parent
-                            opacity: parent.opacity
                             font.family: global.font
                             textFormat: Text.RichText
-                            onLinkActivated: openUrl(link)
+                            onLinkActivated: Qt.openUrlExternally(link)
                             font.pixelSize: device.ratio(14)
                             renderType: Text.NativeRendering
                             anchors.margins: device.ratio(12)
                             width: parent.width - device.ratio(24)
                             height: parent.height - device.ratio(24)
                             wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                            text: message +
-                                  dateAlign +
-                                  "<font size=" +
-                                  units.gu(1.2) +
-                                  "px color=gray>" +
-                                  userName +
-                                  Qt.formatDateTime(new Date(), "hh:mm:ss AP") +
-                                  "</font></right></p>"
+                            text: message + dateAlign + "<font size=" + units.gu(1.2) +
+                                  "px color=gray>" + userName + dateTime() + "</font></right></p>"
 
-                            property string dateAlign: localUser ?
-                                                           "<p align=right>" : "<p align=left>"
-
-                            property string userName: from != "" ?
-                                                          qsTr("By ") + from + " at " : ""
+                            property string dateAlign: localUser ? "<p align=right>" : "<p align=left>"
+                            property string userName: from == "" ?  "" : qsTr("By ") + from + " at "
                         }
                     }
                 }
@@ -322,7 +425,7 @@ Page {
             Button {
                 id: attachButton
                 width: parent.height
-                iconName: "file"
+                iconName: "clip"
                 onClicked: device.isMobile() ? dialog.open() : bridge.shareFiles()
 
                 anchors {
@@ -372,7 +475,8 @@ Page {
             Button {
                 id: sendButton
                 text: qsTr("Send")
-                width: device.ratio(64)
+                iconName: "send"
+                width: device.ratio(72)
                 enabled: sendTextbox.length > 0 ? 1: 0
 
                 anchors {
@@ -401,6 +505,7 @@ Page {
         expanded: false
         header: qsTr("Connected users")
 
+        // Toggle the visibility of the connected users
         function toggle() {
             expanded = !expanded
         }

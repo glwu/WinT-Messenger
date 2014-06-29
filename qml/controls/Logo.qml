@@ -20,7 +20,7 @@ Page {
             flat: true
             iconName: "bars"
             onClicked: menu.toggle(caller)
-            textColor: menu.visible ? theme.info : theme.textColor
+            textColor: menu.visible ? theme.getSelectedColor(true) : theme.navigationBarText
         }
     ]
 

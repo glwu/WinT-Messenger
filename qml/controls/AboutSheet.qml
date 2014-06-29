@@ -16,7 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.2
+import QtQuick 2.1
+
+//-----------------------------------------------------------------------------------//
+// This sheet displays information about the application and allows the programer to //
+// specify the properties of the app and the support links.                          //
+//-----------------------------------------------------------------------------------//
 
 Sheet {
     id: sheet
@@ -27,7 +32,7 @@ Sheet {
     // Disable the confirm button
     confirmButton: false
 
-    // This properties are used to draw information about the application
+    // Create the properties that are used to draw information about the application
     property string appName
     property string website
     property string reportABug
@@ -37,6 +42,10 @@ Sheet {
     property string contactEmail
     property string appMotto
     property alias icon: icon.source
+
+    //------------------------------------------//
+    // Begin the application information column //
+    //------------------------------------------//
 
     // Create a column with the widgets used to display the information about
     // the application
@@ -103,7 +112,7 @@ Sheet {
         }
     }
 
-    // Draw the copyright of the application
+    // Draw the copyright label of the application
     Label {
         text: qsTr(copyright)
 

@@ -152,13 +152,22 @@ void Bridge::sendMessage(const QString message) {
 
 void Bridge::messageRecieved(const QString &from, const QString &face,
                              const QString &message, char localUser) {
-    QString msg = message;
 
+    // Split the message to obtain the message and the color
+    QList<QString> list = message.split("@color@");
+
+    // Obtain the strings
+    QString msg = list.at(0);
+    QString color = "#00557f";
+
+    // Avoid crashing the app when talking to peers with an older version of the app
+    if (list.count() > 1)
+        color = list.at(1);
+
+    // Tweak the message
     msg.replace("[s]", QString("<img src=qrc:/emotes/"));
     msg.replace("[/s]", ".png>");
     msg.replace(QRegExp("((?:https?)://\\S+)"), "<a href=\\1>\\1</a>");
 
-    qDebug() << localUser;
-
-    emit drawMessage(from, face, msg, localUser);
+    emit drawMessage(from, face, msg, color, localUser);
 }
