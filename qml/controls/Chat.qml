@@ -93,7 +93,16 @@ Page {
                 listView.positionViewAtEnd()
 
                 // Append the message to the text-based interface
-                var msg = "<font color=\"" + color + "\">[" + dateTime() + "] &lt;" + from + "&gt;</font> " + message
+                var msg
+
+                // Change the style of the message based if the message is an user message or a
+                // system notification
+                if (from)
+                    msg = "<font color=\"" + color + "\">[" + dateTime() + "] &lt;" + from + "&gt;</font> " + message
+                else
+                    msg = "<font color=\"#bebebe\">* " + message
+
+                // Append the message to the text edit
                 textEdit.append(msg)
 
                 // Play a sound when the message is drawn
