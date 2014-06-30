@@ -8,7 +8,7 @@
 #include <QHostAddress>
 #include <QAbstractSocket>
 
-#include "peerManager.h"
+#include "peermanager.h"
 #include "file-connection/f_server.h"
 #include "message-connection/m_server.h"
 #include "file-connection/f_connection.h"

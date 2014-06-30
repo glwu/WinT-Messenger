@@ -143,7 +143,10 @@ Page {
 
             // Set the anchors of the object
             anchors.fill: parent
-            anchors.margins: device.ratio(5)
+	    anchors.topMargin: 0
+            anchors.bottomMargin: 0
+            anchors.rightMargin: 0
+            anchors.leftMargin: device.ratio(5)
 
             // Create a flickable with the text edit
             Flickable  {
@@ -191,7 +194,7 @@ Page {
 
             // Set the anchors of the object
             anchors.fill: parent
-            anchors.rightMargin: device.ratio(6)
+	    anchors.margins: 0
 
             // Show this widget when the text-based interface is disabled.
             enabled: !textChat
@@ -200,6 +203,7 @@ Page {
             ListView {
                 id: listView
                 anchors.fill: parent
+		anchors.rightMargin: device.ratio(6)
                 anchors.bottomMargin: device.ratio(1)
 
                 // Show this widget when the text-based interface is disabled.
