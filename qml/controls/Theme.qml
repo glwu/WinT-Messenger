@@ -75,7 +75,7 @@ QtObject {
         borderColor              = settings.darkInterface() ? "#323232" : "#bebebe"
         buttonForeground         = settings.darkInterface() ? "#dddddd" : "#222222"
         textFieldForeground      = settings.darkInterface() ? "#dddddd" : "#222222"
-        buttonBackground         = settings.darkInterface() ? "#3f3f3f" : "#dedede"
+        buttonBackground         = settings.darkInterface() ? "#3f3f3f" : "#ededed"
         textFieldBackground      = settings.darkInterface() ? "#383838" : "#f7f7f7"
         buttonBackgroundPressed  = settings.darkInterface() ? "#222222" : "#e8e8e8"
         buttonBackgroundHover    = settings.darkInterface() ? "#333333" : "#f2f2f2"

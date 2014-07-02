@@ -51,6 +51,8 @@ Page {
         Button {
             flat: true
             iconName: "save"
+            visible: !device.isMobile()
+            enabled: !device.isMobile()
             textColor: theme.navigationBarText
             onClicked: device.isMobile() ? dialog.open() : bridge.saveChat(textEdit.text)
         },
@@ -106,7 +108,7 @@ Page {
         anchors.topMargin: 0
         anchors.leftMargin: device.ratio(5)
         anchors.rightMargin: device.ratio(-1)
-        anchors.bottomMargin: sendRectangle.height + device.ratio(5)
+        anchors.bottomMargin: messageControls.height + device.ratio(5)
 
         // Append a new message when the Bridge notifies us about a new message
         Connections {
@@ -232,6 +234,16 @@ Page {
                     height: background.height > device.ratio(80) ?
                                 background.height + device.ratio(16) : device.ratio(80)
 
+                    // Create a opacity effect when created, to do this, we apply an initial
+                    // opacity of 0, then when the rectangle is completely loaded, we change
+                    // the opacity to 1.
+                    opacity: 0
+                    Component.onCompleted: opacity = 1
+
+                    // To apply the opacity effect, we need to define what should this piece
+                    // of shit do when the fucking opacity changes
+                    Behavior on opacity {NumberAnimation{}}
+
                     // This is the profile picture of each message
                     Image {
                         id: image
@@ -262,9 +274,17 @@ Page {
 
                         // Draw a border around the image only if its not transparent
                         Rectangle {
+
+                            // Make the background color of the rectangle transparent
                             color: "transparent"
+
+                            // Fill the parent
                             anchors.fill: parent
+
+                            // Make sure that the border is visible on all devices
                             border.width: device.ratio(1)
+
+                            // Decide if the border color should be transparent or not
                             border.color: {
                                 if (image.source.toString().search(".png") == -1)
                                     return theme.borderColor
@@ -282,6 +302,7 @@ Page {
                         // the radius of the rectangle
                         color: theme.panel
                         radius: device.ratio(2)
+                        border.width: device.ratio(1)
                         border.color: theme.borderColor
 
                         // Set the height of the rectangle based on the painted height
@@ -317,22 +338,39 @@ Page {
                         // This is the text of each rectangle
                         Text {
                             id: text
+
+                            // Make sure that the text is drawn smoothly
                             smooth: true
+
+                            // Set the format of the text and font
                             color: theme.textColor
-                            anchors.fill: parent
                             font.family: global.font
                             textFormat: Text.RichText
-                            onLinkActivated: openUrl(link)
                             font.pixelSize: device.ratio(14)
                             renderType: Text.NativeRendering
+                            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+
+                            // Set the anchors of the text
+                            anchors.fill: parent
                             anchors.margins: device.ratio(12)
+
+                            // Show a warning when opening local files (URLs with file:///)
+                            // on mobile devices using the openUrl(string) function.
+                            onLinkActivated: openUrl(link)
+
+                            // Set the size of the text
                             width: parent.width - device.ratio(24)
                             height: parent.height - device.ratio(24)
-                            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+
+                            // Add rich text formating and date/time to the message
                             text: message + dateAlign + "<font size=" + units.gu(1.2) +
                                   "px color=gray>" + userName + dateTime() + "</font></right></p>"
 
+                            // Define the allignment of the text, which is decided based on the
+                            // location of the rectangle (right/left).
                             property string dateAlign: localUser ? "<p align=right>" : "<p align=left>"
+
+                            // Add a "By {user}" if the message is not a system notification
                             property string userName: from == "" ?  "" : qsTr("By ") + from + " at "
                         }
                     }
@@ -345,29 +383,52 @@ Page {
     SlidingMenu {
         id: emotesMenu
         title: qsTr("Emotes")
+
+        // Define the size of each cell
         cellWidth: device.ratio(42)
         cellHeight: device.ratio(42)
-        anchors.bottomMargin: sendRectangle.height
 
-        // This is the emoticon button control
+        // Make sure that we are shown over the message controls
+        anchors.bottomMargin: messageControls.height
+
+        // This is the emoticon button control, which is applied to each emoticon.
         delegate: Rectangle {
+
+            // Set the size of the rectangle that shows each emoticon
             width: height
             height: device.ratio(30)
+
+            // The background of the emoticon control is transpaent
             color: "transparent"
 
             // Show a rectangle while a emote is hovered
             Rectangle {
+
+                // The background color of the rectangle will differ from the
+                // background color of the rectangle
                 color: theme.panel
+
+                // Fill the emoticon rectangle
                 anchors.fill: parent
+
+                // Decide whenever the rectangle should be visisble or not
                 opacity: emotesMouseArea.containsMouse ?  1 : 0
             }
 
             // The image of each emoticon
             Image {
+
+                // Set the size of the icon
                 height: width
-                asynchronous: true
                 width: device.ratio(15)
+
+                // Make the loading proccess of the Chat control faster
+                asynchronous: true
+
+                // Center the image in the emoticon rectangle
                 anchors.centerIn: parent
+
+                // Based on the defined emoticon, add the full path and load the image.
                 source: "qrc:/emotes/" + name + ".png"
             }
 
@@ -444,15 +505,21 @@ Page {
     // This rectangle stores the messaging controls, such as the
     // send button and the message textbox
     Rectangle {
-        id: sendRectangle
+        id: messageControls
         color: theme.buttonBackground
         border.width: device.ratio(1)
         border.color: theme.borderColor
         height: device.ratio(32)
+
+        // Anchor the controls to the bottom of the page and to the left of the
+        // user sidebar
         anchors {
             left: parent.left
-            right: parent.right
             bottom: parent.bottom
+            right: userSidebar.left
+
+            // Avoid the 'double border' shit
+            rightMargin: device.ratio(-1)
         }
 
         // This button is used to share files
@@ -508,10 +575,10 @@ Page {
         // This button is used to send the message written in sendTextbox
         Button {
             id: sendButton
-            text: qsTr("Send")
             iconName: "send"
-            width: device.ratio(72)
             enabled: sendTextbox.length > 0 ? 1: 0
+            text: device.isMobile() ? "" : qsTr("Send")
+            width: device.isMobile() ? height : device.ratio(86)
 
             anchors {
                 right: parent.right
