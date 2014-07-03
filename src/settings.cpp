@@ -56,7 +56,7 @@ int Settings::x() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
     return 0;
 #else
-    return settings->value("x", 150).toInt();
+    return value("x", 150).toInt();
 #endif
 }
 
@@ -71,7 +71,7 @@ int Settings::y() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
     return 0;
 #else
-    return settings->value("y", 150).toInt();
+    return value("y", 150).toInt();
 #endif
 }
 
@@ -86,7 +86,7 @@ int Settings::width() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
     return qApp->primaryScreen()->geometry().width();
 #else
-    return settings->value("width", 720).toInt();
+    return value("width", 720).toInt();
 #endif
 }
 
@@ -101,7 +101,7 @@ int Settings::height() {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
     return qApp->primaryScreen()->geometry().width();
 #else
-    return settings->value("height", 540).toInt();
+    return value("height", 540).toInt();
 #endif
 }
 
@@ -113,7 +113,7 @@ int Settings::height() {
  */
 
 bool Settings::textChat() {
-    return settings->value("textChat", false).toBool();
+    return value("textChat", false).toBool();
 }
 
 /*!
@@ -124,7 +124,7 @@ bool Settings::textChat() {
  */
 
 bool Settings::maximized() {
-    return settings->value("maximized", false).toBool();
+    return value("maximized", false).toBool();
 }
 
 /*!
@@ -135,7 +135,7 @@ bool Settings::maximized() {
  */
 
 bool Settings::fullscreen() {
-    return settings->value("fullscreen", false).toBool();
+    return value("fullscreen", false).toBool();
 }
 
 /*!
@@ -146,7 +146,7 @@ bool Settings::fullscreen() {
  */
 
 bool Settings::customColor() {
-    return settings->value("customColor", false).toBool();
+    return value("customColor", true).toBool();
 }
 
 /*!
@@ -157,7 +157,7 @@ bool Settings::customColor() {
  */
 
 bool Settings::firstLaunch() {
-    return settings->value("firstLaunch", true).toBool();
+    return value("firstLaunch", true).toBool();
 }
 
 /*!
@@ -168,7 +168,7 @@ bool Settings::firstLaunch() {
  */
 
 bool Settings::darkInterface() {
-    return settings->value("darkInterface", false).toBool();
+    return value("darkInterface", false).toBool();
 }
 
 /*!
@@ -179,7 +179,7 @@ bool Settings::darkInterface() {
  */
 
 bool Settings::notifyUpdates() {
-    return settings->value("notifyUpdates", true).toBool();
+    return value("notifyUpdates", true).toBool();
 }
 
 /*!
@@ -190,5 +190,5 @@ bool Settings::notifyUpdates() {
  */
 
 bool Settings::soundsEnabled() {
-    return settings->value("soundsEnabled", true).toBool();
+    return value("soundsEnabled", true).toBool();
 }

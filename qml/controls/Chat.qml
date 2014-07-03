@@ -145,7 +145,7 @@ Page {
 
             // Set the anchors of the object
             anchors.fill: parent
-	    anchors.topMargin: 0
+            anchors.topMargin: 0
             anchors.bottomMargin: 0
             anchors.rightMargin: 0
             anchors.leftMargin: device.ratio(5)
@@ -196,7 +196,7 @@ Page {
 
             // Set the anchors of the object
             anchors.fill: parent
-	    anchors.margins: 0
+            anchors.margins: 0
 
             // Show this widget when the text-based interface is disabled.
             enabled: !textChat
@@ -205,7 +205,7 @@ Page {
             ListView {
                 id: listView
                 anchors.fill: parent
-		anchors.rightMargin: device.ratio(6)
+                anchors.rightMargin: device.ratio(6)
                 anchors.bottomMargin: device.ratio(1)
 
                 // Show this widget when the text-based interface is disabled.
@@ -447,7 +447,8 @@ Page {
             }
         }
 
-        // A list model with all registered emoticons
+        // Create a list model with all registered emoticons, the full path will be added
+        // later in the delegate (defined somewhere around line 211)
         model: ListModel {
             ListElement {name: "angel"}
             ListElement {name: "angry"}

@@ -54,7 +54,8 @@ Sheet {
         // Center the column in the dialog
         anchors {
             centerIn: parent
-            horizontalCenterOffset: 0
+
+            // Set the margins of the column
             margins: units.gu(3)
             topMargin: units.gu(8)
         }
@@ -65,34 +66,47 @@ Sheet {
         // This image is used to draw the logo of the application
         Image {
             id: icon
+
+            // Set the size of the icon
             width: device.ratio(128)
             height: device.ratio(128)
+
+            // Make the size of the vector image be the same as
+            // the size of the image loader
             sourceSize: Qt.size(width, height)
+
+            // Instruct the image to be loaded at the center of the dialog
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
         // This label is used to draw the name of the application
         Label {
             fontSize: "x-large"
+
+            // The format of the text will be {App Name} {App Version}
             text: appName + " " + version
+
+            // Instruct the label to be loaded at the center of the dialog
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
         // This label is used to draw the motto of the application
         Label {
-            fontSize: "medium"
             text: appMotto
+            fontSize: "medium"
+
+             // Instruct the label to be loaded at the center of the dialog
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
         // Draw the author and contact email of the application
         Column {
+             // Instruct the column to be loaded at the center of the dialog
             anchors.horizontalCenter: parent.horizontalCenter
 
             // Draw the name of the author
             Label {
                 text: author
-                font.bold: true
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
@@ -107,6 +121,8 @@ Sheet {
         Label {
             onLinkActivated: Qt.openUrlExternally(link)
             anchors.horizontalCenter: parent.horizontalCenter
+
+            // The format of the text will be {Report a Bug} • {Website}
             text: "<a href=\"" + reportABug +"\">Report a Bug</a> • " +
                   "<a href=\"" + website + "\">Website</a>"
         }
@@ -116,10 +132,15 @@ Sheet {
     Label {
         text: qsTr(copyright)
 
+        // Anchor the label to the bottom of the dialog
         anchors.bottom: parent.bottom
         anchors.bottomMargin: units.gu(0.4)
+
+        // Make the text look smaller and load a grayish color
         color: Qt.lighter(theme.textColor, 1.5)
         font.pixelSize: units.fontSize("small")
+
+        // Instruct the label to be loaded at the center of the dialog
         anchors.horizontalCenter: parent.horizontalCenter
     }
 }

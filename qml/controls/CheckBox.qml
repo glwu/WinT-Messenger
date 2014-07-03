@@ -19,6 +19,7 @@ Widget {
     Connections {
         target: theme
         onThemeChanged: {
+            // Update the values of the colors when the theme changes
             dot = theme.getSelectedColor(false)
             textColor = theme.textColor
             background = theme.background
@@ -36,13 +37,23 @@ Widget {
     // Create the actual checkbox rectangle
     Rectangle {
         id: dotRect
+
+        // Set the size of the rectangle
         width: height
         height: units.gu(2)
+
+        // Make the rectangle have rounded corners by applying a
+        // radius of 2 pixels
         radius: units.gu(0.25)
+
+        // Configure the border color
         border.color: borderColor
         border.width: device.ratio(1)
+
+        // Change the color when the mouse passes over the widget
         color: mouseOver ? background_mouseOver : background
 
+        // Set the anchors of the rectangle
         anchors {
             verticalCenter: parent.verticalCenter
             left: parent.left
@@ -51,13 +62,22 @@ Widget {
         // Create the checked icon
         Icon {
             color: dot
-            anchors.centerIn: parent
-            name: "check"
-            opacity: selected ? 1 : 0
-            size: parent.height * 1.25
-            anchors.horizontalCenterOffset: units.gu(0.25)
-            anchors.verticalCenterOffset: -units.gu(0.25)
 
+            // Load the text-icon
+            name: "check"
+
+            // Change the visibility if the checkbox is visible or not
+            opacity: selected ? 1 : 0
+
+            // Set the size of the icon
+            size: parent.height * 1.25
+
+            // Center the icon in the checkbox
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: -units.gu(0.25)
+            anchors.horizontalCenterOffset: units.gu(0.25)
+
+            // Play a fading animation when the opacity changes
             Behavior on opacity {NumberAnimation{}}
         }
     }
@@ -65,6 +85,8 @@ Widget {
     // Create the checkbox label
     Label {
         id: label
+
+        // Set the anchors of the label
         anchors {
             verticalCenter: parent.verticalCenter
             left: dotRect.right
