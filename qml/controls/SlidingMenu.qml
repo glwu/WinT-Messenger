@@ -26,7 +26,7 @@ Rectangle {
     // Toggle the visibility of the slider menu
     function toggle() {
         if (!enabled)
-            menu.anchors.topMargin = pageHeight / 2
+            menu.anchors.topMargin = pageHeight / 3
         else
             menu.anchors.topMargin = pageHeight
 

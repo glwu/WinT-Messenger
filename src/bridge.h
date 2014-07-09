@@ -28,9 +28,9 @@ public:
     Q_INVOKABLE void stopChat();
     Q_INVOKABLE void startChat();
     Q_INVOKABLE void playSound();
+    Q_INVOKABLE void shareFiles();
     Q_INVOKABLE bool checkForUpdates();
     Q_INVOKABLE QString getDownloadPath();
-    Q_INVOKABLE void shareFiles();
     Q_INVOKABLE void saveChat(const QString chat);
     Q_INVOKABLE void sendMessage(const QString message);
 

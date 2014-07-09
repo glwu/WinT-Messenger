@@ -88,23 +88,6 @@ bool Bridge::checkForUpdates() {
 }
 
 /*!
- * \brief Bridge::getDownloadPath
- * \return
- *
- * Returns a directory to write the downloaded files:
- *  - "/sdcard/Download/" on Android
- *  - Temporary files directory on other operating systems
- */
-
-QString Bridge::getDownloadPath() {
-#if defined(Q_OS_ANDROID)
-    return "/sdcard/Download/";
-#else
-    return QDir::tempPath() + "/";
-#endif
-}
-
-/*!
  * \brief Bridge::shareFiles
  *
  * Creates a new \c QFileDialog and sends the selected files to
@@ -124,6 +107,23 @@ void Bridge::shareFiles() {
             toUpload -= 1;
         }
     }
+}
+
+/*!
+ * \brief Bridge::getDownloadPath
+ * \return
+ *
+ * Returns a directory to write the downloaded files:
+ *  - "/sdcard/Download/" on Android
+ *  - Temporary files directory on other operating systems
+ */
+
+QString Bridge::getDownloadPath() {
+#if defined(Q_OS_ANDROID)
+    return "/sdcard/Download/";
+#else
+    return QDir::tempPath() + "/";
+#endif
 }
 
 /*!
@@ -185,8 +185,9 @@ void Bridge::messageRecieved(const QString &from, const QString &face,
         color = list.at(1);
 
     // Tweak the message
-    msg.replace("[s]", QString("<img src=qrc:/emotes/"));
-    msg.replace("[/s]", ".png>");
+    qreal size = manager.ratio(25);
+    msg.replace("[s]", QString("<img width=%1 height=%1 src=qrc:/emotes/").arg(size));
+    msg.replace("[/s]", ">");
     msg.replace(QRegExp("((?:https?)://\\S+)"), "<a href=\\1>\\1</a>");
 
     emit drawMessage(from, face, msg, color, localUser);

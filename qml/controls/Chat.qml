@@ -6,6 +6,7 @@
 //
 
 import QtQuick 2.2
+import QtGraphicalEffects 1.0
 import QtQuick.Controls 1.1 as Controls
 
 //--------------------------------------------------------------------------//
@@ -44,8 +45,8 @@ Page {
         }
     }
 
-    // Create the right widgets, such as the user menu and the app menu
-    rightWidgets: [
+    // Create the save button near the back button
+    leftWidgets: [
 
         // Make a button that allows the user to save the chat file
         Button {
@@ -55,7 +56,11 @@ Page {
             enabled: !device.isMobile()
             textColor: theme.navigationBarText
             onClicked: device.isMobile() ? dialog.open() : bridge.saveChat(textEdit.text)
-        },
+        }
+    ]
+
+    // Create the right widgets, such as the user menu and the app menu
+    rightWidgets: [
 
         // Make a button that allows the user to toggle the user menu
         Button {
@@ -108,7 +113,7 @@ Page {
         anchors.topMargin: 0
         anchors.leftMargin: device.ratio(5)
         anchors.rightMargin: device.ratio(-1)
-        anchors.bottomMargin: messageControls.height + device.ratio(5)
+        anchors.bottomMargin: messageControls.height
 
         // Append a new message when the Bridge notifies us about a new message
         Connections {
@@ -206,7 +211,6 @@ Page {
                 id: listView
                 anchors.fill: parent
                 anchors.rightMargin: device.ratio(6)
-                anchors.bottomMargin: device.ratio(1)
 
                 // Show this widget when the text-based interface is disabled.
                 visible: parent.visible
@@ -221,6 +225,23 @@ Page {
                 delegate: Rectangle {
                     color: "transparent"
 
+                    // Set the size of the rectangle
+                    width: device.ratio(1 )
+                    height: background.height + device.ratio(21)
+
+                    // Resize the rectangle when the window is resized
+                    Connections {
+                        target: app
+                        onWidthChanged: {
+                            background.calculateWidth()
+                            background.calculateHeight()
+                        }
+
+                        onHeightChanged: {
+                            height = background.height + device.ratio(21)
+                        }
+                    }
+
                     // Show the rectangle to the left if the message is not from
                     // the local user.
                     anchors.left:  localUser != 1 ? parent.left : undefined
@@ -228,11 +249,6 @@ Page {
                     // Show the rectangle to the right if the message is from the
                     // local user.
                     anchors.right: localUser == 1 ? parent.right : undefined
-
-                    // Make the rectangle higher if the contents of the text do not fit
-                    // in the standard rectangle
-                    height: background.height > device.ratio(80) ?
-                                background.height + device.ratio(16) : device.ratio(80)
 
                     // Create a opacity effect when created, to do this, we apply an initial
                     // opacity of 0, then when the rectangle is completely loaded, we change
@@ -243,6 +259,42 @@ Page {
                     // To apply the opacity effect, we need to define what should this piece
                     // of shit do when the fucking opacity changes
                     Behavior on opacity {NumberAnimation{}}
+
+                    // Create a nice shadow effect under the profile picture
+                    BorderImage {
+                        smooth: true
+                        anchors.fill: image
+                        source: "qrc:/images/shadow.png"
+
+                        border {
+                            top: device.ratio(10)
+                            left: device.ratio(10)
+                            right: device.ratio(10)
+                            bottom: device.ratio(10)
+                        }
+
+                        anchors {
+                            topMargin: -device.ratio(6)
+                            leftMargin: -device.ratio(6)
+                            rightMargin: -device.ratio(8)
+                            bottomMargin: -device.ratio(8)
+                        }
+
+                        // Create a opacity effect when created, to do this, we apply an initial
+                        // opacity of 0, then when the rectangle is completely loaded, we change
+                        // the opacity to 1.
+                        opacity: 0
+                        Component.onCompleted: {
+                            if (image.source.toString().search(".png") == -1)
+                                opacity = 0.50
+                            else
+                                opacity = 0
+                        }
+
+                        // To apply the opacity effect, we need to define what should this piece
+                        // of shit do when the fucking opacity changes
+                        Behavior on opacity {NumberAnimation{}}
+                    }
 
                     // This is the profile picture of each message
                     Image {
@@ -271,27 +323,36 @@ Page {
                         // Show the image to the right if the message is from the
                         // local user.
                         anchors.right: localUser == 1 ? parent.right : undefined
+                    }
 
-                        // Draw a border around the image only if its not transparent
-                        Rectangle {
-
-                            // Make the background color of the rectangle transparent
-                            color: "transparent"
-
-                            // Fill the parent
-                            anchors.fill: parent
-
-                            // Make sure that the border is visible on all devices
-                            border.width: device.ratio(1)
-
-                            // Decide if the border color should be transparent or not
-                            border.color: {
-                                if (image.source.toString().search(".png") == -1)
-                                    return theme.borderColor
-                                else
-                                    return "transparent"
-                            }
+                    // Create a nice shadow effect under the background rectangle
+                    BorderImage {
+                        smooth: true
+                        anchors.fill: background
+                        source: "qrc:/images/shadow.png"
+                        border {
+                            top: device.ratio(10)
+                            left: device.ratio(10)
+                            right: device.ratio(10)
+                            bottom: device.ratio(10)
                         }
+
+                        anchors {
+                            topMargin: -device.ratio(6)
+                            leftMargin: -device.ratio(6)
+                            rightMargin: -device.ratio(8)
+                            bottomMargin: -device.ratio(8)
+                        }
+
+                        // Create a opacity effect when created, to do this, we apply an initial
+                        // opacity of 0, then when the rectangle is completely loaded, we change
+                        // the opacity to 1.
+                        opacity: 0
+                        Component.onCompleted: opacity = 0.50
+
+                        // To apply the opacity effect, we need to define what should this piece
+                        // of shit do when the fucking opacity changes
+                        Behavior on opacity {NumberAnimation{}}
                     }
 
                     // This is the background rectangle of each message
@@ -307,7 +368,21 @@ Page {
 
                         // Set the height of the rectangle based on the painted height
                         // of the text
-                        height: text.paintedHeight + device.ratio(24)
+                        function calculateHeight() {
+                            height = text.paintedHeight + device.ratio(24)
+                        }
+
+                        function calculateWidth() {
+
+                            // The text is longer than what the standard rectangle can contain,
+                            // so we resize the rectangle to show the text completely
+                            if (text.paintedWidth > (chat.width * 0.8 - 2 * image.width))
+                                width = chat.width * 0.95 - 2 * image.width + device.ratio(32)
+
+                            // The text fits in the standard rectangle
+                            else
+                                width = text.paintedWidth + device.ratio(32)
+                        }
 
                         // Set the anchors of the rectangle
                         anchors.top: parent.top
@@ -325,14 +400,8 @@ Page {
 
                         // Resize the rectangle according to the length of the message
                         Component.onCompleted: {
-                            // The text is longer than what the standard rectangle can contain,
-                            // so we resize the rectangle to show the text completely
-                            if (text.paintedWidth > (chat.width * 0.8 - 2 * image.width))
-                                width = chat.width * 0.95 - 2 * image.width + device.ratio(24)
-
-                            // The text fits in the standard rectangle
-                            else
-                                width = text.paintedWidth + device.ratio(24)
+                            calculateWidth()
+                            calculateHeight()
                         }
 
                         // This is the text of each rectangle
@@ -362,16 +431,18 @@ Page {
                             width: parent.width - device.ratio(24)
                             height: parent.height - device.ratio(24)
 
+
                             // Add rich text formating and date/time to the message
-                            text: message + dateAlign + "<font size=" + units.gu(1.2) +
-                                  "px color=gray>" + userName + dateTime() + "</font></right></p>"
+                            text: {
+                                if (localUser != 1)
+                                    return message + "<p><font size=" + units.gu(1.2)
+                                            + "px color=gray>" + userName + dateTime() + "</font></p>"
+                                else
+                                    return message + "<p><font size=" + units.gu(1.2)
+                                            + "px color=gray>" + dateTime() + "</font></p>"
+                            }
 
-                            // Define the allignment of the text, which is decided based on the
-                            // location of the rectangle (right/left).
-                            property string dateAlign: localUser ? "<p align=right>" : "<p align=left>"
-
-                            // Add a "By {user}" if the message is not a system notification
-                            property string userName: from == "" ?  "" : qsTr("By ") + from + " at "
+                            property string userName: from == "" ?  "" : from + " • "
                         }
                     }
                 }
@@ -385,8 +456,8 @@ Page {
         title: qsTr("Emotes")
 
         // Define the size of each cell
-        cellWidth: device.ratio(42)
-        cellHeight: device.ratio(42)
+        cellWidth: device.ratio(36)
+        cellHeight: device.ratio(36)
 
         // Make sure that we are shown over the message controls
         anchors.bottomMargin: messageControls.height
@@ -396,7 +467,7 @@ Page {
 
             // Set the size of the rectangle that shows each emoticon
             width: height
-            height: device.ratio(30)
+            height: device.ratio(32)
 
             // The background of the emoticon control is transpaent
             color: "transparent"
@@ -420,7 +491,7 @@ Page {
 
                 // Set the size of the icon
                 height: width
-                width: device.ratio(15)
+                width: device.ratio(25)
 
                 // Make the loading proccess of the Chat control faster
                 asynchronous: true
@@ -428,8 +499,8 @@ Page {
                 // Center the image in the emoticon rectangle
                 anchors.centerIn: parent
 
-                // Based on the defined emoticon, add the full path and load the image.
-                source: "qrc:/emotes/" + name + ".png"
+                // Based on the defined emoticonl, oad the image.
+                source: "qrc:/emotes/" + modelData
             }
 
             // This mouse area inserts the selected emoticon in the textbox
@@ -439,68 +510,16 @@ Page {
                 hoverEnabled: !device.isMobile()
                 onClicked: {
                     emotesMenu.toggle()
-                    sendTextbox.text = sendTextbox.text +
-                            " [s]" +
-                            name +
-                            "[/s] "
+                    sendTextbox.text = sendTextbox.text + " [s]" + modelData + "[/s] "
                 }
             }
         }
 
-        // Create a list model with all registered emoticons, the full path will be added
-        // later in the delegate (defined somewhere around line 211)
-        model: ListModel {
-            ListElement {name: "angel"}
-            ListElement {name: "angry"}
-            ListElement {name: "aww"}
-            ListElement {name: "blushing"}
-            ListElement {name: "confused"}
-            ListElement {name: "cool"}
-            ListElement {name: "creepy"}
-            ListElement {name: "crying"}
-            ListElement {name: "cthulhu"}
-            ListElement {name: "cute_winking"}
-            ListElement {name: "cute"}
-            ListElement {name: "devil"}
-            ListElement {name: "frowning"}
-            ListElement {name: "gasping"}
-            ListElement {name: "greedy"}
-            ListElement {name: "grinning"}
-            ListElement {name: "happy_smiling"}
-            ListElement {name: "happy"}
-            ListElement {name: "heart"}
-            ListElement {name: "irritated_2"}
-            ListElement {name: "irritated"}
-            ListElement {name: "kissing"}
-            ListElement {name: "laughing"}
-            ListElement {name: "lips_sealed"}
-            ListElement {name: "madness"}
-            ListElement {name: "malicious"}
-            ListElement {name: "naww"}
-            ListElement {name: "pouting"}
-            ListElement {name: "shy"}
-            ListElement {name: "sick"}
-            ListElement {name: "smiling"}
-            ListElement {name: "speechless"}
-            ListElement {name: "spiteful"}
-            ListElement {name: "stupid"}
-            ListElement {name: "surprised_2"}
-            ListElement {name: "surprised"}
-            ListElement {name: "terrified"}
-            ListElement {name: "thumbs_down"}
-            ListElement {name: "thumbs_up"}
-            ListElement {name: "tired"}
-            ListElement {name: "tongue_out_laughing"}
-            ListElement {name: "tongue_out_left"}
-            ListElement {name: "tongue_out_up_left"}
-            ListElement {name: "tongue_out_up"}
-            ListElement {name: "tongue_out"}
-            ListElement {name: "unsure_2"}
-            ListElement {name: "unsure"}
-            ListElement {name: "winking_grinning"}
-            ListElement {name: "winking_tongue_out"}
-            ListElement {name: "winking"}
-        }
+        // Load the C++ QStringList created in main.cpp (line 72-73).
+        // This shitty list contains all emotes of the app.
+        // This proccess is automatic and allows us to add as many emotes as we
+        // want through the QRC
+        model: emotesList
     }
 
     // This rectangle stores the messaging controls, such as the
@@ -620,24 +639,30 @@ Page {
 
         property alias text: label.text
 
+        // Create a column with the icon and the controls
         Column {
             spacing: units.gu(0.75)
+
+            // Set the anchors of the column
             anchors.centerIn: parent
             anchors.margins: device.ratio(12)
             anchors.verticalCenterOffset: -units.gu(6)
 
+            // Create the error icon
             Icon {
                 name: "cancel"
                 fontSize: units.gu(10)
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
+            // Create the title
             Label {
                 fontSize: "x-large"
                 text: qsTr("Cannot open file")
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
+            // Create the subtitle
             Label {
                 id: label
                 width: warningMessage.width * 0.7
@@ -647,6 +672,7 @@ Page {
             }
         }
 
+        // Finally, create the button to close the message
         Button {
             style: "primary"
             text: qsTr("Close")
