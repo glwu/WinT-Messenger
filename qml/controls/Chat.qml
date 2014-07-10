@@ -105,15 +105,16 @@ Page {
     // Here is the item with all the chat dialogs and controls
     // Here be dragons.
     Item {
+        id: chatControls
+
         // Anchor the chat item to the window and the sidebar
+        anchors.topMargin: 0
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.bottom: parent.bottom
         anchors.right: userSidebar.left
-        anchors.topMargin: 0
+        anchors.bottom: messageControls.top
         anchors.leftMargin: device.ratio(5)
         anchors.rightMargin: device.ratio(-1)
-        anchors.bottomMargin: messageControls.height
 
         // Append a new message when the Bridge notifies us about a new message
         Connections {
@@ -198,7 +199,6 @@ Page {
 
         // This list view shows all the bubble messages (with a scrollbar)
         Controls.ScrollView {
-
             // Set the anchors of the object
             anchors.fill: parent
             anchors.margins: 0
@@ -231,7 +231,8 @@ Page {
 
                     // Resize the rectangle when the window is resized
                     Connections {
-                        target: app
+                        target: chatControls
+
                         onWidthChanged: {
                             background.calculateWidth()
                             background.calculateHeight()
@@ -260,42 +261,6 @@ Page {
                     // of shit do when the fucking opacity changes
                     Behavior on opacity {NumberAnimation{}}
 
-                    // Create a nice shadow effect under the profile picture
-                    BorderImage {
-                        smooth: true
-                        anchors.fill: image
-                        source: "qrc:/images/shadow.png"
-
-                        border {
-                            top: device.ratio(10)
-                            left: device.ratio(10)
-                            right: device.ratio(10)
-                            bottom: device.ratio(10)
-                        }
-
-                        anchors {
-                            topMargin: -device.ratio(6)
-                            leftMargin: -device.ratio(6)
-                            rightMargin: -device.ratio(8)
-                            bottomMargin: -device.ratio(8)
-                        }
-
-                        // Create a opacity effect when created, to do this, we apply an initial
-                        // opacity of 0, then when the rectangle is completely loaded, we change
-                        // the opacity to 1.
-                        opacity: 0
-                        Component.onCompleted: {
-                            if (image.source.toString().search(".png") == -1)
-                                opacity = 0.50
-                            else
-                                opacity = 0
-                        }
-
-                        // To apply the opacity effect, we need to define what should this piece
-                        // of shit do when the fucking opacity changes
-                        Behavior on opacity {NumberAnimation{}}
-                    }
-
                     // This is the profile picture of each message
                     Image {
                         id: image
@@ -323,36 +288,20 @@ Page {
                         // Show the image to the right if the message is from the
                         // local user.
                         anchors.right: localUser == 1 ? parent.right : undefined
-                    }
 
-                    // Create a nice shadow effect under the background rectangle
-                    BorderImage {
-                        smooth: true
-                        anchors.fill: background
-                        source: "qrc:/images/shadow.png"
-                        border {
-                            top: device.ratio(10)
-                            left: device.ratio(10)
-                            right: device.ratio(10)
-                            bottom: device.ratio(10)
+                        // Create a border around the image
+                        Rectangle {
+                            color: "transparent"
+                            anchors.fill: parent
+
+                            border.color: theme.borderColor
+                            border.width:  {
+                                if (image.source.toString().search(".png") == -1)
+                                    return 1
+                                else
+                                    return 0
+                            }
                         }
-
-                        anchors {
-                            topMargin: -device.ratio(6)
-                            leftMargin: -device.ratio(6)
-                            rightMargin: -device.ratio(8)
-                            bottomMargin: -device.ratio(8)
-                        }
-
-                        // Create a opacity effect when created, to do this, we apply an initial
-                        // opacity of 0, then when the rectangle is completely loaded, we change
-                        // the opacity to 1.
-                        opacity: 0
-                        Component.onCompleted: opacity = 0.50
-
-                        // To apply the opacity effect, we need to define what should this piece
-                        // of shit do when the fucking opacity changes
-                        Behavior on opacity {NumberAnimation{}}
                     }
 
                     // This is the background rectangle of each message
@@ -453,14 +402,13 @@ Page {
     // This is the emoticon menu
     SlidingMenu {
         id: emotesMenu
-        title: qsTr("Emotes")
+
+        // Hide the caption
+        captionVisible: false
 
         // Define the size of each cell
         cellWidth: device.ratio(36)
         cellHeight: device.ratio(36)
-
-        // Make sure that we are shown over the message controls
-        anchors.bottomMargin: messageControls.height
 
         // This is the emoticon button control, which is applied to each emoticon.
         delegate: Rectangle {
@@ -477,7 +425,7 @@ Page {
 
                 // The background color of the rectangle will differ from the
                 // background color of the rectangle
-                color: theme.panel
+                color: "#49759C"
 
                 // Fill the emoticon rectangle
                 anchors.fill: parent
@@ -509,7 +457,6 @@ Page {
                 anchors.fill: parent
                 hoverEnabled: !device.isMobile()
                 onClicked: {
-                    emotesMenu.toggle()
                     sendTextbox.text = sendTextbox.text + " [s]" + modelData + "[/s] "
                 }
             }
@@ -535,11 +482,12 @@ Page {
         // user sidebar
         anchors {
             left: parent.left
-            bottom: parent.bottom
+            bottom: emotesMenu.top
             right: userSidebar.left
 
             // Avoid the 'double border' shit
             rightMargin: device.ratio(-1)
+            bottomMargin: device.ratio(-1)
         }
 
         // This button is used to share files

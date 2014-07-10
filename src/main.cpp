@@ -69,8 +69,11 @@ int main(int argc, char *argv[]) {
     Settings settings;
     DeviceManager device;
 
-    QDir directory(":/emotes/");
-    QStringList emotesList = directory.entryList(QStringList("*.png"));
+    QDir emotesDir(":/emotes/");
+    QStringList emotesList = emotesDir.entryList(QStringList("*.png"));
+
+    QDir facesDir(":/faces/");
+    QStringList facesList = facesDir.entryList(QStringList("*.jpg")) + facesDir.entryList(QStringList("*.png")) ;
 
     QQmlEngine* engine = new QQmlEngine();
     QQmlComponent* component = new QQmlComponent(engine);
@@ -79,6 +82,7 @@ int main(int argc, char *argv[]) {
     engine->rootContext()->setContextProperty("bridge", &bridge);
     engine->rootContext()->setContextProperty("device", &device);
     engine->rootContext()->setContextProperty("settings", &settings);
+    engine->rootContext()->setContextProperty("facesList", QVariant::fromValue(facesList));
     engine->rootContext()->setContextProperty("emotesList", QVariant::fromValue(emotesList));
 
     if (device.isMobile())

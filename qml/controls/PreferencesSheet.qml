@@ -273,32 +273,7 @@ Rectangle {
         title: qsTr("Choose a profile picture")
 
         // Load all profile images
-        model: ListModel {
-            ListElement {name: "astronaut.jpg"}
-            ListElement {name: "cat-eye.jpg"}
-            ListElement {name: "chess.jpg"}
-            ListElement {name: "coffee.jpg"}
-            ListElement {name: "dice.jpg"}
-            ListElement {name: "energy-arc.jpg"}
-            ListElement {name: "fish.jpg"}
-            ListElement {name: "flake.jpg"}
-            ListElement {name: "flower.jpg"}
-            ListElement {name: "grapes.jpg"}
-            ListElement {name: "guitar.jpg"}
-            ListElement {name: "launch.jpg"}
-            ListElement {name: "leaf.jpg"}
-            ListElement {name: "lightning.jpg"}
-            ListElement {name: "penguin.jpg"}
-            ListElement {name: "puppy.jpg"}
-            ListElement {name: "sky.jpg"}
-            ListElement {name: "sunflower.jpg"}
-            ListElement {name: "sunset.jpg"}
-            ListElement {name: "yellow-rose.jpg"}
-            ListElement {name: "baseball.png"}
-            ListElement {name: "butterfly.png"}
-            ListElement {name: "soccerball.png"}
-            ListElement {name: "tennis-ball.png"}
-        }
+        model: facesList
 
         // Create a rectangle with the image and a mouse area
         // that changes the profile picture when clicked
@@ -308,7 +283,7 @@ Rectangle {
             height: device.ratio(64)
 
             Rectangle {
-                color: theme.panel
+                color: "#49759C"
                 anchors.fill: parent
                 opacity: avatarMouseArea.containsMouse ? 1 : 0
             }
@@ -318,7 +293,7 @@ Rectangle {
                 asynchronous: true
                 width: device.ratio(48)
                 anchors.centerIn: parent
-                source: "qrc:/faces/" + name
+                source: "qrc:/faces/" + modelData
             }
 
             MouseArea {
@@ -327,8 +302,8 @@ Rectangle {
                 hoverEnabled: !device.isMobile()
                 onClicked: {
                     avatarMenu.toggle()
-                    settings.setValue("face", name)
-                    avatarImage.source = "qrc:/faces/" + name
+                    settings.setValue("face", modelData)
+                    avatarImage.source = "qrc:/faces/" +  modelData
                 }
             }
         }

@@ -26,16 +26,16 @@ Rectangle {
     // Toggle the visibility of the slider menu
     function toggle() {
         if (!enabled)
-            menu.anchors.topMargin = pageHeight / 3
+            menu.anchors.topMargin = menu.parent.height * (1 - 0.45)
         else
-            menu.anchors.topMargin = pageHeight
+            menu.anchors.topMargin = menu.parent.height
 
         enabled = !enabled
     }
 
     // Allow the programmer to customize the slider menu
+    property bool captionVisible: true
     property alias model: gridView.model
-    property int pageHeight: app.height
     property alias title: captionText.text
     property alias delegate: gridView.delegate
     property alias cellWidth: gridView.cellWidth
@@ -44,16 +44,16 @@ Rectangle {
     // Add a caption and a close button to the menu
     Rectangle {
         id: captionRectangle
-        height: units.gu(6)
         color: theme.navigationBar
+        height: captionVisible ? units.gu(6) : 0
         anchors {left: parent.left; right: parent.right; top: parent.top;}
 
         // Top border
         Rectangle {
-            height: device.ratio(1)
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
+            height: captionVisible ? device.ratio(1) : 0
             color: settings.customColor() ?
                        Qt.lighter(theme.navigationBar, 1.2) :
                        theme.borderColor
@@ -61,10 +61,10 @@ Rectangle {
 
         // Bottom border
         Rectangle {
-            height: device.ratio(1)
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
+            height: captionVisible ? device.ratio(1) : 0
             color: settings.customColor() ?
                        Qt.lighter(theme.navigationBar, 1.2) :
                        theme.borderColor
@@ -72,11 +72,11 @@ Rectangle {
 
         Label {
             id: captionText
-            height: device.ratio(48)
             color: theme.navigationBarText
-            font.pixelSize: units.fontSize("x-large")
-
             verticalAlignment: Text.AlignVCenter
+            font.pixelSize: units.fontSize("x-large")
+            height: captionVisible ? device.ratio(48) : 0
+
             anchors {
                 margins: 12;
                 left: parent.left;
@@ -104,7 +104,7 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    menu.anchors.topMargin = pageHeight
+                    menu.anchors.topMargin = menu.parent.height
                 }
             }
         }
@@ -115,6 +115,11 @@ Rectangle {
         anchors {
             fill: parent
             topMargin: captionRectangle.height
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: theme.panel
         }
 
         GridView {
