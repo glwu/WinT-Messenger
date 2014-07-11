@@ -79,6 +79,10 @@ Window {
             else if (size === "small")
                 return gu(1.6)
 
+            // Return a value of 9.6 pixels
+            else if (size === "x-small")
+                return gu(1.2)
+
             // Return the same value as a medium widget
             else
                 return gu(1.9)

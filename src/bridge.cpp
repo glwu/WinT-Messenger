@@ -49,11 +49,11 @@ void Bridge::startChat() {
     chat->setDownloadPath(getDownloadPath());
 
     QObject::connect(chat, SIGNAL(delUser(QString)), this,
-                     SIGNAL(delUser(QString)));
+                     SIGNAL (delUser(QString)));
     QObject::connect(this, SIGNAL(returnPressed(QString)), chat,
                      SLOT(returnPressed(QString)));
     QObject::connect(chat, SIGNAL(newUser(QString, QString)), this,
-                     SIGNAL(newUser(QString, QString)));
+                     SIGNAL (newUser(QString, QString)));
     QObject::connect(chat, SIGNAL(newMessage(QString, QString, QString, char)),
                      this, SLOT(messageRecieved(QString, QString, QString, char)));
 

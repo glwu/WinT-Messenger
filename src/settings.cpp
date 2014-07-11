@@ -117,28 +117,6 @@ bool Settings::textChat() {
 }
 
 /*!
- * \brief Settings::maximized
- * \return
- *
- * Returns the value of "maximized".
- */
-
-bool Settings::maximized() {
-    return value("maximized", false).toBool();
-}
-
-/*!
- * \brief Settings::fullscreen
- * \return
- *
- * Returns the value of "fullscreen".
- */
-
-bool Settings::fullscreen() {
-    return value("fullscreen", false).toBool();
-}
-
-/*!
  * \brief Settings::customColor
  * \return
  *

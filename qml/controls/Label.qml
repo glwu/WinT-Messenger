@@ -2,6 +2,7 @@ import QtQuick 2.2
 
 // Draw a text with some common properties
 Text {
+    smooth: true
 
     // Create the properties
     property string fontSize: "small"

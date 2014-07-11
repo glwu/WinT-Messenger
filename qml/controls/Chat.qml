@@ -6,7 +6,6 @@
 //
 
 import QtQuick 2.2
-import QtGraphicalEffects 1.0
 import QtQuick.Controls 1.1 as Controls
 
 //--------------------------------------------------------------------------//
@@ -45,6 +44,16 @@ Page {
         }
     }
 
+    // Show a notification when an user leaves or enters the room
+    Connections {
+        target: bridge
+        onDelUser: notification.show(qsTr("%1 has left the room").arg(nick))
+        onNewUser: {
+            userSidebar.addUser(nick, face)
+            notification.show(qsTr("%1 has joined the room").arg(nick))
+        }
+    }
+
     // Create the save button near the back button
     leftWidgets: [
 
@@ -68,6 +77,38 @@ Page {
             iconName: "user"
             onClicked: userSidebar.toggle()
             textColor: userSidebar.expanded ? theme.getSelectedColor(true) : theme.navigationBarText
+
+            // Create a badge with the number of connected users
+            Rectangle {
+                id: badge
+                smooth: true
+
+                // Setup the anchors
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: -parent.width / 5 + device.ratio(1)
+
+                // Set a redish color (exactly the one used in OS X 10.10)
+                color: "#ec3e3a"
+
+                // Make the rectangle a circle
+                radius: width / 2
+
+                // Setup height of the rectangle
+                height: device.ratio(18)
+
+                // Make the rectangle and ellipse if we have more than 100 users
+                width: usersModel.count > 99 ? device.ratio(24) : device.ratio(18)
+
+                // Create the label
+                Label {
+                    opacity: 0.8
+                    color: "white"
+                    fontSize: "x-small"
+                    text: usersModel.count
+                    anchors.centerIn: parent
+                }
+            }
         },
 
         // Make a button that allows the user to show/hide the application menu
@@ -571,63 +612,144 @@ Page {
         mode: "right"
         id: userSidebar
         expanded: false
+        autoFlick: true
         header: qsTr("Connected users")
 
         // Toggle the visibility of the connected users
         function toggle() {
             expanded = !expanded
         }
-    }
 
-    // This is the fucking warning message
-    Sheet {
-        id: warningMessage
-        buttonsEnabled: false
-        title: qsTr("Warning")
+        // Append a new user
+        function addUser(nick, face) {
+            usersModel.append({"name": nick, "face": face, "index": usersModel.count})
+        }
 
-        property alias text: label.text
+        // Add the local user to the users list
+        Component.onCompleted: addUser(qsTr("You"), settings.value("face", "astronaut.jpg"))
 
-        // Create a column with the icon and the controls
-        Column {
-            spacing: units.gu(0.75)
+        // Create the scroll view the registered users
+        contents: Controls.ScrollView {
+            anchors.fill: parent
 
-            // Set the anchors of the column
-            anchors.centerIn: parent
-            anchors.margins: device.ratio(12)
-            anchors.verticalCenterOffset: -units.gu(6)
+            // Create a list view with the registered users
+            ListView {
+                anchors.fill: parent
 
-            // Create the error icon
-            Icon {
-                name: "cancel"
-                fontSize: units.gu(10)
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
+                // Setup the list model, other objects can manage the list model using
+                // the addUser(string, string) and delUser(string) functions
+                model: ListModel {
+                    id: usersModel
+                }
 
-            // Create the title
-            Label {
-                fontSize: "x-large"
-                text: qsTr("Cannot open file")
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
+                // Create a row with the name of the user and its image
+                delegate: Row {
+                    id: row
+                    x: -userSidebar.width
 
-            // Create the subtitle
-            Label {
-                id: label
-                width: warningMessage.width * 0.7
-                horizontalAlignment: Text.AlignHCenter
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                anchors.horizontalCenter: parent.horizontalCenter
+                    // Create a sliding effect when the component is loaded
+                    Component.onCompleted: x = 0
+                    Behavior on x {NumberAnimation{}}
+
+                    // Automatically delete the object when its respective user extits
+                    // the room
+                    Connections {
+                        target: bridge
+                        onDelUser: {
+                            if (nick == name)
+                                delAni.start()
+                        }
+                    }
+
+                    // Create the animation used when deleting the object
+                    NumberAnimation {
+                        id: delAni
+                        target: row
+                        property: "x"
+                        duration: 200
+                        to: userSidebar.width
+                        easing.type: Easing.InOutQuad
+                        onStopped: usersModel.remove(index)
+                    }
+
+                    // Set the height of the row
+                    height: device.ratio(56)
+
+                    // Set the spacing
+                    spacing: device.ratio(5)
+
+                    // Show the profile picture here
+                    Image {
+                        width: height
+                        visible: parent.visible
+                        height: device.ratio(48)
+                        source: "qrc:/faces/" + face
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    // Show the user name and join date/time here
+                    Label {
+                        id: userName
+                        visible: parent.visible
+                        textFormat: Text.RichText
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: name + "<br><font size=" + units.gu(1.2)
+                              + "px color=gray>" + qsTr("Joined at ") + dateTime() + "</font>"
+                    }
+                }
             }
         }
 
-        // Finally, create the button to close the message
-        Button {
-            style: "primary"
-            text: qsTr("Close")
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: units.gu(4)
-            onClicked: warningMessage.close()
-            anchors.horizontalCenter: parent.horizontalCenter
+        // This is the fucking warning message
+        Sheet {
+            id: warningMessage
+            buttonsEnabled: false
+            title: qsTr("Warning")
+
+            property alias text: label.text
+
+            // Create a column with the icon and the controls
+            Column {
+                spacing: units.gu(0.75)
+
+                // Set the anchors of the column
+                anchors.centerIn: parent
+                anchors.margins: device.ratio(12)
+                anchors.verticalCenterOffset: -units.gu(6)
+
+                // Create the error icon
+                Icon {
+                    name: "cancel"
+                    fontSize: units.gu(10)
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                // Create the title
+                Label {
+                    fontSize: "x-large"
+                    text: qsTr("Cannot open file")
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                // Create the subtitle
+                Label {
+                    id: label
+                    width: warningMessage.width * 0.7
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+
+            // Finally, create the button to close the message
+            Button {
+                style: "primary"
+                text: qsTr("Close")
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: units.gu(4)
+                onClicked: warningMessage.close()
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
     }
 }

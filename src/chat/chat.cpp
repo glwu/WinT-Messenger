@@ -86,8 +86,6 @@ void Chat::shareFile(const QString &path) {
 
 void Chat::newParticipant(const QString &nick, const QString &face) {
     emit newUser(nick, face);
-    emit newMessage(0, "system/info.png",
-                    QString("%1 has joined").arg(nick), 0);
 }
 
 /*!
@@ -100,8 +98,6 @@ void Chat::newParticipant(const QString &nick, const QString &face) {
 
 void Chat::participantLeft(const QString &nick) {
     emit delUser(nick);
-    emit newMessage(0, "system/info.png",
-                    QString("%1 has left").arg(nick), 0);
 }
 
 /*!

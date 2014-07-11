@@ -132,7 +132,7 @@ PageApplication {
     // Create a new about sheet that will display information about the app
     AboutSheet {
         // Identify the dialog
-        z: 100
+        z: 2
         id: aboutSheet
 
         // Set the information of the application, such as the application version and
@@ -155,7 +155,7 @@ PageApplication {
         // the dialog. However, this will cause the dialog to be only visible on the initial page.
         // Of course, we don't want that shit to happen, so we force the dialog to stay on top with the
         // \c z property.
-        z: 100
+        z: 2
 
         // Identify the dialog
         id: preferencesSheet

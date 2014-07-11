@@ -68,49 +68,25 @@ Widget {
         }
     }
 
-    // Create the header of the menu
-    ListItem.Header {
-        id: headerItem
-        visible: text !== ""
-    }
-
     // Create a flickable with the contents of the side bar
-    Flickable {
-        clip: true
-        id: flickable
-        contentWidth: width
-        interactive: contentHeight > height
-        contentHeight: autoFlick ? contents.height : height
+    Item {
+        id: contents
+        width: parent.width
+        height: autoFlick ? childrenRect.height : flickable.height
 
         anchors {
             top: headerItem.visible ? headerItem.bottom : parent.top
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            rightMargin: mode === "left" ? 1 : 0
-            leftMargin: mode === "right" ? 1 : 0
+            rightMargin: mode === "left" ? device.ratio(5) : 0
+            leftMargin: mode === "right" ? device.ratio(5) : 0
         }
+    }
 
-        Item {
-            id: contents
-
-            width: flickable.width
-            height: autoFlick ? childrenRect.height : flickable.height
-        }
-
-        function getFlickableChild(item) {
-            if (item && item.hasOwnProperty("children")) {
-                for (var i=0; i < item.children.length; i++) {
-                    var child = item.children[i];
-                    if (internal.isVerticalFlickable(child)) {
-                        if (child.anchors.top === page.top || child.anchors.fill === page) {
-                            return item.children[i];
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
+    // Create the header of the menu
+    ListItem.Header {
+        id: headerItem
+        visible: text !== ""
     }
 }
