@@ -102,14 +102,14 @@ Page {
 
                 // Create a label that will display the number of connected users.
                 Label {
-                      id: countLabel
-                      color: "#fdfdfdfd"
-                      anchors.fill: parent
-                      text: usersModel.count
-                      font.pixelSize: device.ratio(9)
-                      anchors.margins: -parent.width / 5 + device.ratio(1)
-                      verticalAlignment: Text.AlignVCenter
-                      horizontalAlignment: Text.AlignHCenter
+                    id: countLabel
+                    color: "#fdfdfdfd"
+                    anchors.fill: parent
+                    text: usersModel.count
+                    font.pixelSize: device.ratio(9)
+                    anchors.margins: -parent.width / 5 + device.ratio(1)
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
                 }
             }
         },
@@ -132,6 +132,7 @@ Page {
             preferencesMenuEnabled = true
             bridge.stopChat()
             listModel.clear()
+            usersModel.clear()
             textEdit.text = ""
         }
 
@@ -142,6 +143,7 @@ Page {
             preferencesMenuEnabled = false
             bridge.startChat()
             textEdit.append(qsTr("Welcome to the chat room!") + "<br/><br/>")
+            userSidebar.addUser(qsTr("You"), settings.value("face", "astronaut.jpg"))
             listModel.append({"from": "","face": "/system/globe.png","message": "Welcome to the chat room!", "localUser": false})
         }
     }
@@ -286,8 +288,8 @@ Page {
                         to: localUser ? chatControls.width - 2 * width : 0
 
                         onStopped: {
-                          anchors.left = localUser ? undefined : parent.left
-                          anchors.right = localUser ? parent.right : undefined
+                            anchors.left = localUser ? undefined : parent.left
+                            anchors.right = localUser ? parent.right : undefined
                         }
                     }
 
@@ -310,8 +312,8 @@ Page {
                     // then when the rectangle is completely loaded, we change the opacity and x to a correct value.
                     opacity: 0
                     Component.onCompleted: {
-                      opacity = 1
-                      xAni.start()
+                        opacity = 1
+                        xAni.start()
                     }
 
                     // To apply the opacity effect, we need to define what should this object
@@ -644,11 +646,8 @@ Page {
 
         // Append a new user
         function addUser(nick, face) {
-              usersModel.append({"name": nick, "face": face, "index": usersModel.count})
+            usersModel.append({"name": nick, "face": face, "index": usersModel.count})
         }
-
-        // Add the local user to the users list
-        Component.onCompleted: addUser(qsTr("You"), settings.value("face", "astronaut.jpg"))
 
         // Create the scroll view the registered users
         contents: Controls.ScrollView {
