@@ -27,8 +27,7 @@ PageApplication {
     // Load the \c start page first
     initialPage: start
 
-    // Display a \c notification when there is a new update available, we need to modify a little
-    // this shitty implementation
+    // Display a \c notification when there is a new update available
     Connections {
         target: bridge
         onUpdateAvailable: notification.show("A new version of WinT Messenger is available!")
@@ -38,8 +37,7 @@ PageApplication {
     // Begin the page creation section //
     //---------------------------------//
 
-    // Create the \c chat page, which allows us to actually send and receive messages over the fucking
-    // network.
+    // Create the \c chat page, which allows us to actually send and receive messages over the network.
     Chat {
         id: chat
     }

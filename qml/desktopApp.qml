@@ -37,8 +37,7 @@ PageApplication {
     onWidthChanged: settings.setValue("width", width)
     onHeightChanged: settings.setValue("height", height)
 
-    // Set the minimum size of the window so that we inhibit the user to fuck up
-    // the QML interface
+    // Set the minimum size of the window
     minimumWidth: units.gu(40)
     minimumHeight: units.gu(60)
 
@@ -56,8 +55,7 @@ PageApplication {
     // Begin the page creation section //
     //---------------------------------//
 
-    // Create the \c chat page, which allows us to actually send and receive messages over the fucking
-    // network.
+    // Create the \c chat page, which allows us to actually send and receive messages over the network.
     Chat {
         id: chat
     }

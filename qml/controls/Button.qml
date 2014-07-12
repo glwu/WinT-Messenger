@@ -37,6 +37,8 @@ Widget {
     property bool hidden
     property bool flat: false
     property bool modified: false
+    property bool toggleButton: false
+    property bool toggled: false
 
     // Create the text and iconName properties
     property alias text: label.text
@@ -70,7 +72,7 @@ Widget {
     color: {
         if (flat)
             return "transparent"
-        else if (selected || mouseOver)
+        else if (selected || mouseOver || toggled)
             return background_mouseOver
         else
             return background
@@ -78,6 +80,9 @@ Widget {
 
     // Play some animations while changing states
     Behavior on opacity {NumberAnimation {}}
+
+    // Enable the toggle behavior
+    onClicked: toggleButton ? toggled = !toggled : undefined
 
     // Create a row with the icon and the text
     Row {

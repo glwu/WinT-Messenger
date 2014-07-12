@@ -78,7 +78,7 @@ Page {
             onClicked: userSidebar.toggle()
             textColor: userSidebar.expanded ? theme.getSelectedColor(true) : theme.navigationBarText
 
-            // Create a badge with the number of connected users
+            // Create a badge that displays the number of connected users
             Rectangle {
                 id: badge
                 smooth: true
@@ -98,15 +98,18 @@ Page {
                 height: device.ratio(18)
 
                 // Make the rectangle and ellipse if we have more than 100 users
-                width: usersModel.count > 99 ? device.ratio(24) : device.ratio(18)
+                width: usersModel.count > 99 ? countLabel.paintedWidth + height / 2 : height
 
-                // Create the label
+                // Create a label that will display the number of connected users.
                 Label {
-                    opacity: 0.8
-                    color: "white"
-                    fontSize: "x-small"
-                    text: usersModel.count
-                    anchors.centerIn: parent
+                      id: countLabel
+                      color: "#fdfdfdfd"
+                      anchors.fill: parent
+                      text: usersModel.count
+                      font.pixelSize: device.ratio(9)
+                      anchors.margins: -parent.width / 5 + device.ratio(1)
+                      verticalAlignment: Text.AlignVCenter
+                      horizontalAlignment: Text.AlignHCenter
                 }
             }
         },
@@ -264,11 +267,29 @@ Page {
 
                 // This is the message itself
                 delegate: Rectangle {
+                    id: messageRect
                     color: "transparent"
 
+                    // Set the initial value of x so that the message is hidden
+                    x: localUser ? chatControls.width : -chatControls.width
+
                     // Set the size of the rectangle
-                    width: device.ratio(1 )
                     height: background.height + device.ratio(21)
+                    width: childrenRect.width + device.ratio(20)
+
+                    // This is the animation used to apply the x
+                    NumberAnimation {
+                        id: xAni
+                        property: "x"
+                        duration: 200
+                        target: messageRect
+                        to: localUser ? chatControls.width - 2 * width : 0
+
+                        onStopped: {
+                          anchors.left = localUser ? undefined : parent.left
+                          anchors.right = localUser ? parent.right : undefined
+                        }
+                    }
 
                     // Resize the rectangle when the window is resized
                     Connections {
@@ -284,22 +305,17 @@ Page {
                         }
                     }
 
-                    // Show the rectangle to the left if the message is not from
-                    // the local user.
-                    anchors.left:  localUser != 1 ? parent.left : undefined
-
-                    // Show the rectangle to the right if the message is from the
-                    // local user.
-                    anchors.right: localUser == 1 ? parent.right : undefined
-
-                    // Create a opacity effect when created, to do this, we apply an initial
-                    // opacity of 0, then when the rectangle is completely loaded, we change
-                    // the opacity to 1.
+                    // Create an intro effect when created, to do this, we apply an initial
+                    // opacity to 0 and a x value that will make the control to appear out of the screen,
+                    // then when the rectangle is completely loaded, we change the opacity and x to a correct value.
                     opacity: 0
-                    Component.onCompleted: opacity = 1
+                    Component.onCompleted: {
+                      opacity = 1
+                      xAni.start()
+                    }
 
-                    // To apply the opacity effect, we need to define what should this piece
-                    // of shit do when the fucking opacity changes
+                    // To apply the opacity effect, we need to define what should this object
+                    // do when the opacity changes
                     Behavior on opacity {NumberAnimation{}}
 
                     // This is the profile picture of each message
@@ -324,11 +340,11 @@ Page {
 
                         // Show the image to the left if the message is not from
                         // the local user.
-                        anchors.left:  localUser != 1 ? parent.left : undefined
+                        anchors.left: !localUser ? parent.left : undefined
 
                         // Show the image to the right if the message is from the
                         // local user.
-                        anchors.right: localUser == 1 ? parent.right : undefined
+                        anchors.right: localUser ? parent.right : undefined
 
                         // Create a border around the image
                         Rectangle {
@@ -382,11 +398,11 @@ Page {
 
                         // Show the rectangle to the left if the message is not from
                         // the local user.
-                        anchors.left:  localUser != 1 ? image.right : undefined
+                        anchors.left: !localUser ? image.right : undefined
 
                         // Show the rectangle to the right if the message is from the
                         // local user.
-                        anchors.right: localUser == 1 ? image.left : undefined
+                        anchors.right: localUser ? image.left : undefined
 
                         // Resize the rectangle according to the length of the message
                         Component.onCompleted: {
@@ -424,7 +440,7 @@ Page {
 
                             // Add rich text formating and date/time to the message
                             text: {
-                                if (localUser != 1)
+                                if (!localUser)
                                     return message + "<p><font size=" + units.gu(1.2)
                                             + "px color=gray>" + userName + dateTime() + "</font></p>"
                                 else
@@ -443,6 +459,11 @@ Page {
     // This is the emoticon menu
     SlidingMenu {
         id: emotesMenu
+
+        // Anchor the menu to the user side bar, so that we can display all
+        // emotes correctly even if the user side bar is shown.
+        anchors.rightMargin: userSidebar.expanded ? userSidebar.width : 0
+        Behavior on anchors.rightMargin {NumberAnimation{}}
 
         // Hide the caption
         captionVisible: false
@@ -504,7 +525,7 @@ Page {
         }
 
         // Load the C++ QStringList created in main.cpp (line 72-73).
-        // This shitty list contains all emotes of the app.
+        // This list contains all emotes of the app.
         // This proccess is automatic and allows us to add as many emotes as we
         // want through the QRC
         model: emotesList
@@ -526,7 +547,7 @@ Page {
             bottom: emotesMenu.top
             right: userSidebar.left
 
-            // Avoid the 'double border' shit
+            // Avoid the 'double border' issue
             rightMargin: device.ratio(-1)
             bottomMargin: device.ratio(-1)
         }
@@ -570,6 +591,7 @@ Page {
         // This button is used to add emoticons to our message
         Button {
             id: emotesButton
+            toggleButton: true
             width: parent.height
             iconName: "smile-o"
             onClicked: emotesMenu.toggle()
@@ -622,7 +644,7 @@ Page {
 
         // Append a new user
         function addUser(nick, face) {
-            usersModel.append({"name": nick, "face": face, "index": usersModel.count})
+              usersModel.append({"name": nick, "face": face, "index": usersModel.count})
         }
 
         // Add the local user to the users list
@@ -700,7 +722,7 @@ Page {
             }
         }
 
-        // This is the fucking warning message
+        // This is the warning message displayed when a mobile user tries to open a local file.
         Sheet {
             id: warningMessage
             buttonsEnabled: false

@@ -79,10 +79,6 @@ Window {
             else if (size === "small")
                 return gu(1.6)
 
-            // Return a value of 9.6 pixels
-            else if (size === "x-small")
-                return gu(1.2)
-
             // Return the same value as a medium widget
             else
                 return gu(1.9)
@@ -100,7 +96,7 @@ Window {
         anchors.fill: parent
 
         // Set the visibility of the overlay based if there is a visible sheet
-        // to clarify all the shit here, the overlay a semi-transparent black rectangle
+        // to clarify all the things here, the overlay a semi-transparent black rectangle
         // that covers all the application when the dialog is visible.
         color: currentOverlay !== null ? currentOverlay.overlayColor : "transparent"
         opacity: overlayOpen ? 1 : 0
