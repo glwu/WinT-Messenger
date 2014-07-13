@@ -17,7 +17,7 @@
  */
 import QtQuick 2.2
 import QtQuick.Window 2.0
-import QtQuick.Controls 1.1
+import QtQuick.Controls 1.2
 
 //----------------------------------------------------------------------------//
 // This file creates a window with the default variables used accross the app //
@@ -46,7 +46,6 @@ Window {
         }
 
         // Return the name of the loader font
-        property string font: loader.name
         property string font: "Roboto"
     }
 
