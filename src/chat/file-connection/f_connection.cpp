@@ -57,17 +57,23 @@
  */
 
 FConnection::FConnection(QObject *parent) : QTcpSocket(parent) {
+    // Prepare the variables for use
     transferTimerId = 0;
+    downloadedBytes = 0;
+    currentDownloadSize = 0;
+    downloadStarted = false;
     state = WaitingForGreeting;
     currentDataType = Undefined;
     isGreetingMessageSent = false;
     numBytesForCurrentDataType = -1;
     pingTimer.setInterval(PingInterval);
 
-    QObject::connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
-    QObject::connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
+    // Connect signals/slots
     QObject::connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
+    QObject::connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
+    QObject::connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
     QObject::connect(this, SIGNAL(connected()), this, SLOT(sendGreetingMessage()));
+    QObject::connect(this, SIGNAL(bytesWritten(qint64)), this, SLOT(calculateDownloadProgress(qint64)));
 }
 
 /*!
@@ -78,19 +84,27 @@ FConnection::FConnection(QObject *parent) : QTcpSocket(parent) {
  */
 
 void FConnection::sendFile(const QString &path) {
+    // Open the file
     QFile file(path);
     file.open(QFile::ReadOnly);
 
+    // Read the file and compress it
     QByteArray data = qCompress(file.readAll(), 9);
-    QByteArray fileContents = "BINARY " + QByteArray::number(data.size()) + ' ' + data;
-    QByteArray fileName = "FILENAME " + QByteArray::number(QFileInfo(file).fileName().toUtf8().size())
-            + ' ' + QFileInfo(file).fileName().toUtf8();
 
+    // Create the datagrams to send
+    QByteArray f_data = QFileInfo(file).fileName().toUtf8() + '@' + QByteArray::number(data.size());
+
+    QByteArray fileContents = "BINARY " + QByteArray::number(data.size()) + ' ' + data;
+    QByteArray fileData = "FILEDATA " + QByteArray::number(f_data.size()) + ' ' + f_data;
+
+    // Close the file and clear the compressed data to save memory
     file.close();
     data.clear();
 
-    write(fileName);
-    write(fileContents);
+    // Send the datagrams
+    if (write(fileData) == fileData.size())
+        if (write(fileContents) == fileContents.size())
+            qDebug() << "File transfer complete!";
 }
 
 /*!
@@ -99,6 +113,7 @@ void FConnection::sendFile(const QString &path) {
  */
 
 void FConnection::timerEvent(QTimerEvent *timerEvent) {
+    // Abort the current transfer if it does not respond
     if (timerEvent->timerId() == transferTimerId) {
         abort();
         killTimer(transferTimerId);
@@ -114,46 +129,61 @@ void FConnection::timerEvent(QTimerEvent *timerEvent) {
  */
 
 void FConnection::processReadyRead() {
+    // Prepare the hand shake between the computer and the peer
     if (state == WaitingForGreeting) {
+        // Verify that the header is valid
         if (!readProtocolHeader())
             return;
+
+        // Deny any incoming connection that IS NOT a greeting
         if (currentDataType != Greeting) {
             abort();
             return;
         }
 
+        // Change the current state of the connection
         state = ReadingGreeting;
     }
 
+    // Read the greeting message
     if (state == ReadingGreeting) {
         if (!hasEnoughData())
             return;
 
+        // Read the buffer and verify it
         buffer = read(numBytesForCurrentDataType);
         if (buffer.size() != numBytesForCurrentDataType) {
             abort();
             return;
         }
 
+        // Setup the variables for the next data exchange
         currentDataType = Undefined;
         numBytesForCurrentDataType = 0;
         buffer.clear();
 
+        // Verify that the greeting is valid
         if (!isValid()) {
             abort();
             return;
         }
 
+        // Respond to the greeting to complete the handshake
         if (!isGreetingMessageSent)
             sendGreetingMessage();
 
+        // Start the PING and the PONG processes
         pingTimer.start();
         pongTime.start();
+
+        // Change the current state of the connection
         state = ReadyForUse;
 
+        // Tell the rest of the class that the connection is ready for use
         emit readyForUse();
     }
 
+    // Begin the send/receive process
     while (bytesAvailable() > 0) {
         if (currentDataType == Undefined)
             if (!readProtocolHeader())
@@ -174,11 +204,13 @@ void FConnection::processReadyRead() {
  */
 
 void FConnection::sendPing() {
+    // If the peer does not respond abort the connection
     if (pongTime.elapsed() > PongTimeout) {
         abort();
         return;
     }
 
+    // Send a ping
     write("PING 1 p");
 }
 
@@ -190,12 +222,14 @@ void FConnection::sendPing() {
  */
 
 void FConnection::sendGreetingMessage() {
-    QString greetingMessage = "Greetings";
+    // Prepare the greeting datagram
+    QString greetingMessage = "Hello peer!";
     QByteArray greetingData = "GREETING "
             + QByteArray::number(greetingMessage.toUtf8().size())
             + ' '
             + greetingMessage.toUtf8();
 
+    // Send the datagram and verify that it was received correctly
     if (write(greetingData) == greetingData.size())
         isGreetingMessageSent = true;
 }
@@ -204,44 +238,70 @@ void FConnection::sendGreetingMessage() {
  * \brief FConnection::readDataIntoBuffer
  * \return
  *
- * Adds the data of a new packet to the current buffer.
+ * Returns the size of the downloaded datagram
  */
 
 int FConnection::readDataIntoBuffer() {
+    // Record the number of bytes before reading data into the buffer
     int numBytesBeforeRead = buffer.size();
+
+    // Avoid something roughly similar to the ping of death
     if (numBytesBeforeRead == MaxBufferSize) {
         abort();
         return 0;
     }
 
+    // Read data into the buffer
     while (bytesAvailable() > 0 && buffer.size() < MaxBufferSize) {
         buffer.append(read(1));
         if (buffer.endsWith(SeparatorToken))
             break;
     }
 
+    // Calculate the progress of download if the file is binary
+    if (downloadStarted) {
+        downloadedBytes += buffer.size();
+        qDebug() << downloadedBytes;
+        if (downloadedBytes > 0)
+            emit updateProgress(peerAddress().toString(), (downloadedBytes / currentDownloadSize) * 100);
+        if (downloadedBytes == currentDownloadSize)
+            emit downloadComplete(peerAddress().toString(), currentFileName);
+    }
+
+    // Return the number of bytes that where read
     return buffer.size() - numBytesBeforeRead;
 }
 
 /*!
  * \brief FConnection::dataLengthForCurrentDataType
  * \return
+ *
+ * Converts the downloaded datagram into a base 10 number
  */
 
 int FConnection::dataLengthForCurrentDataType() {
-    if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 ||
-            !buffer.endsWith(SeparatorToken))
+    // Verify that the datagram received was valid
+    if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 || !buffer.endsWith(SeparatorToken))
         return 0;
 
+    // Remove 1 bytes from the end of the byte array
     buffer.chop(1);
+
+    // Convert the buffer to base 10
     int number = buffer.toInt();
+
+    // Clear the current buffer
     buffer.clear();
+
+    // Return the converted buffer
     return number;
 }
 
 /*!
  * \brief FConnection::hasEnoughData
  * \return
+ *
+ * Return \c true if we can proceed with the transfer process.
  */
 
 bool FConnection::hasEnoughData() {
@@ -250,15 +310,17 @@ bool FConnection::hasEnoughData() {
         transferTimerId = 0;
     }
 
+    // Calculate the number of bytes for the current datagram
     if (numBytesForCurrentDataType <= 0)
         numBytesForCurrentDataType = dataLengthForCurrentDataType();
 
-    if (bytesAvailable() < numBytesForCurrentDataType ||
-            numBytesForCurrentDataType <= 0) {
+    // Return false if we cannot complete the transfer process
+    if (bytesAvailable() < numBytesForCurrentDataType || numBytesForCurrentDataType <= 0) {
         transferTimerId = startTimer(TransferTimeout);
         return false;
     }
 
+    // Return true so that we can proceed with the transfer process
     return true;
 }
 
@@ -283,29 +345,49 @@ bool FConnection::readProtocolHeader() {
         transferTimerId = 0;
     }
 
+    // Ensure that the current datagram is bigger than 0
     if (readDataIntoBuffer() <= 0) {
         transferTimerId = startTimer(TransferTimeout);
         return false;
     }
 
+    // The current datagram is a PING
     if (buffer == "PING ")
         currentDataType = Ping;
+
+    // The current datagram is a PONG
     else if (buffer == "PONG ")
         currentDataType = Pong;
+
+    // The current datagram is a GREETING
     else if (buffer == "GREETING ")
         currentDataType = Greeting;
-    else if (buffer == "BINARY ")
+
+    // The current datagram is a BINARY (any shared file)
+    else if (buffer == "BINARY ") {
         currentDataType = Binary;
-    else if (buffer == "FILENAME ")
-        currentDataType = FileName;
+
+        if (!downloadStarted) {
+            downloadStarted = true;
+            emit newDownload(peerAddress().toString(), currentFileName, currentDownloadSize);
+        }
+    }
+
+    // The current datagram is a FILEDATA (the data of any shared file)
+    else if (buffer == "FILEDATA ")
+        currentDataType = FileData;
+
+    // The current datagram is unknown, so we ignore it
     else {
         currentDataType = Undefined;
         abort();
         return false;
     }
 
+    // Clear the buffer and calculate the length of the datagram
     buffer.clear();
     numBytesForCurrentDataType = dataLengthForCurrentDataType();
+
     return true;
 }
 
@@ -320,31 +402,63 @@ bool FConnection::readProtocolHeader() {
  */
 
 void FConnection::processData() {
+    // Read the current contents of the datagram
     buffer = read(numBytesForCurrentDataType);
 
+    // Ensure that the buffer is valid
     if (buffer.size() != numBytesForCurrentDataType) {
         abort();
         return;
     }
 
+    // Do a different action based on the current data type
     switch (currentDataType) {
-    case Ping:
+    case Ping: {
         write("PONG 1 p");
         break;
-    case Pong:
+    }
+    case Pong: {
         pongTime.restart();
         break;
-    case FileName:
-        currentFileName = QString::fromUtf8(buffer);
-        break;
-    case Binary:
-        emit newFile(buffer, currentFileName);
-        break;
-    default:
+    }
+    case FileData: {
+        QList<QByteArray> list = buffer.split('@');
+        currentFileName = QString::fromUtf8(list.at(0));
+        currentDownloadSize = QString::fromUtf8(list.at(1)).toInt();
         break;
     }
+    case Binary: {
+        downloadedBytes = 0;
+        downloadStarted = false;
+        emit newFile(buffer, currentFileName);
+        emit downloadComplete(peerAddress().toString(), currentFileName);
+        break;
+    }
+    default: {
+        break;
+    }
+    }
 
+    // Clear the current data type and the buffer
     currentDataType = Undefined;
     numBytesForCurrentDataType = 0;
     buffer.clear();
+}
+
+/*!
+ * \brief FConnection::calculateDownloadProgress
+ * \param recievedBytes
+ *
+ * Returns the progress of the download with numbers ranging from 0 to 100.
+ */
+
+void FConnection::calculateDownloadProgress(qint64 recievedBytes) {
+    // Only calculate the download progress if the file is 'binary'
+    if (downloadStarted) {
+        downloadedBytes += (int)recievedBytes;
+        if (downloadedBytes > 0)
+            emit updateProgress(peerAddress().toString(), (downloadedBytes / currentDownloadSize) * 100);
+        if (downloadedBytes == currentDownloadSize)
+            emit downloadComplete(peerAddress().toString(), currentFileName);
+    }
 }

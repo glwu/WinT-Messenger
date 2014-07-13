@@ -48,14 +48,13 @@ void Bridge::startChat() {
     chatObjects.append(chat);
     chat->setDownloadPath(getDownloadPath());
 
-    QObject::connect(chat, SIGNAL(delUser(QString)), this,
-                     SIGNAL (delUser(QString)));
-    QObject::connect(this, SIGNAL(returnPressed(QString)), chat,
-                     SLOT(returnPressed(QString)));
-    QObject::connect(chat, SIGNAL(newUser(QString, QString)), this,
-                     SIGNAL (newUser(QString, QString)));
-    QObject::connect(chat, SIGNAL(newMessage(QString, QString, QString, char)),
-                     this, SLOT(messageRecieved(QString, QString, QString, char)));
+    QObject::connect(chat, SIGNAL(delUser(QString)), this, SIGNAL (delUser(QString)));
+    QObject::connect(this, SIGNAL(returnPressed(QString)), chat, SLOT(returnPressed(QString)));
+    QObject::connect(chat, SIGNAL(newUser(QString, QString)), this, SIGNAL (newUser(QString, QString)));
+    QObject::connect(chat, SIGNAL(newMessage(QString, QString, QString, char)), this, SLOT(messageRecieved(QString, QString, QString, char)));
+    QObject::connect(chat, SIGNAL(downloadComplete(QString,QString)), this, SIGNAL(downloadComplete(QString,QString)));
+    QObject::connect(chat, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
+    QObject::connect(chat, SIGNAL(updateProgress(QString,int)), this, SIGNAL(updateProgress(QString,int)));
 
     lan_chat = true;
 }

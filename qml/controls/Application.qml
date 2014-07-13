@@ -47,6 +47,7 @@ Window {
 
         // Return the name of the loader font
         property string font: loader.name
+        property string font: "Roboto"
     }
 
     // This object is used to automatically resize UI elements

@@ -15,14 +15,13 @@
  */
 
 Chat::Chat() {
-    connect(&client, SIGNAL(participantLeft(QString)), this,
-            SLOT(participantLeft(QString)));
-    connect(&client, SIGNAL(newFile(QByteArray,QString)), this,
-            SLOT(receivedFile(QByteArray,QString)));
-    connect(&client, SIGNAL(newParticipant(QString,QString)), this,
-            SLOT(newParticipant(QString,QString)));
-    connect(&client, SIGNAL(newMessage(QString,QString,QString)), this,
-            SLOT(messageReceived(QString,QString,QString)));
+    connect(&client, SIGNAL(participantLeft(QString)), this, SLOT(participantLeft(QString)));
+    connect(&client, SIGNAL(newFile(QByteArray,QString)), this, SLOT(receivedFile(QByteArray,QString)));
+    connect(&client, SIGNAL(newParticipant(QString,QString)), this, SLOT(newParticipant(QString,QString)));
+    connect(&client, SIGNAL(newMessage(QString,QString,QString)), this, SLOT(messageReceived(QString,QString,QString)));
+    connect(&client, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
+    connect(&client, SIGNAL(downloadComplete(QString,QString)), this, SIGNAL(downloadComplete(QString,QString)));
+    connect(&client, SIGNAL(updateProgress(QString,int)), this, SIGNAL(updateProgress(QString,int)));
 
     QSettings settings("WinT 3794", "WinT Messenger");
     userColor = settings.value("userColor", "#428bca").toString();
@@ -116,11 +115,6 @@ void Chat::receivedFile(const QByteArray &data, const QString &fileName) {
     QFile file(downloadPath + fileName);
     if (file.open(QFile::WriteOnly))
         file.write(uncompressedData);
-
-    emit newMessage(0, "system/package.png",
-                    QString("Received <a href='file:///%1'>%2</a>")
-                    .arg(file.fileName())
-                    .arg(fileName), 0);
 
     uncompressedData.clear();
     file.close();

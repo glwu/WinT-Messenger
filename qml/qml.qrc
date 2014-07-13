@@ -36,5 +36,7 @@
         <file>controls/Sidebar.qml</file>
         <file>desktopApp.qml</file>
         <file>mobileApp.qml</file>
+        <file>controls/Badge.qml</file>
+        <file>controls/ProgressBar.qml</file>
     </qresource>
 </RCC>

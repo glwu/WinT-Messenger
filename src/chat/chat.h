@@ -17,6 +17,9 @@ public:
 signals:
     void delUser(const QString &nick);
     void newUser(const QString &nick, const QString &face);
+    void updateProgress(const QString &peer_address, int progress);
+    void downloadComplete(const QString &peer_address, const QString &f_name);
+    void newDownload(const QString &peer_address, const QString &f_name, const int &f_size);
     void newMessage(const QString &from, const QString &face, const QString &message, char localUser);
 
 public slots:

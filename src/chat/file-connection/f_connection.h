@@ -23,7 +23,7 @@ public:
         Pong,
         Greeting,
         Binary,
-        FileName,
+        FileData,
         Undefined
     };
 
@@ -33,7 +33,10 @@ public:
 
 signals:
     void readyForUse();
+    void updateProgress(const QString &peer_address, int progress);
     void newFile(const QByteArray &buffer, const QString &fileName);
+    void downloadComplete(const QString &peer_address, const QString &f_name);
+    void newDownload(const QString &peer_address, const QString &f_name, const int &f_size);
 
 protected:
     void timerEvent(QTimerEvent *timerEvent);
@@ -42,6 +45,7 @@ private slots:
     void sendPing();
     void processReadyRead();
     void sendGreetingMessage();
+    void calculateDownloadProgress(qint64 recievedBytes);
 
 private:
     void processData();
@@ -59,6 +63,11 @@ private:
     DataType currentDataType;
     bool isGreetingMessageSent;
     int numBytesForCurrentDataType;
+
+    // Used for calculating progress of download
+    bool downloadStarted;
+    int downloadedBytes;
+    int currentDownloadSize;
 
     static const char SeparatorToken = ' ';
     static const int PongTimeout = 60 * 1000;

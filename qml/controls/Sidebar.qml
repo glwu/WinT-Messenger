@@ -37,11 +37,14 @@ Widget {
     default property alias contents: contents.data
     property color background: theme.buttonBackgroundHover
 
+    // Toggle the visibility of the connected users
+    function toggle() {
+        expanded = !expanded
+    }
+
     // Set the properties of the widget
     color: background
-    anchors.leftMargin: expanded ? 0 : -width
-    anchors.rightMargin: expanded ? 0 : -width
-    width: app.width > (1.3 * app.height) ? units.gu(25) : app.width
+    width: expanded ? (app.width > device.ratio(550) ? device.ratio(200) : app.width) : 0
 
     anchors {
         left: mode === "left" ? parent.left : undefined
@@ -52,8 +55,7 @@ Widget {
 
     // Create an animation while the margins increase/decrase
     // this causes the actual sliding of the menu
-    Behavior on anchors.leftMargin {NumberAnimation {}}
-    Behavior on anchors.rightMargin {NumberAnimation {}}
+    Behavior on width {NumberAnimation {}}
 
     // Create the border rectangle
     Rectangle {
@@ -72,7 +74,7 @@ Widget {
     Item {
         id: contents
         width: parent.width
-        height: autoFlick ? childrenRect.height : flickable.height
+        //height: childrenRect.height
 
         anchors {
             top: headerItem.visible ? headerItem.bottom : parent.top

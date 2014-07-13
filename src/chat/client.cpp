@@ -54,17 +54,10 @@ Client::Client() {
     peerManager->setMessageServerPort(m_server.serverPort());
     peerManager->startBroadcasting();
 
-    QObject::connect(peerManager, SIGNAL(newMessageConnection(MConnection*)),
-                     this, SLOT(newMessageConnection(MConnection*)));
-
-    QObject::connect(peerManager, SIGNAL(newFileConnection(FConnection*)),
-                     this, SLOT(newFileConnection(FConnection*)));
-
-    QObject::connect(&m_server, SIGNAL(newConnection(MConnection*)),
-                     this, SLOT(newMessageConnection(MConnection*)));
-
-    QObject::connect(&f_server, SIGNAL(newConnection(FConnection*)),
-                     this, SLOT(newFileConnection(FConnection*)));
+    QObject::connect(peerManager, SIGNAL(newMessageConnection(MConnection*)), this, SLOT(newMessageConnection(MConnection*)));
+    QObject::connect(peerManager, SIGNAL(newFileConnection(FConnection*)), this, SLOT(newFileConnection(FConnection*)));
+    QObject::connect(&m_server, SIGNAL(newConnection(MConnection*)), this, SLOT(newMessageConnection(MConnection*)));
+    QObject::connect(&f_server, SIGNAL(newConnection(FConnection*)), this, SLOT(newFileConnection(FConnection*)));
 }
 
 /*!
@@ -158,7 +151,7 @@ bool Client::hasConnection(const QHostAddress &senderIp, int senderPort) const {
  * \brief Client::newFileConnection
  * \param fc
  *
- * Configures the new \c FConnection by connected some selected functions.
+ * Configures the new \c FConnection by connecting some selected functions.
  */
 
 void Client::newFileConnection(FConnection *fc) {
@@ -256,6 +249,10 @@ void Client::readyForUseFile() {
         return;
 
     connect(connection, SIGNAL(newFile(QByteArray,QString)), this, SLOT(getFile(QByteArray,QString)));
+    connect(connection, SIGNAL(updateProgress(QString,int)), this, SIGNAL(updateProgress(QString,int)));
+    connect(connection, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
+    connect(connection, SIGNAL(downloadComplete(QString,QString)), this, SIGNAL(downloadComplete(QString,QString)));
+
     file_peers.insert(connection->peerAddress(), connection);
 }
 

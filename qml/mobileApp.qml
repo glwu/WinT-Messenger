@@ -7,7 +7,7 @@
 
 import "controls"
 import QtQuick 2.2
-import QtQuick.Controls 1.1 as Controls
+import QtQuick.Controls 1.2 as Controls
 
 //------------------------------------------------------------------------------------//
 // This file loads and configures the QML interface and displays it in the QML Window //
@@ -30,7 +30,7 @@ PageApplication {
     // Display a \c notification when there is a new update available
     Connections {
         target: bridge
-        onUpdateAvailable: notification.show("A new version of WinT Messenger is available!")
+        onUpdateAvailable: updateMessage.open()
     }
 
     //---------------------------------//
@@ -157,5 +157,89 @@ PageApplication {
 
         // Identify the dialog
         id: preferencesSheet
+    }
+
+    // This is the message shown when a new update is available
+    Sheet {
+        id: updateMessage
+        buttonsEnabled: false
+        title: qsTr("Update available")
+
+        // Create a column with the icon and the controls
+        Column {
+            spacing: units.gu(0.75)
+
+            // Set the anchors of the column
+            anchors.centerIn: parent
+            anchors.margins: device.ratio(12)
+            anchors.verticalCenterOffset: -units.gu(4)
+
+            // Create the download icon
+            Icon {
+                name: "download"
+                fontSize: units.gu(10)
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            // Create the title
+            Label {
+                fontSize: "x-large"
+                width: updateMessage.width * 0.95
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                text: qsTr("An update of WinT Messenger is available!")
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            // Create the subtitle
+            Label {
+                id: label
+                width: updateMessage.width * 0.7
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Do you want to open the official website to install it?")
+            }
+
+            // Create a label telling the user how to disable the auto-updater
+            Label {
+                color: theme.borderColor
+                font.pixelSize: device.ratio(11)
+                width: updateMessage.width * 0.7
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("You can disable the updater by opening the <a href='http://sf.net'>Prefences</a> dialog")
+
+                onLinkActivated: {
+                    updateMessage.close()
+                    preferencesSheet.open()
+                }
+            }
+
+        }
+
+        // Finally, create the buttons
+        Row {
+            spacing: units.gu(2)
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: units.gu(4)
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Button {
+                style: "primary"
+                text: qsTr("Not now")
+                onClicked: updateMessage.close()
+            }
+
+            Button {
+                style: "primary"
+                text: qsTr("Yes")
+                onClicked: {
+                    Qt.openUrlExternally("http://wint-im.sf.net")
+                    updateMessage.close()
+                }
+            }
+        }
     }
 }

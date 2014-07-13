@@ -24,6 +24,13 @@ PopupBase {
     width: Math.min(implicitWidth, overlayLayer.width - units.gu(2))
     height: contentHeight + contents.anchors.margins * 2
 
+    // Automatically move the menu when the window is resized
+    Connections {
+        target: app
+        onWidthChanged: visible ? open(caller) : undefined
+        onHeightChanged: visible ? open(caller) : undefined
+    }
+
     property int contentHeight: contents.childrenRect.height
 
     default property alias data: contents.data

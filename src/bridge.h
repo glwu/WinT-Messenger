@@ -53,6 +53,9 @@ signals:
     void delUser(const QString &nick);
     void returnPressed(const QString &message);
     void newUser(const QString &nick, const QString &face);
+    void updateProgress(const QString &peer_address, int progress);
+    void downloadComplete(const QString &peer_address, const QString &d_name);
+    void newDownload(const QString &peer_address, const QString &f_name, const int &f_size);
     void drawMessage(QString from, QString face, QString message, QString color, bool localUser);
 };
 

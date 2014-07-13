@@ -17,6 +17,8 @@
 Updater::Updater() {
     newUpdate = false;
     releaseNumber = "2";
+
+#ifndef Q_OS_IOS
     accessManager = new QNetworkAccessManager(this);
 
     connect(accessManager, SIGNAL(finished(QNetworkReply*)), this,
@@ -28,6 +30,7 @@ Updater::Updater() {
 
     if (settings.value("notifyUpdates", true).toBool())
         checkForUpdates();
+#endif
 }
 
 /*!
@@ -39,6 +42,7 @@ Updater::Updater() {
  */
 
 bool Updater::checkForUpdates() {
+#ifndef Q_OS_IOS
     QNetworkRequest req(QUrl("https://raw.githubusercontent.com/WinT-3794/WinT-Messenger/updater/current.txt"));
 
     QSslConfiguration config = QSslConfiguration::defaultConfiguration();
@@ -46,6 +50,9 @@ bool Updater::checkForUpdates() {
     req.setSslConfiguration(config);
     accessManager->get(req);
     return newUpdate;
+#else
+    return false;
+#endif
 }
 
 /*!
@@ -58,6 +65,7 @@ bool Updater::checkForUpdates() {
  */
 
 void Updater::fileDownloaded(QNetworkReply* reply) {
+#ifndef Q_OS_IOS
     QString data = QString::fromUtf8(reply->readAll());
 
     if (!data.isEmpty()) {
@@ -66,6 +74,7 @@ void Updater::fileDownloaded(QNetworkReply* reply) {
             updateAvailable();
         }
     }
+#endif
 }
 
 /*!
@@ -77,5 +86,7 @@ void Updater::fileDownloaded(QNetworkReply* reply) {
  */
 
 void Updater::ignoreSslErrors(QNetworkReply *reply, QList<QSslError> error) {
+#ifndef Q_OS_IOS
     reply->ignoreSslErrors(error);
+#endif
 }
