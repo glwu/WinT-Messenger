@@ -37,7 +37,7 @@ Window {
     // This object is used to get the family of the loaded font. This makes the
     // process of changing the default font more easy because we don't need to
     // define the name of the font all over again. The only necessary step would be
-    // to replace the regular.ttf file with your desired font.
+    // to replace the regular.ttf file with your desired font and.
     property var global: QtObject {
 
         // Load the Lato font
@@ -45,7 +45,9 @@ Window {
             source: "qrc:/fonts/regular.ttf"
         }
 
-        // Return the name of the loader font
+        // We cannot use the return the value of the loader font
+        // because it returns NULL under iOS, so we manually
+        // define the font name.
         property string font: "Roboto"
     }
 

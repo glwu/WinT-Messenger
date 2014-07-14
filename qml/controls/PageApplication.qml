@@ -4,8 +4,16 @@ import "."
 Application {
     id: app
 
+    property Page initialPage
+    property alias pageStack: pageStack
     default property alias data: pageStack.data
     property alias background: background.children
+    property Notification notification: notification
+
+    Component.onCompleted: pageStack.push(initialPage)
+
+    function pop(page)  { pageStack.pop() }
+    function push(page) { pageStack.push(page) }
 
     Item {
         id: background
@@ -16,35 +24,11 @@ Application {
         id: navbar
     }
 
-    property alias pageStack: pageStack
-
-    property Page initialPage
-
-    function push(page) {
-        pageStack.push(page)
-    }
-
-    function pop(page) {
-        pageStack.pop()
-    }
-
-    Component.onCompleted: {
-        if (initialPage)
-            pageStack.push(initialPage)
-    }
-
     PageStack {
         id: pageStack
-
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: navbar.bottom
-            bottom: parent.bottom
-        }
+        anchors.fill: parent
+        anchors.topMargin: navbar.height
     }
-
-    property Notification notification: notification
 
     Notification {
         id: notification

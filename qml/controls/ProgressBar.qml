@@ -16,8 +16,8 @@ Rectangle {
     id: background
 
     // Set the size of the progress bar
-    width: device.ratio(48)
-    height: device.ratio(12)
+    width: device.ratio(96)
+    height: device.ratio(24)
 
     // Set the background color
     color: theme.textFieldBackground
@@ -34,6 +34,8 @@ Rectangle {
 
     // Create the progress rectangle
     Rectangle {
+        id: progressRect
+
         // Set the anchors
         anchors.top: parent.top
         anchors.left: parent.left
@@ -50,27 +52,23 @@ Rectangle {
 
         // Set the width
         width: (parent.width * value) / 100
-
-        // Animate the progress bar when the width changes
-        Behavior on width {NumberAnimation{}}
     }
 
     // Create the background label
     Label {
-        text: valueText
         color: theme.textColor
         anchors.centerIn: parent
-        font.pixelSize: device.ratio(10)
-        horizontalAlignment: Text.AlignLeft
+        opacity: value >= 55 ? 0 : 1
+        font.pixelSize: device.ratio(12)
+        text: value < 100 ? " " + valueText : valueText
     }
 
     // Create the foreground label
     Label {
-        text: valueText
+        opacity: value / 100
         anchors.centerIn: parent
         color: theme.navigationBarText
-        font.pixelSize: device.ratio(10)
-        anchors.horizontalCenterOffset: -(background.width / font.pixelSize / 3)
-        width: (paintedWidth * value) / 100
+        font.pixelSize: device.ratio(12)
+        text: value < 100 ? " " + valueText : valueText
     }
 }

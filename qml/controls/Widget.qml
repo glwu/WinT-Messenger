@@ -18,57 +18,45 @@
 import QtQuick 2.2
 
 //-----------------------------------------------------------------------------//
-// The \c widget allows us to use many of the common features presented by the //
-// traditional QWidgets, such as the onClicked() slot.                         //
+// The \c widget allows us to implement controls in a simpler way. For example,//
+// the \c widget is used in the Button.qml file and the Checkbox.qml
 //-----------------------------------------------------------------------------//
 
 Rectangle {
     id: widget
 
+    // Create the properties of the widget, these are used to customize the
+    // widget and/or get information related to its integrated mouse area.
     property string style: "default"
-    property bool mouseEnabled: opacity > 0
+    property alias mouseArea: mouseArea
+    property bool mouseEnabled: visible
+    property alias pressed: mouseArea.pressed
+    default property alias children: mouseArea.data
+    property bool mouseOver: mouseEnabled ? mouseArea.containsMouse : false
+
+    // This signal is emited when the mouseArea is clicked.
+    // The slot is onClicked()
+    signal clicked(var caller)
+
+    // Disable the widget when its hidden
     visible: opacity > 0
-    opacity: enabled ? 1 : 0.5
-
-    Behavior on opacity {NumberAnimation {}}
-
     color: "transparent"
 
-    signal clicked(var caller)
-    signal doubleClicked(var caller)
-    signal rightClicked(var caller)
+    // Make the widget semi transparent when its disabled
+    opacity: enabled ? 1 : 0.5
 
-    default property alias children: mouseArea.data
-
-    property bool mouseOver: mouseEnabled ? mouseArea.containsMouse : false
-    property alias pressed: mouseArea.pressed
-
-    property alias mouseArea: mouseArea
-
+    // Create the mouse area of the widget, this widget is used to perform
+    // a certain task when the widget is pressed or get information related to
+    // the widget state
     MouseArea {
         id: mouseArea
-        enabled: mouseEnabled
         anchors.fill: parent
+        enabled: mouseEnabled
         hoverEnabled: !device.isMobile()
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
-        propagateComposedEvents: true
-
-        onDoubleClicked: {
-            if (mouse.button == Qt.LeftButton) {
-                widget.forceActiveFocus()
-                widget.doubleClicked(widget)
-            }
-        }
 
         onClicked: {
-            if (mouse.button == Qt.LeftButton) {
-                widget.forceActiveFocus()
-                widget.clicked(widget)
-            }
-
-            else if (mouse.button == Qt.RightButton) {
-                widget.rightClicked(widget)
-            }
+            widget.clicked(widget)
+            widget.forceActiveFocus()
         }
     }
 }

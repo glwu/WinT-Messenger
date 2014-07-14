@@ -1,6 +1,13 @@
 import QtQuick 2.2
 import "ListItems" as ListItem
 
+//-----------------------------------------------------------------------------//
+// Shows a popover with a list of actions. In other words, this class          //
+// can create a structure similar to a menubar. For a graphical representation //
+// the menu that lists the About, Preferences and Donate options is an action  //
+// popover.                                                                    //
+//-----------------------------------------------------------------------------//
+
 Popover {
     id: popover
     overlayColor: "transparent"

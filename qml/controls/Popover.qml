@@ -40,6 +40,7 @@ PopupBase {
     property color background: theme.background
     property color borderColor: theme.borderColor
     property int maxWidth: units.gu(35)
+    property alias triangleVisible: triangle.visible
     radius: units.gu(0.6)
 
     border.color: borderColor
@@ -100,7 +101,6 @@ PopupBase {
 
     RectangularGlow {
         id: glowEffect
-
         opacity: 0.3
         anchors.fill: parent
         glowRadius: units.gu(1)
@@ -108,6 +108,7 @@ PopupBase {
     }
 
     Rectangle {
+        id: triangle
         border.width: device.ratio(1)
         border.color: borderColor
         color: background

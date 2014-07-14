@@ -24,7 +24,7 @@ Chat::Chat() {
     connect(&client, SIGNAL(updateProgress(QString,int)), this, SIGNAL(updateProgress(QString,int)));
 
     QSettings settings("WinT 3794", "WinT Messenger");
-    userColor = settings.value("userColor", "#428bca").toString();
+    userColor = settings.value("userColor", "#336699").toString();
 }
 
 /*!

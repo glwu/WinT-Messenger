@@ -3,7 +3,7 @@
 
 TARGET   = wint-messenger
 TEMPLATE = app
-VERSION = 1.2.0
+VERSION  = 1.3.1
 
 CODECFORTR  = UTF-8
 CODECFORSRC = UTF-8
@@ -53,6 +53,16 @@ android {
 }
 
 ios {
+    QMAKE_INFO_PLIST   = sys/ios/info.plist
+    ICONS.files = $$PWD/sys/ios/icon.png
+    FONTS.files = $$PWD/res/fonts/regular.ttf
+    QMAKE_BUNDLE_DATA += FONTS
+    QMAKE_BUNDLE_DATA += ICONS
+    HEADERS -= src/updater.h
+    SOURCES -= src/updater.cpp
+}
+
+iphonesimulator {
     QMAKE_INFO_PLIST   = sys/ios/info.plist
     ICONS.files = $$PWD/sys/ios/icon.png
     FONTS.files = $$PWD/res/fonts/regular.ttf

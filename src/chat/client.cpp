@@ -92,9 +92,6 @@ void Client::sendFile(const QString &path) {
         QList<FConnection *> file_connections = file_peers.values();
         foreach (FConnection *connection, file_connections)
             connection->sendFile(path);
-
-        QFile file(path);
-        sendMessage(QString("Shared %1").arg(QFileInfo(file).fileName()));
     }
 }
 

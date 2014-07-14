@@ -45,8 +45,8 @@ Rectangle {
         color: "#fdfdfdfd"
         anchors.fill: parent
         font.pixelSize: device.ratio(9)
-        anchors.margins: -parent.width / 5 + device.ratio(1)
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
+        anchors.margins: -parent.width / 5 + device.ratio(1)
     }
 }

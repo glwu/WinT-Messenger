@@ -36,17 +36,20 @@ QtObject {
     property string toolbarText: "#fff"
     property color secondaryColor: "#888"
     property string textFieldPlaceholder: "#aaa"
-    property string userColor: settings.value("userColor", primary)
+    property string userColor: settings.value("userColor", "#336699")
 
     // This are the colors that vary depending if the user choosed to
     // use a dark interface or a light interface
     property string panel
+    property string chatText
     property string textColor
     property string logoTitle
     property string background
     property string borderColor
     property string logoSubtitle
     property string navigationBar
+    property string chatDateTimeText
+    property string chatNotification
     property string buttonBackground
     property string buttonForeground
     property string navigationBarText
@@ -68,6 +71,7 @@ QtObject {
     function setColors() {
         // Change the colors based on the theme setting (dark theme or light theme)
         panel                    = settings.darkInterface() ? "#383838" : "#ededed"
+        chatText                 = settings.darkInterface() ? "#efefef" : "#333333"
         textColor                = settings.darkInterface() ? "#aaaaaa" : "#666666"
         logoTitle                = settings.darkInterface() ? "#eeeeee" : "#333333"
         logoSubtitle             = settings.darkInterface() ? "#bebebe" : "#666666"
@@ -75,6 +79,8 @@ QtObject {
         borderColor              = settings.darkInterface() ? "#323232" : "#bebebe"
         buttonForeground         = settings.darkInterface() ? "#dddddd" : "#222222"
         textFieldForeground      = settings.darkInterface() ? "#dddddd" : "#222222"
+        chatDateTimeText         = settings.darkInterface() ? "#5bc0de" : "#336699"
+        chatNotification         = settings.darkInterface() ? "#b3b3b3" : "#7f7f7f"
         buttonBackground         = settings.darkInterface() ? "#3f3f3f" : "#ededed"
         textFieldBackground      = settings.darkInterface() ? "#383838" : "#f7f7f7"
         buttonBackgroundPressed  = settings.darkInterface() ? "#222222" : "#e8e8e8"

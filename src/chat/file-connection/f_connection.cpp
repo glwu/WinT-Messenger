@@ -258,16 +258,6 @@ int FConnection::readDataIntoBuffer() {
             break;
     }
 
-    // Calculate the progress of download if the file is binary
-    if (downloadStarted) {
-        downloadedBytes += buffer.size();
-        qDebug() << downloadedBytes;
-        if (downloadedBytes > 0)
-            emit updateProgress(peerAddress().toString(), (downloadedBytes / currentDownloadSize) * 100);
-        if (downloadedBytes == currentDownloadSize)
-            emit downloadComplete(peerAddress().toString(), currentFileName);
-    }
-
     // Return the number of bytes that where read
     return buffer.size() - numBytesBeforeRead;
 }
@@ -359,7 +349,8 @@ bool FConnection::readProtocolHeader() {
     else if (buffer == "PONG ")
         currentDataType = Pong;
 
-    // The current datagram is a GREETING
+    // The current datagram is a GREETING, this datagram is only used once
+    // during the initial handshake between a peer and another peer.
     else if (buffer == "GREETING ")
         currentDataType = Greeting;
 
@@ -367,13 +358,22 @@ bool FConnection::readProtocolHeader() {
     else if (buffer == "BINARY ") {
         currentDataType = Binary;
 
+        // Because WinT Messenger sends first information about the shared file
+        // and then the contents of the shared file, we can safely asume that
+        // the program already knows the basic information of the file (such as)
+        // the file name and file size. Taking into account that, we can safely
+        // send the needed file information to the QML interface so that the user
+        // can know that a file is being downloaded.
         if (!downloadStarted) {
             downloadStarted = true;
             emit newDownload(peerAddress().toString(), currentFileName, currentDownloadSize);
         }
     }
 
-    // The current datagram is a FILEDATA (the data of any shared file)
+    // The current datagram is a FILEDATA (the data of any shared file). This
+    // data type contains the filename and the size of the file in question.
+    // Note that this kind of data is ALWAYS sent before the transfer of the
+    // contents of the file begins.
     else if (buffer == "FILEDATA ")
         currentDataType = FileData;
 
@@ -413,20 +413,30 @@ void FConnection::processData() {
 
     // Do a different action based on the current data type
     switch (currentDataType) {
+
+    // Respond to the PING request with a PONG
     case Ping: {
         write("PONG 1 p");
         break;
     }
+
+    // Reset the ping process
     case Pong: {
         pongTime.restart();
         break;
     }
+
+    // Split the incoming information to obtain the file name and the file
+    // size.
     case FileData: {
         QList<QByteArray> list = buffer.split('@');
         currentFileName = QString::fromUtf8(list.at(0));
         currentDownloadSize = QString::fromUtf8(list.at(1)).toInt();
         break;
     }
+
+    // Tell the QML interface that the download has completed and prepare the
+    // variables for the next download
     case Binary: {
         downloadedBytes = 0;
         downloadStarted = false;
@@ -434,6 +444,8 @@ void FConnection::processData() {
         emit downloadComplete(peerAddress().toString(), currentFileName);
         break;
     }
+
+    // Do nothing
     default: {
         break;
     }
@@ -455,10 +467,12 @@ void FConnection::processData() {
 void FConnection::calculateDownloadProgress(qint64 recievedBytes) {
     // Only calculate the download progress if the file is 'binary'
     if (downloadStarted) {
+        // Append the received bytes to the downloaded bytes
         downloadedBytes += (int)recievedBytes;
+
+        // If the downloaded bytes are greater than zero, calculate the progress
+        // of the download
         if (downloadedBytes > 0)
             emit updateProgress(peerAddress().toString(), (downloadedBytes / currentDownloadSize) * 100);
-        if (downloadedBytes == currentDownloadSize)
-            emit downloadComplete(peerAddress().toString(), currentFileName);
     }
 }

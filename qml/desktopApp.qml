@@ -145,6 +145,9 @@ PageApplication {
     Page {
         id: webViewer
 
+        // Create the string used for the title
+        property string p_title
+
         // Create the control icons
         rightWidgets:  [
 
@@ -176,6 +179,7 @@ PageApplication {
         // Update the title and URL of the page
         function open(_title, url) {
             title = _title
+            p_title = _title
             app.push(webViewer)
             webView.url = url
         }
@@ -190,11 +194,19 @@ PageApplication {
                 smooth: true
                 anchors.fill: parent
 
+                // Show the loading percentage in the title
+                onLoadProgressChanged: {
+                    if (loadProgress < 100)
+                        webViewer.title = webViewer.p_title + " (" + loadProgress + "%)"
+                    else
+                        webViewer.title = webViewer.p_title
+                }
+
                 // Create a progressbar
                 Rectangle {
                     x: 0
                     y: 0
-                    color: theme.primary
+                    color: theme.warning
                     height: device.ratio(2)
                     opacity: width >= webView.width ? 0 : 1
                     width: webView.width * (webView.loadProgress / 100)
