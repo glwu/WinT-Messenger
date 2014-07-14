@@ -86,7 +86,7 @@ Rectangle {
             Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: units.gu(1.5)
+                anchors.margins: units.gu(1)
                 height: avatarImage.height * 1.2
 
                 // Create an horizontal spacer
@@ -171,7 +171,7 @@ Rectangle {
                 spacing: device.ratio(8)
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.margins: units.gu(1.5)
+                anchors.margins: units.gu(1)
 
                 // Createa an horizontal spacer
                 Rectangle {

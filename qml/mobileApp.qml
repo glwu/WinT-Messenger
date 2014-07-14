@@ -33,6 +33,8 @@ PageApplication {
         onUpdateAvailable: updateMessage.open()
     }
 
+    Component.onCompleted: notification.show(dpi)
+
     //---------------------------------//
     // Begin the page creation section //
     //---------------------------------//

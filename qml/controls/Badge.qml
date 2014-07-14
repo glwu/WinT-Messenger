@@ -20,7 +20,7 @@ Rectangle {
     property alias text: label.text
 
     // Create an animation when the opacity changes
-    Behavior on opacity {NumberAnimation{}}
+    Behavior on opacity {NumberAnimation{ duration: 200 }}
 
     // Setup the anchors
     anchors.right: parent.right

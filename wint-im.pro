@@ -58,6 +58,7 @@ ios {
     FONTS.files = $$PWD/res/fonts/regular.ttf
     QMAKE_BUNDLE_DATA += FONTS
     QMAKE_BUNDLE_DATA += ICONS
+
     HEADERS -= src/updater.h
     SOURCES -= src/updater.cpp
 }
@@ -68,6 +69,7 @@ iphonesimulator {
     FONTS.files = $$PWD/res/fonts/regular.ttf
     QMAKE_BUNDLE_DATA += FONTS
     QMAKE_BUNDLE_DATA += ICONS
+
     HEADERS -= src/updater.h
     SOURCES -= src/updater.cpp
 }

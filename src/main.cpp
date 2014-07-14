@@ -72,10 +72,6 @@ int main(int argc, char *argv[]) {
     // Create the settings wrapper for QML
     Settings settings;
 
-    // Create the device manager, which allows us to resize the QML controls to fit the
-    // display in mobile devices and allows us to get very basic device information
-    DeviceManager device;
-
     // Load all the PNG images found inside the qrc:/emotes folder into a QStringList
     QDir emotesDir(":/emotes/");
     QStringList emotesList = emotesDir.entryList(QStringList("*.png"));
@@ -90,13 +86,13 @@ int main(int argc, char *argv[]) {
 
     // Allow the QML interface to gain access to the selected C++ objects
     engine->rootContext()->setContextProperty("bridge", &bridge);
-    engine->rootContext()->setContextProperty("device", &device);
     engine->rootContext()->setContextProperty("settings", &settings);
+    engine->rootContext()->setContextProperty("device", &bridge.manager);
     engine->rootContext()->setContextProperty("facesList", QVariant::fromValue(facesList));
     engine->rootContext()->setContextProperty("emotesList", QVariant::fromValue(emotesList));
 
     // Load a different main QML file depending on the Operating System
-    if (device.isMobile())
+    if (MOBILE_TARGET)
         component->loadUrl(QUrl("qrc:/qml/mobileApp.qml"));
     else
         component->loadUrl(QUrl("qrc:/qml/desktopApp.qml"));
@@ -105,7 +101,7 @@ int main(int argc, char *argv[]) {
     QQuickWindow* window = qobject_cast<QQuickWindow*>(component->create());
     window->setScreen(app.primaryScreen());
 
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+#if MOBILE_TARGET
     // Allow the window to display the system's statusbar and controls under mobile systems
     window->showMaximized();
 #else

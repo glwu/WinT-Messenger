@@ -21,7 +21,7 @@ Chat::Chat() {
     connect(&client, SIGNAL(newMessage(QString,QString,QString)), this, SLOT(messageReceived(QString,QString,QString)));
     connect(&client, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
     connect(&client, SIGNAL(downloadComplete(QString,QString)), this, SIGNAL(downloadComplete(QString,QString)));
-    connect(&client, SIGNAL(updateProgress(QString,int)), this, SIGNAL(updateProgress(QString,int)));
+    connect(&client, SIGNAL(updateProgress(QString,QString,int)), this, SIGNAL(updateProgress(QString,QString,int)));
 
     QSettings settings("WinT 3794", "WinT Messenger");
     userColor = settings.value("userColor", "#336699").toString();
@@ -61,7 +61,7 @@ void Chat::returnPressed(const QString &message) {
  * \brief Chat::shareFile
  * \param path
  *
- * Sends the file path to the \c Client and sends the
+ * Sends the file path to the \c Client and sends a
  * processed message to the \c Bridge.
  */
 
@@ -72,6 +72,7 @@ void Chat::shareFile(const QString &path) {
     emit newMessage(client.nickName(), "system/package.png",
                     QString("You shared <a href='file://%1'>%2</a>")
                     .arg(path, QFileInfo(file).fileName()), 1);
+    file.close();
 }
 
 /*!

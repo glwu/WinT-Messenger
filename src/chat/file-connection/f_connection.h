@@ -33,9 +33,9 @@ public:
 
 signals:
     void readyForUse();
-    void updateProgress(const QString &peer_address, int progress);
     void newFile(const QByteArray &buffer, const QString &fileName);
     void downloadComplete(const QString &peer_address, const QString &f_name);
+    void updateProgress(const QString &peer_address, const QString &d_name, int progress);
     void newDownload(const QString &peer_address, const QString &f_name, const int &f_size);
 
 protected:

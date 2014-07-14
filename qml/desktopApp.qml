@@ -211,7 +211,7 @@ PageApplication {
                     opacity: width >= webView.width ? 0 : 1
                     width: webView.width * (webView.loadProgress / 100)
 
-                    Behavior on width {NumberAnimation{}}
+                    Behavior on width {NumberAnimation{ duration: 200 }}
                     Behavior on opacity {NumberAnimation{duration: 200}}
                 }
             }

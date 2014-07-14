@@ -17,7 +17,7 @@
 Bridge::Bridge() {
     lan_chat = false;
 
-#ifndef Q_OS_IOS
+#if SSL_SUPPORT
     updater = new Updater();
     connect(updater, SIGNAL(updateAvailable()), this, SIGNAL(updateAvailable()));
 #endif
@@ -48,13 +48,13 @@ void Bridge::startChat() {
     chatObjects.append(chat);
     chat->setDownloadPath(getDownloadPath());
 
-    QObject::connect(chat, SIGNAL(delUser(QString)), this, SIGNAL (delUser(QString)));
-    QObject::connect(this, SIGNAL(returnPressed(QString)), chat, SLOT(returnPressed(QString)));
-    QObject::connect(chat, SIGNAL(newUser(QString, QString)), this, SIGNAL (newUser(QString, QString)));
-    QObject::connect(chat, SIGNAL(newMessage(QString, QString, QString, char)), this, SLOT(messageRecieved(QString, QString, QString, char)));
-    QObject::connect(chat, SIGNAL(downloadComplete(QString,QString)), this, SIGNAL(downloadComplete(QString,QString)));
-    QObject::connect(chat, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
-    QObject::connect(chat, SIGNAL(updateProgress(QString,int)), this, SIGNAL(updateProgress(QString,int)));
+    connect(chat, SIGNAL(delUser(QString)), this, SIGNAL (delUser(QString)));
+    connect(this, SIGNAL(returnPressed(QString)), chat, SLOT(returnPressed(QString)));
+    connect(chat, SIGNAL(newUser(QString, QString)), this, SIGNAL (newUser(QString, QString)));
+    connect(chat, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
+    connect(chat, SIGNAL(downloadComplete(QString,QString)), this, SIGNAL(downloadComplete(QString,QString)));
+    connect(chat, SIGNAL(updateProgress(QString,QString,int)), this, SIGNAL(updateProgress(QString,QString,int)));
+    connect(chat, SIGNAL(newMessage(QString, QString, QString, char)), this, SLOT(messageRecieved(QString, QString, QString, char)));
 
     lan_chat = true;
 }

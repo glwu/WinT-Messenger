@@ -41,9 +41,18 @@ Rectangle {
         fontSize: "large"
         color: "white"
         horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        width: paintedWidth + units.gu(4.5) > app.width ?
-                   app.width - units.gu(4.5) : paintedWidth
+
+        width: {
+            if (paintedWidth + units.gu(4.5) > app.width)
+                return app.width - units.gu(4.5)
+        }
+
+        wrapMode: {
+            if (paintedWidth + units.gu(4.5) > app.width)
+                return Text.WrapAtWordBoundaryOrAnywhere
+            else
+                return Text.NoWrap
+        }
     }
 
     Timer {

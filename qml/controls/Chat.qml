@@ -73,6 +73,21 @@ Page {
             enabled: !device.isMobile()
             textColor: theme.navigationBarText
             onClicked: device.isMobile() ? dialog.open() : bridge.saveChat(textEdit.text)
+        },
+
+        // Create a button that displays and manages downloads
+        Button {
+            flat: true
+            iconName: "download"
+            visible: device.isMobile()
+            enabled: device.isMobile()
+            onClicked: downloadMenu.toggle(caller)
+            textColor: downloadMenu.visible ? theme.getSelectedColor(true) : theme.navigationBarText
+
+            // Create the badge that displays the number of downloads
+            Badge {
+                text: activeDownloads
+            }
         }
     ]
 
@@ -83,309 +98,14 @@ Page {
         Button {
             flat: true
             iconName: "download"
+            visible: !device.isMobile()
+            enabled: !device.isMobile()
             onClicked: downloadMenu.toggle(caller)
             textColor: downloadMenu.visible ? theme.getSelectedColor(true) : theme.navigationBarText
 
             // Create the badge that displays the number of downloads
             Badge {
                 text: activeDownloads
-            }
-
-            // Create the download menu
-            Popover {
-                id: downloadMenu
-                overlayColor: "transparent"
-
-                // This function is used when the user exits the Chat room
-                function exit() {
-                    close()
-                    downloadsModel.clear()
-                }
-
-                // Calulate the width and height of the popover
-                width: column.width + units.gu(2.2)
-                height: column.height + units.gu(2.2)
-
-
-                // Create the column with the downloads
-                Column {
-                    id: column
-                    y: device.ratio(6)
-                    spacing: device.ratio(6)
-                    width: downloadsListView.width + device.ratio(24)
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    height: downloadsScrollView.height + titleRectangle.height + spacing
-
-                    // Create a rectangle with the title of the popover and a clear button
-                    Rectangle {
-                        id: titleRectangle
-                        width: parent.width
-                        color: "transparent"
-                        height: device.ratio(42)
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        // Create the title
-                        Label {
-                            id: downloadsLabel
-                            text: qsTr("Downloads")
-                            anchors.left: parent.left
-                            anchors.margins: device.ratio(12)
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        // Create the button
-                        Button {
-                            text: qsTr("Clear")
-                            height: device.ratio(24)
-                            width: device.ratio(58)
-                            anchors.right: parent.right
-                            anchors.margins: device.ratio(12)
-                            enabled: downloadsModel.count > 0
-                            anchors.verticalCenter: parent.verticalCenter
-                            onClicked: downloadsModel.clearFinishedDownloads()
-                        }
-
-                        // Create a separator
-                        Rectangle {
-                            height: device.ratio(1)
-                            color: theme.borderColor
-                            anchors.bottom: parent.bottom
-                            width: parent.width - device.ratio(24)
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-                    }
-
-                    // Create a scroll view with all active downloads
-                    Controls.ScrollView {
-                        id: downloadsScrollView
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        height: {
-                            if (downloadsModel.count > 0)
-                                return downloadsListView.contentHeight > app.height * 0.4 ?
-                                            app.height * 0.4 : downloadsListView.contentHeight
-                            else
-                                return noDownloadsLabel.height
-                        }
-
-                        // Create a label telling the user that there are no downloads
-                        Rectangle {
-                            color: "transparent"
-                            id: noDownloadsLabel
-                            anchors.top: parent.top
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            opacity: downloadsModel.count > 0 ? 0 : 1
-                            height: downloadsModel.count > 0 ? 0 : device.ratio(56)
-
-                            // Generate the UI effects
-                            Behavior on height {NumberAnimation{}}
-                            Behavior on opacity {NumberAnimation{}}
-
-                            // Generate the actual label
-                            Label {
-                                fontSize: "large"
-                                anchors.centerIn: parent
-                                color: theme.chatNotification
-                                text: qsTr("There are no downloads")
-                            }
-                        }
-
-                        // Create a list view that will display every download
-                        ListView {
-                            id: downloadsListView
-                            //anchors.top: noDownloadsLabel.bottom
-
-                            // Create a new download when the bridge emits the newDownload() signal
-                            Connections {
-                                target: bridge
-                                onNewDownload: {
-                                    activeDownloads += 1
-                                    downloadsModel.append({"f_name": f_name, "f_size": f_size, "sender": peer_address})
-                                }
-                            }
-
-
-                            // Create the list model with all the downloads, this list is used to draw the download rectangles
-                            model: ListModel {
-                                id: downloadsModel
-
-                                // Code to clear all finished downloads and show a notification
-                                signal clearDownloads
-                                function clearFinishedDownloads() {
-                                    // Create a int with all the downloads prior to cleaning them
-                                    var previousCount = count
-
-                                    // Clear all finished downloads
-                                    clearDownloads()
-
-                                    // Tell the user that there are no current downloads
-                                    if (previousCount == 0)
-                                        notification.show("There are no downloads")
-
-                                    // Show a notification informing the user that there are no finished downloads
-                                    else if (previousCount - count == 0)
-                                        notification.show("There are no finished downloads")
-
-                                    // Tell the user how many downloads we cleared
-                                    else
-                                        notification.show(qsTr("Cleared %1 finished downloads").arg(previousCount - count))
-                                }
-                            }
-
-                            // Create the rectangle that holds the download information
-                            delegate: Rectangle {
-                                id: downloadItem
-
-                                // Tell the user that the download started
-                                Component.onCompleted: notification.show(qsTr("Download of %1 started").arg(f_name))
-
-                                // Calculates the correct unit to display a size in bytes
-                                function getUnits(bytes) {
-                                    if (bytes === 0)
-                                        return '0 Bytes';
-
-                                    var k = 1000;
-                                    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-                                    var i = Math.floor(Math.log(bytes) / Math.log(k));
-
-                                    return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
-                                }
-
-                                property bool finished: false
-
-                                // Update the progress of the download
-                                Connections {
-                                    target: bridge
-
-                                    // Finish the download and hide the progress bar
-                                    onDownloadComplete: {
-                                        if (peer_address == sender && d_name == f_name) {
-                                            finished = true
-                                            activeDownloads -= 1
-                                            progressBar.height = 0
-                                            progressBar.visible = false
-                                            downloadMouseArea.enabled = true
-                                            progressLabel.text = downloadItem.getUnits(f_size) + " - " + sender
-
-                                            // Tell the user that the download has finished
-                                            notification.show(qsTr("Download of %1 finished!").arg(f_name))
-                                        }
-                                    }
-
-                                    // Update the value of the progress bar
-                                    onUpdateProgress: {
-                                        if (peer_address == sender && d_name == f_name) {
-                                            console.log("updating progres...") + progress
-                                            progressBar.value = progress
-                                        }
-                                    }
-                                }
-
-                                // Remove the rectangle if the user clicks "clear"
-                                Connections {
-                                    target: downloadsModel
-                                    onClearDownloads: finished ? downloadsModel.remove(index) : undefined
-                                }
-
-                                // Set the size of the rectangle
-                                width: parent.width - device.ratio(2)
-                                height: downloadIcon.height + fNameLabel.paintedHeight +
-                                        progressBar.height + progressLabel.paintedHeight
-
-                                // Make the rectangle a bit rounded
-                                radius: device.ratio(3)
-
-                                // Make the download item hoverable
-                                color: downloadMouseArea.containsMouse ? theme.buttonBackgroundHover : "transparent"
-
-                                // Define the width of the progress bar
-                                property int controlWidth: (width - device.ratio(12)) * 0.75 - device.ratio(4)
-
-                                // Create a row with the icon and the download information
-                                Row {
-                                    anchors.fill: parent
-                                    spacing: device.ratio(6)
-                                    anchors.margins: device.ratio(8)
-                                    anchors.horizontalCenter: parent.horizontalCenter
-
-                                    // Create an icon of the file
-                                    Image {
-                                        width: height
-                                        id: downloadIcon
-                                        height: device.ratio(48)
-                                        source: "qrc:/faces/system/package.png"
-                                        anchors.verticalCenter: parent.verticalCenter
-                                    }
-
-                                    // Create the progress bar with information
-                                    Column {
-                                        spacing: parent.spacing
-                                        anchors.verticalCenter: parent.verticalCenter
-
-                                        // Create a label with the name of the file
-                                        Label {
-                                            text: f_name
-                                            id: fNameLabel
-                                            scale: getScale()
-                                            width: parent.width
-                                            transformOrigin: Item.TopLeft
-                                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-                                            // Resize the label so that it fits inside the rectangle.
-                                            // However, we need to make sure that the text stays visible,
-                                            // so if the scaler than 0.65, we will use word wrapping
-                                            function getScale() {
-                                                var c_scale = 1
-
-                                                if (paintedWidth > width) {
-                                                    c_scale = width / paintedWidth
-
-                                                    if (c_scale < 0.65)
-                                                        c_scale = 0.65
-                                                }
-
-                                                return c_scale
-                                            }
-                                        }
-
-                                        // Create a progress bar showing the progress of the download
-                                        ProgressBar {
-                                            id: progressBar
-                                            width: downloadItem.controlWidth
-                                        }
-
-                                        // Create a label with the progress of the file
-                                        Label {
-                                            id: progressLabel
-                                            font.pixelSize: device.ratio(9)
-                                            color: theme.borderColorDisabled
-                                            width: downloadItem.controlWidth
-                                            //wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                                            scale: paintedWidth > width ? (width / paintedWidth) : 1
-                                            transformOrigin: Item.TopLeft
-                                            text: downloadItem.getUnits((f_size * progressBar.value) / 100) +
-                                                  " of " + downloadItem.getUnits(f_size) + " - " + sender
-                                        }
-                                    }
-                                }
-
-                                // Create a mouse area that will help the user open the downloaded file
-                                MouseArea {
-                                    enabled: false
-                                    anchors.fill: parent
-                                    id: downloadMouseArea
-
-                                    // Enable the hover feature only in desktop devices
-                                    hoverEnabled: !device.isMobile()
-
-                                    // Open the file
-                                    onClicked: openUrl("file://" + bridge.getDownloadPath() + f_name)
-                                }
-                            }
-                        }
-                    }
-                }
             }
         },
 
@@ -437,6 +157,314 @@ Page {
                 textEdit.append("<br/>" + formatTextMessage(settings.value("userName", "unknown") + " has joined the room.", true))
             else
                 listModel.append({"from": "","face": "/system/globe.png","message": "Welcome to the chat room!", "localUser": false})
+        }
+    }
+
+    // Create the download menu
+    Popover {
+        id: downloadMenu
+        overlayColor: "transparent"
+
+        // This function is used when the user exits the Chat room
+        function exit() {
+            close()
+            downloadsModel.clear()
+        }
+
+        // Calulate the width and height of the popover
+        width: column.width + units.gu(2.2)
+        height: column.height + units.gu(2.2)
+
+        // Create the column with the downloads
+        Column {
+            id: column
+            y: device.ratio(6)
+            spacing: device.ratio(6)
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: downloadsScrollView.height + titleRectangle.height + spacing
+            width: activeDownloads > 0 ? downloadsListView.contentWidth + device.ratio(24) :
+                                         noDownloadsLabel.paintedWidth  + device.ratio(24)
+
+            // Create a rectangle with the title of the popover and a clear button
+            Rectangle {
+                id: titleRectangle
+                width: parent.width
+                color: "transparent"
+                height: device.ratio(42)
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                // Create the title
+                Label {
+                    id: downloadsLabel
+                    text: qsTr("Downloads")
+                    anchors.left: parent.left
+                    anchors.margins: device.ratio(12)
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                // Create the button
+                Button {
+                    text: qsTr("Clear")
+                    height: device.ratio(24)
+                    width: device.ratio(58)
+                    anchors.right: parent.right
+                    anchors.margins: device.ratio(12)
+                    enabled: downloadsModel.count > 0
+                    anchors.verticalCenter: parent.verticalCenter
+                    onClicked: downloadsModel.clearFinishedDownloads()
+                }
+
+                // Create a separator
+                Rectangle {
+                    height: device.ratio(1)
+                    color: theme.borderColor
+                    anchors.bottom: parent.bottom
+                    width: parent.width - device.ratio(24)
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+
+            // Create a scroll view with all active downloads
+            Controls.ScrollView {
+                id: downloadsScrollView
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: {
+                    if (downloadsModel.count > 0)
+                        return downloadsListView.contentHeight > app.height * 0.4 ?
+                                    app.height * 0.4 : downloadsListView.contentHeight
+                    else
+                        return noDownloadsLabel.height
+                }
+
+                // Create a label telling the user that there are no downloads
+                Rectangle {
+                    color: "transparent"
+                    id: noDownloadsLabel
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    opacity: downloadsModel.count > 0 ? 0 : 1
+                    height: downloadsModel.count > 0 ? 0 : device.ratio(56)
+
+                    // Add the paintetWidth property
+                    property alias paintedWidth: nDLabel.paintedWidth
+
+                    // Generate the UI effects
+                    Behavior on height {NumberAnimation{ duration: 200 }}
+                    Behavior on opacity {NumberAnimation{ duration: 200 }}
+
+                    // Generate the actual label
+                    Label {
+                        id: nDLabel
+                        fontSize: "large"
+                        width: paintedWidth
+                        anchors.centerIn: parent
+                        color: theme.chatNotification
+                        text: qsTr("There are no downloads")
+                    }
+                }
+
+                // Create a list view that will display every download
+                ListView {
+                    id: downloadsListView
+
+                    // Create a new download when the bridge emits the newDownload() signal
+                    Connections {
+                        target: bridge
+                        onNewDownload: {
+                            activeDownloads += 1
+                            downloadsModel.append({"f_name": f_name, "f_size": f_size, "sender": peer_address})
+                        }
+                    }
+
+
+                    // Create the list model with all the downloads, this list is used to draw the download rectangles
+                    model: ListModel {
+                        id: downloadsModel
+
+                        // Code to clear all finished downloads and show a notification
+                        signal clearDownloads
+                        function clearFinishedDownloads() {
+                            // Create a int with all the downloads prior to cleaning them
+                            var previousCount = count
+
+                            // Clear all finished downloads
+                            clearDownloads()
+
+                            // Tell the user that there are no current downloads
+                            if (previousCount == 0)
+                                notification.show("There are no downloads")
+
+                            // Show a notification informing the user that there are no finished downloads
+                            else if (previousCount - count == 0)
+                                notification.show("There are no finished downloads")
+
+                            // Tell the user how many downloads we cleared
+                            else
+                                notification.show(qsTr("Cleared %1 finished downloads").arg(previousCount - count))
+                        }
+                    }
+
+                    // Create the rectangle that holds the download information
+                    delegate: Rectangle {
+                        id: downloadItem
+
+                        // Tell the user that the download started
+                        Component.onCompleted: notification.show(qsTr("Download of %1 started").arg(f_name))
+
+                        // Calculates the correct unit to display a size in bytes
+                        function getUnits(bytes) {
+                            if (bytes === 0)
+                                return '0 Bytes';
+
+                            var k = 1000;
+                            var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+                            var i = Math.floor(Math.log(bytes) / Math.log(k));
+
+                            return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+                        }
+
+                        property bool finished: false
+
+                        // Update the progress of the download
+                        Connections {
+                            target: bridge
+
+                            // Finish the download and hide the progress bar
+                            onDownloadComplete: {
+                                if (peer_address == sender && d_name == f_name) {
+                                    finished = true
+                                    activeDownloads -= 1
+                                    progressBar.height = 0
+                                    progressBar.visible = false
+                                    downloadMouseArea.enabled = true
+                                    progressLabel.text = downloadItem.getUnits(f_size) + " - " + sender
+
+                                    // Tell the user that the download has finished
+                                    notification.show(qsTr("Download of %1 finished!").arg(f_name))
+                                }
+                            }
+
+                            // Update the value of the progress bar
+                            onUpdateProgress: {
+                                if (peer_address == sender && d_name == f_name)
+                                    progressBar.value = progress
+                            }
+                        }
+
+                        // Remove the rectangle if the user clicks "clear"
+                        Connections {
+                            target: downloadsModel
+                            onClearDownloads: finished ? downloadsModel.remove(index) : undefined
+                        }
+
+                        // Set the size of the rectangle
+                        width: parent.width - device.ratio(2)
+                        height: downloadIcon.height + fNameLabel.paintedHeight +
+                                progressBar.height + progressLabel.paintedHeight
+
+                        // Make the rectangle a bit rounded
+                        radius: device.ratio(3)
+
+                        // Make the download item hoverable
+                        color: downloadMouseArea.containsMouse ? theme.buttonBackgroundHover : "transparent"
+
+                        // Define the width of the progress bar
+                        property int controlWidth: (width - device.ratio(12)) * 0.75 - device.ratio(4)
+
+                        // Create a row with the icon and the download information
+                        Row {
+                            anchors.fill: parent
+                            spacing: device.ratio(6)
+                            anchors.margins: device.ratio(8)
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            // Create an icon of the file
+                            Image {
+                                width: height
+                                id: downloadIcon
+                                height: device.ratio(48)
+                                source: "qrc:/faces/system/package.png"
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            // Create the progress bar with information
+                            Column {
+                                spacing: parent.spacing
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                // Create a label with the name of the file
+                                Label {
+                                    text: f_name
+                                    id: fNameLabel
+                                    scale: getScale()
+                                    width: parent.width
+                                    transformOrigin: Item.TopLeft
+                                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                                    // Resize the label so that it fits inside the rectangle.
+                                    // However, we need to make sure that the text stays visible,
+                                    // so if the scaler than 0.65, we will use word wrapping
+                                    function getScale() {
+                                        var c_scale = 1
+
+                                        if (paintedWidth > width) {
+                                            c_scale = width / paintedWidth
+
+                                            if (c_scale < 0.65)
+                                                c_scale = 0.65
+                                        }
+
+                                        return c_scale
+                                    }
+                                }
+
+                                // Create a progress bar showing the progress of the download
+                                ProgressBar {
+                                    id: progressBar
+                                    valueText: {
+                                        if (!f_size > 0)
+                                            return  qsTr("Downloading...")
+                                    }
+
+                                    width: downloadItem.controlWidth
+                                }
+
+                                // Create a label with the progress of the file
+                                Label {
+                                    id: progressLabel
+                                    font.pixelSize: device.ratio(9)
+                                    color: theme.borderColorDisabled
+                                    width: downloadItem.controlWidth
+                                    scale: paintedWidth > width ? (width / paintedWidth) : 1
+                                    transformOrigin: Item.TopLeft
+                                    text: {
+                                        if (f_size > 0)
+                                            return downloadItem.getUnits((f_size * progressBar.value) / 100) +
+                                                    " of " + downloadItem.getUnits(f_size) + " - " + sender
+                                        else
+                                            return "Unknown size - " + sender
+                                    }
+                                }
+                            }
+                        }
+
+                        // Create a mouse area that will help the user open the downloaded file
+                        MouseArea {
+                            enabled: false
+                            anchors.fill: parent
+                            id: downloadMouseArea
+
+                            // Enable the hover feature only in desktop devices
+                            hoverEnabled: !device.isMobile()
+
+                            // Open the file
+                            onClicked: openUrl("file://" + bridge.getDownloadPath() + f_name)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -703,7 +731,7 @@ Page {
 
                     // To apply the opacity effect, we need to define what should this object
                     // do when the opacity changes
-                    Behavior on opacity {NumberAnimation{}}
+                    Behavior on opacity {NumberAnimation{ duration: 200 }}
 
                     // This is the profile picture of each message
                     Image {
@@ -850,7 +878,7 @@ Page {
         // Anchor the menu to the user side bar, so that we can display all
         // emotes correctly even if the user side bar is shown.
         anchors.rightMargin: userSidebar.expanded ? userSidebar.width : 0
-        Behavior on anchors.rightMargin {NumberAnimation{}}
+        Behavior on anchors.rightMargin {NumberAnimation{ duration: 200 }}
 
         // Hide the caption
         captionVisible: false
@@ -1050,7 +1078,7 @@ Page {
 
                     // Create a sliding effect when the component is loaded
                     Component.onCompleted: x = 0
-                    Behavior on x {NumberAnimation{}}
+                    Behavior on x {NumberAnimation{ duration: 200 }}
 
                     // Automatically delete the object when its respective user extits
                     // the room

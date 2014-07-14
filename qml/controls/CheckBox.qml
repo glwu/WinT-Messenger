@@ -78,7 +78,7 @@ Widget {
             anchors.horizontalCenterOffset: units.gu(0.25)
 
             // Play a fading animation when the opacity changes
-            Behavior on opacity {NumberAnimation{}}
+            Behavior on opacity {NumberAnimation{ duration: 200 }}
         }
     }
 

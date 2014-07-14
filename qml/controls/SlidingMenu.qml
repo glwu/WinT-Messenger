@@ -20,8 +20,8 @@ Rectangle {
     }
 
     // Enable animations
-    Behavior on opacity {NumberAnimation{}}
-    Behavior on anchors.topMargin {NumberAnimation{}}
+    Behavior on opacity {NumberAnimation{ duration: 200 }}
+    Behavior on anchors.topMargin {NumberAnimation{ duration: 200 }}
 
     // Toggle the visibility of the slider menu
     function toggle() {
@@ -99,7 +99,7 @@ Rectangle {
                 verticalCenter: parent.verticalCenter;
             }
 
-            Behavior on opacity {NumberAnimation{}}
+            Behavior on opacity {NumberAnimation{ duration: 200 }}
 
             MouseArea {
                 anchors.fill: parent

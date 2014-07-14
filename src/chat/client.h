@@ -32,9 +32,9 @@ public:
 signals:
     void participantLeft(const QString &nick);
     void newFile(const QByteArray &data, const QString &name);
-    void updateProgress(const QString &peer_address, int progress);
     void newParticipant(const QString &nick, const QString &face);
     void downloadComplete(const QString &peer_address, const QString &f_name);
+    void updateProgress(const QString &peer_address, const QString &d_name, int progress);
     void newDownload(const QString &peer_address, const QString &f_name, const int &f_size);
     void newMessage(const QString &from, const QString &face, const QString &message);
 

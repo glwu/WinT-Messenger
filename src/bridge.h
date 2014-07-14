@@ -14,7 +14,11 @@
 #include "chat/chat.h"
 #include "device_manager.h"
 
-#ifndef Q_OS_IOS
+#if defined(Q_OS_IOS)
+#define SSL_SUPPORT false
+#pragma message("Updater engine disabled because target does not support SSL")
+#else
+#define SSL_SUPPORT true
 #include "updater.h"
 #endif
 
@@ -34,13 +38,14 @@ public:
     Q_INVOKABLE void saveChat(const QString chat);
     Q_INVOKABLE void sendMessage(const QString message);
 
+    DeviceManager manager;
+
 private slots:
     void messageRecieved(const QString &from, const QString &face, const QString &message, char localUser);
 
 private:
     Chat* chat;
     bool lan_chat;
-    DeviceManager manager;
     QList<Chat*> chatObjects;
     QSound *sound;
 
@@ -53,8 +58,8 @@ signals:
     void delUser(const QString &nick);
     void returnPressed(const QString &message);
     void newUser(const QString &nick, const QString &face);
-    void updateProgress(const QString &peer_address, int progress);
     void downloadComplete(const QString &peer_address, const QString &d_name);
+    void updateProgress(const QString &peer_address, const QString &d_name, int progress);
     void newDownload(const QString &peer_address, const QString &f_name, const int &f_size);
     void drawMessage(QString from, QString face, QString message, QString color, bool localUser);
 };

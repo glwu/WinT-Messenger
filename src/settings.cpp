@@ -53,7 +53,7 @@ QVariant Settings::value(const QString &key, const QVariant &defaultValue) const
  */
 
 int Settings::x() {
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+#if MOBILE_TARGET
     return 0;
 #else
     return value("x", 150).toInt();
@@ -68,7 +68,7 @@ int Settings::x() {
  */
 
 int Settings::y() {
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+#if MOBILE_TARGET
     return 0;
 #else
     return value("y", 150).toInt();
@@ -83,7 +83,7 @@ int Settings::y() {
  */
 
 int Settings::width() {
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+#if MOBILE_TARGET
     return qApp->primaryScreen()->geometry().width();
 #else
     return value("width", 720).toInt();
@@ -98,7 +98,7 @@ int Settings::width() {
  */
 
 int Settings::height() {
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+#if MOBILE_TARGET
     return qApp->primaryScreen()->geometry().width();
 #else
     return value("height", 540).toInt();

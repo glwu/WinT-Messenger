@@ -69,11 +69,11 @@ FConnection::FConnection(QObject *parent) : QTcpSocket(parent) {
     pingTimer.setInterval(PingInterval);
 
     // Connect signals/slots
-    QObject::connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
-    QObject::connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
-    QObject::connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
-    QObject::connect(this, SIGNAL(connected()), this, SLOT(sendGreetingMessage()));
-    QObject::connect(this, SIGNAL(bytesWritten(qint64)), this, SLOT(calculateDownloadProgress(qint64)));
+    connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
+    connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
+    connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
+    connect(this, SIGNAL(connected()), this, SLOT(sendGreetingMessage()));
+    connect(this, SIGNAL(bytesWritten(qint64)), this, SLOT(calculateDownloadProgress(qint64)));
 }
 
 /*!
@@ -420,23 +420,29 @@ void FConnection::processData() {
         break;
     }
 
-    // Reset the ping process
+        // Reset the ping process
     case Pong: {
         pongTime.restart();
         break;
     }
 
-    // Split the incoming information to obtain the file name and the file
-    // size.
+        // Split the incoming information to obtain the file name and the file
+        // size.
     case FileData: {
         QList<QByteArray> list = buffer.split('@');
         currentFileName = QString::fromUtf8(list.at(0));
-        currentDownloadSize = QString::fromUtf8(list.at(1)).toInt();
+
+        // Avoid crashing the app when talking to other clients
+        if (list.count() > 1)
+            currentDownloadSize = QString::fromUtf8(list.at(1)).toInt();
+        else
+            currentDownloadSize = 0;
+
         break;
     }
 
-    // Tell the QML interface that the download has completed and prepare the
-    // variables for the next download
+        // Tell the QML interface that the download has completed and prepare the
+        // variables for the next download
     case Binary: {
         downloadedBytes = 0;
         downloadStarted = false;
@@ -445,7 +451,7 @@ void FConnection::processData() {
         break;
     }
 
-    // Do nothing
+        // Do nothing
     default: {
         break;
     }
@@ -472,7 +478,11 @@ void FConnection::calculateDownloadProgress(qint64 recievedBytes) {
 
         // If the downloaded bytes are greater than zero, calculate the progress
         // of the download
-        if (downloadedBytes > 0)
-            emit updateProgress(peerAddress().toString(), (downloadedBytes / currentDownloadSize) * 100);
+        if (downloadedBytes > 0) {
+            if (currentDownloadSize > 0)
+                emit updateProgress(peerAddress().toString(), currentFileName, (downloadedBytes / currentDownloadSize) * 100);
+            else
+                emit updateProgress(peerAddress().toString(), currentFileName, 0);
+        }
     }
 }

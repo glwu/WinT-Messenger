@@ -75,7 +75,7 @@ PopupBase {
     width: parent.width * 0.95 > units.gu(60) ? units.gu(60) : parent.width * 0.95
     height: Math.min(Math.max(minHeight, contentHeight + titleBar.height + 2 * sheet.margins), maxHeight)
 
-    Behavior on opacity {NumberAnimation{}}
+    Behavior on opacity {NumberAnimation{ duration: 200 }}
 
     // Create the shadow
     RectangularGlow {
