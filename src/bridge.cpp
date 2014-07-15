@@ -46,7 +46,6 @@ void Bridge::startChat() {
 
     chat = new Chat();
     chatObjects.append(chat);
-    chat->setDownloadPath(getDownloadPath());
 
     connect(chat, SIGNAL(delUser(QString)), this, SIGNAL (delUser(QString)));
     connect(this, SIGNAL(returnPressed(QString)), chat, SLOT(returnPressed(QString)));

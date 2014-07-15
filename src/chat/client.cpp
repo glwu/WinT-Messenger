@@ -107,18 +107,6 @@ QString Client::nickName() const {
 }
 
 /*!
- * \brief Client::getFile
- * \param fileData
- * \param fileName
- *
- * Emits a signal that notifies the \c Chat that we received a new file.
- */
-
-void Client::getFile(const QByteArray &fileData, const QString &fileName) {
-    emit newFile(fileData, fileName);
-}
-
-/*!
  * \brief Client::hasConnection
  * \param senderIp
  * \param senderPort
@@ -245,7 +233,6 @@ void Client::readyForUseFile() {
     if (file_peers.contains(connection->peerAddress()))
         return;
 
-    connect(connection, SIGNAL(newFile(QByteArray,QString)), this, SLOT(getFile(QByteArray,QString)));
     connect(connection, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
     connect(connection, SIGNAL(downloadComplete(QString,QString)), this, SIGNAL(downloadComplete(QString,QString)));
     connect(connection, SIGNAL(updateProgress(QString,QString,int)), this, SIGNAL(updateProgress(QString,QString,int)));

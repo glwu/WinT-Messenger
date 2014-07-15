@@ -13,7 +13,6 @@
 
 #include "bridge.h"
 #include "settings.h"
-#include "device_manager.h"
 
 /*!
  * \mainpage

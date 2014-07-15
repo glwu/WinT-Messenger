@@ -39,7 +39,6 @@ Page {
     // Show a warning message on mobile devices if
     // the user tries to open a local file
     function openUrl(url) {
-        console.log(url)
         Qt.openUrlExternally(url)
 
         if (device.isMobile()) {
@@ -78,6 +77,7 @@ Page {
         // Create a button that displays and manages downloads
         Button {
             flat: true
+            id: lDownloadButton
             iconName: "download"
             visible: device.isMobile()
             enabled: device.isMobile()
@@ -97,6 +97,7 @@ Page {
         // Create a button that displays and manages downloads
         Button {
             flat: true
+            id: rDownloadButton
             iconName: "download"
             visible: !device.isMobile()
             enabled: !device.isMobile()
@@ -172,18 +173,20 @@ Page {
         }
 
         // Calulate the width and height of the popover
-        width: column.width + units.gu(2.2)
         height: column.height + units.gu(2.2)
+        width: activeDownloads > 0 ? downloadsListView.width + device.ratio(42) :
+                                     noDownloadsLabel.paintedWidth  + device.ratio(42)
 
         // Create the column with the downloads
         Column {
             id: column
             y: device.ratio(6)
+            width: parent.width
             spacing: device.ratio(6)
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: device.ratio(6)
             height: downloadsScrollView.height + titleRectangle.height + spacing
-            width: activeDownloads > 0 ? downloadsListView.contentWidth + device.ratio(24) :
-                                         noDownloadsLabel.paintedWidth  + device.ratio(24)
 
             // Create a rectangle with the title of the popover and a clear button
             Rectangle {
@@ -200,7 +203,6 @@ Page {
                     anchors.left: parent.left
                     anchors.margins: device.ratio(12)
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 // Create the button
@@ -228,7 +230,9 @@ Page {
             // Create a scroll view with all active downloads
             Controls.ScrollView {
                 id: downloadsScrollView
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+
                 height: {
                     if (downloadsModel.count > 0)
                         return downloadsListView.contentHeight > app.height * 0.4 ?
@@ -267,13 +271,15 @@ Page {
 
                 // Create a list view that will display every download
                 ListView {
+                    //width: contentWidth
                     id: downloadsListView
+
+                    Behavior on width {NumberAnimation{ duration: 200 }}
 
                     // Create a new download when the bridge emits the newDownload() signal
                     Connections {
                         target: bridge
                         onNewDownload: {
-                            activeDownloads += 1
                             downloadsModel.append({"f_name": f_name, "f_size": f_size, "sender": peer_address})
                         }
                     }
@@ -311,7 +317,14 @@ Page {
                         id: downloadItem
 
                         // Tell the user that the download started
-                        Component.onCompleted: notification.show(qsTr("Download of %1 started").arg(f_name))
+                        Component.onCompleted: {
+                            activeDownloads += 1
+
+                            if (downloadMenu.visible)
+                                downloadMenu.open(device.isMobile() ? lDownloadButton : rDownloadButton)
+
+                            notification.show(qsTr("Download of %1 started").arg(f_name))
+                        }
 
                         // Calculates the correct unit to display a size in bytes
                         function getUnits(bytes) {
@@ -426,6 +439,8 @@ Page {
                                     valueText: {
                                         if (!f_size > 0)
                                             return  qsTr("Downloading...")
+                                        else
+                                            return value + "%"
                                     }
 
                                     width: downloadItem.controlWidth
@@ -604,8 +619,8 @@ Page {
                     readOnly: true
 
                     // Make the text selectable
-                    selectByMouse: true
-                    selectByKeyboard: true
+                    selectByMouse: !device.isMobile()
+                    selectByKeyboard: !device.isMobile()
 
                     // Set the anchors
                     anchors.fill: parent
@@ -987,10 +1002,10 @@ Page {
             placeholderText: qsTr("Type a message...")
 
             anchors {
+                top: parent.top
+                bottom: parent.bottom
                 left: attachButton.right
                 right: emotesButton.left
-                bottom: parent.bottom
-                top: parent.top
                 rightMargin: device.ratio(-1)
                 leftMargin: device.ratio(-1)
             }

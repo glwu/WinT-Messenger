@@ -31,12 +31,11 @@ public:
 
 signals:
     void participantLeft(const QString &nick);
-    void newFile(const QByteArray &data, const QString &name);
     void newParticipant(const QString &nick, const QString &face);
     void downloadComplete(const QString &peer_address, const QString &f_name);
+    void newMessage(const QString &from, const QString &face, const QString &message);
     void updateProgress(const QString &peer_address, const QString &d_name, int progress);
     void newDownload(const QString &peer_address, const QString &f_name, const int &f_size);
-    void newMessage(const QString &from, const QString &face, const QString &message);
 
 private slots:
     void readyForUseMsg();
@@ -49,7 +48,6 @@ private slots:
 
     void newFileConnection(FConnection *fc);
     void newMessageConnection(MConnection *mc);
-    void getFile(const QByteArray &fileData, const QString &fileName);
 
 private:
     MServer m_server;

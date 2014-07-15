@@ -36,7 +36,6 @@ public slots:
 private slots:
     void participantLeft(const QString &nick);
     void newParticipant(const QString &nick, const QString &face);
-    void receivedFile(const QByteArray &data, const QString &fileName);
     void messageReceived(const QString &from, const QString &face, const QString &message);
 
 private:

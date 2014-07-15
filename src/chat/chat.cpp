@@ -16,7 +16,6 @@
 
 Chat::Chat() {
     connect(&client, SIGNAL(participantLeft(QString)), this, SLOT(participantLeft(QString)));
-    connect(&client, SIGNAL(newFile(QByteArray,QString)), this, SLOT(receivedFile(QByteArray,QString)));
     connect(&client, SIGNAL(newParticipant(QString,QString)), this, SLOT(newParticipant(QString,QString)));
     connect(&client, SIGNAL(newMessage(QString,QString,QString)), this, SLOT(messageReceived(QString,QString,QString)));
     connect(&client, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
@@ -25,18 +24,6 @@ Chat::Chat() {
 
     QSettings settings("WinT 3794", "WinT Messenger");
     userColor = settings.value("userColor", "#336699").toString();
-}
-
-/*!
- * \brief Chat::setDownloadPath
- * \param path
- *
- * Changes the directory where we save received files based on the
- * \c path parameter.
- */
-
-void Chat::setDownloadPath(const QString &path) {
-    downloadPath = path;
 }
 
 /*!
@@ -98,27 +85,6 @@ void Chat::newParticipant(const QString &nick, const QString &face) {
 
 void Chat::participantLeft(const QString &nick) {
     emit delUser(nick);
-}
-
-/*!
- * \brief Chat::receivedFile
- * \param data
- * \param fileName
- *
- * Uncompresses the \c data, creates a file in the \c downloadPath directory,
- * writes the \c data to the file and sends a message to the \c Bridge that
- * notifies the user that the download is complete.
- */
-
-void Chat::receivedFile(const QByteArray &data, const QString &fileName) {
-    QByteArray uncompressedData = qUncompress(data);
-
-    QFile file(downloadPath + fileName);
-    if (file.open(QFile::WriteOnly))
-        file.write(uncompressedData);
-
-    uncompressedData.clear();
-    file.close();
 }
 
 /*!

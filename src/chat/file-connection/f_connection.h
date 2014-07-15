@@ -33,7 +33,6 @@ public:
 
 signals:
     void readyForUse();
-    void newFile(const QByteArray &buffer, const QString &fileName);
     void downloadComplete(const QString &peer_address, const QString &f_name);
     void updateProgress(const QString &peer_address, const QString &d_name, int progress);
     void newDownload(const QString &peer_address, const QString &f_name, const int &f_size);
@@ -45,7 +44,7 @@ private slots:
     void sendPing();
     void processReadyRead();
     void sendGreetingMessage();
-    void calculateDownloadProgress(qint64 recievedBytes);
+    void calculateDownloadProgress();
 
 private:
     void processData();
@@ -57,6 +56,7 @@ private:
     QTime pongTime;
     QTimer pingTimer;
     QByteArray buffer;
+    QTimer downloadTimer;
     int transferTimerId;
     ConnectionState state;
     QString currentFileName;
@@ -66,8 +66,8 @@ private:
 
     // Used for calculating progress of download
     bool downloadStarted;
-    int downloadedBytes;
-    int currentDownloadSize;
+    qreal downloadedBytes;
+    qreal currentDownloadSize;
 
     static const char SeparatorToken = ' ';
     static const int PongTimeout = 60 * 1000;

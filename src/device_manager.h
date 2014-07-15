@@ -10,7 +10,6 @@
 
 #include <math.h>
 
-#include <QDebug>
 #include <QObject>
 #include <QScreen>
 #include <QGuiApplication>

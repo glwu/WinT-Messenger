@@ -73,7 +73,8 @@ FConnection::FConnection(QObject *parent) : QTcpSocket(parent) {
     connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
     connect(this, SIGNAL(readyRead()), this, SLOT(processReadyRead()));
     connect(this, SIGNAL(connected()), this, SLOT(sendGreetingMessage()));
-    connect(this, SIGNAL(bytesWritten(qint64)), this, SLOT(calculateDownloadProgress(qint64)));
+    connect(&downloadTimer, SIGNAL(timeout()), this, SLOT(calculateDownloadProgress()));
+    connect(this, SIGNAL(downloadComplete(QString,QString)), &downloadTimer, SLOT(stop()));
 }
 
 /*!
@@ -366,6 +367,7 @@ bool FConnection::readProtocolHeader() {
         // can know that a file is being downloaded.
         if (!downloadStarted) {
             downloadStarted = true;
+            downloadTimer.start(100);
             emit newDownload(peerAddress().toString(), currentFileName, currentDownloadSize);
         }
     }
@@ -446,7 +448,31 @@ void FConnection::processData() {
     case Binary: {
         downloadedBytes = 0;
         downloadStarted = false;
-        emit newFile(buffer, currentFileName);
+
+        // Define the download path
+        QString downloadPath;
+
+#if defined(Q_OS_ANDROID)
+        downloadPath =  "/sdcard/Download/";
+#else
+        downloadPath =  QDir::tempPath() + "/";
+#endif
+
+        // Uncompress the data
+        QByteArray uncompressedData = qUncompress(buffer);
+
+        // Create a new file with the download path
+        QFile file(downloadPath + currentFileName);
+
+        // Open the file and write the downloaded contents to it
+        if (file.open(QFile::WriteOnly))
+            file.write(uncompressedData);
+
+        // Close the file & clear the byte array
+        file.close();
+        uncompressedData.clear();
+
+        // Emit the signal when the download is complete
         emit downloadComplete(peerAddress().toString(), currentFileName);
         break;
     }
@@ -470,17 +496,14 @@ void FConnection::processData() {
  * Returns the progress of the download with numbers ranging from 0 to 100.
  */
 
-void FConnection::calculateDownloadProgress(qint64 recievedBytes) {
-    // Only calculate the download progress if the file is 'binary'
+void FConnection::calculateDownloadProgress() {
     if (downloadStarted) {
-        // Append the received bytes to the downloaded bytes
-        downloadedBytes += (int)recievedBytes;
+        downloadedBytes = bytesAvailable();
 
-        // If the downloaded bytes are greater than zero, calculate the progress
-        // of the download
         if (downloadedBytes > 0) {
             if (currentDownloadSize > 0)
-                emit updateProgress(peerAddress().toString(), currentFileName, (downloadedBytes / currentDownloadSize) * 100);
+                emit updateProgress(peerAddress().toString(), currentFileName,
+                                    (int)((downloadedBytes / currentDownloadSize) * 100));
             else
                 emit updateProgress(peerAddress().toString(), currentFileName, 0);
         }
