@@ -143,6 +143,7 @@ Page {
             listModel.clear()
             usersModel.clear()
             downloadMenu.exit()
+            activeDownloads = 0
             preferencesMenuEnabled = true
         }
 
@@ -174,8 +175,9 @@ Page {
 
         // Calulate the width and height of the popover
         height: column.height + units.gu(2.2)
-        width: activeDownloads > 0 ? downloadsListView.width + device.ratio(42) :
-                                     noDownloadsLabel.paintedWidth  + device.ratio(42)
+        width: noDownloadsLabel.paintedWidth + device.ratio(42)
+
+        Behavior on width {NumberAnimation{duration: 200}}
 
         // Create the column with the downloads
         Column {
@@ -271,10 +273,8 @@ Page {
 
                 // Create a list view that will display every download
                 ListView {
-                    //width: contentWidth
                     id: downloadsListView
-
-                    Behavior on width {NumberAnimation{ duration: 200 }}
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     // Create a new download when the bridge emits the newDownload() signal
                     Connections {
@@ -283,7 +283,6 @@ Page {
                             downloadsModel.append({"f_name": f_name, "f_size": f_size, "sender": peer_address})
                         }
                     }
-
 
                     // Create the list model with all the downloads, this list is used to draw the download rectangles
                     model: ListModel {
@@ -316,12 +315,28 @@ Page {
                     delegate: Rectangle {
                         id: downloadItem
 
+                        // Set the size of the rectangle
+                        width: parent.width - device.ratio(2)
+                        height: downloadIcon.height + fNameLabel.paintedHeight +
+                                progressBar.height + progressLabel.paintedHeight
+
+                        // Make the rectangle a bit rounded
+                        radius: device.ratio(3)
+
+                        // Make the download item hoverable
+                        color: downloadMouseArea.containsMouse ? theme.buttonBackgroundHover : "transparent"
+
+                        // Define the width of the progress bar
+                        property int controlWidth: (width - device.ratio(12)) * 0.75 - device.ratio(4)
+
                         // Tell the user that the download started
                         Component.onCompleted: {
                             activeDownloads += 1
 
-                            if (downloadMenu.visible)
+                            if (downloadMenu.visible) {
+                                downloadMenu.close()
                                 downloadMenu.open(device.isMobile() ? lDownloadButton : rDownloadButton)
+                            }
 
                             notification.show(qsTr("Download of %1 started").arg(f_name))
                         }
@@ -354,6 +369,10 @@ Page {
                                     downloadMouseArea.enabled = true
                                     progressLabel.text = downloadItem.getUnits(f_size) + " - " + sender
 
+                                    if (downloadMenu.visible) {
+                                        downloadMenu.open(device.isMobile() ? lDownloadButton : rDownloadButton)
+                                    }
+
                                     // Tell the user that the download has finished
                                     notification.show(qsTr("Download of %1 finished!").arg(f_name))
                                 }
@@ -371,20 +390,6 @@ Page {
                             target: downloadsModel
                             onClearDownloads: finished ? downloadsModel.remove(index) : undefined
                         }
-
-                        // Set the size of the rectangle
-                        width: parent.width - device.ratio(2)
-                        height: downloadIcon.height + fNameLabel.paintedHeight +
-                                progressBar.height + progressLabel.paintedHeight
-
-                        // Make the rectangle a bit rounded
-                        radius: device.ratio(3)
-
-                        // Make the download item hoverable
-                        color: downloadMouseArea.containsMouse ? theme.buttonBackgroundHover : "transparent"
-
-                        // Define the width of the progress bar
-                        property int controlWidth: (width - device.ratio(12)) * 0.75 - device.ratio(4)
 
                         // Create a row with the icon and the download information
                         Row {
@@ -436,22 +441,23 @@ Page {
                                 // Create a progress bar showing the progress of the download
                                 ProgressBar {
                                     id: progressBar
+                                    implicitWidth: downloadItem.controlWidth
+
                                     valueText: {
                                         if (!f_size > 0)
                                             return  qsTr("Downloading...")
                                         else
                                             return value + "%"
                                     }
-
-                                    width: downloadItem.controlWidth
                                 }
 
                                 // Create a label with the progress of the file
                                 Label {
                                     id: progressLabel
+                                    width: progressBar.width
                                     font.pixelSize: device.ratio(9)
                                     color: theme.borderColorDisabled
-                                    width: downloadItem.controlWidth
+                                    //implicitWidth: downloadItem.controlWidth
                                     scale: paintedWidth > width ? (width / paintedWidth) : 1
                                     transformOrigin: Item.TopLeft
                                     text: {
