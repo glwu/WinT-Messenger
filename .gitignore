@@ -19,6 +19,7 @@ qrc_*.cpp
 
 # OS X Finder files
 *.DS_Store
+*._*
 
 Makefile
 *-build-*
