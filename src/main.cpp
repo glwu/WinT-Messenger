@@ -103,17 +103,14 @@ int main(int argc, char *argv[]) {
     window->setScreen(app.primaryScreen());
 
     // Show the window icon only on Windows & Linux
-#if (!MOBILE_TARGET) && !defined(Q_OS_MAC)
-    window->setIcon(QIcon(":/icons/Logo.svg"));
-#endif
+    if (LINUX || WINDOWS)
+        window->setIcon(QIcon(":/icons/Logo.svg"));
 
-#if MOBILE_TARGET
     // Allow the window to display the system's statusbar and controls under mobile systems
-    window->showMaximized();
-#else
-    // Show the window noramlly under desktop systems
-    window->showNormal();
-#endif
+    if (MOBILE_TARGET)
+        window->showMaximized();
+    else
+        window->showNormal();
 
     // Execute the application
     return app.exec();

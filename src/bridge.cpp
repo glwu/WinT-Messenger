@@ -22,6 +22,9 @@ Bridge::Bridge() {
 
     // Check for updates only if the target system supports SSL.
     // For the moment, only iOS has trouble supporting SSL.
+    // We need to use preprocessor directives because the build on
+    // iOS would fail because we would need to create the Updater object,
+    // which includes classes that try to initialize SSL features.
 #if SSL_SUPPORT
     updater = new Updater();
     connect(updater, SIGNAL(updateAvailable()), this, SIGNAL(updateAvailable()));
@@ -112,11 +115,10 @@ void Bridge::playSound() {
 
 bool Bridge::checkForUpdates() {
     // Check for updates only if the target system supports SSL.
-#if SSL_SUPPORT
-    return updater->checkForUpdates();
-#else
-    return false;
-#endif
+    if (SSL_SUPPORT)
+        return updater->checkForUpdates();
+    else
+        return false;
 }
 
 /*!
@@ -165,12 +167,11 @@ void Bridge::shareFiles() {
 QString Bridge::getDownloadPath() {
     // Save downloaded files on the SD card on Android
     // Save the downloaded files on the temporary directory on other
-    // operatin systems.
-#if defined(Q_OS_ANDROID)
-    return "/sdcard/Download/";
-#else
-    return QDir::tempPath() + "/";
-#endif
+    // operating systems.
+    if (ANDROID)
+        return "/sdcard/Download/";
+    else
+        return QDir::tempPath() + "/";
 }
 
 /*!

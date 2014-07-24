@@ -161,13 +161,6 @@ PageApplication {
                 onClicked: Qt.openUrlExternally(webView.url)
             },
 
-            Button {
-                flat: true
-                iconName: "fuck"
-                textColor: theme.navigationBarText
-                onClicked: webView.back()
-            }
-
             // Create a button that refereshes the current page
             Button {
                 flat: true
