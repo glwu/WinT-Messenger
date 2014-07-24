@@ -52,7 +52,7 @@
  *  - state (assigned value is \c WaitingForGreeting)
  *  - isGreetingMessageSent (assigned value is \c false)
  *  - numBytesForCurrentDataType (assigned value is \c -1)
- *  - pintTimer interval (assigned value is value of \c PingInterval)
+ *  - pintTimer interval (assigned value is value of \c PING_INTERVAL)
  *
  * After initializing those variables, the funnction connects the neccesary slots
  * to make everything work.
@@ -67,7 +67,7 @@ MConnection::MConnection(QObject *parent) : QTcpSocket(parent) {
     isGreetingMessageSent = false;
     greetingMessage = "undefined";
     numBytesForCurrentDataType = -1;
-    pingTimer.setInterval(PingInterval);
+    pingTimer.setInterval(PING_INTERVAL);
 
     connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
     connect(this, SIGNAL(disconnected()), &pingTimer, SLOT(stop()));
@@ -208,7 +208,7 @@ void MConnection::processReadyRead() {
  */
 
 void MConnection::sendPing() {
-    if (pongTime.elapsed() > PongTimeout) {
+    if (pongTime.elapsed() > PONG_TIMEOUT) {
         abort();
         return;
     }
@@ -242,14 +242,14 @@ void MConnection::sendGreetingMessage() {
 
 int MConnection::readDataIntoBuffer() {
     int numBytesBeforeRead = buffer.size();
-    if (numBytesBeforeRead == MaxBufferSize) {
+    if (numBytesBeforeRead == MAX_BUFFER_SIZE) {
         abort();
         return 0;
     }
 
-    while (bytesAvailable() > 0 && buffer.size() < MaxBufferSize) {
+    while (bytesAvailable() > 0 && buffer.size() < MAX_BUFFER_SIZE) {
         buffer.append(read(1));
-        if (buffer.endsWith(SeparatorToken))
+        if (buffer.endsWith(SEPARATOR_TOKEN))
             break;
     }
 
@@ -263,7 +263,7 @@ int MConnection::readDataIntoBuffer() {
 
 int MConnection::dataLengthForCurrentDataType() {
     if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 ||
-            !buffer.endsWith(SeparatorToken))
+            !buffer.endsWith(SEPARATOR_TOKEN))
         return 0;
 
     buffer.chop(1);
@@ -288,7 +288,8 @@ bool MConnection::hasEnoughData() {
 
     if (bytesAvailable() < numBytesForCurrentDataType ||
             numBytesForCurrentDataType <= 0) {
-        transferTimerId = startTimer(TransferTimeout);
+
+        transferTimerId = startTimer(TRANSFER_TIMEOUT);
         return false;
     }
 
@@ -316,7 +317,7 @@ bool MConnection::readProtocolHeader() {
     }
 
     if (readDataIntoBuffer() <= 0) {
-        transferTimerId = startTimer(TransferTimeout);
+        transferTimerId = startTimer(TRANSFER_TIMEOUT);
         return false;
     }
 

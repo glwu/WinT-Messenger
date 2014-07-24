@@ -40,13 +40,17 @@ Page {
     // the user tries to open a local file
     function openUrl(url) {
         Qt.openUrlExternally(url)
+        console.log("Opening URL: " + url)
 
         if (device.isMobile()) {
             if (url.search("file:///") !== -1) {
+                url = url.replace("file://", "")
                 downloadMenu.close()
                 warningMessage.open()
                 warningMessage.text = qsTr("Cannot open file directly from WinT Messenger, " +
-                                           "the requested URL was: " + url)
+                                           "your file was download here: " + url +
+                                           "<br>If you want to learn more about this error, " +
+                                           "<a href=https://github.com/WinT-3794/WinT-Messenger/issues/3>click here</a>.")
             }
         }
     }
@@ -156,7 +160,7 @@ Page {
             userSidebar.addUser(qsTr("You"), settings.value("face", "astronaut.jpg"))
 
             if (textChat)
-                textEdit.append("<br/>" + formatTextMessage(settings.value("userName", "unknown") + " has joined the room.", true))
+                textEdit.append(formatTextMessage(settings.value("userName", "unknown") + " has joined the room.", true))
             else
                 listModel.append({"from": "","face": "/system/globe.png","message": "Welcome to the chat room!", "localUser": false})
         }
@@ -481,7 +485,7 @@ Page {
                             hoverEnabled: !device.isMobile()
 
                             // Open the file
-                            onClicked: openUrl("file://" + bridge.getDownloadPath() + f_name)
+                            onClicked: openUrl("file:///" + bridge.getDownloadPath() + f_name)
                         }
                     }
                 }
@@ -506,7 +510,6 @@ Page {
         anchors.left: parent.left
         anchors.right: userSidebar.left
         anchors.bottom: messageControls.top
-        anchors.leftMargin: device.ratio(5)
         anchors.rightMargin: device.ratio(-1)
 
         // Append a new message when the Bridge notifies us about a new message
@@ -572,6 +575,7 @@ Page {
 
                 // Set the anchors of the flickable
                 anchors.fill: parent
+		anchors.rightMargin: device.ratio(5)
 
                 // Set the size of the flickable based on the size of the text edit
                 contentWidth: width
@@ -690,7 +694,7 @@ Page {
             ListView {
                 id: listView
                 anchors.fill: parent
-                anchors.rightMargin: device.ratio(6)
+                anchors.rightMargin: device.ratio(11)
 
                 // Show this widget when the text-based interface is disabled.
                 visible: parent.visible
@@ -1161,16 +1165,15 @@ Page {
 
         // Create a column with the icon and the controls
         Column {
-            spacing: units.gu(0.75)
+            spacing: units.gu(2)
 
             // Set the anchors of the column
             anchors.centerIn: parent
             anchors.margins: device.ratio(12)
-            anchors.verticalCenterOffset: -units.gu(6)
 
             // Create the error icon
             Icon {
-                name: "cancel"
+                name: "exclamation"
                 fontSize: units.gu(10)
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -1185,21 +1188,21 @@ Page {
             // Create the subtitle
             Label {
                 id: label
+                textFormat: Text.RichText
+                onLinkActivated: openUrl(link)
                 width: warningMessage.width * 0.7
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 anchors.horizontalCenter: parent.horizontalCenter
             }
-        }
 
-        // Finally, create the button to close the message
-        Button {
-            style: "primary"
-            text: qsTr("Close")
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: units.gu(4)
-            onClicked: warningMessage.close()
-            anchors.horizontalCenter: parent.horizontalCenter
+            // Finally, create the button to close the message
+            Button {
+                style: "primary"
+                text: qsTr("Close")
+                onClicked: warningMessage.close()
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
     }
 }

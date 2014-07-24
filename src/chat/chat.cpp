@@ -15,13 +15,21 @@
  */
 
 Chat::Chat() {
-    connect(&client, SIGNAL(participantLeft(QString)), this, SLOT(participantLeft(QString)));
-    connect(&client, SIGNAL(newParticipant(QString,QString)), this, SLOT(newParticipant(QString,QString)));
-    connect(&client, SIGNAL(newMessage(QString,QString,QString)), this, SLOT(messageReceived(QString,QString,QString)));
-    connect(&client, SIGNAL(newDownload(QString,QString,int)), this, SIGNAL(newDownload(QString,QString,int)));
-    connect(&client, SIGNAL(downloadComplete(QString,QString)), this, SIGNAL(downloadComplete(QString,QString)));
-    connect(&client, SIGNAL(updateProgress(QString,QString,int)), this, SIGNAL(updateProgress(QString,QString,int)));
+    // Establish the communication layers between the client and the bridge
+    connect(&client, SIGNAL(participantLeft(QString)), this,
+                     SLOT(participantLeft(QString)));
+    connect(&client, SIGNAL(newParticipant(QString,QString)), this,
+                     SLOT(newParticipant(QString,QString)));
+    connect(&client, SIGNAL(newMessage(QString,QString,QString)), this,
+                     SLOT(messageReceived(QString,QString,QString)));
+    connect(&client, SIGNAL(newDownload(QString,QString,int)), this,
+                     SIGNAL(newDownload(QString,QString,int)));
+    connect(&client, SIGNAL(downloadComplete(QString,QString)), this,
+                     SIGNAL(downloadComplete(QString,QString)));
+    connect(&client, SIGNAL(updateProgress(QString,QString,int)), this,
+                     SIGNAL(updateProgress(QString,QString,int)));
 
+    // Load the user color
     QSettings settings("WinT 3794", "WinT Messenger");
     userColor = settings.value("userColor", "#336699").toString();
 }
@@ -36,11 +44,18 @@ Chat::Chat() {
  */
 
 void Chat::returnPressed(const QString &message) {
+    // Append the profile color to the message
     QString msg = message + "@color@" + userColor;
+
+    // Replace "<" and ">" with their HTML equivalents to avoid screwing up
+    // the QML interface (because the messages are displayed in HTML)
     msg.replace("<", "&lt;");
     msg.replace(">", "&gt;");
 
+    // Send the message to all connected users
     client.sendMessage(msg);
+
+    // Draw the modified message in the QML interface as the local user
     emit newMessage(client.nickName(), QString(client.peerManager->face()), msg, 1);
 }
 
@@ -53,12 +68,18 @@ void Chat::returnPressed(const QString &message) {
  */
 
 void Chat::shareFile(const QString &path) {
+    // Send the file to all connected users, note that the file is actually read
+    // in the FConnection class ($PWD/file-connection/f_connection.cpp)
     client.sendFile(path);
 
+    // Get the name of the file to notify the sender of the file that the
+    // file was shared.
     QFile file(path);
     emit newMessage(client.nickName(), "system/package.png",
                     QString("You shared <a href='file://%1'>%2</a>")
                     .arg(path, QFileInfo(file).fileName()), 1);
+
+    // Close the file so that other programs/OS can use it.
     file.close();
 }
 
@@ -67,8 +88,8 @@ void Chat::shareFile(const QString &path) {
  * \param nick
  * \param face
  *
- * Sends information about the new peer to the \c Bridge and sends a message to the \c Bridge
- * that notifies the user that the user has joined the room.
+ * Sends information about the new peer to the \c Bridge and sends a message
+ * to the \c Bridge that notifies the user that the user has joined the room.
  */
 
 void Chat::newParticipant(const QString &nick, const QString &face) {

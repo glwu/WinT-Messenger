@@ -1,6 +1,7 @@
 //
 //  This file is part of WinT Messenger
 //
+//  Copytight (c) 2014 WinT 3794
 //  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
 //  Please check the license.txt file for more information.
 //
@@ -96,9 +97,14 @@ int main(int argc, char *argv[]) {
     else
         component->loadUrl(QUrl("qrc:/qml/desktopApp.qml"));
 
-    // Create the window and load it in the primary screen of the device
+    // Create the window with the QML engine
     QQuickWindow* window = qobject_cast<QQuickWindow*>(component->create());
     window->setScreen(app.primaryScreen());
+
+    // Show the window icon only on Windows & Linux
+#if (!MOBILE_TARGET) && !defined(Q_OS_MAC)
+    window->setIcon(QIcon(":/icons/Logo.svg"));
+#endif
 
 #if MOBILE_TARGET
     // Allow the window to display the system's statusbar and controls under mobile systems

@@ -98,7 +98,8 @@ Widget {
                 "refresh": "",
                 "confirm": "",
                 "cancel": "",
-                "save": ""
+                "save": "",
+                "exclamation": ""
     }
 
     // Load the Font Awesome font

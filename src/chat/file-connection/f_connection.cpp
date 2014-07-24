@@ -66,7 +66,7 @@ FConnection::FConnection(QObject *parent) : QTcpSocket(parent) {
     currentDataType = Undefined;
     isGreetingMessageSent = false;
     numBytesForCurrentDataType = -1;
-    pingTimer.setInterval(PingInterval);
+    pingTimer.setInterval(PING_INTERVAL);
 
     // Connect signals/slots
     connect(&pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
@@ -206,7 +206,7 @@ void FConnection::processReadyRead() {
 
 void FConnection::sendPing() {
     // If the peer does not respond abort the connection
-    if (pongTime.elapsed() > PongTimeout) {
+    if (pongTime.elapsed() > PONG_TIMEOUT) {
         abort();
         return;
     }
@@ -247,15 +247,15 @@ int FConnection::readDataIntoBuffer() {
     int numBytesBeforeRead = buffer.size();
 
     // Avoid something roughly similar to the ping of death
-    if (numBytesBeforeRead == MaxBufferSize) {
+    if (numBytesBeforeRead == MAX_BUFFER_SIZE) {
         abort();
         return 0;
     }
 
     // Read data into the buffer
-    while (bytesAvailable() > 0 && buffer.size() < MaxBufferSize) {
+    while (bytesAvailable() > 0 && buffer.size() < MAX_BUFFER_SIZE) {
         buffer.append(read(1));
-        if (buffer.endsWith(SeparatorToken))
+        if (buffer.endsWith(char(MAX_BUFFER_SIZE)))
             break;
     }
 
@@ -272,7 +272,7 @@ int FConnection::readDataIntoBuffer() {
 
 int FConnection::dataLengthForCurrentDataType() {
     // Verify that the datagram received was valid
-    if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 || !buffer.endsWith(SeparatorToken))
+    if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 || !buffer.endsWith(SEPARATOR_TOKEN))
         return 0;
 
     // Remove 1 bytes from the end of the byte array
@@ -307,7 +307,7 @@ bool FConnection::hasEnoughData() {
 
     // Return false if we cannot complete the transfer process
     if (bytesAvailable() < numBytesForCurrentDataType || numBytesForCurrentDataType <= 0) {
-        transferTimerId = startTimer(TransferTimeout);
+        transferTimerId = startTimer(TRANSFER_TIMEOUT);
         return false;
     }
 
@@ -338,7 +338,7 @@ bool FConnection::readProtocolHeader() {
 
     // Ensure that the current datagram is bigger than 0
     if (readDataIntoBuffer() <= 0) {
-        transferTimerId = startTimer(TransferTimeout);
+        transferTimerId = startTimer(TRANSFER_TIMEOUT);
         return false;
     }
 
@@ -491,7 +491,7 @@ void FConnection::processData() {
 
 /*!
  * \brief FConnection::calculateDownloadProgress
- * \param recievedBytes
+ * \param receivedBytes
  *
  * Returns the progress of the download with numbers ranging from 0 to 100.
  */

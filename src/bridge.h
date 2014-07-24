@@ -41,7 +41,7 @@ public:
     DeviceManager manager;
 
 private slots:
-    void messageRecieved(const QString &from, const QString &face, const QString &message, char localUser);
+    void messagereceived(const QString &from, const QString &face, const QString &message, char localUser);
 
 private:
     Chat* chat;

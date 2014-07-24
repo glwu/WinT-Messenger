@@ -69,11 +69,11 @@ private:
     qreal downloadedBytes;
     qreal currentDownloadSize;
 
-    static const char SeparatorToken = ' ';
-    static const int PongTimeout = 60 * 1000;
-    static const int PingInterval = 5 * 1000;
-    static const int MaxBufferSize = 1024000;
-    static const int TransferTimeout = 30 * 1000;
+    static const char SEPARATOR_TOKEN = ' ';
+    static const int PONG_TIMEOUT = 60 * 1000;
+    static const int PING_INTERVAL = 5 * 1000;
+    static const int TRANSFER_TIMEOUT = 30 * 1000;
+    static const int MAX_BUFFER_SIZE = 1024 * 1000;
 };
 
 #endif

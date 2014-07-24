@@ -169,12 +169,12 @@ PageApplication {
 
         // Create a column with the icon and the controls
         Column {
-            spacing: units.gu(0.75)
+            spacing: units.gu(2)
 
             // Set the anchors of the column
             anchors.centerIn: parent
             anchors.margins: device.ratio(12)
-            anchors.verticalCenterOffset: -units.gu(4)
+            //anchors.verticalCenterOffset: -units.gu(4)
 
             // Create the download icon
             Icon {
@@ -206,7 +206,6 @@ PageApplication {
             // Create a label telling the user how to disable the auto-updater
             Label {
                 color: theme.borderColor
-                font.pixelSize: device.ratio(11)
                 width: updateMessage.width * 0.7
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -219,27 +218,24 @@ PageApplication {
                 }
             }
 
-        }
+            // Finally, create the buttons
+            Row {
+                spacing: units.gu(2)
+                anchors.horizontalCenter: parent.horizontalCenter
 
-        // Finally, create the buttons
-        Row {
-            spacing: units.gu(2)
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: units.gu(4)
-            anchors.horizontalCenter: parent.horizontalCenter
+                Button {
+                    style: "primary"
+                    text: qsTr("Not now")
+                    onClicked: updateMessage.close()
+                }
 
-            Button {
-                style: "primary"
-                text: qsTr("Not now")
-                onClicked: updateMessage.close()
-            }
-
-            Button {
-                style: "primary"
-                text: qsTr("Yes")
-                onClicked: {
-                    Qt.openUrlExternally("http://wint-im.sf.net")
-                    updateMessage.close()
+                Button {
+                    style: "primary"
+                    text: qsTr("Yes")
+                    onClicked: {
+                        Qt.openUrlExternally("http://wint-im.sf.net")
+                        updateMessage.close()
+                    }
                 }
             }
         }

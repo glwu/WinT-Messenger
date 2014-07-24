@@ -32,7 +32,7 @@ private slots:
 
 private:
     bool newUpdate;
-    QString releaseNumber;
+    int releaseNumber;
     QNetworkAccessManager *accessManager;
 
 signals:
