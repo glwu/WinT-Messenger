@@ -1,7 +1,9 @@
 //
 //  This file is part of WinT Messenger
 //
+//  Copytight (c) 2013-2014 WinT 3794
 //  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//
 //  Please check the license.txt file for more information.
 //
 
@@ -21,7 +23,7 @@ DeviceManager::DeviceManager() {
     // reported logical DPI (using the physical DPI returns a NULL value under Android)
     // and calculate a constant based on the screen resolution.
 
-    // First of all, get the size of the screen. We don't want to use qApp->primaryScreen() 
+    // First of all, get the size of the screen. We don't want to use qApp->primaryScreen()
     // for all the calculations made here.
     rect = qApp->primaryScreen()->geometry();
 
