@@ -19,6 +19,11 @@ You can see how the whole app works here, or even write code to make it better!
 5. Send pull request from your fork.
 6. We'll review it, and push your changes to the site!
 
+## Developer's documentation
+
+You can find the Doxygen documentation for version 1.2.1 [here](http://wint-im.sf.net/dev-doc/html/index.html). Updated documentation for 1.3.0 will be uploaded soon.
+
+
 ## Setup/Compilling
 
 ### Windows
@@ -90,7 +95,3 @@ You can see how the whole app works here, or even write code to make it better!
 **Note:** We will configure the project to create an insallation script for the next commit during the following week.
 	
 That's all! To run WinT Messenger, you can type "wint-messenger" (without quotes) in Terminal. You can also run WinT Messenger from your application menu (Gnome) or Dash (Unity).
-
-# Developer's documentation
-
-You can find the developer documentation (Doxygen) for version 1.2.1 [here](http://wint-im.sf.net/dev-doc/html/index.html). Updated documentation for 1.3.0 will be uploaded soon.
