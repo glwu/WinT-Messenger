@@ -12,7 +12,7 @@ You can see how the whole app works here, or even write code to make it better!
 
 ## Contributing
 
-1. Join [https://groups.google.com/forum/#!forum/wint-messenger](https://groups.google.com/forum/#!forum/wint-messenger-developers) to stay up to date with the development and help the community!
+1. Join [https://groups.google.com/forum/#!forum/wint-messenger](https://groups.google.com/forum/#!forum/wint-messenger) to stay up to date with the development and help the community!
 2. Fork this project!
 3. Make your changes on a branch.
 4. Make changes!
@@ -24,12 +24,12 @@ You can see how the whole app works here, or even write code to make it better!
 You can find the Doxygen documentation for version 1.2.1 [here](http://wint-im.sf.net/dev-doc/html/index.html). Updated documentation for 1.3.0 will be uploaded soon.
 
 
-## Setup/Compilling
+## Setup/Compiling
 
 ### Windows
 
 1. Install the Qt SDK from [http://qt-project.org/downloads](http://qt-project.org/downloads).
-2. [Download](https://github.com/WinT-3794/WinT-Messenger/archive/master.zip) the source code and extract it with your favourite ZIP utility.
+2. [Download](https://github.com/WinT-3794/WinT-Messenger/archive/master.zip) the source code and extract it with your favorite ZIP utility.
 3. Open the wint-im.pro file with Qt Creator.
 4. Configure the project by selecting Windows as your target system.
 5. Select the "release" build option.
@@ -40,10 +40,10 @@ You can find the Doxygen documentation for version 1.2.1 [here](http://wint-im.s
 ### Mac OS X
 
 1. Download Xcode from the App Store.
-2. Open XCode and accept the license agreement.
+2. Open Xcode and accept the license agreement.
 3. After you accept the license agreement, you can safely quit Xcode (CMD + Q).
 4. Install the Qt SDK from [http://qt-project.org/downloads](http://qt-project.org/downloads).
-5. [Download](https://github.com/WinT-3794/WinT-Messenger/archive/master.zip) the source code and extract it with your favourite ZIP utility.
+5. [Download](https://github.com/WinT-3794/WinT-Messenger/archive/master.zip) the source code and extract it with your favorite ZIP utility.
 6. Open the wint-im.pro file with Qt Creator.
 7. Configure the project by selecting Mac OS X as your target system.
 8. Select the "release" build option.
@@ -92,6 +92,6 @@ You can find the Doxygen documentation for version 1.2.1 [here](http://wint-im.s
 		sudo cp wint-messenger.svg /usr/share/pixmaps/wint-messenger.svg
 		sudo cp wint-messenger.desktop /usr/share/applications/wint-messenger.desktop
 		
-**Note:** We will configure the project to create an insallation script for the next commit during the following week.
+**Note:** We will configure the project to create an installation script for the next commit during the following week.
 	
 That's all! To run WinT Messenger, you can type "wint-messenger" (without quotes) in Terminal. You can also run WinT Messenger from your application menu (Gnome) or Dash (Unity).
