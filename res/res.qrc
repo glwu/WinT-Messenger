@@ -882,5 +882,7 @@
         <file>emotes/octocat.png</file>
         <file>emotes/shipit.png</file>
         <file>emotes/trollface.png</file>
+        <file>icons/Internet.svg</file>
+        <file>icons/XMPP.svg</file>
     </qresource>
 </RCC>

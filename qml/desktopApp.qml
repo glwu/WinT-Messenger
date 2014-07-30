@@ -7,7 +7,10 @@
 //  Please check the license.txt file for more information.
 //
 
-import "controls"
+import "controls/Core"
+import "controls/Chat"
+import "controls/Dialogs"
+
 import QtQuick 2.2
 import QtWebKit 3.0
 import QtQuick.Controls 1.2 as Controls
@@ -57,9 +60,18 @@ PageApplication {
     // Begin the page creation section //
     //---------------------------------//
 
-    // Create the \c chat page, which allows us to actually send and receive messages over the network.
+    // Create the \c lan chat page, which allows us to actually
+    // send and receive messages over the lan network.
     Chat {
-        id: chat
+        id: lan_chat
+        onVisibleChanged: visible ? bridge.startLanChat() : bridge.stopLanChat()
+    }
+
+    // Create the xmpp chat page. We do nothing when the page is shown because
+    // the Xmpp dialog will initialize the xmpp chat
+    Chat {
+        id: xmpp_chat
+        onVisibleChanged: visible ? undefined : bridge.stopXmppChat()
     }
 
     // Create the \c start page (the initial page that is loaded in line 40)
@@ -143,6 +155,45 @@ PageApplication {
         }
     }
 
+    // Create the connect page
+    Logo {
+        id: chat
+
+        // Set the logo icon, the title and the subtitle of the page
+        text: qsTr("Chat")
+        title: qsTr("Chat")
+        source: "qrc:/icons/Internet.svg"
+        subtitle: qsTr("Select your preferred chat option")
+
+        // Create a column of buttons that will allow the user to select chat services
+        Column {
+            y: chat.firstItem
+            spacing: units.gu(0.5)
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            // Create a button to open the LAN chat
+            Button {
+                width: units.gu(24)
+                text: qsTr("Local network chat")
+                onClicked: app.push(lan_chat)
+            }
+
+            // Create a button that will open the XMPP configuration dialog
+            Button {
+                width: units.gu(24)
+                text: qsTr("XMPP/Jabber chat")
+                onClicked: xmppSheet.open()
+            }
+
+            // Create a button that will open the web viewer with a help topic about chat options
+            Button {
+                width: units.gu(24)
+                text: qsTr("Help")
+                onClicked: webViewer.open(qsTr("Help"), "http://wint-im.sf.net/doc/chat-option.html")
+            }
+        }
+    }
+
     // Create the web viewer page, used for displaying web pages
     Page {
         id: webViewer
@@ -182,6 +233,8 @@ PageApplication {
         function open(_title, url) {
             title = _title
             p_title = _title
+            webView.url = "about:blank"
+
             app.push(webViewer)
             webView.url = url
         }
@@ -254,6 +307,11 @@ PageApplication {
 
         // Identify the dialog
         id: preferencesSheet
+    }
+
+    // Create the XMPP login dialog
+    XmppSheet {
+        id: xmppSheet
     }
 
     // This is the message shown when a new update is available
