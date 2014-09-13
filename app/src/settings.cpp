@@ -12,7 +12,6 @@
 Settings::Settings()
 {
     m_settings = new QSettings (APP_COMPANY, APP_NAME);
-    m_settings->clear();
 }
 
 void Settings::setValue (QString key, QVariant value)
