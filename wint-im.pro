@@ -7,28 +7,14 @@
 #  Please check the license.txt file for more information.
 #
 
-VERSION  = 1.3.0
 TEMPLATE = subdirs
+CONFIG += ordered
 
-CODECFORTR  = UTF-8
-CODECFORSRC = UTF-8
+SUBDIRS += libs/xmpp/qxmpp
+SUBDIRS += libs/xmpp
+SUBDIRS += libs/qchat
+SUBDIRS += app
 
-CONFIG += c++11
-CONFIG +=ordered
-
-SUBDIRS += src
-
-OTHER_FILES += \
-    qml/*.qml \
-    qml/controls/*.qml \
-    qml/controls/Chat/*.qml \
-    qml/controls/Core/*.qml \
-    qml/controls/Dialogs/*.qml \
-    qml/controls/Core/ListItems/*.qml
-
-OTHER_FILES += \
-    readme.md \
-    license.txt \
-    src/src/readme.md \
-    src/modules/xmpp/readme.md \
-    src/modules/qchat/readme.md
+app.depends += libs/xmpp
+app.depends += libs/qchat
+xmpp.depends += libs/xmpp/qxmpp

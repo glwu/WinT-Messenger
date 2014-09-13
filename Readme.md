@@ -4,6 +4,8 @@
 
 WinT Messenger is a practical instant messaging application developed by a small team of students working in the WinT 3794 team. The application is written in QML/C++ and can be used with the most popular desktop and mobile operating systems.
 
+The application supports local
+
 You can see how the whole app works here, or even write code to make it better!
 
 ## Contributing
@@ -15,22 +17,30 @@ You can see how the whole app works here, or even write code to make it better!
 5. Send pull request from your fork.
 6. We'll review it, and push your changes to the site!
 
+## License
+
+This project is released under the GNU GPL 3.0 License.
+
+## Useful links
+
++ [Project website](http://wint-im.sf.net)
++ [Wint 3794 website](http://wint3794.org)
++ [SourceForge Project](http://sf.net/p/wint-im)
++ [OpenHub Project](http://openhub.net/p/wint-im)
++ [Developer Documentation](http://wint-im.sf.net/doxygen/)
++ [Contact developer](mailto:alex.racotta@gmail.com)
++ [Contact WinT 3794](mailto:wint3794@hotmail.com)
+
 ## Developer's notes
-
-### Doxygen documentation
-
-You can find the Doxygen documentation for version 1.2.1 [here](http://wint-im.sf.net/dev-doc/html/index.html). Updated documentation for 1.3.0 will be uploaded soon.
 
 ### Notes
 
-This project is a subdirs project, so you can take the code from an individual module, such as the LAN Chat module (qchat) and easily implement it in your program. Each chat module is completely standalone has a main.cpp file that shows you how to implemnt a simple chat program in a command line interface.
+This project's code is divided in modules, so you can take the code from an individual module, such as the LAN Chat module (qchat) and easily implement it in your program. Each chat module is completely standalone and has an example 
 
 For the moment, we have implemented the following modules:
 
 + LAN Chat with file sharing support (src/modules/qchat)
 + XMPP Chat based on QXMPP libraries (src/modules/xmpp)
-
-You will find examples for each module that will show you how to implement and manage each module. You may use them as a base for your next chat application or to create alternative interfaces for WinT Messenger!
 
 ## Setup/Compiling
 
@@ -46,7 +56,6 @@ You will find examples for each module that will show you how to implement and m
 **Notes:** 
 
 + In order to compile the application, you will need to install OpenSSL in "C:\OpenSSL-Win32\". You can get the installer [here](http://slproweb.com/download/Win32OpenSSL-1_0_1h.exe).
-+ If you want to install the software, you will need to deploy it with the "windeployqt" tool. I will upload instructions regarding deployment soon.
 
 ### Mac OS X
 
@@ -59,7 +68,7 @@ You will find examples for each module that will show you how to implement and m
 7. Configure the project by selecting Mac OS X as your target system.
 8. Select the "release" build option.
 9. Build and run WinT Messenger by pressing CMD + R.
-10. To install, navigate to the directory where you extracted the source code and locate a folder similar to "build-wint-im-Desktop_Qt_5_3_clang_64bit-Release" and copy the WinT Messenger.app to your Applications folder.
+10. To install, navigate to the directory where you extracted the source code and locate a folder similar to "build-wint-im-Desktop_Qt_5_3_clang_64bit-Release/app/" and copy the WinT Messenger.app to your Applications folder.
 
 ### Ubuntu-based distros
 
@@ -91,23 +100,11 @@ You will find examples for each module that will show you how to implement and m
 6. Run the application
 	
         make clean
-        cd src
+        cd app
         ./wint-messenger
 	
 7. To install WinT Messenger, run the following:
 
-        sudo cp wint-messenger /usr/bin/wint-messenger
-	
-8. Create the application launchers for your application menu:
-
-        cd ../../sys/linux
-        sudo cp wint-messenger.svg /usr/share/pixmaps/wint-messenger.svg
-        sudo cp wint-messenger.desktop /usr/share/applications/wint-messenger.desktop
-		
-**Note:** We will configure the project to create an installation script for the next commit during the following week.
+        sudo make install
 	
 That's all! To run WinT Messenger, you can type "wint-messenger" (without quotes) in Terminal. You can also run WinT Messenger from your application menu (Gnome) or Dash (Unity).
-
-## License
-
-WinT Messenger is released with the GNU 3.0 license, you can read a copy 
