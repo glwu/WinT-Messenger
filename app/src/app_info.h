@@ -10,7 +10,7 @@
 #ifndef APP_INFO_H
 #define APP_INFO_H
 
-#define APP_VERSION "1.4.1"
+#define APP_VERSION "1.3.1"
 #define APP_COMPANY "WinT 3794"
 #define APP_NAME "WinT Messenger"
 

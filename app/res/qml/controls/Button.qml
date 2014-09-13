@@ -7,7 +7,7 @@
 //  Please check the license.txt file for more information.
 //
 
-import QtQuick 2.3
+import QtQuick 2.0
 
 Rectangle {
     id: button

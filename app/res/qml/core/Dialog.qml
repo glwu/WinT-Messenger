@@ -9,9 +9,9 @@
 
 import "../controls"
 
-import QtQuick 2.3
+import QtQuick 2.0
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.2 as Controls
+import QtQuick.Controls 1.0 as Controls
 
 Item {
     id: dialog

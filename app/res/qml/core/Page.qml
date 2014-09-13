@@ -10,7 +10,7 @@
 import "."
 import "../controls"
 
-import QtQuick 2.3
+import QtQuick 2.0
 
 Flickable {
     id: page

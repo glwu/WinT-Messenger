@@ -78,14 +78,16 @@ For the moment, we have implemented the following modules:
 
         sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
         sudo add-apt-repository --yes ppa:canonical-qt5-edgers/qt5-beta2
-        sudo apt-get update -qq
-        sudo apt-get install -qq qt5-qmake openssl-devel libssl-dev libpulse-dev qtbase5-dev qtdeclarative$
+        sudo apt-get update
+        sudo apt-get install build-essential qt5-qmake openssl-devel libssl-dev libpulse-dev qtbase5-dev qtdeclarative
+        
+	+ Note that your distribution may require more packages to be installed.
 
 3. Then, go to your downloads folder and unzip the current commit.
 
         cd ~/Downloads
-        unzip WinT-Messenger-master.zip -d Wint-Messenger-master
-        cd wint-messenger-master
+        unzip WinT-Messenger-master.zip -d WinT-Messenger-master
+        cd WinT-Messenger-master
 	
 4. Make a directory to build the software
     

@@ -13,7 +13,7 @@ import "pages"
 import "dialogs"
 import "controls"
 
-import QtQuick 2.3
+import QtQuick 2.0
 
 App {
     title: tr(appName)
