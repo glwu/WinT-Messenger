@@ -27,38 +27,40 @@ Dialog {
         Icon {
             id: _icon
             color: theme.iconColor
-            iconSize: units.gu(14)
+            iconSize: units.gu(12)
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: -height / 1.2
+            anchors.verticalCenterOffset: -height * 1.1
         }
 
         Label {
             id: _title
-            fontSize: "x-large"
-            maximumLineCount: 1
-            elide: Text.ElideRight
+            fontSize: "large"
+            color: theme.logoTitle
             anchors.top: _icon.bottom
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.topMargin: units.gu(1.5)
             horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
 
         Label {
             id: _subtitle
             fontSize: "medium"
-            maximumLineCount: 1
-            elide: Text.ElideRight
-            anchors.top: _title.bottom
+            color: theme.logoSubtitle
             anchors.left: parent.left
+            anchors.top: _title.bottom
             anchors.right: parent.right
+            anchors.topMargin: units.gu(0.5)
             horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
 
         Item {
             id: _contents
             anchors.top: _subtitle.bottom
             anchors.bottom: parent.bottom
-            anchors.topMargin: units.gu(6)
+            anchors.topMargin: units.gu(2)
             anchors.margins: units.scale(16)
             anchors.horizontalCenter: parent.horizontalCenter
         }

@@ -22,8 +22,10 @@ MessageBox {
         Button {
             id: _check4updates
             anchors.centerIn: parent
-            width: _acknowledgements.width
             text: tr("Check for updates")
+            width: _acknowledgements.width
+            anchors.verticalCenterOffset: units.gu(3)
+
             onClicked: {
                 close()
                 updates.checkForUpdates(true)

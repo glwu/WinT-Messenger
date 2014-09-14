@@ -14,6 +14,7 @@ Bridge::Bridge()
     m_qchat_enabled = false;
     m_xmpp_enabled = false;
     imageProvider = new ImageProvider;
+    m_clipboard = QApplication::clipboard();
 
     m_updater = new Updater();
     connect (m_updater, SIGNAL (updateAvailable()),
@@ -144,6 +145,11 @@ void Bridge::processNewUser (const QString& nickname, const QString &id,
 
     imageProvider->addImage (profilePicture, id);
     emit newUser (nickname, id);
+}
+
+void Bridge::copy(const QString &string) {
+    m_clipboard->clear();
+    m_clipboard->setText(string);
 }
 
 QString Bridge::getId (QString nickname)

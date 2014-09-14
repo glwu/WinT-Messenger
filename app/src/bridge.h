@@ -12,6 +12,7 @@
 
 #include <QSound>
 #include <QImage>
+#include <QClipboard>
 #include <QFileDialog>
 #include <QDomDocument>
 
@@ -92,10 +93,18 @@ public:
     Q_INVOKABLE void sendMessage (const QString& to, const QString &message);
 
     /*!
+     * \brief copy
+     * \param string
+     */
+
+    Q_INVOKABLE void copy(const QString &string);
+
+    /*!
          * \brief getId
          * \param nickname
          * \return
          */
+
 
     Q_INVOKABLE QString getId (QString nickname);
 
@@ -147,6 +156,8 @@ private:
 
     QStringList m_uuids;
     QStringList m_nicknames;
+
+    QClipboard *m_clipboard;
 
     bool m_xmpp_enabled;
     bool m_qchat_enabled;

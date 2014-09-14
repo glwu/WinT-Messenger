@@ -20,8 +20,8 @@ Item {
 
     anchors {
         top: parent.top
+        topMargin: units.gu(1.75)
         horizontalCenter: parent.horizontalCenter
-        topMargin: navigationBar.height + units.gu(1)
     }
 
     Behavior on opacity {NumberAnimation{}}

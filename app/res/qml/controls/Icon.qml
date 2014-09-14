@@ -25,6 +25,7 @@ Label {
                 "question": "",
                 "fa-spinner": "",
                 "envelope-o": "",
+                "bitcoin": "",
                 "grid": "",
                 "google" : "",
                 "check-circle": "",

@@ -70,7 +70,20 @@ For the moment, we have implemented the following modules:
 9. Build and run WinT Messenger by pressing CMD + R.
 10. To install, navigate to the directory where you extracted the source code and locate a folder similar to "build-wint-im-Desktop_Qt_5_3_clang_64bit-Release/app/" and copy the WinT Messenger.app to your Applications folder.
 
-### Ubuntu-based distros
+### Linux
+
+#### Method 1 (Recommended)
+
+1. Install the Qt SDK from [http://qt-project.org/downloads](http://qt-project.org/downloads).
+2. [Download](https://github.com/WinT-3794/WinT-Messenger/archive/master.zip) the source code and extract it with your favorite ZIP utility.
+3. Open the wint-im.pro file with Qt Creator.
+4. Configure the project by selecting Windows as your target system.
+5. Select the "release" build option.
+5. Build and run WinT Messenger by pressing CTRL + R.
+6. Navigate to the build directory with your preferred terminal emulator.
+7. Run "sudo make install" (without the quotes) to configure and install the application.
+
+#### Method 2 (Ubuntu-based distros only)
 
 1. [Download](https://github.com/WinT-3794/WinT-Messenger/archive/master.zip) the source code.
 

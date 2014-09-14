@@ -124,16 +124,54 @@ Window {
         }
     }
 
-    Notification {
-        id: _notification
-    }
-
     AboutDialog {
         id: _about_dialog
     }
 
     Preferences {
         id: _preferences
+    }
+
+    MessageBox {
+        icon: "bitcoin"
+        id: _donate_bitcoins
+        title: tr("Donate Bitcoins")
+        caption: tr("Donate Bitcoins")
+        details: tr("You can donate BitCoins to the following address")
+
+        data: Column {
+            spacing: units.gu(1)
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Label {
+                id: _address
+                color: theme.success
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.pixelSize: units.size("small")
+                text: "3C8VJ37dyxfLzKfPXrbbgYMerDa1tzNGVe"
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            }
+
+            Button {
+                text: tr("Copy address to clipboard")
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: {
+                    bridge.copy(_address.text)
+                    notification.show(tr("Bitcoin address copied successfully!"))
+                }
+            }
+
+            Button {
+                text: tr("Learn more about Bitcoin")
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: {
+                    _donate_bitcoins.close()
+                    Qt.openUrlExternally("https://bitcoin.org")
+                }
+            }
+
+        }
     }
 
     MessageBox {
@@ -169,6 +207,7 @@ Window {
         data: Item {
             Button {
                 anchors.centerIn: parent
+                anchors.verticalCenterOffset: units.gu(3)
                 text: _updates.updates_available ? tr("Download Updates") : tr("Close")
                 onClicked: _updates.updates_available ? Qt.openUrlExternally("http://wint-im.sf.net") :
                                                         _updates.close()
@@ -199,6 +238,17 @@ Window {
                 width: website.width
                 text: tr("Preferences")
                 onClicked: _preferences.open()
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Button {
+                flat: true
+                id: donate
+                fontSize: "medium"
+                iconName: "bitcoin"
+                width: website.width
+                text: tr("Donate Bitcoins")
+                onClicked: _donate_bitcoins.open()
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
@@ -265,5 +315,9 @@ Window {
                 }
             }
         }
+    }
+
+    Notification {
+        id: _notification
     }
 }
