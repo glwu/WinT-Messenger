@@ -1,7 +1,7 @@
 //
 //  This file is part of WinT Messenger
 //
-//  Copytight (c) 2013-2014 WinT 3794
+//  Copyright (c) 2013-2014 WinT 3794
 //  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
 //
 //  Please check the license.txt file for more information.
@@ -137,7 +137,7 @@ Window {
         id: _donate_bitcoins
         title: tr("Donate Bitcoins")
         caption: tr("Donate Bitcoins")
-        details: tr("You can donate BitCoins to the following address")
+        details: tr("You can donate Bitcoins to the following address")
 
         data: Column {
             spacing: units.gu(1)
