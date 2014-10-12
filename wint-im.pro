@@ -7,14 +7,11 @@
 #  Please check the license.txt file for more information.
 #
 
-TEMPLATE = subdirs
 CONFIG += ordered
+TEMPLATE = subdirs
 
-SUBDIRS += libs/xmpp/qxmpp
-SUBDIRS += libs/xmpp
-SUBDIRS += libs/qchat
-SUBDIRS += app
+SUBDIRS += $$PWD/src/libs/qchat
+SUBDIRS += $$PWD/src/libs/qxmpp
+SUBDIRS += $$PWD/src/libs/xmpp
+SUBDIRS += $$PWD/src/app
 
-app.depends += libs/xmpp
-app.depends += libs/qchat
-xmpp.depends += libs/xmpp/qxmpp

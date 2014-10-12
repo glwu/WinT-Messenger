@@ -4,8 +4,6 @@
 
 WinT Messenger is a practical instant messaging application developed by a small team of students working in the WinT 3794 team. The application is written in QML/C++ and can be used with the most popular desktop and mobile operating systems.
 
-The application supports local
-
 You can see how the whole app works here, or even write code to make it better!
 
 ## Contributing
@@ -16,6 +14,27 @@ You can see how the whole app works here, or even write code to make it better!
 4. Make changes!
 5. Send pull request from your fork.
 6. We'll review it, and push your changes to the site!
+
+## Donate
+
+Donate the the project to keep it going!
+
+<p><p><script src="http://coinwidget.com/widget/coin.js"></script>
+<script>
+CoinWidgetCom.go({
+	wallet_address: "1BdxESMayJAengjAkjipMwfWkiqZUztyhU"
+	, currency: "bitcoin"
+	, counter: "count"
+	, alignment: "bl"
+	, qrcode: true
+	, auto_show: false
+	, lbl_button: "Donate"
+	, lbl_address: "My Bitcoin Address:"
+	, lbl_count: "donations"
+	, lbl_amount: "BTC"
+});
+</script></p></p>
+
 
 ## License
 
@@ -35,7 +54,7 @@ This project is released under the GNU GPL 3.0 License.
 
 ### Notes
 
-This project's code is divided in modules, so you can take the code from an individual module, such as the LAN Chat module (qchat) and easily implement it in your program. Each chat module is completely standalone and has an example 
+This project's code is divided in modules, so you can take the code from an individual module, such as the LAN Chat module (qchat) and easily implement it in your program.
 
 For the moment, we have implemented the following modules:
 
@@ -53,10 +72,6 @@ For the moment, we have implemented the following modules:
 5. Select the "release" build option.
 5. Build and run WinT Messenger by pressing CTRL + R.
 
-**Notes:** 
-
-+ In order to compile the application, you will need to install OpenSSL in "C:\OpenSSL-Win32\". You can get the installer [here](http://slproweb.com/download/Win32OpenSSL-1_0_1h.exe).
-
 ### Mac OS X
 
 1. Download Xcode from the App Store.
@@ -68,7 +83,7 @@ For the moment, we have implemented the following modules:
 7. Configure the project by selecting Mac OS X as your target system.
 8. Select the "release" build option.
 9. Build and run WinT Messenger by pressing CMD + R.
-10. To install, navigate to the directory where you extracted the source code and locate a folder similar to "build-wint-im-Desktop_Qt_5_3_clang_64bit-Release/app/" and copy the WinT Messenger.app to your Applications folder.
+10. To install, navigate to the directory where you extracted the source code and locate a folder similar to "build-wint-im*/src/app" and copy the WinT Messenger.app to your Applications folder.
 
 ### Linux
 
