@@ -16,6 +16,10 @@ win32 {
     DESTDIR = $$OUT_PWD
 }
 
+macx {
+    CONFIG += static
+}
+
 HEADERS += \
     $$PWD/src/qchat.h \
     $$PWD/src/client.h \

@@ -62,25 +62,8 @@ Page {
         Icon {
             name: "download"
             color: theme.navigationBarText
-            opacity: _sidebar.sidebarFitsScreen() ? 1 : 0
-
-            Behavior on opacity {
-                NumberAnimation{}
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                enabled: parent.opacity > 0
-                onClicked: app.downloadMenu.toggle(parent)
-            }
-        }
-    ]
-
-    leftWidgets: [
-        Icon {
-            name: "download"
-            color: theme.navigationBarText
-            opacity: _sidebar.sidebarFitsScreen() ? 0 : 1
+            opacity: _sidebar.sidebarFitsScreen()
+                     && downloadMenu.activeDownloads > 0 ? 1 : 0
 
             Behavior on opacity {
                 NumberAnimation{}

@@ -16,6 +16,10 @@ win32 {
     DESTDIR = $$OUT_PWD
 }
 
+macx {
+    CONFIG += static
+}
+
 LIBS += -L$$OUT_PWD/../qxmpp -lqxmpp
 
 SOURCES += $$PWD/src/xmpp.cpp

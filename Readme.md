@@ -17,24 +17,9 @@ You can see how the whole app works here, or even write code to make it better!
 
 ## Donate
 
-Donate the the project to keep it going!
+Show some love and donate to the following Bitcoin adress to support us:
 
-<p><p><script src="http://coinwidget.com/widget/coin.js"></script>
-<script>
-CoinWidgetCom.go({
-	wallet_address: "1BdxESMayJAengjAkjipMwfWkiqZUztyhU"
-	, currency: "bitcoin"
-	, counter: "count"
-	, alignment: "bl"
-	, qrcode: true
-	, auto_show: false
-	, lbl_button: "Donate"
-	, lbl_address: "My Bitcoin Address:"
-	, lbl_count: "donations"
-	, lbl_amount: "BTC"
-});
-</script></p></p>
-
+> 1BdxESMayJAengjAkjipMwfWkiqZUztyhU
 
 ## License
 

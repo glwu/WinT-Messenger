@@ -70,3 +70,10 @@ ios {
     SOURCES -= src/updater.cpp
 }
 
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../libs/qchat/release/ -lqchat
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../libs/qchat/debug/ -lqchat
+else:unix: LIBS += -L$$OUT_PWD/../libs/qchat/ -lqchat
+
+INCLUDEPATH += $$PWD/../libs/qchat
+DEPENDPATH += $$PWD/../libs/qchat
