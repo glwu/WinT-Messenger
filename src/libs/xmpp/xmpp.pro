@@ -8,7 +8,7 @@
 #
 
 TEMPLATE = lib
-CONFIG += static
+CONFIG += shared
 QT += core xml network
 DEFINES += XMPP_LIBRARY
 

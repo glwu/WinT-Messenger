@@ -8,7 +8,7 @@
 #
 
 TEMPLATE = lib
-CONFIG += static
+CONFIG += shared
 QT += core network
 DEFINES += QCHAT_LIBRARY
 

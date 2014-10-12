@@ -1,7 +1,7 @@
 QT += network xml
 
 QXMPP_LIBRARY_NAME = qxmpp
-QXMPP_LIBRARY_TYPE = static
+QXMPP_LIBRARY_TYPE = shared
 QXMPP_INCLUDEPATH = $$PWD/src/base $$PWD/src/client $$PWD/src/server
 
 # Libraries used internally by QXmpp
