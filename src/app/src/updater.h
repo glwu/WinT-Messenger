@@ -13,6 +13,7 @@
 #include <QSsl>
 #include <QSslError>
 #include <QByteArray>
+#include <QStringList>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QGuiApplication>
