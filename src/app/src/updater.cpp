@@ -32,12 +32,19 @@ bool Updater::checkForUpdates()
 void Updater::fileDownloaded (QNetworkReply *reply)
 {
     QString _data = QString::fromUtf8 (reply->readAll());
+    if (!_data.isEmpty()) {
+        QStringList downloaded = _data.split(".");
+        QStringList installed = QString(APP_VERSION).split(".");
 
-    if (!_data.isEmpty() && _data.toInt() > CURRENT_RELEASE)
-    {
-        m_new_update = true;
-        updateAvailable();
+        for (int i = 0; i <= downloaded.count() - 1; ++i) {
+            if (downloaded.at(i) > installed.at(i)) {
+                m_new_update = true;
+                break;
+            }
+        }
     }
+
+    emit updateAvailable(m_new_update, _data);
 }
 
 void Updater::ignoreSslErrors (QNetworkReply *reply, QList<QSslError> error)

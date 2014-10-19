@@ -47,7 +47,7 @@ class Updater : public QObject
 
     signals:
 
-        void updateAvailable();
+        void updateAvailable(bool newUpdate, const QString &version);
 
     private:
 

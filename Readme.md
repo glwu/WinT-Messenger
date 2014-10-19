@@ -17,7 +17,7 @@ You can see how the whole app works here, or even write code to make it better!
 
 ## Donate
 
-Show some love and donate to the following Bitcoin adress to support us:
+Donate Bitcoins to the project to keep it going!
 
 > 1BdxESMayJAengjAkjipMwfWkiqZUztyhU
 

@@ -25,8 +25,8 @@ Bridge::Bridge()
 
     // Create and configure the application updater
     m_updater = new Updater();
-    connect (m_updater, SIGNAL (updateAvailable()),
-             this,      SIGNAL (updateAvailable()));
+    connect (m_updater, SIGNAL (updateAvailable(bool, QString)),
+             this,      SIGNAL (updateAvailable(bool, QString)));
 }
 
 void Bridge::stopLanChat()

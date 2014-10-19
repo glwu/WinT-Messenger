@@ -13,6 +13,7 @@ import "../controls"
 import QtQuick 2.0
 
 Dialog {
+    id: dialog
     helpButton: true
     title: "XMPP Login"
     onVisibleChanged: _password_edit.text = ""
@@ -100,6 +101,25 @@ Dialog {
             fontSize: "large"
             color: theme.logoTitle
             text: qsTr("Sign in to chat online")
+        }
+
+        Item {
+            id: spacer
+            width: units.gu(1)
+
+            Component.onCompleted: height = calculateHeight()
+
+            Connections {
+                target: app
+                onHeightChanged: spacer.height = spacer.calculateHeight()
+            }
+
+            // MAGIC!! DO NOT TOUCH!!
+            function calculateHeight() {
+                var constant = dialog.height <= dialog.width ? 3 : 8
+                var height = ((_buttons.y - _login_controls.y) / constant) - (3 * _spinnerIcon.height)
+                return height
+            }
         }
 
         Icon {

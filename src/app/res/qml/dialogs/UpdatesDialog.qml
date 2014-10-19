@@ -20,15 +20,23 @@ MessageBox {
 
     Connections {
         target: bridge
+
         onUpdateAvailable: {
+            updates_available = newUpdate
+
+            if (updates_available) {
+                updatesAvailable(version)
+                return
+            }
+
             if (notify_updates)
-                updatesAvailable()
+                latestVersion()
         }
     }
 
     Component.onCompleted: {
         if (settings.notifyUpdates())
-            checkForUpdates(true)
+            checkForUpdates(false)
     }
 
     function checkForUpdates(notify) {
@@ -36,16 +44,14 @@ MessageBox {
         bridge.checkForUpdates()
     }
 
-    function updatesAvailable() {
-        _updates.updates_available = true
-        _updates.caption = qsTr("A new version of WinT Messenger is available to download")
+    function updatesAvailable(new_version) {
+        _updates.caption = qsTr("A new version of WinT Messenger (" + new_version + ") is available to download")
         _updates.details = qsTr("Would you like to open a web browser to download it?")
 
         _updates.open()
     }
 
     function latestVersion() {
-        _updates.updates_available = false
         _updates.caption = qsTr("There are no updates available")
         _updates.details = qsTr("You are running the latest version of WinT Messenger")
 
@@ -61,7 +67,7 @@ MessageBox {
         Button {
             id: _yes_button
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: units.gu(3)
+            anchors.verticalCenterOffset: _updates.updates_available ? units.gu(3) : units.gu(6)
             text: _updates.updates_available ? qsTr("Yes, download the new version") : qsTr("Close")
             onClicked: _updates.updates_available ? Qt.openUrlExternally("http://wint-im.sf.net") :
                                                     _updates.close()

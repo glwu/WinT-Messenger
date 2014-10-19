@@ -80,7 +80,6 @@ class Bridge : public QObject
 
         void xmppConnected();
         void xmppDisconnected();
-        void updateAvailable();
         void delUser (QString nick, QString id);
         void newUser (QString nick, QString id);
         void sendFile (QString file, QString peer);
@@ -90,6 +89,7 @@ class Bridge : public QObject
         void downloadComplete (QString name, QString file);
         void newDownload (QString name, QString file, int size);
         void presenceChanged (const QString &id, bool connected);
+        void updateAvailable(bool newUpdate, const QString &version);
         void updateProgress (QString name, QString file, int progress);
         void statusChanged (const QString &from, const QString &status);
 

@@ -11,17 +11,17 @@ import QtQuick 2.0
 
 QtObject {
     property string info: "#5bc0de"
-    property string danger: "#d9534f"
+    property string danger: "#f7846a"
     property string success: "#5cb85c"
-    property string warning: "#f0ad4e"
+    property string warning: "#ffc94e"
     property string darkGray : "#333"
     property string toolbarText: "#fff"
     property string highlight: "#008db6"
-    property string disabled : "#cbcbcb"
-    property string secondaryColor: "#888"
-    property string textFieldPlaceholder: "#aaa"
+    property string disabled : "#c4d1d1"
+    property string secondaryColor: "#888888"
+    property string textFieldPlaceholder: "#aaaaaa"
 
-    property string notificationText: "#000"
+    property string notificationText: "#000000"
     property string notificationBorder: "#f0c36e"
     property string notificationBackground: "#f9edbe"
 
@@ -63,10 +63,11 @@ QtObject {
         borderColor              = settings.darkInterface() ? "#333333" : "#d3d3d3"
 
         iconColor = settings.darkInterface() ? primary : textColor
-        primary = settings.customColor() ? settings.primaryColor() : settings.darkInterface() ? "#383838" : "#666"
+        primary = settings.customColor() ? settings.primaryColor() :
+                                           settings.darkInterface() ? "#383838" : "#666666"
 
         navigationBar = primary
-        navigationBarText = "#fff"
+        navigationBarText = "#ffffff"
 
         themeChanged()
     }
