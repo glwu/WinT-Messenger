@@ -54,7 +54,7 @@ Window {
 
     Image {
         cache: false
-        opacity: 0.4
+        opacity: 0.75
         fillMode: Image.Tile
         anchors.fill: parent
         source: "qrc:/textures/textures/background.png"

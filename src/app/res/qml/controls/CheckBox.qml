@@ -24,7 +24,9 @@ Rectangle {
         height: units.gu(2)
         radius: units.gu(0.25)
         color: theme.background
-        border.color: _mouseArea.containsMouse ? theme.primary : theme.borderColor
+        border.color: _mouseArea.containsMouse ? theme.secondary : theme.borderColor
+
+        Behavior on border.color {ColorAnimation{}}
 
         anchors {
             verticalCenter: parent.verticalCenter

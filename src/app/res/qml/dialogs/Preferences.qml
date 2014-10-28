@@ -62,6 +62,8 @@ Dialog {
             text: qsTr("User profile")
             anchors.left: parent.left
             anchors.margins: units.gu(1)
+
+            Behavior on color {ColorAnimation{}}
         }
 
         Item {
@@ -180,6 +182,8 @@ Dialog {
             anchors.left: parent.left
             text: qsTr("Other settings")
             anchors.margins: units.gu(1)
+
+            Behavior on color {ColorAnimation{}}
         }
 
         Row {

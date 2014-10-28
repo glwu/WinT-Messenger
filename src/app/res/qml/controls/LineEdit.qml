@@ -32,6 +32,8 @@ TextField {
             background: Frame {
                 color: theme.textFieldBackground
                 border.color: textField.focus && coloredBorder ? theme.secondary : theme.borderColor
+
+                Behavior on border.color {ColorAnimation{}}
             }
         }
     }
@@ -47,6 +49,7 @@ TextField {
         opacity: textField.text && textField.focus ? 1 : 0
         color: _mouseArea.containsMouse ? theme.primary : theme.textColor
 
+        Behavior on color {ColorAnimation{}}
         Behavior on opacity {NumberAnimation{}}
 
         Icon {

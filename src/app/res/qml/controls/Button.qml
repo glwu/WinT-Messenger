@@ -72,6 +72,7 @@ Frame {
                 return 0.0
         }
 
+        Behavior on color {ColorAnimation{}}
         Behavior on opacity {NumberAnimation{}}
     }
 
