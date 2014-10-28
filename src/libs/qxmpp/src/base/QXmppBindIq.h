@@ -33,28 +33,27 @@
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppBindIq : public QXmppIq
-{
-    public:
-        QString jid() const;
-        void setJid (const QString&);
+class QXMPP_EXPORT QXmppBindIq : public QXmppIq {
+  public:
+    QString jid() const;
+    void setJid (const QString&);
 
-        QString resource() const;
-        void setResource (const QString&);
+    QString resource() const;
+    void setResource (const QString&);
 
-        /// \cond
-        static bool isBindIq (const QDomElement &element);
-        /// \endcond
+    /// \cond
+    static bool isBindIq (const QDomElement &element);
+    /// \endcond
 
-    protected:
-        /// \cond
-        void parseElementFromChild (const QDomElement &element);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    /// \cond
+    void parseElementFromChild (const QDomElement &element);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QString m_jid;
-        QString m_resource;
+  private:
+    QString m_jid;
+    QString m_resource;
 };
 
 #endif // QXMPPBIND_H

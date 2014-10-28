@@ -155,22 +155,22 @@ Rectangle {
         width: _bg.width
         height: _bg.height
         anchors.centerIn: _bg
+        color: theme.borderColor
         glowRadius: units.scale(3)
         anchors.verticalCenterOffset: glowRadius
         anchors.horizontalCenterOffset: glowRadius
-        color: settings.darkInterface() ? theme.shadow : theme.borderColor
     }
 
     RectangularGlow {
         opacity: 0.5
         width: triangle.width
         height: triangle.height
+        color: theme.borderColor
         glowRadius: units.scale(3)
         anchors.centerIn: triangle
         rotation: triangle.rotation
         anchors.verticalCenterOffset: glowRadius
         anchors.horizontalCenterOffset: glowRadius
-        color: settings.darkInterface() ? theme.shadow : theme.borderColor
     }
 
     Frame {

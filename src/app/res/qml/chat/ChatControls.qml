@@ -89,8 +89,8 @@ Item {
 
         // Create the message textbox
         LineEdit {
-            blueFocus: false
             id: _message_textbox
+            coloredBorder: false
             placeholderText: qsTr("Type a message...")
             Keys.onReturnPressed: newMessage(_message_textbox.text)
 

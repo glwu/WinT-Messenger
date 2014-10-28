@@ -28,21 +28,18 @@
 #include "QXmppVCardIq.h"
 #include "QXmppVCardManager.h"
 
-class QXmppVCardManagerPrivate
-{
-    public:
-        QXmppVCardIq clientVCard;
-        bool isClientVCardReceived;
+class QXmppVCardManagerPrivate {
+  public:
+    QXmppVCardIq clientVCard;
+    bool isClientVCardReceived;
 };
 
 QXmppVCardManager::QXmppVCardManager()
-    : d (new QXmppVCardManagerPrivate)
-{
+    : d (new QXmppVCardManagerPrivate) {
     d->isClientVCardReceived = false;
 }
 
-QXmppVCardManager::~QXmppVCardManager()
-{
+QXmppVCardManager::~QXmppVCardManager() {
     delete d;
 }
 
@@ -51,8 +48,7 @@ QXmppVCardManager::~QXmppVCardManager()
 ///
 /// \param jid Jid of the specific entry in the roster
 ///
-QString QXmppVCardManager::requestVCard (const QString& jid)
-{
+QString QXmppVCardManager::requestVCard (const QString& jid) {
     QXmppVCardIq request (jid);
 
     if (client()->sendPacket (request))
@@ -66,8 +62,7 @@ QString QXmppVCardManager::requestVCard (const QString& jid)
 ///
 /// \return QXmppVCard
 ///
-const QXmppVCardIq& QXmppVCardManager::clientVCard() const
-{
+const QXmppVCardIq& QXmppVCardManager::clientVCard() const {
     return d->clientVCard;
 }
 
@@ -75,8 +70,7 @@ const QXmppVCardIq& QXmppVCardManager::clientVCard() const
 ///
 /// \param clientVCard QXmppVCard
 ///
-void QXmppVCardManager::setClientVCard (const QXmppVCardIq& clientVCard)
-{
+void QXmppVCardManager::setClientVCard (const QXmppVCardIq& clientVCard) {
     d->clientVCard = clientVCard;
     d->clientVCard.setTo ("");
     d->clientVCard.setFrom ("");
@@ -87,8 +81,7 @@ void QXmppVCardManager::setClientVCard (const QXmppVCardIq& clientVCard)
 /// This function requests the server for vCard of the connected user itself.
 /// Once received the signal clientVCardReceived() is emitted. Received vCard
 /// can be get using clientVCard().
-QString QXmppVCardManager::requestClientVCard()
-{
+QString QXmppVCardManager::requestClientVCard() {
     return requestVCard();
 }
 
@@ -97,27 +90,22 @@ QString QXmppVCardManager::requestClientVCard()
 ///
 /// \return bool
 ///
-bool QXmppVCardManager::isClientVCardReceived() const
-{
+bool QXmppVCardManager::isClientVCardReceived() const {
     return d->isClientVCardReceived;
 }
 
 /// \cond
-QStringList QXmppVCardManager::discoveryFeatures() const
-{
+QStringList QXmppVCardManager::discoveryFeatures() const {
     // XEP-0054: vcard-temp
     return QStringList() << ns_vcard;
 }
 
-bool QXmppVCardManager::handleStanza (const QDomElement &element)
-{
-    if (element.tagName() == "iq" && QXmppVCardIq::isVCard (element))
-    {
+bool QXmppVCardManager::handleStanza (const QDomElement &element) {
+    if (element.tagName() == "iq" && QXmppVCardIq::isVCard (element)) {
         QXmppVCardIq vCardIq;
         vCardIq.parse (element);
 
-        if (vCardIq.from().isEmpty())
-        {
+        if (vCardIq.from().isEmpty()) {
             d->clientVCard = vCardIq;
             d->isClientVCardReceived = true;
             emit clientVCardReceived();

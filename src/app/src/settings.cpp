@@ -9,73 +9,55 @@
 
 #include "settings.h"
 
-Settings::Settings()
-{
+Settings::Settings() {
+    m_primary_color = "#2672AC";
     m_settings = new QSettings (COMPANY_NAME, APP_NAME);
-    m_primary_color = "#008db6";
 }
 
-void Settings::setValue (QString key, QVariant value)
-{
+void Settings::setValue (QString key, QVariant value) {
     m_settings->setValue (key, value);
 }
 
-QVariant Settings::value (QString key, QVariant defaultValue) const
-{
+QVariant Settings::value (QString key, QVariant defaultValue) const {
     return m_settings->value (key, defaultValue);
 }
 
-int Settings::x()
-{
+int Settings::x() {
     return value ("x", 150).toInt();
 }
 
-int Settings::y()
-{
+int Settings::y() {
     return value ("x", 150).toInt();
 }
 
-int Settings::width()
-{
+int Settings::width() {
     return value ("width", 860).toInt();
 }
 
-int Settings::height()
-{
+int Settings::height() {
     return value ("height", 560).toInt();
 }
 
-bool Settings::textChat()
-{
+bool Settings::textChat() {
     return value ("textChat", false).toBool();
 }
 
-bool Settings::customColor()
-{
+bool Settings::customColor() {
     return value ("customColor", true).toBool();
 }
 
-bool Settings::firstLaunch()
-{
+bool Settings::firstLaunch() {
     return value ("firstLaunch", true).toBool();
 }
 
-bool Settings::darkInterface()
-{
-    return value ("darkInterface", false).toBool();
-}
-
-bool Settings::notifyUpdates()
-{
+bool Settings::notifyUpdates() {
     return value ("notifyUpdates", true).toBool();
 }
 
-bool Settings::soundsEnabled()
-{
+bool Settings::soundsEnabled() {
     return value ("soundsEnabled", true).toBool();
 }
 
-QString Settings::primaryColor()
-{
+QString Settings::primaryColor() {
     return value ("primaryColor", m_primary_color).toString();
 }

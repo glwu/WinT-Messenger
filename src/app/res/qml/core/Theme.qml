@@ -25,51 +25,100 @@ QtObject {
     property string notificationBorder: "#f0c36e"
     property string notificationBackground: "#f9edbe"
 
-    property string panel
-    property string dialog
-    property string shadow
+    property string panel: "#FFFFFF"
+    property string dialog: "#FFFFFF"
+    property string shadow: "#666666"
+    property string chatText: "#333333"
+    property string iconColor: "#5A5E67"
+    property string textColor: "#5A5E67"
+    property string background: "#F8F8F8"
+    property string borderColor: "#E6E6E6"
+    property string logoSubtitle: "#4C505A"
+    property string chatDateTimeText: "#415F9B"
+    property string chatNotification: "#7F7F7F"
+    property string textFieldBackground: "#FFFFFF"
+    property string textFieldForeground: "#5A5E67"
+
     property string primary
-    property string chatText
-    property string textColor
-    property string logoTitle
-    property string iconColor
-    property string background
-    property string borderColor
-    property string logoSubtitle
+    property string secondary
     property string navigationBar
-    property string chatDateTimeText
-    property string chatNotification
     property string navigationBarText
-    property string textFieldBackground
-    property string textFieldForeground
 
     signal themeChanged()
 
     Component.onCompleted: setColors()
 
     function setColors() {
-        panel                    = settings.darkInterface() ? "#383838" : "#f2f2f2"
-        dialog                   = settings.darkInterface() ? "#444444" : "#fffffd"
-        shadow                   = settings.darkInterface() ? "#000000" : "#666666"
-        chatText                 = settings.darkInterface() ? "#efefef" : "#333333"
-        textColor                = settings.darkInterface() ? "#adadad" : "#666666"
-        logoTitle                = settings.darkInterface() ? "#f6f6f6" : "#232323"
-        logoSubtitle             = settings.darkInterface() ? "#a4a4a4" : "#666666"
-        background               = settings.darkInterface() ? "#333333" : "#eeeeee"
-        textFieldForeground      = settings.darkInterface() ? "#dddddd" : "#222222"
-        chatDateTimeText         = settings.darkInterface() ? "#5bc0de" : "#415f9b"
-        chatNotification         = settings.darkInterface() ? "#b3b3b3" : "#7f7f7f"
-        textFieldBackground      = settings.darkInterface() ? "#383838" : "#f7f7f7"
-        borderColor              = settings.darkInterface() ? "#333333" : "#d3d3d3"
-
-        iconColor = settings.darkInterface() ? primary : textColor
-        primary = settings.customColor() ? settings.primaryColor() :
-                                           settings.darkInterface() ? "#383838" : "#666666"
+        primary = settings.customColor() ? settings.primaryColor() : "#666666"
 
         navigationBar = primary
-        navigationBarText = "#ffffff"
+        secondary = smartColor(primary)
+        navigationBarText = calculateForeground(navigationBar)
 
         themeChanged()
+    }
+
+    function smartColor(input_color) {
+        // Remove the "#" from hexadecimal color
+        var color = input_color.replace("#", "")
+
+        // Separate the hexadecimal values for Red, Green and Blue
+        var r = color.substring(0, 2)
+        var g = color.substring(2, 4)
+        var b = color.substring(4, 6)
+
+        // Convert hexadecimal numbers to decimals
+        r = parseInt(r, 16)
+        g = parseInt(g, 16)
+        b = parseInt(b, 16)
+
+        // Process the color using hardcoded values
+        r = 2.65 * r
+        g = 1.44 * g
+        b = 1.24 * b
+
+        // Remove any "extreme" colors and ensure that the
+        // obtained colors are valid
+        r = optimizeColor(r)
+        g = optimizeColor(g)
+        b = optimizeColor(b)
+
+        // Convert the decimal values to hexadecimal values
+        r = r.toString(16)
+        g = g.toString(16)
+        b = b.toString(16)
+
+        // Get the final color
+        return "#" + r + g + b
+    }
+
+    function optimizeColor(color) {
+        // Ensure that we do not crash the program
+        // if the color is 0
+        if (color <= 0) {
+            color = 16
+        }
+
+        // Ensure that the color is not too dark
+        if (color < 24) {
+            while (color < 24) {
+                color = color * 2.4
+            }
+        }
+
+        // Ensure that the color is not to bright
+        if (color > 255) {
+            while (color > 255) {
+                color = color * 0.745
+            }
+        }
+
+        // Round the obtained color to the nearest integer
+        return Math.round(color)
+    }
+
+    function calculateForeground(color) {
+        return "#FFF"
     }
 
     function getStyleColor(style) {

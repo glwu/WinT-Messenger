@@ -31,32 +31,31 @@
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppVersionIq : public QXmppIq
-{
-    public:
-        QString name() const;
-        void setName (const QString &name);
+class QXMPP_EXPORT QXmppVersionIq : public QXmppIq {
+  public:
+    QString name() const;
+    void setName (const QString &name);
 
-        QString os() const;
-        void setOs (const QString &os);
+    QString os() const;
+    void setOs (const QString &os);
 
-        QString version() const;
-        void setVersion (const QString &version);
+    QString version() const;
+    void setVersion (const QString &version);
 
-        /// \cond
-        static bool isVersionIq (const QDomElement &element);
-        /// \endcond
+    /// \cond
+    static bool isVersionIq (const QDomElement &element);
+    /// \endcond
 
-    protected:
-        /// \cond
-        void parseElementFromChild (const QDomElement &element);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    /// \cond
+    void parseElementFromChild (const QDomElement &element);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QString m_name;
-        QString m_os;
-        QString m_version;
+  private:
+    QString m_name;
+    QString m_os;
+    QString m_version;
 };
 
 #endif

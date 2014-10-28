@@ -44,33 +44,32 @@ class QXmppStream;
 ///
 /// \ingroup Core
 
-class QXMPP_EXPORT QXmppClientExtension : public QXmppLoggable
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppClientExtension : public QXmppLoggable {
+    Q_OBJECT
 
-    public:
-        QXmppClientExtension();
-        virtual ~QXmppClientExtension();
+  public:
+    QXmppClientExtension();
+    virtual ~QXmppClientExtension();
 
-        virtual QStringList discoveryFeatures() const;
-        virtual QList<QXmppDiscoveryIq::Identity> discoveryIdentities() const;
+    virtual QStringList discoveryFeatures() const;
+    virtual QList<QXmppDiscoveryIq::Identity> discoveryIdentities() const;
 
-        /// \brief You need to implement this method to process incoming XMPP
-        /// stanzas.
-        ///
-        /// You should return true if the stanza was handled and no further
-        /// processing should occur, or false to let other extensions process
-        /// the stanza.
-        virtual bool handleStanza (const QDomElement &stanza) = 0;
+    /// \brief You need to implement this method to process incoming XMPP
+    /// stanzas.
+    ///
+    /// You should return true if the stanza was handled and no further
+    /// processing should occur, or false to let other extensions process
+    /// the stanza.
+    virtual bool handleStanza (const QDomElement &stanza) = 0;
 
-    protected:
-        QXmppClient *client();
-        virtual void setClient (QXmppClient *client);
+  protected:
+    QXmppClient *client();
+    virtual void setClient (QXmppClient *client);
 
-    private:
-        QXmppClientExtensionPrivate *const d;
+  private:
+    QXmppClientExtensionPrivate *const d;
 
-        friend class QXmppClient;
+    friend class QXmppClient;
 };
 
 #endif

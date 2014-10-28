@@ -33,67 +33,64 @@
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppMucItem
-{
-    public:
-        /// This enum is used to represent long-lived permissions in a room (affiliations).
-        enum Affiliation
-        {
-            UnspecifiedAffiliation,
-            OutcastAffiliation,
-            NoAffiliation,
-            MemberAffiliation,
-            AdminAffiliation,
-            OwnerAffiliation,
-        };
+class QXMPP_EXPORT QXmppMucItem {
+  public:
+    /// This enum is used to represent long-lived permissions in a room (affiliations).
+    enum Affiliation {
+        UnspecifiedAffiliation,
+        OutcastAffiliation,
+        NoAffiliation,
+        MemberAffiliation,
+        AdminAffiliation,
+        OwnerAffiliation,
+    };
 
-        /// This enum is used to represent short-lived permissions in a room (roles).
-        enum Role
-        {
-            UnspecifiedRole,
-            NoRole,
-            VisitorRole,
-            ParticipantRole,
-            ModeratorRole,
-        };
+    /// This enum is used to represent short-lived permissions in a room (roles).
+    enum Role {
+        UnspecifiedRole,
+        NoRole,
+        VisitorRole,
+        ParticipantRole,
+        ModeratorRole,
+    };
 
-        QXmppMucItem();
-        bool isNull() const;
+    QXmppMucItem();
+    bool isNull() const;
 
-        QString actor() const;
-        void setActor (const QString &actor);
+    QString actor() const;
+    void setActor (const QString &actor);
 
-        Affiliation affiliation() const;
-        void setAffiliation (Affiliation affiliation);
+    Affiliation affiliation() const;
+    void setAffiliation (Affiliation affiliation);
 
-        QString jid() const;
-        void setJid (const QString &jid);
+    QString jid() const;
+    void setJid (const QString &jid);
 
-        QString nick() const;
-        void setNick (const QString &nick);
+    QString nick() const;
+    void setNick (const QString &nick);
 
-        QString reason() const;
-        void setReason (const QString &reason);
+    QString reason() const;
+    void setReason (const QString &reason);
 
-        Role role() const;
-        void setRole (Role role);
+    Role role() const;
+    void setRole (Role role);
 
-        /// \cond
-        void parse (const QDomElement &element);
-        void toXml (QXmlStreamWriter *writer) const;
+    /// \cond
+    void parse (const QDomElement &element);
+    void toXml (QXmlStreamWriter *writer) const;
 
-        static Affiliation affiliationFromString (const QString &affiliationStr);
-        static QString affiliationToString (Affiliation affiliation);
-        static Role roleFromString (const QString &roleStr);
-        static QString roleToString (Role role);
-        /// \endcond
-    private:
-        QString m_actor;
-        Affiliation m_affiliation;
-        QString m_jid;
-        QString m_nick;
-        QString m_reason;
-        Role m_role;
+    static Affiliation affiliationFromString (const QString &affiliationStr);
+    static QString affiliationToString (Affiliation affiliation);
+    static Role roleFromString (const QString &roleStr);
+    static QString roleToString (Role role);
+    /// \endcond
+  private:
+    QString m_actor;
+    Affiliation m_affiliation;
+    QString m_jid;
+    QString m_nick;
+    QString m_reason;
+    Role m_role;
 };
 
 /// \brief The QXmppMucAdminIq class represents a chat room administration IQ
@@ -103,24 +100,23 @@ class QXMPP_EXPORT QXmppMucItem
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppMucAdminIq : public QXmppIq
-{
-    public:
-        QList<QXmppMucItem> items() const;
-        void setItems (const QList<QXmppMucItem> &items);
+class QXMPP_EXPORT QXmppMucAdminIq : public QXmppIq {
+  public:
+    QList<QXmppMucItem> items() const;
+    void setItems (const QList<QXmppMucItem> &items);
 
-        /// \cond
-        static bool isMucAdminIq (const QDomElement &element);
-        /// \endcond
+    /// \cond
+    static bool isMucAdminIq (const QDomElement &element);
+    /// \endcond
 
-    protected:
-        /// \cond
-        void parseElementFromChild (const QDomElement &element);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    /// \cond
+    void parseElementFromChild (const QDomElement &element);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QList<QXmppMucItem> m_items;
+  private:
+    QList<QXmppMucItem> m_items;
 };
 
 /// \brief The QXmppMucOwnerIq class represents a chat room configuration IQ as
@@ -131,24 +127,23 @@ class QXMPP_EXPORT QXmppMucAdminIq : public QXmppIq
 /// \sa QXmppDataForm
 ///
 
-class QXMPP_EXPORT QXmppMucOwnerIq : public QXmppIq
-{
-    public:
-        QXmppDataForm form() const;
-        void setForm (const QXmppDataForm &form);
+class QXMPP_EXPORT QXmppMucOwnerIq : public QXmppIq {
+  public:
+    QXmppDataForm form() const;
+    void setForm (const QXmppDataForm &form);
 
-        /// \cond
-        static bool isMucOwnerIq (const QDomElement &element);
-        /// \endcond
+    /// \cond
+    static bool isMucOwnerIq (const QDomElement &element);
+    /// \endcond
 
-    protected:
-        /// \cond
-        void parseElementFromChild (const QDomElement &element);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    /// \cond
+    void parseElementFromChild (const QDomElement &element);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QXmppDataForm m_form;
+  private:
+    QXmppDataForm m_form;
 };
 
 #endif

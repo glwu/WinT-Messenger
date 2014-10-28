@@ -15,6 +15,7 @@ Item {
 
     Image {
         id: _image
+        cache: false
         smooth: true
         visible: false
         asynchronous: true

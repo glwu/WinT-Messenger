@@ -8,8 +8,7 @@
 
 #include "qchat.h"
 
-QChat::QChat()
-{
+QChat::QChat() {
     connect (&client, SIGNAL (participantLeft (QString, QString)),
              this,    SIGNAL (delUser (QString, QString)));
     connect (&client, SIGNAL (newParticipant (QString, QString, QImage)),
@@ -26,59 +25,58 @@ QChat::QChat()
              this,    SIGNAL (statusChanged (QString, QString)));
 }
 
-void QChat::setNickname (const QString& nick)
-{
+void QChat::setNickname (const QString& nick) {
     if (!nick.isEmpty())
         client.setNickname (nick);
+
     else
         qWarning() << "QChat: Nickname cannot be empty!";
 }
 
-void QChat::setProfilePicture (const QImage& image)
-{
+void QChat::setProfilePicture (const QImage& image) {
     if (!image.isNull())
         client.setProfilePicture (image);
+
     else
         qWarning() << "QChat: Invalid profile picture!";
 }
 
-void QChat::setDownloadPath (const QString& path)
-{
+void QChat::setDownloadPath (const QString& path) {
     if (!path.isEmpty())
         client.setDownloadPath (path);
+
     else
         qWarning() << "QChat: Download path cannot be empty!";
 }
 
-void QChat::sendStatus (const QString &to, const QString &status)
-{
+void QChat::sendStatus (const QString &to, const QString &status) {
     if (!status.isEmpty())
         client.sendStatus (to, status);
+
     else
         qWarning() << "QChat: Status message cannot be empty!";
 }
 
-void QChat::shareFile (const QString& to, const QString& path)
-{
+void QChat::shareFile (const QString& to, const QString& path) {
     if (!path.isEmpty())
         client.sendFile (to, path);
+
     else
         qWarning() << "QChat: File path cannot be empty!";
 }
 
-void QChat::returnPressed (const QString& to, const QString &message)
-{
+void QChat::returnPressed (const QString& to, const QString &message) {
     if (!message.isEmpty()) {
         QString msg = message;
         msg.replace ("<", "&lt;");
         msg.replace (">", "&gt;");
         client.sendMessage (to, message);
     }
+
     else
         qWarning() << "QChat: Message cannot be empty!";
 }
 
-void QChat::processNewUser (const QString &name, const QString &id, const QImage &image)
-{
+void QChat::processNewUser (const QString &name, const QString &id, const QImage &image) {
     emit newUser (name, id, image);
 }

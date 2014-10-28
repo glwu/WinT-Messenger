@@ -2,6 +2,7 @@
     <qresource prefix="/fonts">
         <file>fonts/font_awesome.ttf</file>
         <file>fonts/regular.ttf</file>
+        <file>fonts/bold.ttf</file>
     </qresource>
     <qresource prefix="/faces">
         <file>faces/astronaut.jpg</file>
@@ -113,5 +114,8 @@
         <file>smileys/Wink.png</file>
         <file>smileys/Yuck.png</file>
         <file>smileys/Yum.png</file>
+    </qresource>
+    <qresource prefix="/textures">
+        <file>textures/background.png</file>
     </qresource>
 </RCC>

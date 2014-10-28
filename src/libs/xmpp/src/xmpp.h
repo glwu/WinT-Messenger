@@ -26,58 +26,57 @@
 
 #include "xmpp_global.h"
 
-class XMPP_EXPORT Xmpp : public QObject
-{
-        Q_OBJECT
+class XMPP_EXPORT Xmpp : public QObject {
+    Q_OBJECT
 
-    public:
+  public:
 
-        Xmpp();
-        ~Xmpp();
+    Xmpp();
+    ~Xmpp();
 
-    public slots:
+  public slots:
 
-        /// Changes the path where Xmpp saves all
-        /// downloaded files
-        void setDownloadPath (const QString& path);
+    /// Changes the path where Xmpp saves all
+    /// downloaded files
+    void setDownloadPath (const QString& path);
 
-        /// Connects to a server with the specified
-        /// \c JID and \c passwd
-        void login (const QString& jid, const QString& passwd);
+    /// Connects to a server with the specified
+    /// \c JID and \c passwd
+    void login (const QString& jid, const QString& passwd);
 
-        /// Sends the specificified file in \c path to the specified
-        /// \c peer
-        void shareFile (const QString& to, const QString& path);
+    /// Sends the specificified file in \c path to the specified
+    /// \c peer
+    void shareFile (const QString& to, const QString& path);
 
-        /// Sends a status message to the specified peer
-        void sendStatus (const QString &to, const QString &status);
+    /// Sends a status message to the specified peer
+    void sendStatus (const QString &to, const QString &status);
 
-        /// Sends a message to the specified peer
-        void sendMessage (const QString& to, const QString& message);
+    /// Sends a message to the specified peer
+    void sendMessage (const QString& to, const QString& message);
 
-    signals:
+  signals:
 
-        void connected();
-        void disconnected();
-        void delUser (const QString& name, const QString& id);
-        void newMessage (const QString& from, const QString& message);
-        void presenceChanged (const QString& from, const bool &connected);
-        void newUser (const QString& name, const QString& id, const QImage& image);
+    void connected();
+    void disconnected();
+    void delUser (const QString& name, const QString& id);
+    void newMessage (const QString& from, const QString& message);
+    void presenceChanged (const QString& from, const bool &connected);
+    void newUser (const QString& name, const QString& id, const QImage& image);
 
-    private slots:
+  private slots:
 
-        void rosterReceived();
-        void vCardReceived (const QXmppVCardIq& vCard);
-        void messageReceived (const QXmppMessage& message);
+    void rosterReceived();
+    void vCardReceived (const QXmppVCardIq& vCard);
+    void messageReceived (const QXmppMessage& message);
 
-    private:
+  private:
 
-        QString m_jid;
-        QString m_path;
-        QXmppClient *m_client;
+    QString m_jid;
+    QString m_path;
+    QXmppClient *m_client;
 
-        QStringList jids;
-        QStringList users;
+    QStringList jids;
+    QStringList users;
 };
 
 #endif

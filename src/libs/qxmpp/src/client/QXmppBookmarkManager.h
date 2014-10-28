@@ -35,37 +35,36 @@ class QXmppBookmarkSet;
 /// bookmarks as defined by XEP-0048: Bookmarks.
 ///
 
-class QXMPP_EXPORT QXmppBookmarkManager : public QXmppClientExtension
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppBookmarkManager : public QXmppClientExtension {
+    Q_OBJECT
 
-    public:
-        QXmppBookmarkManager();
-        ~QXmppBookmarkManager();
+  public:
+    QXmppBookmarkManager();
+    ~QXmppBookmarkManager();
 
-        bool areBookmarksReceived() const;
-        QXmppBookmarkSet bookmarks() const;
-        bool setBookmarks (const QXmppBookmarkSet &bookmarks);
+    bool areBookmarksReceived() const;
+    QXmppBookmarkSet bookmarks() const;
+    bool setBookmarks (const QXmppBookmarkSet &bookmarks);
 
-        /// \cond
-        bool handleStanza (const QDomElement &stanza);
-        /// \endcond
+    /// \cond
+    bool handleStanza (const QDomElement &stanza);
+    /// \endcond
 
-    signals:
-        /// This signal is emitted when bookmarks are received.
-        void bookmarksReceived (const QXmppBookmarkSet &bookmarks);
+  signals:
+    /// This signal is emitted when bookmarks are received.
+    void bookmarksReceived (const QXmppBookmarkSet &bookmarks);
 
-    protected:
-        /// \cond
-        void setClient (QXmppClient *client);
-        /// \endcond
+  protected:
+    /// \cond
+    void setClient (QXmppClient *client);
+    /// \endcond
 
-    private slots:
-        void slotConnected();
-        void slotDisconnected();
+  private slots:
+    void slotConnected();
+    void slotDisconnected();
 
-    private:
-        QXmppBookmarkManagerPrivate *const d;
+  private:
+    QXmppBookmarkManagerPrivate *const d;
 };
 
 #endif

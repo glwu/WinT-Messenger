@@ -13,60 +13,59 @@
 #include "client.h"
 #include "qchat_global.h"
 
-class QCHAT_EXPORT QChat : public QObject
-{
-        Q_OBJECT
+class QCHAT_EXPORT QChat : public QObject {
+    Q_OBJECT
 
-    public:
+  public:
 
-        QChat();
+    QChat();
 
-    public slots:
+  public slots:
 
-        /// Changes the nickname to be shown to the connected
-        /// peers
-        void setNickname (const QString& nick);
+    /// Changes the nickname to be shown to the connected
+    /// peers
+    void setNickname (const QString& nick);
 
-        /// Changes the path in which QChat saves all downloaded
-        /// files
-        void setDownloadPath (const QString& path);
+    /// Changes the path in which QChat saves all downloaded
+    /// files
+    void setDownloadPath (const QString& path);
 
-        /// Changes the user's profile picture
-        void setProfilePicture (const QImage& image);
+    /// Changes the user's profile picture
+    void setProfilePicture (const QImage& image);
 
-        /// Sends a status message to specified peer.
-        /// Use a blank string in the \to parameter to send the
-        /// status message to every user
-        void sendStatus (const QString &to, const QString &status);
+    /// Sends a status message to specified peer.
+    /// Use a blank string in the \to parameter to send the
+    /// status message to every user
+    void sendStatus (const QString &to, const QString &status);
 
-        /// Sends a file in \path to specified \peer.
-        /// Use a blank string to send the file to all peers
-        void shareFile (const QString& to, const QString &path);
+    /// Sends a file in \path to specified \peer.
+    /// Use a blank string to send the file to all peers
+    void shareFile (const QString& to, const QString &path);
 
-        /// Sends a message to specified peer.
-        /// Use a blank string in the \to parameter to send the
-        /// message to every peer
-        void returnPressed (const QString& to, const QString& message);
-
-
-    signals:
-
-        void delUser (const QString& nick, const QString& id);
-        void statusChanged (const QString &id, const QString &status);
-        void newMessage (const QString& from, const QString& message);
-        void downloadComplete (const QString& from, const QString& file);
-        void newUser (const QString& nick, const QString& id, const QImage& face);
-        void updateProgress (const QString& from, const QString& file, int progress);
-        void newDownload (const QString& from, const QString& file, const int& size);
+    /// Sends a message to specified peer.
+    /// Use a blank string in the \to parameter to send the
+    /// message to every peer
+    void returnPressed (const QString& to, const QString& message);
 
 
-    private slots:
+  signals:
 
-        void processNewUser (const QString& name, const QString &id, const QImage& image);
+    void delUser (const QString& nick, const QString& id);
+    void statusChanged (const QString &id, const QString &status);
+    void newMessage (const QString& from, const QString& message);
+    void downloadComplete (const QString& from, const QString& file);
+    void newUser (const QString& nick, const QString& id, const QImage& face);
+    void updateProgress (const QString& from, const QString& file, int progress);
+    void newDownload (const QString& from, const QString& file, const int& size);
 
-    private:
 
-        Client client;
+  private slots:
+
+    void processNewUser (const QString& name, const QString &id, const QImage& image);
+
+  private:
+
+    Client client;
 };
 
 #endif

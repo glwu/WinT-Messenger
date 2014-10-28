@@ -11,6 +11,7 @@ import "../core"
 import "../controls"
 
 import QtQuick 2.0
+import QtMultimedia 5.0
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 1.0 as Controls
 
@@ -18,33 +19,21 @@ Page {
     id: page
     interactive: false
 
-    property bool sound_enabled: settings.soundsEnabled()
-
     function setTitle(string) {
         title = string
         navigationBar.title = string
     }
 
     function addUser(nickname, id) {
-        if (sound_enabled) {
-            soundTimer.start()
-            sound_enabled = false
-            bridge.playSound("login")
+        if (!loginSound.playing) {
+            loginSound.play()
         }
     }
 
     function removeUser(nickname) {
-        if (sound_enabled) {
-            soundTimer.start()
-            sound_enabled = false
-            bridge.playSound("logout")
+        if (!logoutSound.playing) {
+            logoutSound.play()
         }
-    }
-
-    Connections {
-        target: bridge
-        onDelUser: removeUser(nick)
-        onNewUser: addUser(nick, id)
     }
 
     onVisibleChanged: {
@@ -77,15 +66,22 @@ Page {
         }
     ]
 
-    Rectangle {
-        color: theme.dialog
-        anchors.fill: parent
+    Connections {
+        target: bridge
+        onDelUser: removeUser(nick)
+        onNewUser: addUser(nick, id)
     }
 
-    Timer {
-        id: soundTimer
-        interval: 750
-        onTriggered: sound_enabled = true
+    SoundEffect {
+        id: loginSound
+        source: "qrc:/sounds/sounds/login.wav"
+        volume: settings.soundsEnabled() ? 1 : 0
+    }
+
+    SoundEffect {
+        id: logoutSound
+        source: "qrc:/sounds/sounds/logout.wav"
+        volume: settings.soundsEnabled() ? 1 : 0
     }
 
     MouseArea {
@@ -176,6 +172,7 @@ Page {
             Label {
                 centered: true
                 fontSize: "large"
+                color: theme.secondary
                 text: {
                     if (_sidebar.connectedUsers > 0)
                         return qsTr("Chat with your friends")
@@ -187,6 +184,7 @@ Page {
             Label {
                 centered: true
                 fontSize: "small"
+                color: theme.logoSubtitle
                 text: {
                     if (_sidebar.connectedUsers > 0)
                         return qsTr("Use the sidebar to select a buddy to chat with.")

@@ -35,40 +35,39 @@ class QXmppElement;
 class QXmppElementPrivate;
 
 typedef QList<QXmppElement> QXmppElementList;
-class QXMPP_EXPORT QXmppElement
-{
-    public:
-        QXmppElement();
-        QXmppElement (const QXmppElement &other);
-        QXmppElement (const QDomElement &element);
-        ~QXmppElement();
+class QXMPP_EXPORT QXmppElement {
+  public:
+    QXmppElement();
+    QXmppElement (const QXmppElement &other);
+    QXmppElement (const QDomElement &element);
+    ~QXmppElement();
 
-        QDomElement sourceDomElement() const;
+    QDomElement sourceDomElement() const;
 
-        QStringList attributeNames() const;
+    QStringList attributeNames() const;
 
-        QString attribute (const QString &name) const;
-        void setAttribute (const QString &name, const QString &value);
+    QString attribute (const QString &name) const;
+    void setAttribute (const QString &name, const QString &value);
 
-        void appendChild (const QXmppElement &child);
-        QXmppElement firstChildElement (const QString &name = QString()) const;
-        QXmppElement nextSiblingElement (const QString &name = QString()) const;
-        void removeChild (const QXmppElement &child);
+    void appendChild (const QXmppElement &child);
+    QXmppElement firstChildElement (const QString &name = QString()) const;
+    QXmppElement nextSiblingElement (const QString &name = QString()) const;
+    void removeChild (const QXmppElement &child);
 
-        QString tagName() const;
-        void setTagName (const QString &type);
+    QString tagName() const;
+    void setTagName (const QString &type);
 
-        QString value() const;
-        void setValue (const QString &text);
+    QString value() const;
+    void setValue (const QString &text);
 
-        bool isNull() const;
-        void toXml (QXmlStreamWriter *writer) const;
+    bool isNull() const;
+    void toXml (QXmlStreamWriter *writer) const;
 
-        QXmppElement &operator= (const QXmppElement &other);
+    QXmppElement &operator= (const QXmppElement &other);
 
-    private:
-        QXmppElement (QXmppElementPrivate *other);
-        QXmppElementPrivate *d;
+  private:
+    QXmppElement (QXmppElementPrivate *other);
+    QXmppElementPrivate *d;
 };
 
 #endif

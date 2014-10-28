@@ -9,9 +9,7 @@
 
 #include "updater.h"
 
-Updater::Updater()
-{
-    m_new_update = false;
+Updater::Updater() {
     m_access_manager = new QNetworkAccessManager (this);
     connect (m_access_manager, SIGNAL (finished (QNetworkReply *)),
              this,             SLOT   (fileDownloaded (QNetworkReply *)));
@@ -19,35 +17,32 @@ Updater::Updater()
              this,             SLOT   (ignoreSslErrors (QNetworkReply *, QList<QSslError>)));
 }
 
-bool Updater::checkForUpdates()
-{
-    QNetworkRequest _req (QUrl (UPDATE_URL));
-    QSslConfiguration _config = QSslConfiguration::defaultConfiguration();
-    _config.setProtocol (QSsl::AnyProtocol);
-    _req.setSslConfiguration (_config);
-    m_access_manager->get (_req);
-    return m_new_update;
+void Updater::checkForUpdates() {
+    m_access_manager->get (QNetworkRequest (QUrl (UPDATE_URL)));
 }
 
-void Updater::fileDownloaded (QNetworkReply *reply)
-{
-    QString _data = QString::fromUtf8 (reply->readAll());
-    if (!_data.isEmpty()) {
-        QStringList downloaded = _data.split(".");
-        QStringList installed = QString(APP_VERSION).split(".");
+void Updater::fileDownloaded (QNetworkReply *reply) {
+    bool _new_update = false;
 
-        for (int i = 0; i <= downloaded.count() - 1; ++i) {
-            if (downloaded.at(i) > installed.at(i)) {
-                m_new_update = true;
-                break;
+    QString _reply = QString::fromUtf8 (reply->readAll());
+
+    if (!_reply.isEmpty()) {
+        QStringList _download = _reply.split (".");
+        QStringList _installed = QString (APP_VERSION).split (".");
+
+        if (_download.count() == _installed.count()) {
+            for (int i = 0; i <= _download.count() - 1; ++i) {
+                if (_download.at (i) > _installed.at (i)) {
+                    _new_update = true;
+                    break;
+                }
             }
         }
     }
 
-    emit updateAvailable(m_new_update, _data);
+    emit updateAvailable (_new_update, _reply);
 }
 
-void Updater::ignoreSslErrors (QNetworkReply *reply, QList<QSslError> error)
-{
+void Updater::ignoreSslErrors (QNetworkReply *reply, QList<QSslError> error) {
     reply->ignoreSslErrors (error);
 }

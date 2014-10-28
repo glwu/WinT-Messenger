@@ -10,8 +10,7 @@
 
 #include "m_connection.h"
 
-MConnection::MConnection (QObject *parent) : QTcpSocket (parent)
-{
+MConnection::MConnection (QObject *parent) : QTcpSocket (parent) {
     transferTimerId = 0;
     m_nickname = "unknown";
     state = WaitingForGreeting;
@@ -26,57 +25,46 @@ MConnection::MConnection (QObject *parent) : QTcpSocket (parent)
     connect (this, SIGNAL (connected()), this, SLOT (sendGreetingMessage()));
 }
 
-QString MConnection::id() const
-{
+QString MConnection::id() const {
     return nickname() + "@" + peerAddress().toString();
 }
 
-QString MConnection::nickname() const
-{
+QString MConnection::nickname() const {
     return m_nickname;
 }
 
-QImage MConnection::profilePicture() const
-{
+QImage MConnection::profilePicture() const {
     return profile_picture;
 }
 
-void MConnection::setGreetingMessage (const QByteArray& message)
-{
+void MConnection::setGreetingMessage (const QByteArray& message) {
     greetingMessage = message;
 }
 
-void MConnection::sendStatus (const QString &status)
-{
+void MConnection::sendStatus (const QString &status) {
     write ("STATUS " + QByteArray::number (status.toUtf8().size()) + ' ' +
            status.toUtf8());
 }
 
-void MConnection::sendMessage (const QString& message)
-{
+void MConnection::sendMessage (const QString& message) {
     write ("MESSAGE " + QByteArray::number (message.toUtf8().size()) + ' ' +
            message.toUtf8());
 }
 
-void MConnection::timerEvent (QTimerEvent *timerEvent)
-{
-    if (timerEvent->timerId() == transferTimerId)
-    {
+void MConnection::timerEvent (QTimerEvent *timerEvent) {
+    if (timerEvent->timerId() == transferTimerId) {
         abort();
         killTimer (transferTimerId);
         transferTimerId = 0;
     }
 }
 
-void MConnection::processReadyRead()
-{
-    if (state == WaitingForGreeting)
-    {
+void MConnection::processReadyRead() {
+    if (state == WaitingForGreeting) {
         if (!readProtocolHeader())
             return;
 
-        if (currentDataType != Greeting)
-        {
+        if (currentDataType != Greeting) {
             abort();
             return;
         }
@@ -84,15 +72,13 @@ void MConnection::processReadyRead()
         state = ReadingGreeting;
     }
 
-    if (state == ReadingGreeting)
-    {
+    if (state == ReadingGreeting) {
         if (!hasEnoughData())
             return;
 
         buffer = read (numBytesForCurrentDataType);
 
-        if (buffer.size() != numBytesForCurrentDataType)
-        {
+        if (buffer.size() != numBytesForCurrentDataType) {
             abort();
             return;
         }
@@ -103,8 +89,7 @@ void MConnection::processReadyRead()
         if (m_nickname.isEmpty())
             m_nickname = tr ("Unknown");
 
-        if (list.count() > 1)
-        {
+        if (list.count() > 1) {
             QByteArray image;
 
             for (int i = 1; list.count() > i; i++)
@@ -120,8 +105,7 @@ void MConnection::processReadyRead()
         numBytesForCurrentDataType = 0;
         buffer.clear();
 
-        if (!isValid())
-        {
+        if (!isValid()) {
             abort();
             return;
         }
@@ -135,8 +119,7 @@ void MConnection::processReadyRead()
         emit readyForUse();
     }
 
-    while (bytesAvailable() > 0)
-    {
+    while (bytesAvailable() > 0) {
         if (currentDataType == Undefined)
             if (!readProtocolHeader())
                 return;
@@ -148,10 +131,8 @@ void MConnection::processReadyRead()
     }
 }
 
-void MConnection::sendPing()
-{
-    if (pongTime.elapsed() > PONG_TIMEOUT)
-    {
+void MConnection::sendPing() {
+    if (pongTime.elapsed() > PONG_TIMEOUT) {
         abort();
         return;
     }
@@ -159,8 +140,7 @@ void MConnection::sendPing()
     write ("PING 1 p");
 }
 
-void MConnection::sendGreetingMessage()
-{
+void MConnection::sendGreetingMessage() {
     QByteArray greetingData = "GREETING " +
                               QByteArray::number (greetingMessage.size()) + ' ' +
                               greetingMessage;
@@ -169,18 +149,15 @@ void MConnection::sendGreetingMessage()
         isGreetingMessageSent = true;
 }
 
-int MConnection::readDataIntoBuffer()
-{
+int MConnection::readDataIntoBuffer() {
     int numBytesBeforeRead = buffer.size();
 
-    if (numBytesBeforeRead == MAX_BUFFER_SIZE)
-    {
+    if (numBytesBeforeRead == MAX_BUFFER_SIZE) {
         abort();
         return 0;
     }
 
-    while (bytesAvailable() > 0 && buffer.size() < MAX_BUFFER_SIZE)
-    {
+    while (bytesAvailable() > 0 && buffer.size() < MAX_BUFFER_SIZE) {
         buffer.append (read (1));
 
         if (buffer.endsWith (SEPARATOR_TOKEN))
@@ -190,8 +167,7 @@ int MConnection::readDataIntoBuffer()
     return buffer.size() - numBytesBeforeRead;
 }
 
-int MConnection::dataLengthForCurrentDataType()
-{
+int MConnection::dataLengthForCurrentDataType() {
     if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 ||
             !buffer.endsWith (SEPARATOR_TOKEN))
         return 0;
@@ -202,10 +178,8 @@ int MConnection::dataLengthForCurrentDataType()
     return number;
 }
 
-bool MConnection::hasEnoughData()
-{
-    if (transferTimerId)
-    {
+bool MConnection::hasEnoughData() {
+    if (transferTimerId) {
         QObject::killTimer (transferTimerId);
         transferTimerId = 0;
     }
@@ -214,8 +188,7 @@ bool MConnection::hasEnoughData()
         numBytesForCurrentDataType = dataLengthForCurrentDataType();
 
     if (bytesAvailable() < numBytesForCurrentDataType ||
-            numBytesForCurrentDataType <= 0)
-    {
+            numBytesForCurrentDataType <= 0) {
         transferTimerId = startTimer (TRANSFER_TIMEOUT);
         return false;
     }
@@ -223,16 +196,13 @@ bool MConnection::hasEnoughData()
     return true;
 }
 
-bool MConnection::readProtocolHeader()
-{
-    if (transferTimerId)
-    {
+bool MConnection::readProtocolHeader() {
+    if (transferTimerId) {
         killTimer (transferTimerId);
         transferTimerId = 0;
     }
 
-    if (readDataIntoBuffer() <= 0)
-    {
+    if (readDataIntoBuffer() <= 0) {
         transferTimerId = startTimer (TRANSFER_TIMEOUT);
         return false;
     }
@@ -252,8 +222,7 @@ bool MConnection::readProtocolHeader()
     else if (buffer == "GREETING ")
         currentDataType = Greeting;
 
-    else
-    {
+    else {
         currentDataType = Undefined;
         abort();
         return false;
@@ -264,18 +233,15 @@ bool MConnection::readProtocolHeader()
     return true;
 }
 
-void MConnection::processData()
-{
+void MConnection::processData() {
     buffer = read (numBytesForCurrentDataType);
 
-    if (buffer.size() != numBytesForCurrentDataType)
-    {
+    if (buffer.size() != numBytesForCurrentDataType) {
         abort();
         return;
     }
 
-    switch (currentDataType)
-    {
+    switch (currentDataType) {
         case PlainText:
             emit newMessage (m_nickname, QString::fromUtf8 (buffer));
             break;

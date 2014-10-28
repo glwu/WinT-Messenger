@@ -35,7 +35,7 @@ Dialog {
         Label {
             id: _title
             fontSize: "medium"
-            color: theme.logoTitle
+            color: theme.secondary
             anchors.top: _icon.bottom
             anchors.left: parent.left
             anchors.right: parent.right

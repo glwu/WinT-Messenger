@@ -15,21 +15,20 @@
 
 #include "f_connection.h"
 
-class FServer : public QTcpServer
-{
-        Q_OBJECT
+class FServer : public QTcpServer {
+    Q_OBJECT
 
-    public:
+  public:
 
-        FServer (QObject *parent = 0);
+    FServer (QObject *parent = 0);
 
-    signals:
+  signals:
 
-        void newConnection (FConnection *connection);
+    void newConnection (FConnection *connection);
 
-    protected:
+  protected:
 
-        void incomingConnection (qintptr socketDescriptor);
+    void incomingConnection (qintptr socketDescriptor);
 };
 
 #endif

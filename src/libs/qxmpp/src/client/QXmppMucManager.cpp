@@ -32,43 +32,38 @@
 #include "QXmppMucManager.h"
 #include "QXmppUtils.h"
 
-class QXmppMucManagerPrivate
-{
-    public:
-        QMap<QString, QXmppMucRoom *> rooms;
+class QXmppMucManagerPrivate {
+  public:
+    QMap<QString, QXmppMucRoom *> rooms;
 };
 
-class QXmppMucRoomPrivate
-{
-    public:
-        QString ownJid() const
-        {
-            return jid + "/" + nickName;
-        }
-        QXmppClient *client;
-        QXmppDiscoveryManager *discoManager;
-        QXmppMucRoom::Actions allowedActions;
-        QString jid;
-        QString name;
-        QMap<QString, QXmppPresence> participants;
-        QString password;
-        QMap<QString, QXmppMucItem> permissions;
-        QSet<QString> permissionsQueue;
-        QString nickName;
-        QString subject;
+class QXmppMucRoomPrivate {
+  public:
+    QString ownJid() const {
+        return jid + "/" + nickName;
+    }
+    QXmppClient *client;
+    QXmppDiscoveryManager *discoManager;
+    QXmppMucRoom::Actions allowedActions;
+    QString jid;
+    QString name;
+    QMap<QString, QXmppPresence> participants;
+    QString password;
+    QMap<QString, QXmppMucItem> permissions;
+    QSet<QString> permissionsQueue;
+    QString nickName;
+    QString subject;
 };
 
 /// Constructs a new QXmppMucManager.
 
-QXmppMucManager::QXmppMucManager()
-{
+QXmppMucManager::QXmppMucManager() {
     d = new QXmppMucManagerPrivate;
 }
 
 /// Destroys a QXmppMucManager.
 
-QXmppMucManager::~QXmppMucManager()
-{
+QXmppMucManager::~QXmppMucManager() {
     delete d;
 }
 
@@ -76,12 +71,10 @@ QXmppMucManager::~QXmppMucManager()
 ///
 /// \param roomJid
 
-QXmppMucRoom *QXmppMucManager::addRoom (const QString &roomJid)
-{
+QXmppMucRoom *QXmppMucManager::addRoom (const QString &roomJid) {
     QXmppMucRoom *room = d->rooms.value (roomJid);
 
-    if (!room)
-    {
+    if (!room) {
         room = new QXmppMucRoom (client(), roomJid, this);
         d->rooms.insert (roomJid, room);
         connect (room, SIGNAL (destroyed (QObject *)),
@@ -96,14 +89,12 @@ QXmppMucRoom *QXmppMucManager::addRoom (const QString &roomJid)
 
 /// Returns the list of managed rooms.
 
-QList<QXmppMucRoom *> QXmppMucManager::rooms() const
-{
+QList<QXmppMucRoom *> QXmppMucManager::rooms() const {
     return d->rooms.values();
 }
 
 /// \cond
-QStringList QXmppMucManager::discoveryFeatures() const
-{
+QStringList QXmppMucManager::discoveryFeatures() const {
     // XEP-0045: Multi-User Chat
     return QStringList()
            << ns_muc
@@ -113,21 +104,16 @@ QStringList QXmppMucManager::discoveryFeatures() const
            << ns_conference;
 }
 
-bool QXmppMucManager::handleStanza (const QDomElement &element)
-{
-    if (element.tagName() == "iq")
-    {
-        if (QXmppMucAdminIq::isMucAdminIq (element))
-        {
+bool QXmppMucManager::handleStanza (const QDomElement &element) {
+    if (element.tagName() == "iq") {
+        if (QXmppMucAdminIq::isMucAdminIq (element)) {
             QXmppMucAdminIq iq;
             iq.parse (element);
 
             QXmppMucRoom *room = d->rooms.value (iq.from());
 
-            if (room && iq.type() == QXmppIq::Result && room->d->permissionsQueue.remove (iq.id()))
-            {
-                foreach (const QXmppMucItem & item, iq.items())
-                {
+            if (room && iq.type() == QXmppIq::Result && room->d->permissionsQueue.remove (iq.id())) {
+                foreach (const QXmppMucItem & item, iq.items()) {
                     const QString jid = item.jid();
 
                     if (!room->d->permissions.contains (jid))
@@ -141,8 +127,7 @@ bool QXmppMucManager::handleStanza (const QDomElement &element)
             return true;
         }
 
-        else if (QXmppMucOwnerIq::isMucOwnerIq (element))
-        {
+        else if (QXmppMucOwnerIq::isMucOwnerIq (element)) {
             QXmppMucOwnerIq iq;
             iq.parse (element);
 
@@ -158,8 +143,7 @@ bool QXmppMucManager::handleStanza (const QDomElement &element)
     return false;
 }
 
-void QXmppMucManager::setClient (QXmppClient *client)
-{
+void QXmppMucManager::setClient (QXmppClient *client) {
     bool check;
     Q_UNUSED (check);
 
@@ -171,8 +155,7 @@ void QXmppMucManager::setClient (QXmppClient *client)
 }
 /// \endcond
 
-void QXmppMucManager::_q_messageReceived (const QXmppMessage &msg)
-{
+void QXmppMucManager::_q_messageReceived (const QXmppMessage &msg) {
     if (msg.type() != QXmppMessage::Normal)
         return;
 
@@ -183,8 +166,7 @@ void QXmppMucManager::_q_messageReceived (const QXmppMessage &msg)
         emit invitationReceived (roomJid, msg.from(), msg.mucInvitationReason());
 }
 
-void QXmppMucManager::_q_roomDestroyed (QObject *object)
-{
+void QXmppMucManager::_q_roomDestroyed (QObject *object) {
     const QString key = d->rooms.key (static_cast<QXmppMucRoom *> (object));
     d->rooms.remove (key);
 }
@@ -194,8 +176,7 @@ void QXmppMucManager::_q_roomDestroyed (QObject *object)
 /// \param parent
 
 QXmppMucRoom::QXmppMucRoom (QXmppClient *client, const QString &jid, QObject *parent)
-    : QObject (parent)
-{
+    : QObject (parent) {
     bool check;
     Q_UNUSED (check);
 
@@ -217,8 +198,7 @@ QXmppMucRoom::QXmppMucRoom (QXmppClient *client, const QString &jid, QObject *pa
                      this, SLOT (_q_presenceReceived (QXmppPresence)));
     Q_ASSERT (check);
 
-    if (d->discoManager)
-    {
+    if (d->discoManager) {
         check = connect (d->discoManager, SIGNAL (infoReceived (QXmppDiscoveryIq)),
                          this, SLOT (_q_discoveryInfoReceived (QXmppDiscoveryIq)));
         Q_ASSERT (check);
@@ -234,15 +214,13 @@ QXmppMucRoom::QXmppMucRoom (QXmppClient *client, const QString &jid, QObject *pa
 
 /// Destroys a QXmppMucRoom.
 
-QXmppMucRoom::~QXmppMucRoom()
-{
+QXmppMucRoom::~QXmppMucRoom() {
     delete d;
 }
 
 /// Returns the actions you are allowed to perform on the room.
 
-QXmppMucRoom::Actions QXmppMucRoom::allowedActions() const
-{
+QXmppMucRoom::Actions QXmppMucRoom::allowedActions() const {
     return d->allowedActions;
 }
 
@@ -252,10 +230,8 @@ QXmppMucRoom::Actions QXmppMucRoom::allowedActions() const
 ///
 /// \return true if the request was sent, false otherwise
 
-bool QXmppMucRoom::ban (const QString &jid, const QString &reason)
-{
-    if (!QXmppUtils::jidToResource (jid).isEmpty())
-    {
+bool QXmppMucRoom::ban (const QString &jid, const QString &reason) {
+    if (!QXmppUtils::jidToResource (jid).isEmpty()) {
         qWarning ("QXmppMucRoom::ban expects a bare JID");
         return false;
     }
@@ -275,15 +251,13 @@ bool QXmppMucRoom::ban (const QString &jid, const QString &reason)
 
 /// Returns true if you are currently in the room.
 
-bool QXmppMucRoom::isJoined() const
-{
+bool QXmppMucRoom::isJoined() const {
     return d->participants.contains (d->ownJid());
 }
 
 /// Returns the chat room's bare JID.
 
-QString QXmppMucRoom::jid() const
-{
+QString QXmppMucRoom::jid() const {
     return d->jid;
 }
 
@@ -291,8 +265,7 @@ QString QXmppMucRoom::jid() const
 ///
 /// \return true if the request was sent, false otherwise
 
-bool QXmppMucRoom::join()
-{
+bool QXmppMucRoom::join() {
     if (isJoined() || d->nickName.isEmpty())
         return false;
 
@@ -311,8 +284,7 @@ bool QXmppMucRoom::join()
 ///
 /// \return true if the request was sent, false otherwise
 
-bool QXmppMucRoom::kick (const QString &jid, const QString &reason)
-{
+bool QXmppMucRoom::kick (const QString &jid, const QString &reason) {
     QXmppMucItem item;
     item.setNick (QXmppUtils::jidToResource (jid));
     item.setRole (QXmppMucItem::NoRole);
@@ -332,8 +304,7 @@ bool QXmppMucRoom::kick (const QString &jid, const QString &reason)
 ///
 /// \return true if the request was sent, false otherwise
 
-bool QXmppMucRoom::leave (const QString &message)
-{
+bool QXmppMucRoom::leave (const QString &message) {
     QXmppPresence packet;
     packet.setTo (d->ownJid());
     packet.setType (QXmppPresence::Unavailable);
@@ -345,15 +316,13 @@ bool QXmppMucRoom::leave (const QString &message)
 ///
 /// This name will only be available after the room has been joined.
 
-QString QXmppMucRoom::name() const
-{
+QString QXmppMucRoom::name() const {
     return d->name;
 }
 
 /// Returns your own nickname.
 
-QString QXmppMucRoom::nickName() const
-{
+QString QXmppMucRoom::nickName() const {
     return d->nickName;
 }
 
@@ -364,8 +333,7 @@ QString QXmppMucRoom::nickName() const
 ///
 /// \return true if the request was sent, false otherwise
 
-bool QXmppMucRoom::sendInvitation (const QString &jid, const QString &reason)
-{
+bool QXmppMucRoom::sendInvitation (const QString &jid, const QString &reason) {
     QXmppMessage message;
     message.setTo (jid);
     message.setType (QXmppMessage::Normal);
@@ -378,8 +346,7 @@ bool QXmppMucRoom::sendInvitation (const QString &jid, const QString &reason)
 ///
 /// \return true if the request was sent, false otherwise
 
-bool QXmppMucRoom::sendMessage (const QString &text)
-{
+bool QXmppMucRoom::sendMessage (const QString &text) {
     QXmppMessage msg;
     msg.setTo (d->jid);
     msg.setType (QXmppMessage::GroupChat);
@@ -393,22 +360,19 @@ bool QXmppMucRoom::sendMessage (const QString &text)
 ///
 /// \param nickName
 
-void QXmppMucRoom::setNickName (const QString &nickName)
-{
+void QXmppMucRoom::setNickName (const QString &nickName) {
     if (nickName == d->nickName)
         return;
 
     // if we had already joined the room, request nickname change
-    if (isJoined())
-    {
+    if (isJoined()) {
         QXmppPresence packet = d->client->clientPresence();
         packet.setTo (d->jid + "/" + nickName);
         packet.setType (QXmppPresence::Available);
         d->client->sendPacket (packet);
     }
 
-    else
-    {
+    else {
         d->nickName = nickName;
         emit nickNameChanged (nickName);
     }
@@ -418,8 +382,7 @@ void QXmppMucRoom::setNickName (const QString &nickName)
 ///
 /// The specified \a jid is the Occupant JID of the form "room@service/nick".
 
-QString QXmppMucRoom::participantFullJid (const QString &jid) const
-{
+QString QXmppMucRoom::participantFullJid (const QString &jid) const {
     if (d->participants.contains (jid))
         return d->participants.value (jid).mucItem().jid();
 
@@ -431,8 +394,7 @@ QString QXmppMucRoom::participantFullJid (const QString &jid) const
 ///
 /// The specified \a jid is the Occupant JID of the form "room@service/nick".
 
-QXmppPresence QXmppMucRoom::participantPresence (const QString &jid) const
-{
+QXmppPresence QXmppMucRoom::participantPresence (const QString &jid) const {
     if (d->participants.contains (jid))
         return d->participants.value (jid);
 
@@ -446,15 +408,13 @@ QXmppPresence QXmppMucRoom::participantPresence (const QString &jid) const
 ///
 /// These JIDs are Occupant JIDs of the form "room@service/nick".
 
-QStringList QXmppMucRoom::participants() const
-{
+QStringList QXmppMucRoom::participants() const {
     return d->participants.keys();
 }
 
 /// Returns the chat room password.
 
-QString QXmppMucRoom::password() const
-{
+QString QXmppMucRoom::password() const {
     return d->password;
 }
 
@@ -462,15 +422,13 @@ QString QXmppMucRoom::password() const
 ///
 /// \param password
 
-void QXmppMucRoom::setPassword (const QString &password)
-{
+void QXmppMucRoom::setPassword (const QString &password) {
     d->password = password;
 }
 
 /// Returns the room's subject.
 
-QString QXmppMucRoom::subject() const
-{
+QString QXmppMucRoom::subject() const {
     return d->subject;
 }
 
@@ -478,8 +436,7 @@ QString QXmppMucRoom::subject() const
 ///
 /// \param subject
 
-void QXmppMucRoom::setSubject (const QString &subject)
-{
+void QXmppMucRoom::setSubject (const QString &subject) {
     QXmppMessage msg;
     msg.setTo (d->jid);
     msg.setType (QXmppMessage::GroupChat);
@@ -493,8 +450,7 @@ void QXmppMucRoom::setSubject (const QString &subject)
 ///
 /// \sa configurationReceived()
 
-bool QXmppMucRoom::requestConfiguration()
-{
+bool QXmppMucRoom::requestConfiguration() {
     QXmppMucOwnerIq iq;
     iq.setTo (d->jid);
     return d->client->sendPacket (iq);
@@ -506,8 +462,7 @@ bool QXmppMucRoom::requestConfiguration()
 ///
 /// \return true if the request was sent, false otherwise
 
-bool QXmppMucRoom::setConfiguration (const QXmppDataForm &form)
-{
+bool QXmppMucRoom::setConfiguration (const QXmppDataForm &form) {
     QXmppMucOwnerIq iqPacket;
     iqPacket.setType (QXmppIq::Set);
     iqPacket.setTo (d->jid);
@@ -521,8 +476,7 @@ bool QXmppMucRoom::setConfiguration (const QXmppDataForm &form)
 ///
 /// \sa permissionsReceived()
 
-bool QXmppMucRoom::requestPermissions()
-{
+bool QXmppMucRoom::requestPermissions() {
     QList<QXmppMucItem::Affiliation> affiliations;
     affiliations << QXmppMucItem::OwnerAffiliation;
     affiliations << QXmppMucItem::AdminAffiliation;
@@ -531,8 +485,7 @@ bool QXmppMucRoom::requestPermissions()
 
     d->permissions.clear();
     d->permissionsQueue.clear();
-    foreach (QXmppMucItem::Affiliation affiliation, affiliations)
-    {
+    foreach (QXmppMucItem::Affiliation affiliation, affiliations) {
         QXmppMucItem item;
         item.setAffiliation (affiliation);
 
@@ -554,13 +507,11 @@ bool QXmppMucRoom::requestPermissions()
 ///
 /// \return true if the request was sent, false otherwise
 
-bool QXmppMucRoom::setPermissions (const QList<QXmppMucItem> &permissions)
-{
+bool QXmppMucRoom::setPermissions (const QList<QXmppMucItem> &permissions) {
     QList<QXmppMucItem> items;
 
     // Process changed members
-    foreach (const QXmppMucItem & item, permissions)
-    {
+    foreach (const QXmppMucItem & item, permissions) {
         const QString jid = item.jid();
 
         if (d->permissions.value (jid).affiliation() != item.affiliation())
@@ -570,8 +521,7 @@ bool QXmppMucRoom::setPermissions (const QList<QXmppMucItem> &permissions)
     }
 
     // Process deleted members
-    foreach (const QString & jid, d->permissions.keys())
-    {
+    foreach (const QString & jid, d->permissions.keys()) {
         QXmppMucItem item;
         item.setAffiliation (QXmppMucItem::NoAffiliation);
         item.setJid (jid);
@@ -590,8 +540,7 @@ bool QXmppMucRoom::setPermissions (const QList<QXmppMucItem> &permissions)
     return d->client->sendPacket (iq);
 }
 
-void QXmppMucRoom::_q_disconnected()
-{
+void QXmppMucRoom::_q_disconnected() {
     const bool wasJoined = isJoined();
 
     // clear chat room participants
@@ -602,8 +551,7 @@ void QXmppMucRoom::_q_disconnected()
     emit participantsChanged();
 
     // update available actions
-    if (d->allowedActions != NoAction)
-    {
+    if (d->allowedActions != NoAction) {
         d->allowedActions = NoAction;
         emit allowedActionsChanged (d->allowedActions);
     }
@@ -613,38 +561,31 @@ void QXmppMucRoom::_q_disconnected()
         emit left();
 }
 
-void QXmppMucRoom::_q_discoveryInfoReceived (const QXmppDiscoveryIq &iq)
-{
-    if (iq.from() == d->jid)
-    {
+void QXmppMucRoom::_q_discoveryInfoReceived (const QXmppDiscoveryIq &iq) {
+    if (iq.from() == d->jid) {
         QString name;
-        foreach (const QXmppDiscoveryIq::Identity & identity, iq.identities())
-        {
-            if (identity.category() == "conference")
-            {
+        foreach (const QXmppDiscoveryIq::Identity & identity, iq.identities()) {
+            if (identity.category() == "conference") {
                 name = identity.name();
                 break;
             }
         }
 
-        if (name != d->name)
-        {
+        if (name != d->name) {
             d->name = name;
             emit nameChanged (name);
         }
     }
 }
 
-void QXmppMucRoom::_q_messageReceived (const QXmppMessage &message)
-{
+void QXmppMucRoom::_q_messageReceived (const QXmppMessage &message) {
     if (QXmppUtils::jidToBareJid (message.from()) != d->jid)
         return;
 
     // handle message subject
     const QString subject = message.subject();
 
-    if (!subject.isEmpty())
-    {
+    if (!subject.isEmpty()) {
         d->subject = subject;
         emit subjectChanged (subject);
     }
@@ -652,13 +593,11 @@ void QXmppMucRoom::_q_messageReceived (const QXmppMessage &message)
     emit messageReceived (message);
 }
 
-void QXmppMucRoom::_q_presenceReceived (const QXmppPresence &presence)
-{
+void QXmppMucRoom::_q_presenceReceived (const QXmppPresence &presence) {
     const QString jid = presence.from();
 
     // if our own presence changes, reflect it in the chat room
-    if (isJoined() && jid == d->client->configuration().jid())
-    {
+    if (isJoined() && jid == d->client->configuration().jid()) {
         QXmppPresence packet = d->client->clientPresence();
         packet.setTo (d->ownJid());
         d->client->sendPacket (packet);
@@ -667,14 +606,12 @@ void QXmppMucRoom::_q_presenceReceived (const QXmppPresence &presence)
     if (QXmppUtils::jidToBareJid (jid) != d->jid)
         return;
 
-    if (presence.type() == QXmppPresence::Available)
-    {
+    if (presence.type() == QXmppPresence::Available) {
         const bool added = !d->participants.contains (jid);
         d->participants.insert (jid, presence);
 
         // refresh allowed actions
-        if (jid == d->ownJid())
-        {
+        if (jid == d->ownJid()) {
 
             QXmppMucItem mucItem = presence.mucItem();
             Actions newActions = NoAction;
@@ -690,20 +627,17 @@ void QXmppMucRoom::_q_presenceReceived (const QXmppPresence &presence)
             else if (mucItem.affiliation() == QXmppMucItem::AdminAffiliation)
                 newActions |= (PermissionsAction | SubjectAction);
 
-            if (newActions != d->allowedActions)
-            {
+            if (newActions != d->allowedActions) {
                 d->allowedActions = newActions;
                 emit allowedActionsChanged (d->allowedActions);
             }
         }
 
-        if (added)
-        {
+        if (added) {
             emit participantAdded (jid);
             emit participantsChanged();
 
-            if (jid == d->ownJid())
-            {
+            if (jid == d->ownJid()) {
                 // request room information
                 if (d->discoManager)
                     d->discoManager->requestInfo (d->jid);
@@ -716,10 +650,8 @@ void QXmppMucRoom::_q_presenceReceived (const QXmppPresence &presence)
             emit participantChanged (jid);
     }
 
-    else if (presence.type() == QXmppPresence::Unavailable)
-    {
-        if (d->participants.contains (jid))
-        {
+    else if (presence.type() == QXmppPresence::Unavailable) {
+        if (d->participants.contains (jid)) {
             d->participants.insert (jid, presence);
 
             emit participantRemoved (jid);
@@ -727,20 +659,17 @@ void QXmppMucRoom::_q_presenceReceived (const QXmppPresence &presence)
             emit participantsChanged();
 
             // check whether this was our own presence
-            if (jid == d->ownJid())
-            {
+            if (jid == d->ownJid()) {
                 const QString newNick = presence.mucItem().nick();
 
-                if (!newNick.isEmpty() && newNick != d->nickName)
-                {
+                if (!newNick.isEmpty() && newNick != d->nickName) {
                     d->nickName = newNick;
                     emit nickNameChanged (newNick);
                     return;
                 }
 
                 // check whether we were kicked
-                if (presence.mucStatusCodes().contains (307))
-                {
+                if (presence.mucStatusCodes().contains (307)) {
                     const QString actor = presence.mucItem().actor();
                     const QString reason = presence.mucItem().reason();
                     emit kicked (actor, reason);
@@ -754,8 +683,7 @@ void QXmppMucRoom::_q_presenceReceived (const QXmppPresence &presence)
                 emit participantsChanged();
 
                 // update available actions
-                if (d->allowedActions != NoAction)
-                {
+                if (d->allowedActions != NoAction) {
                     d->allowedActions = NoAction;
                     emit allowedActionsChanged (d->allowedActions);
                 }
@@ -766,10 +694,8 @@ void QXmppMucRoom::_q_presenceReceived (const QXmppPresence &presence)
         }
     }
 
-    else if (presence.type() == QXmppPresence::Error)
-    {
-        if (presence.isMucSupported())
-        {
+    else if (presence.type() == QXmppPresence::Error) {
+        if (presence.isMucSupported()) {
             // emit error
             emit error (presence.error());
 

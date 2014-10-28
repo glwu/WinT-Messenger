@@ -23,10 +23,10 @@ Page {
         width: _bg.width
         height: _bg.height
         anchors.centerIn: _bg
+        color: theme.borderColor
         glowRadius: units.scale(3)
         anchors.verticalCenterOffset: glowRadius
         anchors.horizontalCenterOffset: glowRadius
-        color: settings.darkInterface() ? theme.shadow : theme.borderColor
     }
 
     Rectangle {
@@ -66,7 +66,7 @@ Page {
         Label {
             id: _caption
             fontSize: "xx-large"
-            color: theme.logoTitle
+            color: theme.secondary
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -units.scale(12)
         }
@@ -93,7 +93,7 @@ Page {
                 name: iconName
                 visible: iconName
                 anchors.fill: parent
-                color: theme.textColor
+                color: theme.iconColor
                 iconSize: _image.height
             }
         }

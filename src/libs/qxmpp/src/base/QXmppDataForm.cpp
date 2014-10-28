@@ -30,14 +30,12 @@
 #include "QXmppDataForm.h"
 #include "QXmppUtils.h"
 
-struct field_type
-{
+struct field_type {
     QXmppDataForm::Field::Type type;
     const char *str;
 };
 
-static field_type field_types[] =
-{
+static field_type field_types[] = {
     {QXmppDataForm::Field::BooleanField, "boolean"},
     {QXmppDataForm::Field::FixedField, "fixed"},
     {QXmppDataForm::Field::HiddenField, "hidden"},
@@ -51,144 +49,125 @@ static field_type field_types[] =
     {static_cast<QXmppDataForm::Field::Type> (-1), NULL},
 };
 
-class QXmppDataFormMediaPrivate : public QSharedData
-{
-    public:
-        QSize size;
-        QList<QPair<QString, QString> > uris;
+class QXmppDataFormMediaPrivate : public QSharedData {
+  public:
+    QSize size;
+    QList<QPair<QString, QString> > uris;
 };
 
 /// Constructs an empty QXmppDataForm::Media.
 
 QXmppDataForm::Media::Media()
-    : d (new QXmppDataFormMediaPrivate)
-{
+    : d (new QXmppDataFormMediaPrivate) {
 }
 
 /// Constructs a copy of \a other.
 
 QXmppDataForm::Media::Media (const QXmppDataForm::Media &other)
-    : d (other.d)
-{
+    : d (other.d) {
 }
 
 /// Destroys the media.
 
-QXmppDataForm::Media::~Media()
-{
+QXmppDataForm::Media::~Media() {
 }
 
 /// Assigns \a other to this media.
 
-QXmppDataForm::Media& QXmppDataForm::Media::operator= (const QXmppDataForm::Media &other)
-{
+QXmppDataForm::Media& QXmppDataForm::Media::operator= (const QXmppDataForm::Media &other) {
     d = other.d;
     return *this;
 }
 
 /// Returns media's height.
 
-int QXmppDataForm::Media::height() const
-{
+int QXmppDataForm::Media::height() const {
     return d->size.height();
 }
 
 /// Sets media's \a height.
 
-void QXmppDataForm::Media::setHeight (int height)
-{
+void QXmppDataForm::Media::setHeight (int height) {
     d->size.setHeight (height);
 }
 
 /// Returns media's width.
 
-int QXmppDataForm::Media::width() const
-{
+int QXmppDataForm::Media::width() const {
     return d->size.width();
 }
 
 /// Sets media's \a width.
 
-void QXmppDataForm::Media::setWidth (int width)
-{
+void QXmppDataForm::Media::setWidth (int width) {
     d->size.setWidth (width);
 }
 
 /// Returns media's uris.
 
-QList< QPair< QString, QString > > QXmppDataForm::Media::uris() const
-{
+QList< QPair< QString, QString > > QXmppDataForm::Media::uris() const {
     return d->uris;
 }
 
 /// Sets media's \a uris.
 
-void QXmppDataForm::Media::setUris (const QList< QPair< QString, QString > > &uris)
-{
+void QXmppDataForm::Media::setUris (const QList< QPair< QString, QString > > &uris) {
     d->uris = uris;
 }
 
 /// Returns true if no media tag present.
 
-bool QXmppDataForm::Media::isNull() const
-{
+bool QXmppDataForm::Media::isNull() const {
     return d->uris.empty();
 }
 
-class QXmppDataFormFieldPrivate : public QSharedData
-{
-    public:
-        QXmppDataFormFieldPrivate();
+class QXmppDataFormFieldPrivate : public QSharedData {
+  public:
+    QXmppDataFormFieldPrivate();
 
-        QString description;
-        QString key;
-        QString label;
-        QXmppDataForm::Media media;
-        QList<QPair<QString, QString> > options;
-        bool required;
-        QXmppDataForm::Field::Type type;
-        QVariant value;
+    QString description;
+    QString key;
+    QString label;
+    QXmppDataForm::Media media;
+    QList<QPair<QString, QString> > options;
+    bool required;
+    QXmppDataForm::Field::Type type;
+    QVariant value;
 };
 
 QXmppDataFormFieldPrivate::QXmppDataFormFieldPrivate()
     : required (false)
-    , type (QXmppDataForm::Field::TextSingleField)
-{
+    , type (QXmppDataForm::Field::TextSingleField) {
 }
 
 /// Constructs a QXmppDataForm::Field of the specified \a type.
 
 QXmppDataForm::Field::Field (QXmppDataForm::Field::Type type)
-    : d (new QXmppDataFormFieldPrivate)
-{
+    : d (new QXmppDataFormFieldPrivate) {
     d->type = type;
 }
 
 /// Constructs a copy of \a other.
 
 QXmppDataForm::Field::Field (const QXmppDataForm::Field &other)
-    : d (other.d)
-{
+    : d (other.d) {
 }
 
 /// Destroys the form field.
 
-QXmppDataForm::Field::~Field()
-{
+QXmppDataForm::Field::~Field() {
 }
 
 /// Assigns \a other to this field.
 
-QXmppDataForm::Field& QXmppDataForm::Field::operator= (const QXmppDataForm::Field &other)
-{
+QXmppDataForm::Field& QXmppDataForm::Field::operator= (const QXmppDataForm::Field &other) {
     d = other.d;
     return *this;
 }
 
 /// Returns the field's description.
 
-QString QXmppDataForm::Field::description() const
-{
+QString QXmppDataForm::Field::description() const {
     return d->description;
 }
 
@@ -196,15 +175,13 @@ QString QXmppDataForm::Field::description() const
 ///
 /// \param description
 
-void QXmppDataForm::Field::setDescription (const QString &description)
-{
+void QXmppDataForm::Field::setDescription (const QString &description) {
     d->description = description;
 }
 
 /// Returns the field's key.
 
-QString QXmppDataForm::Field::key() const
-{
+QString QXmppDataForm::Field::key() const {
     return d->key;
 }
 
@@ -212,15 +189,13 @@ QString QXmppDataForm::Field::key() const
 ///
 /// \param key
 
-void QXmppDataForm::Field::setKey (const QString &key)
-{
+void QXmppDataForm::Field::setKey (const QString &key) {
     d->key = key;
 }
 
 /// Returns the field's label.
 
-QString QXmppDataForm::Field::label() const
-{
+QString QXmppDataForm::Field::label() const {
     return d->label;
 }
 
@@ -228,29 +203,25 @@ QString QXmppDataForm::Field::label() const
 ///
 /// \param label
 
-void QXmppDataForm::Field::setLabel (const QString &label)
-{
+void QXmppDataForm::Field::setLabel (const QString &label) {
     d->label = label;
 }
 
 /// Returns the field's media.
 
-QXmppDataForm::Media QXmppDataForm::Field::media() const
-{
+QXmppDataForm::Media QXmppDataForm::Field::media() const {
     return d->media;
 }
 
 /// Sets the field's \a media.
 
-void QXmppDataForm::Field::setMedia (const QXmppDataForm::Media &media)
-{
+void QXmppDataForm::Field::setMedia (const QXmppDataForm::Media &media) {
     d->media = media;
 }
 
 /// Returns the field's options.
 
-QList<QPair<QString, QString> > QXmppDataForm::Field::options() const
-{
+QList<QPair<QString, QString> > QXmppDataForm::Field::options() const {
     return d->options;
 }
 
@@ -258,15 +229,13 @@ QList<QPair<QString, QString> > QXmppDataForm::Field::options() const
 ///
 /// \param options
 
-void QXmppDataForm::Field::setOptions (const QList<QPair<QString, QString> > &options)
-{
+void QXmppDataForm::Field::setOptions (const QList<QPair<QString, QString> > &options) {
     d->options = options;
 }
 
 /// Returns true if the field is required, false otherwise.
 
-bool QXmppDataForm::Field::isRequired() const
-{
+bool QXmppDataForm::Field::isRequired() const {
     return d->required;
 }
 
@@ -274,15 +243,13 @@ bool QXmppDataForm::Field::isRequired() const
 ///
 /// \param required
 
-void QXmppDataForm::Field::setRequired (bool required)
-{
+void QXmppDataForm::Field::setRequired (bool required) {
     d->required = required;
 }
 
 /// Returns the field's type.
 
-QXmppDataForm::Field::Type QXmppDataForm::Field::type() const
-{
+QXmppDataForm::Field::Type QXmppDataForm::Field::type() const {
     return d->type;
 }
 
@@ -290,15 +257,13 @@ QXmppDataForm::Field::Type QXmppDataForm::Field::type() const
 ///
 /// \param type
 
-void QXmppDataForm::Field::setType (QXmppDataForm::Field::Type type)
-{
+void QXmppDataForm::Field::setType (QXmppDataForm::Field::Type type) {
     d->type = type;
 }
 
 /// Returns the field's value.
 
-QVariant QXmppDataForm::Field::value() const
-{
+QVariant QXmppDataForm::Field::value() const {
     return d->value;
 }
 
@@ -306,67 +271,58 @@ QVariant QXmppDataForm::Field::value() const
 ///
 /// \param value
 
-void QXmppDataForm::Field::setValue (const QVariant &value)
-{
+void QXmppDataForm::Field::setValue (const QVariant &value) {
     d->value = value;
 }
 
-class QXmppDataFormPrivate : public QSharedData
-{
-    public:
-        QXmppDataFormPrivate();
+class QXmppDataFormPrivate : public QSharedData {
+  public:
+    QXmppDataFormPrivate();
 
-        QString instructions;
-        QList<QXmppDataForm::Field> fields;
-        QString title;
-        QXmppDataForm::Type type;
+    QString instructions;
+    QList<QXmppDataForm::Field> fields;
+    QString title;
+    QXmppDataForm::Type type;
 };
 
 QXmppDataFormPrivate::QXmppDataFormPrivate()
-    : type (QXmppDataForm::None)
-{
+    : type (QXmppDataForm::None) {
 }
 
 /// Constructs a QXmppDataForm of the specified \a type.
 
 QXmppDataForm::QXmppDataForm (QXmppDataForm::Type type)
-    : d (new QXmppDataFormPrivate)
-{
+    : d (new QXmppDataFormPrivate) {
     d->type = type;
 }
 
 /// Constructs a copy of \a other.
 
 QXmppDataForm::QXmppDataForm (const QXmppDataForm &other)
-    : d (other.d)
-{
+    : d (other.d) {
 }
 
 /// Destroys the form.
 
-QXmppDataForm::~QXmppDataForm()
-{
+QXmppDataForm::~QXmppDataForm() {
 }
 
 /// Assigns \a other to this form.
 
-QXmppDataForm& QXmppDataForm::operator= (const QXmppDataForm &other)
-{
+QXmppDataForm& QXmppDataForm::operator= (const QXmppDataForm &other) {
     d = other.d;
     return *this;
 }
 
 /// Returns the form's fields.
 
-QList<QXmppDataForm::Field> QXmppDataForm::fields() const
-{
+QList<QXmppDataForm::Field> QXmppDataForm::fields() const {
     return d->fields;
 }
 
 /// Returns the form's fields by reference.
 
-QList<QXmppDataForm::Field> &QXmppDataForm::fields()
-{
+QList<QXmppDataForm::Field> &QXmppDataForm::fields() {
     return d->fields;
 }
 
@@ -374,15 +330,13 @@ QList<QXmppDataForm::Field> &QXmppDataForm::fields()
 ///
 /// \param fields
 
-void QXmppDataForm::setFields (const QList<QXmppDataForm::Field> &fields)
-{
+void QXmppDataForm::setFields (const QList<QXmppDataForm::Field> &fields) {
     d->fields = fields;
 }
 
 /// Returns the form's instructions.
 
-QString QXmppDataForm::instructions() const
-{
+QString QXmppDataForm::instructions() const {
     return d->instructions;
 }
 
@@ -390,15 +344,13 @@ QString QXmppDataForm::instructions() const
 ///
 /// \param instructions
 
-void QXmppDataForm::setInstructions (const QString &instructions)
-{
+void QXmppDataForm::setInstructions (const QString &instructions) {
     d->instructions = instructions;
 }
 
 /// Returns the form's title.
 
-QString QXmppDataForm::title() const
-{
+QString QXmppDataForm::title() const {
     return d->title;
 }
 
@@ -406,15 +358,13 @@ QString QXmppDataForm::title() const
 ///
 /// \param title
 
-void QXmppDataForm::setTitle (const QString &title)
-{
+void QXmppDataForm::setTitle (const QString &title) {
     d->title = title;
 }
 
 /// Returns the form's type.
 
-QXmppDataForm::Type QXmppDataForm::type() const
-{
+QXmppDataForm::Type QXmppDataForm::type() const {
     return d->type;
 }
 
@@ -422,21 +372,18 @@ QXmppDataForm::Type QXmppDataForm::type() const
 ///
 /// \param type
 
-void QXmppDataForm::setType (QXmppDataForm::Type type)
-{
+void QXmppDataForm::setType (QXmppDataForm::Type type) {
     d->type = type;
 }
 
 /// Returns true if the form has an unknown type.
 
-bool QXmppDataForm::isNull() const
-{
+bool QXmppDataForm::isNull() const {
     return d->type == QXmppDataForm::None;
 }
 
 /// \cond
-void QXmppDataForm::parse (const QDomElement &element)
-{
+void QXmppDataForm::parse (const QDomElement &element) {
     if (element.isNull())
         return;
 
@@ -455,8 +402,7 @@ void QXmppDataForm::parse (const QDomElement &element)
     else if (typeStr == "result")
         d->type = QXmppDataForm::Result;
 
-    else
-    {
+    else {
         qWarning() << "Unknown form type" << typeStr;
         return;
     }
@@ -467,8 +413,7 @@ void QXmppDataForm::parse (const QDomElement &element)
 
     QDomElement fieldElement = element.firstChildElement ("field");
 
-    while (!fieldElement.isNull())
-    {
+    while (!fieldElement.isNull()) {
         QXmppDataForm::Field field;
 
         /* field type */
@@ -476,10 +421,8 @@ void QXmppDataForm::parse (const QDomElement &element)
         const QString typeStr = fieldElement.attribute ("type");
         struct field_type *ptr;
 
-        for (ptr = field_types; ptr->str; ptr++)
-        {
-            if (typeStr == ptr->str)
-            {
+        for (ptr = field_types; ptr->str; ptr++) {
+            if (typeStr == ptr->str) {
                 type = ptr->type;
                 break;
             }
@@ -492,21 +435,18 @@ void QXmppDataForm::parse (const QDomElement &element)
         field.setKey (fieldElement.attribute ("var"));
 
         /* field value(s) */
-        if (type == QXmppDataForm::Field::BooleanField)
-        {
+        if (type == QXmppDataForm::Field::BooleanField) {
             const QString valueStr = fieldElement.firstChildElement ("value").text();
             field.setValue (valueStr == "1" || valueStr == "true");
         }
 
         else if (type == QXmppDataForm::Field::ListMultiField ||
                  type == QXmppDataForm::Field::JidMultiField ||
-                 type == QXmppDataForm::Field::TextMultiField)
-        {
+                 type == QXmppDataForm::Field::TextMultiField) {
             QStringList values;
             QDomElement valueElement = fieldElement.firstChildElement ("value");
 
-            while (!valueElement.isNull())
-            {
+            while (!valueElement.isNull()) {
                 values.append (valueElement.text());
                 valueElement = valueElement.nextSiblingElement ("value");
             }
@@ -520,8 +460,7 @@ void QXmppDataForm::parse (const QDomElement &element)
         /* field media */
         QDomElement mediaElement = fieldElement.firstChildElement ("media");
 
-        if (!mediaElement.isNull())
-        {
+        if (!mediaElement.isNull()) {
             Media media;
             media.setHeight (mediaElement.attribute ("height", "-1").toInt());
             media.setWidth (mediaElement.attribute ("width", "-1").toInt());
@@ -529,8 +468,7 @@ void QXmppDataForm::parse (const QDomElement &element)
             QList<QPair<QString, QString> > uris;
             QDomElement uriElement = mediaElement.firstChildElement ("uri");
 
-            while (!uriElement.isNull())
-            {
+            while (!uriElement.isNull()) {
                 uris.append (QPair<QString, QString> (uriElement.attribute ("type"),
                                                       uriElement.text()));
                 uriElement = uriElement.nextSiblingElement ("uri");
@@ -542,13 +480,11 @@ void QXmppDataForm::parse (const QDomElement &element)
 
         /* field options */
         if (type == QXmppDataForm::Field::ListMultiField ||
-                type == QXmppDataForm::Field::ListSingleField)
-        {
+                type == QXmppDataForm::Field::ListSingleField) {
             QList<QPair<QString, QString> > options;
             QDomElement optionElement = fieldElement.firstChildElement ("option");
 
-            while (!optionElement.isNull())
-            {
+            while (!optionElement.isNull()) {
                 options.append (QPair<QString, QString> (optionElement.attribute ("label"),
                                 optionElement.firstChildElement ("value").text()));
                 optionElement = optionElement.nextSiblingElement ("option");
@@ -567,8 +503,7 @@ void QXmppDataForm::parse (const QDomElement &element)
     }
 }
 
-void QXmppDataForm::toXml (QXmlStreamWriter *writer) const
-{
+void QXmppDataForm::toXml (QXmlStreamWriter *writer) const {
     if (isNull())
         return;
 
@@ -599,8 +534,7 @@ void QXmppDataForm::toXml (QXmlStreamWriter *writer) const
     if (!d->instructions.isEmpty())
         writer->writeTextElement ("instructions", d->instructions);
 
-    foreach (const QXmppDataForm::Field & field, d->fields)
-    {
+    foreach (const QXmppDataForm::Field & field, d->fields) {
         writer->writeStartElement ("field");
 
         /* field type */
@@ -608,10 +542,8 @@ void QXmppDataForm::toXml (QXmlStreamWriter *writer) const
         QString typeStr;
         struct field_type *ptr;
 
-        for (ptr = field_types; ptr->str; ptr++)
-        {
-            if (type == ptr->type)
-            {
+        for (ptr = field_types; ptr->str; ptr++) {
+            if (type == ptr->type) {
                 typeStr = ptr->str;
                 break;
             }
@@ -629,8 +561,7 @@ void QXmppDataForm::toXml (QXmlStreamWriter *writer) const
 
         else if (type == QXmppDataForm::Field::ListMultiField ||
                  type == QXmppDataForm::Field::JidMultiField ||
-                 type == QXmppDataForm::Field::TextMultiField)
-        {
+                 type == QXmppDataForm::Field::TextMultiField) {
             foreach (const QString & value, field.value().toStringList())
             helperToXmlAddTextElement (writer, "value", value);
         }
@@ -641,8 +572,7 @@ void QXmppDataForm::toXml (QXmlStreamWriter *writer) const
         /* field media */
         Media media = field.media();
 
-        if (!media.isNull())
-        {
+        if (!media.isNull()) {
             writer->writeStartElement ("media");
             helperToXmlAddAttribute (writer, "xmlns", ns_media_element);
 
@@ -653,8 +583,7 @@ void QXmppDataForm::toXml (QXmlStreamWriter *writer) const
                 helperToXmlAddAttribute (writer, "width", QString::number (media.width()));
 
             QPair<QString, QString> uri;
-            foreach (uri, media.uris())
-            {
+            foreach (uri, media.uris()) {
                 writer->writeStartElement ("uri");
                 helperToXmlAddAttribute (writer, "type", uri.first);
                 writer->writeCharacters (uri.second);
@@ -665,11 +594,9 @@ void QXmppDataForm::toXml (QXmlStreamWriter *writer) const
 
         /* field options */
         if (type == QXmppDataForm::Field::ListMultiField ||
-                type == QXmppDataForm::Field::ListSingleField)
-        {
+                type == QXmppDataForm::Field::ListSingleField) {
             QPair<QString, QString> option;
-            foreach (option, field.options())
-            {
+            foreach (option, field.options()) {
                 writer->writeStartElement ("option");
                 helperToXmlAddAttribute (writer, "label", option.first);
                 helperToXmlAddTextElement (writer, "value", option.second);

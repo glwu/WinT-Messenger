@@ -30,17 +30,15 @@
 #include "QXmppVersionManager.h"
 #include "QXmppVersionIq.h"
 
-class QXmppVersionManagerPrivate
-{
-    public:
-        QString clientName;
-        QString clientVersion;
-        QString clientOs;
+class QXmppVersionManagerPrivate {
+  public:
+    QString clientName;
+    QString clientVersion;
+    QString clientOs;
 };
 
 QXmppVersionManager::QXmppVersionManager()
-    : d (new QXmppVersionManagerPrivate)
-{
+    : d (new QXmppVersionManagerPrivate) {
     d->clientName = qApp->applicationName();
 
     if (d->clientName.isEmpty())
@@ -62,8 +60,7 @@ QXmppVersionManager::QXmppVersionManager()
         d->clientVersion = QXmppVersion();
 }
 
-QXmppVersionManager::~QXmppVersionManager()
-{
+QXmppVersionManager::~QXmppVersionManager() {
     delete d;
 }
 
@@ -71,8 +68,7 @@ QXmppVersionManager::~QXmppVersionManager()
 ///
 /// \param jid
 
-QString QXmppVersionManager::requestVersion (const QString& jid)
-{
+QString QXmppVersionManager::requestVersion (const QString& jid) {
     QXmppVersionIq request;
     request.setType (QXmppIq::Get);
     request.setTo (jid);
@@ -88,8 +84,7 @@ QString QXmppVersionManager::requestVersion (const QString& jid)
 ///
 /// \param name
 
-void QXmppVersionManager::setClientName (const QString& name)
-{
+void QXmppVersionManager::setClientName (const QString& name) {
     d->clientName = name;
 }
 
@@ -97,8 +92,7 @@ void QXmppVersionManager::setClientName (const QString& name)
 ///
 /// \param version
 
-void QXmppVersionManager::setClientVersion (const QString& version)
-{
+void QXmppVersionManager::setClientVersion (const QString& version) {
     d->clientVersion = version;
 }
 
@@ -106,8 +100,7 @@ void QXmppVersionManager::setClientVersion (const QString& version)
 ///
 /// \param os
 
-void QXmppVersionManager::setClientOs (const QString& os)
-{
+void QXmppVersionManager::setClientOs (const QString& os) {
     d->clientOs = os;
 }
 
@@ -116,8 +109,7 @@ void QXmppVersionManager::setClientOs (const QString& os)
 /// By default this is set to the QApplication::applicationName(), or
 /// "Based on QXmpp" if not specified.
 
-QString QXmppVersionManager::clientName() const
-{
+QString QXmppVersionManager::clientName() const {
     return d->clientName;
 }
 
@@ -126,8 +118,7 @@ QString QXmppVersionManager::clientName() const
 /// By default this is set to QApplication::applicationVersion(), or
 /// QXmpp's version if not specified.
 
-QString QXmppVersionManager::clientVersion() const
-{
+QString QXmppVersionManager::clientVersion() const {
     return d->clientVersion;
 }
 
@@ -136,27 +127,22 @@ QString QXmppVersionManager::clientVersion() const
 /// By default this is "Linux", "Mac OS", "Symbian" or "Windows" depending
 /// on the platform QXmpp was compiled for.
 
-QString QXmppVersionManager::clientOs() const
-{
+QString QXmppVersionManager::clientOs() const {
     return d->clientOs;
 }
 
 /// \cond
-QStringList QXmppVersionManager::discoveryFeatures() const
-{
+QStringList QXmppVersionManager::discoveryFeatures() const {
     // XEP-0092: Software Version
     return QStringList() << ns_version;
 }
 
-bool QXmppVersionManager::handleStanza (const QDomElement &element)
-{
-    if (element.tagName() == "iq" && QXmppVersionIq::isVersionIq (element))
-    {
+bool QXmppVersionManager::handleStanza (const QDomElement &element) {
+    if (element.tagName() == "iq" && QXmppVersionIq::isVersionIq (element)) {
         QXmppVersionIq versionIq;
         versionIq.parse (element);
 
-        if (versionIq.type() == QXmppIq::Get)
-        {
+        if (versionIq.type() == QXmppIq::Get) {
             // respond to query
             QXmppVersionIq responseIq;
             responseIq.setType (QXmppIq::Result);
@@ -170,8 +156,7 @@ bool QXmppVersionManager::handleStanza (const QDomElement &element)
             client()->sendPacket (responseIq);
         }
 
-        else if (versionIq.type() == QXmppIq::Result)
-        {
+        else if (versionIq.type() == QXmppIq::Result) {
             // emit response
             emit versionReceived (versionIq);
         }

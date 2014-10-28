@@ -30,30 +30,28 @@
  * about a new version of WinT Messenger.
  */
 
-class Updater : public QObject
-{
-        Q_OBJECT
+class Updater : public QObject {
+    Q_OBJECT
 
-    public:
+  public:
 
-        Updater();
+    Updater();
 
-        /// Returns \c true if there is an update available
-        bool checkForUpdates();
+    /// Returns \c true if there is an update available
+    void checkForUpdates();
 
-    private slots:
+  private slots:
 
-        void fileDownloaded (QNetworkReply *reply);
-        void ignoreSslErrors (QNetworkReply *reply, QList<QSslError> error);
+    void fileDownloaded (QNetworkReply *reply);
+    void ignoreSslErrors (QNetworkReply *reply, QList<QSslError> error);
 
-    signals:
+  signals:
 
-        void updateAvailable(bool newUpdate, const QString &version);
+    void updateAvailable (bool newUpdate, const QString &version);
 
-    private:
+  private:
 
-        bool m_new_update;
-        QNetworkAccessManager *m_access_manager;
+    QNetworkAccessManager *m_access_manager;
 };
 
 #endif

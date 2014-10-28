@@ -14,8 +14,7 @@
 #define COMPANY_NAME "WinT 3794"
 #define APP_NAME "WinT Messenger"
 
-#define UPDATE_URL "https://raw.githubusercontent.com/wint-3794/wint-messenger/updater/latest.txt"
-
 #define BITCOIN_ADDRESS "1BdxESMayJAengjAkjipMwfWkiqZUztyhU"
+#define UPDATE_URL "https://raw.githubusercontent.com/wint-3794/wint-messenger/updater/latest.txt"
 
 #endif

@@ -38,54 +38,53 @@ class QXmppStreamPrivate;
 /// \brief The QXmppStream class is the base class for all XMPP streams.
 ///
 
-class QXMPP_EXPORT QXmppStream : public QXmppLoggable
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppStream : public QXmppLoggable {
+    Q_OBJECT
 
-    public:
-        QXmppStream (QObject *parent);
-        ~QXmppStream();
+  public:
+    QXmppStream (QObject *parent);
+    ~QXmppStream();
 
-        virtual bool isConnected() const;
-        bool sendPacket (const QXmppStanza&);
+    virtual bool isConnected() const;
+    bool sendPacket (const QXmppStanza&);
 
-    signals:
-        /// This signal is emitted when the stream is connected.
-        void connected();
+  signals:
+    /// This signal is emitted when the stream is connected.
+    void connected();
 
-        /// This signal is emitted when the stream is disconnected.
-        void disconnected();
+    /// This signal is emitted when the stream is disconnected.
+    void disconnected();
 
-    protected:
-        // Access to underlying socket
-        QSslSocket *socket() const;
-        void setSocket (QSslSocket *socket);
+  protected:
+    // Access to underlying socket
+    QSslSocket *socket() const;
+    void setSocket (QSslSocket *socket);
 
-        // Overridable methods
-        virtual void handleStart();
+    // Overridable methods
+    virtual void handleStart();
 
-        /// Handles an incoming XMPP stanza.
-        ///
-        /// \param element
-        virtual void handleStanza (const QDomElement &element) = 0;
+    /// Handles an incoming XMPP stanza.
+    ///
+    /// \param element
+    virtual void handleStanza (const QDomElement &element) = 0;
 
-        /// Handles an incoming XMPP stream start.
-        ///
-        /// \param element
-        virtual void handleStream (const QDomElement &element) = 0;
+    /// Handles an incoming XMPP stream start.
+    ///
+    /// \param element
+    virtual void handleStream (const QDomElement &element) = 0;
 
-    public slots:
-        virtual void disconnectFromHost();
-        virtual bool sendData (const QByteArray&);
+  public slots:
+    virtual void disconnectFromHost();
+    virtual bool sendData (const QByteArray&);
 
-    private slots:
-        void _q_socketConnected();
-        void _q_socketEncrypted();
-        void _q_socketError (QAbstractSocket::SocketError error);
-        void _q_socketReadyRead();
+  private slots:
+    void _q_socketConnected();
+    void _q_socketEncrypted();
+    void _q_socketError (QAbstractSocket::SocketError error);
+    void _q_socketReadyRead();
 
-    private:
-        QXmppStreamPrivate *const d;
+  private:
+    QXmppStreamPrivate *const d;
 };
 
 #endif // QXMPPSTREAM_H

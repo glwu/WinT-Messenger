@@ -42,8 +42,7 @@ static QByteArray forcedNonce;
 
 // Calculate digest response for use with XMPP/SASL.
 
-static QByteArray calculateDigest (const QByteArray &method, const QByteArray &digestUri, const QByteArray &secret, const QByteArray &nonce, const QByteArray &cnonce, const QByteArray &nc)
-{
+static QByteArray calculateDigest (const QByteArray &method, const QByteArray &digestUri, const QByteArray &secret, const QByteArray &nonce, const QByteArray &cnonce, const QByteArray &nc) {
     const QByteArray A1 = secret + ':' + nonce + ':' + cnonce;
     const QByteArray A2 = method + ':' + digestUri;
 
@@ -53,8 +52,7 @@ static QByteArray calculateDigest (const QByteArray &method, const QByteArray &d
     return QCryptographicHash::hash (KD, QCryptographicHash::Md5).toHex();
 }
 
-static QByteArray generateNonce()
-{
+static QByteArray generateNonce() {
     if (!forcedNonce.isEmpty())
         return forcedNonce;
 
@@ -67,38 +65,31 @@ static QByteArray generateNonce()
 
 QXmppSaslAuth::QXmppSaslAuth (const QString &mechanism, const QByteArray &value)
     : m_mechanism (mechanism)
-    , m_value (value)
-{
+    , m_value (value) {
 }
 
-QString QXmppSaslAuth::mechanism() const
-{
+QString QXmppSaslAuth::mechanism() const {
     return m_mechanism;
 }
 
-void QXmppSaslAuth::setMechanism (const QString &mechanism)
-{
+void QXmppSaslAuth::setMechanism (const QString &mechanism) {
     m_mechanism = mechanism;
 }
 
-QByteArray QXmppSaslAuth::value() const
-{
+QByteArray QXmppSaslAuth::value() const {
     return m_value;
 }
 
-void QXmppSaslAuth::setValue (const QByteArray &value)
-{
+void QXmppSaslAuth::setValue (const QByteArray &value) {
     m_value = value;
 }
 
-void QXmppSaslAuth::parse (const QDomElement &element)
-{
+void QXmppSaslAuth::parse (const QDomElement &element) {
     m_mechanism = element.attribute ("mechanism");
     m_value = QByteArray::fromBase64 (element.text().toLatin1());
 }
 
-void QXmppSaslAuth::toXml (QXmlStreamWriter *writer) const
-{
+void QXmppSaslAuth::toXml (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("auth");
     writer->writeAttribute ("xmlns", ns_xmpp_sasl);
     writer->writeAttribute ("mechanism", m_mechanism);
@@ -110,27 +101,22 @@ void QXmppSaslAuth::toXml (QXmlStreamWriter *writer) const
 }
 
 QXmppSaslChallenge::QXmppSaslChallenge (const QByteArray &value)
-    : m_value (value)
-{
+    : m_value (value) {
 }
 
-QByteArray QXmppSaslChallenge::value() const
-{
+QByteArray QXmppSaslChallenge::value() const {
     return m_value;
 }
 
-void QXmppSaslChallenge::setValue (const QByteArray &value)
-{
+void QXmppSaslChallenge::setValue (const QByteArray &value) {
     m_value = value;
 }
 
-void QXmppSaslChallenge::parse (const QDomElement &element)
-{
+void QXmppSaslChallenge::parse (const QDomElement &element) {
     m_value = QByteArray::fromBase64 (element.text().toLatin1());
 }
 
-void QXmppSaslChallenge::toXml (QXmlStreamWriter *writer) const
-{
+void QXmppSaslChallenge::toXml (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("challenge");
     writer->writeAttribute ("xmlns", ns_xmpp_sasl);
 
@@ -141,27 +127,22 @@ void QXmppSaslChallenge::toXml (QXmlStreamWriter *writer) const
 }
 
 QXmppSaslFailure::QXmppSaslFailure (const QString &condition)
-    : m_condition (condition)
-{
+    : m_condition (condition) {
 }
 
-QString QXmppSaslFailure::condition() const
-{
+QString QXmppSaslFailure::condition() const {
     return m_condition;
 }
 
-void QXmppSaslFailure::setCondition (const QString &condition)
-{
+void QXmppSaslFailure::setCondition (const QString &condition) {
     m_condition = condition;
 }
 
-void QXmppSaslFailure::parse (const QDomElement &element)
-{
+void QXmppSaslFailure::parse (const QDomElement &element) {
     m_condition = element.firstChildElement().tagName();
 }
 
-void QXmppSaslFailure::toXml (QXmlStreamWriter *writer) const
-{
+void QXmppSaslFailure::toXml (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("failure");
     writer->writeAttribute ("xmlns", ns_xmpp_sasl);
 
@@ -172,27 +153,22 @@ void QXmppSaslFailure::toXml (QXmlStreamWriter *writer) const
 }
 
 QXmppSaslResponse::QXmppSaslResponse (const QByteArray &value)
-    : m_value (value)
-{
+    : m_value (value) {
 }
 
-QByteArray QXmppSaslResponse::value() const
-{
+QByteArray QXmppSaslResponse::value() const {
     return m_value;
 }
 
-void QXmppSaslResponse::setValue (const QByteArray &value)
-{
+void QXmppSaslResponse::setValue (const QByteArray &value) {
     m_value = value;
 }
 
-void QXmppSaslResponse::parse (const QDomElement &element)
-{
+void QXmppSaslResponse::parse (const QDomElement &element) {
     m_value = QByteArray::fromBase64 (element.text().toLatin1());
 }
 
-void QXmppSaslResponse::toXml (QXmlStreamWriter *writer) const
-{
+void QXmppSaslResponse::toXml (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("response");
     writer->writeAttribute ("xmlns", ns_xmpp_sasl);
 
@@ -202,53 +178,45 @@ void QXmppSaslResponse::toXml (QXmlStreamWriter *writer) const
     writer->writeEndElement();
 }
 
-QXmppSaslSuccess::QXmppSaslSuccess()
-{
+QXmppSaslSuccess::QXmppSaslSuccess() {
 }
 
-void QXmppSaslSuccess::parse (const QDomElement &element)
-{
+void QXmppSaslSuccess::parse (const QDomElement &element) {
     Q_UNUSED (element);
 }
 
-void QXmppSaslSuccess::toXml (QXmlStreamWriter *writer) const
-{
+void QXmppSaslSuccess::toXml (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("success");
     writer->writeAttribute ("xmlns", ns_xmpp_sasl);
     writer->writeEndElement();
 }
 
-class QXmppSaslClientPrivate
-{
-    public:
-        QString host;
-        QString serviceType;
-        QString username;
-        QString password;
+class QXmppSaslClientPrivate {
+  public:
+    QString host;
+    QString serviceType;
+    QString username;
+    QString password;
 };
 
 QXmppSaslClient::QXmppSaslClient (QObject *parent)
     : QXmppLoggable (parent)
-    , d (new QXmppSaslClientPrivate)
-{
+    , d (new QXmppSaslClientPrivate) {
 }
 
-QXmppSaslClient::~QXmppSaslClient()
-{
+QXmppSaslClient::~QXmppSaslClient() {
     delete d;
 }
 
 /// Returns a list of supported mechanisms.
 
-QStringList QXmppSaslClient::availableMechanisms()
-{
+QStringList QXmppSaslClient::availableMechanisms() {
     return QStringList() << "PLAIN" << "DIGEST-MD5" << "ANONYMOUS" << "X-FACEBOOK-PLATFORM" << "X-MESSENGER-OAUTH2" << "X-OAUTH2";
 }
 
 /// Creates an SASL client for the given mechanism.
 
-QXmppSaslClient *QXmppSaslClient::create (const QString &mechanism, QObject *parent)
-{
+QXmppSaslClient *QXmppSaslClient::create (const QString &mechanism, QObject *parent) {
     if (mechanism == "PLAIN")
         return new QXmppSaslClientPlain (parent);
 
@@ -273,84 +241,71 @@ QXmppSaslClient *QXmppSaslClient::create (const QString &mechanism, QObject *par
 
 /// Returns the host.
 
-QString QXmppSaslClient::host() const
-{
+QString QXmppSaslClient::host() const {
     return d->host;
 }
 
 /// Sets the host.
 
-void QXmppSaslClient::setHost (const QString &host)
-{
+void QXmppSaslClient::setHost (const QString &host) {
     d->host = host;
 }
 
 /// Returns the service type, e.g. "xmpp".
 
-QString QXmppSaslClient::serviceType() const
-{
+QString QXmppSaslClient::serviceType() const {
     return d->serviceType;
 }
 
 /// Sets the service type, e.g. "xmpp".
 
-void QXmppSaslClient::setServiceType (const QString &serviceType)
-{
+void QXmppSaslClient::setServiceType (const QString &serviceType) {
     d->serviceType = serviceType;
 }
 
 /// Returns the username.
 
-QString QXmppSaslClient::username() const
-{
+QString QXmppSaslClient::username() const {
     return d->username;
 }
 
 /// Sets the username.
 
-void QXmppSaslClient::setUsername (const QString &username)
-{
+void QXmppSaslClient::setUsername (const QString &username) {
     d->username = username;
 }
 
 /// Returns the password.
 
-QString QXmppSaslClient::password() const
-{
+QString QXmppSaslClient::password() const {
     return d->password;
 }
 
 /// Sets the password.
 
-void QXmppSaslClient::setPassword (const QString &password)
-{
+void QXmppSaslClient::setPassword (const QString &password) {
     d->password = password;
 }
 
 QXmppSaslClientAnonymous::QXmppSaslClientAnonymous (QObject *parent)
     : QXmppSaslClient (parent)
-    , m_step (0)
-{
+    , m_step (0) {
 }
 
-QString QXmppSaslClientAnonymous::mechanism() const
-{
+QString QXmppSaslClientAnonymous::mechanism() const {
     return "ANONYMOUS";
 }
 
-bool QXmppSaslClientAnonymous::respond (const QByteArray &challenge, QByteArray &response)
-{
+bool QXmppSaslClientAnonymous::respond (const QByteArray &challenge, QByteArray &response) {
     Q_UNUSED (challenge);
 
-    if (m_step == 0)
-    {
+    if (m_step == 0) {
         response = QByteArray();
         m_step++;
         return true;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslClientAnonymous : Invalid step");
         return false;
     }
@@ -359,34 +314,28 @@ bool QXmppSaslClientAnonymous::respond (const QByteArray &challenge, QByteArray 
 QXmppSaslClientDigestMd5::QXmppSaslClientDigestMd5 (QObject *parent)
     : QXmppSaslClient (parent)
     , m_nc ("00000001")
-    , m_step (0)
-{
+    , m_step (0) {
     m_cnonce = generateNonce();
 }
 
-QString QXmppSaslClientDigestMd5::mechanism() const
-{
+QString QXmppSaslClientDigestMd5::mechanism() const {
     return "DIGEST-MD5";
 }
 
-bool QXmppSaslClientDigestMd5::respond (const QByteArray &challenge, QByteArray &response)
-{
+bool QXmppSaslClientDigestMd5::respond (const QByteArray &challenge, QByteArray &response) {
     Q_UNUSED (challenge);
     const QByteArray digestUri = QString ("%1/%2").arg (serviceType(), host()).toUtf8();
 
-    if (m_step == 0)
-    {
+    if (m_step == 0) {
         response = QByteArray();
         m_step++;
         return true;
     }
 
-    else if (m_step == 1)
-    {
+    else if (m_step == 1) {
         const QMap<QByteArray, QByteArray> input = QXmppSaslDigestMd5::parseMessage (challenge);
 
-        if (!input.contains ("nonce"))
-        {
+        if (!input.contains ("nonce")) {
             warning ("QXmppSaslClientDigestMd5 : Invalid input on step 1");
             return false;
         }
@@ -397,8 +346,7 @@ bool QXmppSaslClientDigestMd5::respond (const QByteArray &challenge, QByteArray 
         // determine quality of protection
         const QList<QByteArray> qops = input.value ("qop", "auth").split (',');
 
-        if (!qops.contains ("auth"))
-        {
+        if (!qops.contains ("auth")) {
             warning ("QXmppSaslClientDigestMd5 : Invalid quality of protection");
             return false;
         }
@@ -428,13 +376,11 @@ bool QXmppSaslClientDigestMd5::respond (const QByteArray &challenge, QByteArray 
         return true;
     }
 
-    else if (m_step == 2)
-    {
+    else if (m_step == 2) {
         const QMap<QByteArray, QByteArray> input = QXmppSaslDigestMd5::parseMessage (challenge);
 
         // check new challenge
-        if (input.value ("rspauth") != calculateDigest (QByteArray(), digestUri, m_secret, m_nonce, m_cnonce, m_nc))
-        {
+        if (input.value ("rspauth") != calculateDigest (QByteArray(), digestUri, m_secret, m_nonce, m_cnonce, m_nc)) {
             warning ("QXmppSaslClientDigestMd5 : Invalid challenge on step 2");
             return false;
         }
@@ -444,8 +390,7 @@ bool QXmppSaslClientDigestMd5::respond (const QByteArray &challenge, QByteArray 
         return true;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslClientDigestMd5 : Invalid step");
         return false;
     }
@@ -453,27 +398,22 @@ bool QXmppSaslClientDigestMd5::respond (const QByteArray &challenge, QByteArray 
 
 QXmppSaslClientFacebook::QXmppSaslClientFacebook (QObject *parent)
     : QXmppSaslClient (parent)
-    , m_step (0)
-{
+    , m_step (0) {
 }
 
-QString QXmppSaslClientFacebook::mechanism() const
-{
+QString QXmppSaslClientFacebook::mechanism() const {
     return "X-FACEBOOK-PLATFORM";
 }
 
-bool QXmppSaslClientFacebook::respond (const QByteArray &challenge, QByteArray &response)
-{
-    if (m_step == 0)
-    {
+bool QXmppSaslClientFacebook::respond (const QByteArray &challenge, QByteArray &response) {
+    if (m_step == 0) {
         // no initial response
         response = QByteArray();
         m_step++;
         return true;
     }
 
-    else if (m_step == 1)
-    {
+    else if (m_step == 1) {
         // parse request
 #if QT_VERSION >= 0x050000
         QUrlQuery requestUrl (challenge);
@@ -482,8 +422,7 @@ bool QXmppSaslClientFacebook::respond (const QByteArray &challenge, QByteArray &
         requestUrl.setEncodedQuery (challenge);
 #endif
 
-        if (!requestUrl.hasQueryItem ("method") || !requestUrl.hasQueryItem ("nonce"))
-        {
+        if (!requestUrl.hasQueryItem ("method") || !requestUrl.hasQueryItem ("nonce")) {
             warning ("QXmppSaslClientFacebook : Invalid challenge, nonce or method missing");
             return false;
         }
@@ -510,8 +449,7 @@ bool QXmppSaslClientFacebook::respond (const QByteArray &challenge, QByteArray &
         return true;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslClientFacebook : Invalid step");
         return false;
     }
@@ -519,29 +457,24 @@ bool QXmppSaslClientFacebook::respond (const QByteArray &challenge, QByteArray &
 
 QXmppSaslClientGoogle::QXmppSaslClientGoogle (QObject *parent)
     : QXmppSaslClient (parent)
-    , m_step (0)
-{
+    , m_step (0) {
 }
 
-QString QXmppSaslClientGoogle::mechanism() const
-{
+QString QXmppSaslClientGoogle::mechanism() const {
     return "X-OAUTH2";
 }
 
-bool QXmppSaslClientGoogle::respond (const QByteArray &challenge, QByteArray &response)
-{
+bool QXmppSaslClientGoogle::respond (const QByteArray &challenge, QByteArray &response) {
     Q_UNUSED (challenge);
 
-    if (m_step == 0)
-    {
+    if (m_step == 0) {
         // send initial response
         response = QString ('\0' + username() + '\0' + password()).toUtf8();
         m_step++;
         return true;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslClientGoogle : Invalid step");
         return false;
     }
@@ -549,28 +482,23 @@ bool QXmppSaslClientGoogle::respond (const QByteArray &challenge, QByteArray &re
 
 QXmppSaslClientPlain::QXmppSaslClientPlain (QObject *parent)
     : QXmppSaslClient (parent)
-    , m_step (0)
-{
+    , m_step (0) {
 }
 
-QString QXmppSaslClientPlain::mechanism() const
-{
+QString QXmppSaslClientPlain::mechanism() const {
     return "PLAIN";
 }
 
-bool QXmppSaslClientPlain::respond (const QByteArray &challenge, QByteArray &response)
-{
+bool QXmppSaslClientPlain::respond (const QByteArray &challenge, QByteArray &response) {
     Q_UNUSED (challenge);
 
-    if (m_step == 0)
-    {
+    if (m_step == 0) {
         response = QString ('\0' + username() + '\0' + password()).toUtf8();
         m_step++;
         return true;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslClientPlain : Invalid step");
         return false;
     }
@@ -578,58 +506,49 @@ bool QXmppSaslClientPlain::respond (const QByteArray &challenge, QByteArray &res
 
 QXmppSaslClientWindowsLive::QXmppSaslClientWindowsLive (QObject *parent)
     : QXmppSaslClient (parent)
-    , m_step (0)
-{
+    , m_step (0) {
 }
 
-QString QXmppSaslClientWindowsLive::mechanism() const
-{
+QString QXmppSaslClientWindowsLive::mechanism() const {
     return "X-MESSENGER-OAUTH2";
 }
 
-bool QXmppSaslClientWindowsLive::respond (const QByteArray &challenge, QByteArray &response)
-{
+bool QXmppSaslClientWindowsLive::respond (const QByteArray &challenge, QByteArray &response) {
     Q_UNUSED (challenge);
 
-    if (m_step == 0)
-    {
+    if (m_step == 0) {
         // send initial response
         response = QByteArray::fromBase64 (password().toLatin1());
         m_step++;
         return true;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslClientWindowsLive : Invalid step");
         return false;
     }
 }
 
-class QXmppSaslServerPrivate
-{
-    public:
-        QString username;
-        QString password;
-        QByteArray passwordDigest;
-        QString realm;
+class QXmppSaslServerPrivate {
+  public:
+    QString username;
+    QString password;
+    QByteArray passwordDigest;
+    QString realm;
 };
 
 QXmppSaslServer::QXmppSaslServer (QObject *parent)
     : QXmppLoggable (parent)
-    , d (new QXmppSaslServerPrivate)
-{
+    , d (new QXmppSaslServerPrivate) {
 }
 
-QXmppSaslServer::~QXmppSaslServer()
-{
+QXmppSaslServer::~QXmppSaslServer() {
     delete d;
 }
 
 /// Creates an SASL server for the given mechanism.
 
-QXmppSaslServer *QXmppSaslServer::create (const QString &mechanism, QObject *parent)
-{
+QXmppSaslServer *QXmppSaslServer::create (const QString &mechanism, QObject *parent) {
     if (mechanism == "PLAIN")
         return new QXmppSaslServerPlain (parent);
 
@@ -645,84 +564,71 @@ QXmppSaslServer *QXmppSaslServer::create (const QString &mechanism, QObject *par
 
 /// Returns the username.
 
-QString QXmppSaslServer::username() const
-{
+QString QXmppSaslServer::username() const {
     return d->username;
 }
 
 /// Sets the username.
 
-void QXmppSaslServer::setUsername (const QString &username)
-{
+void QXmppSaslServer::setUsername (const QString &username) {
     d->username = username;
 }
 
 /// Returns the password.
 
-QString QXmppSaslServer::password() const
-{
+QString QXmppSaslServer::password() const {
     return d->password;
 }
 
 /// Sets the password.
 
-void QXmppSaslServer::setPassword (const QString &password)
-{
+void QXmppSaslServer::setPassword (const QString &password) {
     d->password = password;
 }
 
 /// Returns the password digest.
 
-QByteArray QXmppSaslServer::passwordDigest() const
-{
+QByteArray QXmppSaslServer::passwordDigest() const {
     return d->passwordDigest;
 }
 
 /// Sets the password digest.
 
-void QXmppSaslServer::setPasswordDigest (const QByteArray &digest)
-{
+void QXmppSaslServer::setPasswordDigest (const QByteArray &digest) {
     d->passwordDigest = digest;
 }
 
 /// Returns the realm.
 
-QString QXmppSaslServer::realm() const
-{
+QString QXmppSaslServer::realm() const {
     return d->realm;
 }
 
 /// Sets the realm.
 
-void QXmppSaslServer::setRealm (const QString &realm)
-{
+void QXmppSaslServer::setRealm (const QString &realm) {
     d->realm = realm;
 }
 
 QXmppSaslServerAnonymous::QXmppSaslServerAnonymous (QObject *parent)
     : QXmppSaslServer (parent)
-    , m_step (0)
-{
+    , m_step (0) {
 }
 
-QString QXmppSaslServerAnonymous::mechanism() const
-{
+QString QXmppSaslServerAnonymous::mechanism() const {
     return "ANONYMOUS";
 }
 
-QXmppSaslServer::Response QXmppSaslServerAnonymous::respond (const QByteArray &request, QByteArray &response)
-{
+QXmppSaslServer::Response QXmppSaslServerAnonymous::respond (const QByteArray &request, QByteArray &response) {
     Q_UNUSED (request);
 
-    if (m_step == 0)
-    {
+    if (m_step == 0) {
         m_step++;
         response = QByteArray();
         return Succeeded;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslServerAnonymous : Invalid step");
         return Failed;
     }
@@ -730,20 +636,16 @@ QXmppSaslServer::Response QXmppSaslServerAnonymous::respond (const QByteArray &r
 
 QXmppSaslServerDigestMd5::QXmppSaslServerDigestMd5 (QObject *parent)
     : QXmppSaslServer (parent)
-    , m_step (0)
-{
+    , m_step (0) {
     m_nonce = generateNonce();
 }
 
-QString QXmppSaslServerDigestMd5::mechanism() const
-{
+QString QXmppSaslServerDigestMd5::mechanism() const {
     return "DIGEST-MD5";
 }
 
-QXmppSaslServer::Response QXmppSaslServerDigestMd5::respond (const QByteArray &request, QByteArray &response)
-{
-    if (m_step == 0)
-    {
+QXmppSaslServer::Response QXmppSaslServerDigestMd5::respond (const QByteArray &request, QByteArray &response) {
+    if (m_step == 0) {
         QMap<QByteArray, QByteArray> output;
         output["nonce"] = m_nonce;
 
@@ -759,14 +661,12 @@ QXmppSaslServer::Response QXmppSaslServerDigestMd5::respond (const QByteArray &r
         return Challenge;
     }
 
-    else if (m_step == 1)
-    {
+    else if (m_step == 1) {
         const QMap<QByteArray, QByteArray> input = QXmppSaslDigestMd5::parseMessage (request);
         const QByteArray realm = input.value ("realm");
         const QByteArray digestUri = input.value ("digest-uri");
 
-        if (input.value ("qop") != "auth")
-        {
+        if (input.value ("qop") != "auth") {
             warning ("QXmppSaslServerDigestMd5 : Invalid quality of protection");
             return Failed;
         }
@@ -779,8 +679,7 @@ QXmppSaslServer::Response QXmppSaslServerDigestMd5::respond (const QByteArray &r
         m_nc = input.value ("nc");
         m_cnonce = input.value ("cnonce");
 
-        if (!password().isEmpty())
-        {
+        if (!password().isEmpty()) {
             m_secret = QCryptographicHash::hash (
                            username().toUtf8() + ":" + realm + ":" + password().toUtf8(),
                            QCryptographicHash::Md5);
@@ -800,15 +699,13 @@ QXmppSaslServer::Response QXmppSaslServerDigestMd5::respond (const QByteArray &r
         return Challenge;
     }
 
-    else if (m_step == 2)
-    {
+    else if (m_step == 2) {
         m_step++;
         response = QByteArray();
         return Succeeded;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslServerDigestMd5 : Invalid step");
         return Failed;
     }
@@ -816,29 +713,23 @@ QXmppSaslServer::Response QXmppSaslServerDigestMd5::respond (const QByteArray &r
 
 QXmppSaslServerPlain::QXmppSaslServerPlain (QObject *parent)
     : QXmppSaslServer (parent)
-    , m_step (0)
-{
+    , m_step (0) {
 }
 
-QString QXmppSaslServerPlain::mechanism() const
-{
+QString QXmppSaslServerPlain::mechanism() const {
     return "PLAIN";
 }
 
-QXmppSaslServer::Response QXmppSaslServerPlain::respond (const QByteArray &request, QByteArray &response)
-{
-    if (m_step == 0)
-    {
-        if (request.isEmpty())
-        {
+QXmppSaslServer::Response QXmppSaslServerPlain::respond (const QByteArray &request, QByteArray &response) {
+    if (m_step == 0) {
+        if (request.isEmpty()) {
             response = QByteArray();
             return Challenge;
         }
 
         QList<QByteArray> auth = request.split ('\0');
 
-        if (auth.size() != 3)
-        {
+        if (auth.size() != 3) {
             warning ("QXmppSaslServerPlain : Invalid input");
             return Failed;
         }
@@ -851,33 +742,28 @@ QXmppSaslServer::Response QXmppSaslServerPlain::respond (const QByteArray &reque
         return InputNeeded;
     }
 
-    else
-    {
+    else {
         warning ("QXmppSaslServerPlain : Invalid step");
         return Failed;
     }
 }
 
-void QXmppSaslDigestMd5::setNonce (const QByteArray &nonce)
-{
+void QXmppSaslDigestMd5::setNonce (const QByteArray &nonce) {
     forcedNonce = nonce;
 }
 
-QMap<QByteArray, QByteArray> QXmppSaslDigestMd5::parseMessage (const QByteArray &ba)
-{
+QMap<QByteArray, QByteArray> QXmppSaslDigestMd5::parseMessage (const QByteArray &ba) {
     QMap<QByteArray, QByteArray> map;
     int startIndex = 0;
     int pos = 0;
 
-    while ((pos = ba.indexOf ("=", startIndex)) >= 0)
-    {
+    while ((pos = ba.indexOf ("=", startIndex)) >= 0) {
         // key get name and skip equals
         const QByteArray key = ba.mid (startIndex, pos - startIndex).trimmed();
         pos++;
 
         // check whether string is quoted
-        if (ba.at (pos) == '"')
-        {
+        if (ba.at (pos) == '"') {
             // skip opening quote
             pos++;
             int endPos = ba.indexOf ('"', pos);
@@ -886,8 +772,7 @@ QMap<QByteArray, QByteArray> QXmppSaslDigestMd5::parseMessage (const QByteArray 
             while (endPos >= 0 && ba.at (endPos - 1) == '\\')
                 endPos = ba.indexOf ('"', endPos + 1);
 
-            if (endPos < 0)
-            {
+            if (endPos < 0) {
                 qWarning ("Unfinished quoted string");
                 return map;
             }
@@ -901,8 +786,7 @@ QMap<QByteArray, QByteArray> QXmppSaslDigestMd5::parseMessage (const QByteArray 
             startIndex = endPos + 2;
         }
 
-        else
-        {
+        else {
             // non-quoted string
             int endPos = ba.indexOf (',', pos);
 
@@ -918,11 +802,9 @@ QMap<QByteArray, QByteArray> QXmppSaslDigestMd5::parseMessage (const QByteArray 
     return map;
 }
 
-QByteArray QXmppSaslDigestMd5::serializeMessage (const QMap<QByteArray, QByteArray> &map)
-{
+QByteArray QXmppSaslDigestMd5::serializeMessage (const QMap<QByteArray, QByteArray> &map) {
     QByteArray ba;
-    foreach (const QByteArray & key, map.keys())
-    {
+    foreach (const QByteArray & key, map.keys()) {
         if (!ba.isEmpty())
             ba.append (',');
 
@@ -931,17 +813,14 @@ QByteArray QXmppSaslDigestMd5::serializeMessage (const QMap<QByteArray, QByteArr
         const char *separators = "()<>@,;:\\\"/[]?={} \t";
         bool quote = false;
 
-        for (const char *c = separators; *c; c++)
-        {
-            if (value.contains (*c))
-            {
+        for (const char *c = separators; *c; c++) {
+            if (value.contains (*c)) {
                 quote = true;
                 break;
             }
         }
 
-        if (quote)
-        {
+        if (quote) {
             value.replace ("\\", "\\\\");
             value.replace ("\"", "\\\"");
             ba.append ("\"" + value + "\"");

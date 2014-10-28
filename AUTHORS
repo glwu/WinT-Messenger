@@ -1,0 +1,12 @@
+WINT MESSENGER AUTHORS
+----------------------
+
+Alex Spataru <alex_spataru@outlook.com>
+    * Main developer and designer of WinT Messenger.
+
+NOTES
+-----
+
+- This project relies upon the QXmpp libraries, please see its respective authors file for more information.
+
+- Some parts of the QML interface have been inspired upon the QML air project, more information regarding this is shown on files using some code from the QML Air project.

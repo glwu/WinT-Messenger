@@ -31,33 +31,31 @@
  * on some systems (such as Windows and Android).
  */
 
-class Settings : public QObject
-{
-        Q_OBJECT
+class Settings : public QObject {
+    Q_OBJECT
 
-    public:
+  public:
 
-        Settings();
+    Settings();
 
-        Q_INVOKABLE void setValue (QString key, QVariant value);
-        Q_INVOKABLE QVariant value (QString key, QVariant defaultValue) const;
+    Q_INVOKABLE void setValue (QString key, QVariant value);
+    Q_INVOKABLE QVariant value (QString key, QVariant defaultValue) const;
 
-        Q_INVOKABLE int x();
-        Q_INVOKABLE int y();
-        Q_INVOKABLE int width();
-        Q_INVOKABLE int height();
-        Q_INVOKABLE bool textChat();
-        Q_INVOKABLE bool customColor();
-        Q_INVOKABLE bool firstLaunch();
-        Q_INVOKABLE bool darkInterface();
-        Q_INVOKABLE bool notifyUpdates();
-        Q_INVOKABLE bool soundsEnabled();
-        Q_INVOKABLE QString primaryColor();
+    Q_INVOKABLE int x();
+    Q_INVOKABLE int y();
+    Q_INVOKABLE int width();
+    Q_INVOKABLE int height();
+    Q_INVOKABLE bool textChat();
+    Q_INVOKABLE bool customColor();
+    Q_INVOKABLE bool firstLaunch();
+    Q_INVOKABLE bool notifyUpdates();
+    Q_INVOKABLE bool soundsEnabled();
+    Q_INVOKABLE QString primaryColor();
 
-    private:
+  private:
 
-        QSettings *m_settings;
-        QString m_primary_color;
+    QSettings *m_settings;
+    QString m_primary_color;
 };
 
 #endif

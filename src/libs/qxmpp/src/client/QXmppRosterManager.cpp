@@ -30,37 +30,34 @@
 #include "QXmppRosterManager.h"
 #include "QXmppUtils.h"
 
-class QXmppRosterManagerPrivate
-{
-    public:
-        QXmppRosterManagerPrivate (QXmppRosterManager *qq);
+class QXmppRosterManagerPrivate {
+  public:
+    QXmppRosterManagerPrivate (QXmppRosterManager *qq);
 
-        // map of bareJid and its rosterEntry
-        QMap<QString, QXmppRosterIq::Item> entries;
+    // map of bareJid and its rosterEntry
+    QMap<QString, QXmppRosterIq::Item> entries;
 
-        // map of resources of the jid and map of resources and presences
-        QMap<QString, QMap<QString, QXmppPresence> > presences;
+    // map of resources of the jid and map of resources and presences
+    QMap<QString, QMap<QString, QXmppPresence> > presences;
 
-        // flag to store that the roster has been populated
-        bool isRosterReceived;
+    // flag to store that the roster has been populated
+    bool isRosterReceived;
 
-        // id of the initial roster request
-        QString rosterReqId;
+    // id of the initial roster request
+    QString rosterReqId;
 
-    private:
-        QXmppRosterManager *q;
+  private:
+    QXmppRosterManager *q;
 };
 
 QXmppRosterManagerPrivate::QXmppRosterManagerPrivate (QXmppRosterManager *qq)
     : isRosterReceived (false),
-      q (qq)
-{
+      q (qq) {
 }
 
 /// Constructs a roster manager.
 
-QXmppRosterManager::QXmppRosterManager (QXmppClient *client)
-{
+QXmppRosterManager::QXmppRosterManager (QXmppClient *client) {
     bool check;
     Q_UNUSED (check);
 
@@ -79,8 +76,7 @@ QXmppRosterManager::QXmppRosterManager (QXmppClient *client)
     Q_ASSERT (check);
 }
 
-QXmppRosterManager::~QXmppRosterManager()
-{
+QXmppRosterManager::~QXmppRosterManager() {
     delete d;
 }
 
@@ -88,8 +84,7 @@ QXmppRosterManager::~QXmppRosterManager()
 ///
 /// You can call this method in reply to the subscriptionRequest() signal.
 
-bool QXmppRosterManager::acceptSubscription (const QString &bareJid, const QString &reason)
-{
+bool QXmppRosterManager::acceptSubscription (const QString &bareJid, const QString &reason) {
     QXmppPresence presence;
     presence.setTo (bareJid);
     presence.setType (QXmppPresence::Subscribed);
@@ -99,8 +94,7 @@ bool QXmppRosterManager::acceptSubscription (const QString &bareJid, const QStri
 
 /// Upon XMPP connection, request the roster.
 ///
-void QXmppRosterManager::_q_connected()
-{
+void QXmppRosterManager::_q_connected() {
     QXmppRosterIq roster;
     roster.setType (QXmppIq::Get);
     roster.setFrom (client()->configuration().jid());
@@ -110,16 +104,14 @@ void QXmppRosterManager::_q_connected()
         client()->sendPacket (roster);
 }
 
-void QXmppRosterManager::_q_disconnected()
-{
+void QXmppRosterManager::_q_disconnected() {
     d->entries.clear();
     d->presences.clear();
     d->isRosterReceived = false;
 }
 
 /// \cond
-bool QXmppRosterManager::handleStanza (const QDomElement &element)
-{
+bool QXmppRosterManager::handleStanza (const QDomElement &element) {
     if (element.tagName() != "iq" || !QXmppRosterIq::isRosterIq (element))
         return false;
 
@@ -135,10 +127,8 @@ bool QXmppRosterManager::handleStanza (const QDomElement &element)
 
     bool isInitial = (d->rosterReqId == rosterIq.id());
 
-    switch (rosterIq.type())
-    {
-        case QXmppIq::Set:
-            {
+    switch (rosterIq.type()) {
+        case QXmppIq::Set: {
                 // send result iq
                 QXmppIq returnIq (QXmppIq::Result);
                 returnIq.setId (rosterIq.id());
@@ -146,32 +136,26 @@ bool QXmppRosterManager::handleStanza (const QDomElement &element)
 
                 // store updated entries and notify changes
                 const QList<QXmppRosterIq::Item> items = rosterIq.items();
-                foreach (const QXmppRosterIq::Item & item, items)
-                {
+                foreach (const QXmppRosterIq::Item & item, items) {
                     const QString bareJid = item.bareJid();
 
-                    if (item.subscriptionType() == QXmppRosterIq::Item::Remove)
-                    {
-                        if (d->entries.remove (bareJid))
-                        {
+                    if (item.subscriptionType() == QXmppRosterIq::Item::Remove) {
+                        if (d->entries.remove (bareJid)) {
                             // notify the user that the item was removed
                             emit itemRemoved (bareJid);
                         }
                     }
 
-                    else
-                    {
+                    else {
                         const bool added = !d->entries.contains (bareJid);
                         d->entries.insert (bareJid, item);
 
-                        if (added)
-                        {
+                        if (added) {
                             // notify the user that the item was added
                             emit itemAdded (bareJid);
                         }
 
-                        else
-                        {
+                        else {
                             // notify the user that the item changed
                             emit itemChanged (bareJid);
                         }
@@ -180,17 +164,14 @@ bool QXmppRosterManager::handleStanza (const QDomElement &element)
             }
             break;
 
-        case QXmppIq::Result:
-            {
+        case QXmppIq::Result: {
                 const QList<QXmppRosterIq::Item> items = rosterIq.items();
-                foreach (const QXmppRosterIq::Item & item, items)
-                {
+                foreach (const QXmppRosterIq::Item & item, items) {
                     const QString bareJid = item.bareJid();
                     d->entries.insert (bareJid, item);
                 }
 
-                if (isInitial)
-                {
+                if (isInitial) {
                     d->isRosterReceived = true;
                     emit rosterReceived();
                 }
@@ -206,8 +187,7 @@ bool QXmppRosterManager::handleStanza (const QDomElement &element)
 }
 /// \endcond
 
-void QXmppRosterManager::_q_presenceReceived (const QXmppPresence& presence)
-{
+void QXmppRosterManager::_q_presenceReceived (const QXmppPresence& presence) {
     const QString jid = presence.from();
     const QString bareJid = QXmppUtils::jidToBareJid (jid);
     const QString resource = QXmppUtils::jidToResource (jid);
@@ -215,8 +195,7 @@ void QXmppRosterManager::_q_presenceReceived (const QXmppPresence& presence)
     if (bareJid.isEmpty())
         return;
 
-    switch (presence.type())
-    {
+    switch (presence.type()) {
         case QXmppPresence::Available:
             d->presences[bareJid][resource] = presence;
             emit presenceChanged (bareJid, resource);
@@ -228,8 +207,7 @@ void QXmppRosterManager::_q_presenceReceived (const QXmppPresence& presence)
             break;
 
         case QXmppPresence::Subscribe:
-            if (client()->configuration().autoAcceptSubscriptions())
-            {
+            if (client()->configuration().autoAcceptSubscriptions()) {
                 // accept subscription request
                 acceptSubscription (bareJid);
 
@@ -251,8 +229,7 @@ void QXmppRosterManager::_q_presenceReceived (const QXmppPresence& presence)
 ///
 /// You can call this method in reply to the subscriptionRequest() signal.
 
-bool QXmppRosterManager::refuseSubscription (const QString &bareJid, const QString &reason)
-{
+bool QXmppRosterManager::refuseSubscription (const QString &bareJid, const QString &reason) {
     QXmppPresence presence;
     presence.setTo (bareJid);
     presence.setType (QXmppPresence::Unsubscribed);
@@ -269,8 +246,7 @@ bool QXmppRosterManager::refuseSubscription (const QString &bareJid, const QStri
 /// \param name Optional name for the item.
 /// \param groups Optional groups for the item.
 
-bool QXmppRosterManager::addItem (const QString &bareJid, const QString &name, const QSet<QString> &groups)
-{
+bool QXmppRosterManager::addItem (const QString &bareJid, const QString &name, const QSet<QString> &groups) {
     QXmppRosterIq::Item item;
     item.setBareJid (bareJid);
     item.setName (name);
@@ -290,8 +266,7 @@ bool QXmppRosterManager::addItem (const QString &bareJid, const QString &name, c
 ///
 /// \param bareJid
 
-bool QXmppRosterManager::removeItem (const QString &bareJid)
-{
+bool QXmppRosterManager::removeItem (const QString &bareJid) {
     QXmppRosterIq::Item item;
     item.setBareJid (bareJid);
     item.setSubscriptionType (QXmppRosterIq::Item::Remove);
@@ -310,8 +285,7 @@ bool QXmppRosterManager::removeItem (const QString &bareJid)
 /// \param bareJid
 /// \param name
 
-bool QXmppRosterManager::renameItem (const QString &bareJid, const QString &name)
-{
+bool QXmppRosterManager::renameItem (const QString &bareJid, const QString &name) {
     if (!d->entries.contains (bareJid))
         return false;
 
@@ -329,8 +303,7 @@ bool QXmppRosterManager::renameItem (const QString &bareJid, const QString &name
 /// As a result, the server will initiate a roster push, causing the
 /// itemAdded() or itemChanged() signal to be emitted.
 
-bool QXmppRosterManager::subscribe (const QString &bareJid, const QString &reason)
-{
+bool QXmppRosterManager::subscribe (const QString &bareJid, const QString &reason) {
     QXmppPresence packet;
     packet.setTo (QXmppUtils::jidToBareJid (bareJid));
     packet.setType (QXmppPresence::Subscribe);
@@ -343,8 +316,7 @@ bool QXmppRosterManager::subscribe (const QString &bareJid, const QString &reaso
 /// As a result, the server will initiate a roster push, causing the
 /// itemChanged() signal to be emitted.
 
-bool QXmppRosterManager::unsubscribe (const QString &bareJid, const QString &reason)
-{
+bool QXmppRosterManager::unsubscribe (const QString &bareJid, const QString &reason) {
     QXmppPresence packet;
     packet.setTo (QXmppUtils::jidToBareJid (bareJid));
     packet.setType (QXmppPresence::Unsubscribe);
@@ -357,8 +329,7 @@ bool QXmppRosterManager::unsubscribe (const QString &bareJid, const QString &rea
 /// \return QStringList list of all the bareJids
 ///
 
-QStringList QXmppRosterManager::getRosterBareJids() const
-{
+QStringList QXmppRosterManager::getRosterBareJids() const {
     return d->entries.keys();
 }
 
@@ -369,8 +340,7 @@ QStringList QXmppRosterManager::getRosterBareJids() const
 ///
 
 QXmppRosterIq::Item QXmppRosterManager::getRosterEntry (
-    const QString& bareJid) const
-{
+    const QString& bareJid) const {
     // will return blank entry if bareJid does'nt exist
     if (d->entries.contains (bareJid))
         return d->entries.value (bareJid);
@@ -385,8 +355,7 @@ QXmppRosterIq::Item QXmppRosterManager::getRosterEntry (
 /// \return list of associated resources as a QStringList
 ///
 
-QStringList QXmppRosterManager::getResources (const QString& bareJid) const
-{
+QStringList QXmppRosterManager::getResources (const QString& bareJid) const {
     if (d->presences.contains (bareJid))
         return d->presences[bareJid].keys();
 
@@ -403,8 +372,7 @@ QStringList QXmppRosterManager::getResources (const QString& bareJid) const
 ///
 
 QMap<QString, QXmppPresence> QXmppRosterManager::getAllPresencesForBareJid (
-    const QString& bareJid) const
-{
+    const QString& bareJid) const {
     if (d->presences.contains (bareJid))
         return d->presences[bareJid];
 
@@ -420,13 +388,11 @@ QMap<QString, QXmppPresence> QXmppRosterManager::getAllPresencesForBareJid (
 ///
 
 QXmppPresence QXmppRosterManager::getPresence (const QString& bareJid,
-        const QString& resource) const
-{
+        const QString& resource) const {
     if (d->presences.contains (bareJid) && d->presences[bareJid].contains (resource))
         return d->presences[bareJid][resource];
 
-    else
-    {
+    else {
         QXmppPresence presence;
         presence.setType (QXmppPresence::Unavailable);
         return presence;
@@ -437,7 +403,6 @@ QXmppPresence QXmppRosterManager::getPresence (const QString& bareJid,
 ///
 /// \return true if roster received else false
 
-bool QXmppRosterManager::isRosterReceived() const
-{
+bool QXmppRosterManager::isRosterReceived() const {
     return d->isRosterReceived;
 }

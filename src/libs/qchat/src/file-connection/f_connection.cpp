@@ -10,8 +10,7 @@
 
 #include "f_connection.h"
 
-FConnection::FConnection (QObject *parent) : QTcpSocket (parent)
-{
+FConnection::FConnection (QObject *parent) : QTcpSocket (parent) {
     transferTimerId = 0;
     downloadedBytes = 0;
     currentDownloadSize = 0;
@@ -30,13 +29,11 @@ FConnection::FConnection (QObject *parent) : QTcpSocket (parent)
     connect (this, SIGNAL (downloadComplete (QString, QString)), &downloadTimer, SLOT (stop()));
 }
 
-void FConnection::setDownloadPath (const QString& path)
-{
+void FConnection::setDownloadPath (const QString& path) {
     m_download_dir = path;
 }
 
-void FConnection::sendFile (const QString& path)
-{
+void FConnection::sendFile (const QString& path) {
     QFile file (path);
     file.open (QFile::ReadOnly);
 
@@ -53,25 +50,20 @@ void FConnection::sendFile (const QString& path)
             qDebug() << "File transfer complete!";
 }
 
-void FConnection::timerEvent (QTimerEvent *timerEvent)
-{
-    if (timerEvent->timerId() == transferTimerId)
-    {
+void FConnection::timerEvent (QTimerEvent *timerEvent) {
+    if (timerEvent->timerId() == transferTimerId) {
         abort();
         killTimer (transferTimerId);
         transferTimerId = 0;
     }
 }
 
-void FConnection::processReadyRead()
-{
-    if (state == WaitingForGreeting)
-    {
+void FConnection::processReadyRead() {
+    if (state == WaitingForGreeting) {
         if (!readProtocolHeader())
             return;
 
-        if (currentDataType != Greeting)
-        {
+        if (currentDataType != Greeting) {
             abort();
             return;
         }
@@ -79,15 +71,13 @@ void FConnection::processReadyRead()
         state = ReadingGreeting;
     }
 
-    if (state == ReadingGreeting)
-    {
+    if (state == ReadingGreeting) {
         if (!hasEnoughData())
             return;
 
         buffer = read (numBytesForCurrentDataType);
 
-        if (buffer.size() != numBytesForCurrentDataType)
-        {
+        if (buffer.size() != numBytesForCurrentDataType) {
             abort();
             return;
         }
@@ -97,8 +87,7 @@ void FConnection::processReadyRead()
         numBytesForCurrentDataType = 0;
         buffer.clear();
 
-        if (!isValid())
-        {
+        if (!isValid()) {
             abort();
             return;
         }
@@ -112,8 +101,7 @@ void FConnection::processReadyRead()
         emit readyForUse();
     }
 
-    while (bytesAvailable() > 0)
-    {
+    while (bytesAvailable() > 0) {
         if (currentDataType == Undefined)
             if (!readProtocolHeader())
                 return;
@@ -125,10 +113,8 @@ void FConnection::processReadyRead()
     }
 }
 
-void FConnection::sendPing()
-{
-    if (pongTime.elapsed() > PONG_TIMEOUT)
-    {
+void FConnection::sendPing() {
+    if (pongTime.elapsed() > PONG_TIMEOUT) {
         abort();
         return;
     }
@@ -136,8 +122,7 @@ void FConnection::sendPing()
     write ("PING 1 p");
 }
 
-void FConnection::sendGreetingMessage()
-{
+void FConnection::sendGreetingMessage() {
     QString _greeting_message = QSettings ("WinT 3794", "WinT Messenger")
                                 .value ("nickname", "unknown")
                                 .toString();
@@ -149,18 +134,15 @@ void FConnection::sendGreetingMessage()
         isGreetingMessageSent = true;
 }
 
-int FConnection::readDataIntoBuffer()
-{
+int FConnection::readDataIntoBuffer() {
     int numBytesBeforeRead = buffer.size();
 
-    if (numBytesBeforeRead == MAX_BUFFER_SIZE)
-    {
+    if (numBytesBeforeRead == MAX_BUFFER_SIZE) {
         abort();
         return 0;
     }
 
-    while (bytesAvailable() > 0 && buffer.size() < MAX_BUFFER_SIZE)
-    {
+    while (bytesAvailable() > 0 && buffer.size() < MAX_BUFFER_SIZE) {
         buffer.append (read (1));
 
         if (buffer.endsWith (SEPARATOR_TOKEN))
@@ -170,8 +152,7 @@ int FConnection::readDataIntoBuffer()
     return buffer.size() - numBytesBeforeRead;
 }
 
-int FConnection::dataLengthForCurrentDataType()
-{
+int FConnection::dataLengthForCurrentDataType() {
     if (bytesAvailable() <= 0 || readDataIntoBuffer() <= 0 ||
             !buffer.endsWith (SEPARATOR_TOKEN))
         return 0;
@@ -182,10 +163,8 @@ int FConnection::dataLengthForCurrentDataType()
     return number;
 }
 
-bool FConnection::hasEnoughData()
-{
-    if (transferTimerId)
-    {
+bool FConnection::hasEnoughData() {
+    if (transferTimerId) {
         QObject::killTimer (transferTimerId);
         transferTimerId = 0;
     }
@@ -194,8 +173,7 @@ bool FConnection::hasEnoughData()
         numBytesForCurrentDataType = dataLengthForCurrentDataType();
 
     if (bytesAvailable() < numBytesForCurrentDataType ||
-            numBytesForCurrentDataType <= 0)
-    {
+            numBytesForCurrentDataType <= 0) {
         transferTimerId = startTimer (TRANSFER_TIMEOUT);
         return false;
     }
@@ -203,16 +181,13 @@ bool FConnection::hasEnoughData()
     return true;
 }
 
-bool FConnection::readProtocolHeader()
-{
-    if (transferTimerId)
-    {
+bool FConnection::readProtocolHeader() {
+    if (transferTimerId) {
         killTimer (transferTimerId);
         transferTimerId = 0;
     }
 
-    if (readDataIntoBuffer() <= 0)
-    {
+    if (readDataIntoBuffer() <= 0) {
         transferTimerId = startTimer (TRANSFER_TIMEOUT);
         return false;
     }
@@ -229,20 +204,17 @@ bool FConnection::readProtocolHeader()
     else if (buffer == "FILEDATA ")
         currentDataType = FileData;
 
-    else if (buffer == "BINARY ")
-    {
+    else if (buffer == "BINARY ") {
         currentDataType = Binary;
 
-        if (!downloadStarted)
-        {
+        if (!downloadStarted) {
             downloadStarted = true;
             downloadTimer.start (100);
             emit newDownload (m_nickname, currentFileName, currentDownloadSize);
         }
     }
 
-    else
-    {
+    else {
         currentDataType = Undefined;
         abort();
         return false;
@@ -253,32 +225,26 @@ bool FConnection::readProtocolHeader()
     return true;
 }
 
-void FConnection::processData()
-{
+void FConnection::processData() {
     buffer = read (numBytesForCurrentDataType);
 
-    if (buffer.size() != numBytesForCurrentDataType)
-    {
+    if (buffer.size() != numBytesForCurrentDataType) {
         abort();
         return;
     }
 
-    switch (currentDataType)
-    {
-        case Ping:
-            {
+    switch (currentDataType) {
+        case Ping: {
                 write ("PONG 1 p");
                 break;
             }
 
-        case Pong:
-            {
+        case Pong: {
                 pongTime.restart();
                 break;
             }
 
-        case FileData:
-            {
+        case FileData: {
                 QList<QByteArray> list = buffer.split ('@');
                 currentFileName = QString::fromUtf8 (list.at (0));
 
@@ -291,8 +257,7 @@ void FConnection::processData()
                 break;
             }
 
-        case Binary:
-            {
+        case Binary: {
                 downloadedBytes = 0;
                 downloadStarted = false;
                 QByteArray uncompressedData = qUncompress (buffer);
@@ -307,8 +272,7 @@ void FConnection::processData()
                 break;
             }
 
-        default:
-            {
+        default: {
                 break;
             }
     }
@@ -318,14 +282,11 @@ void FConnection::processData()
     buffer.clear();
 }
 
-void FConnection::calculateDownloadProgress()
-{
-    if (downloadStarted)
-    {
+void FConnection::calculateDownloadProgress() {
+    if (downloadStarted) {
         downloadedBytes = bytesAvailable();
 
-        if (downloadedBytes > 0)
-        {
+        if (downloadedBytes > 0) {
             if (currentDownloadSize > 0)
                 emit updateProgress (
                     m_nickname,

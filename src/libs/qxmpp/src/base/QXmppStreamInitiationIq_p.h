@@ -43,44 +43,42 @@
 // We mean it.
 //
 
-class QXMPP_AUTOTEST_EXPORT QXmppStreamInitiationIq : public QXmppIq
-{
-    public:
-        enum Profile
-        {
-            None = 0,
-            FileTransfer,
-        };
+class QXMPP_AUTOTEST_EXPORT QXmppStreamInitiationIq : public QXmppIq {
+  public:
+    enum Profile {
+        None = 0,
+        FileTransfer,
+    };
 
-        QXmppDataForm featureForm() const;
-        void setFeatureForm (const QXmppDataForm &form);
+    QXmppDataForm featureForm() const;
+    void setFeatureForm (const QXmppDataForm &form);
 
-        QXmppTransferFileInfo fileInfo() const;
-        void setFileInfo (const QXmppTransferFileInfo &info);
+    QXmppTransferFileInfo fileInfo() const;
+    void setFileInfo (const QXmppTransferFileInfo &info);
 
-        QString mimeType() const;
-        void setMimeType (const QString &mimeType);
+    QString mimeType() const;
+    void setMimeType (const QString &mimeType);
 
-        QXmppStreamInitiationIq::Profile profile() const;
-        void setProfile (QXmppStreamInitiationIq::Profile profile);
+    QXmppStreamInitiationIq::Profile profile() const;
+    void setProfile (QXmppStreamInitiationIq::Profile profile);
 
-        QString siId() const;
-        void setSiId (const QString &id);
+    QString siId() const;
+    void setSiId (const QString &id);
 
-        static bool isStreamInitiationIq (const QDomElement &element);
+    static bool isStreamInitiationIq (const QDomElement &element);
 
-    protected:
-        /// \cond
-        void parseElementFromChild (const QDomElement &element);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    /// \cond
+    void parseElementFromChild (const QDomElement &element);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QXmppDataForm m_featureForm;
-        QXmppTransferFileInfo m_fileInfo;
-        QString m_mimeType;
-        Profile m_profile;
-        QString m_siId;
+  private:
+    QXmppDataForm m_featureForm;
+    QXmppTransferFileInfo m_fileInfo;
+    QString m_mimeType;
+    Profile m_profile;
+    QString m_siId;
 };
 
 #endif

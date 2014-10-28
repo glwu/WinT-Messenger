@@ -20,7 +20,7 @@ TextField {
     opacity: enabled ? 1 : 0.5
     font.pixelSize: units.size("small")
 
-    property bool blueFocus: true
+    property bool coloredBorder: true
 
     Component {
         id: textFieldStyle
@@ -31,6 +31,7 @@ TextField {
 
             background: Frame {
                 color: theme.textFieldBackground
+                border.color: textField.focus && coloredBorder ? theme.secondary : theme.borderColor
             }
         }
     }

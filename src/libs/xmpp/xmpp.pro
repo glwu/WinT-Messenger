@@ -8,6 +8,7 @@
 #
 
 TEMPLATE = lib
+CONFIG += c++11
 CONFIG += shared
 QT += core xml network
 DEFINES += XMPP_LIBRARY

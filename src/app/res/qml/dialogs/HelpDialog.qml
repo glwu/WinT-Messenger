@@ -28,7 +28,7 @@ Dialog {
             id: _caption
             text: qsTr("Help")
             fontSize: "xx-large"
-            color: theme.logoTitle
+            color: theme.secondary
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -units.scale(12)
         }

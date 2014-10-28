@@ -26,12 +26,11 @@
 
 #include "QXmppIq.h"
 
-class QXMPP_EXPORT QXmppPingIq : public QXmppIq
-{
-    public:
-        QXmppPingIq();
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        static bool isPingIq (const QDomElement &element);
+class QXMPP_EXPORT QXmppPingIq : public QXmppIq {
+  public:
+    QXmppPingIq();
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    static bool isPingIq (const QDomElement &element);
 };
 
 #endif

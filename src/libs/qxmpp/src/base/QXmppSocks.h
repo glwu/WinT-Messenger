@@ -31,51 +31,49 @@
 
 class QTcpServer;
 
-class QXMPP_EXPORT QXmppSocksClient : public QTcpSocket
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppSocksClient : public QTcpSocket {
+    Q_OBJECT
 
-    public:
-        QXmppSocksClient (const QString &proxyHost, quint16 proxyPort, QObject *parent = 0);
-        void connectToHost (const QString &hostName, quint16 hostPort);
+  public:
+    QXmppSocksClient (const QString &proxyHost, quint16 proxyPort, QObject *parent = 0);
+    void connectToHost (const QString &hostName, quint16 hostPort);
 
-    signals:
-        void ready();
+  signals:
+    void ready();
 
-    private slots:
-        void slotConnected();
-        void slotReadyRead();
+  private slots:
+    void slotConnected();
+    void slotReadyRead();
 
-    private:
-        QString m_proxyHost;
-        quint16 m_proxyPort;
-        QString m_hostName;
-        quint16 m_hostPort;
-        int m_step;
+  private:
+    QString m_proxyHost;
+    quint16 m_proxyPort;
+    QString m_hostName;
+    quint16 m_hostPort;
+    int m_step;
 };
 
-class QXMPP_EXPORT QXmppSocksServer : public QObject
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppSocksServer : public QObject {
+    Q_OBJECT
 
-    public:
-        QXmppSocksServer (QObject *parent = 0);
-        void close();
-        bool listen (quint16 port = 0);
+  public:
+    QXmppSocksServer (QObject *parent = 0);
+    void close();
+    bool listen (quint16 port = 0);
 
-        quint16 serverPort() const;
+    quint16 serverPort() const;
 
-    signals:
-        void newConnection (QTcpSocket *socket, QString hostName, quint16 port);
+  signals:
+    void newConnection (QTcpSocket *socket, QString hostName, quint16 port);
 
-    private slots:
-        void slotNewConnection();
-        void slotReadyRead();
+  private slots:
+    void slotNewConnection();
+    void slotReadyRead();
 
-    private:
-        QTcpServer *m_server;
-        QTcpServer *m_server_v6;
-        QMap<QTcpSocket *, int> m_states;
+  private:
+    QTcpServer *m_server;
+    QTcpServer *m_server_v6;
+    QMap<QTcpSocket *, int> m_states;
 };
 
 #endif

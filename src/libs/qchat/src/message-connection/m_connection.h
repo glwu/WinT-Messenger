@@ -20,76 +20,73 @@
 #include <QHostAddress>
 
 
-class MConnection : public QTcpSocket
-{
-        Q_OBJECT
+class MConnection : public QTcpSocket {
+    Q_OBJECT
 
-    public:
-        enum ConnectionState
-        {
-            WaitingForGreeting,
-            ReadingGreeting,
-            ReadyForUse
-        };
+  public:
+    enum ConnectionState {
+        WaitingForGreeting,
+        ReadingGreeting,
+        ReadyForUse
+    };
 
-        enum DataType
-        {
-            PlainText,
-            Ping,
-            Pong,
-            Greeting,
-            Status,
-            Undefined
-        };
+    enum DataType {
+        PlainText,
+        Ping,
+        Pong,
+        Greeting,
+        Status,
+        Undefined
+    };
 
-        MConnection (QObject *parent = 0);
+    MConnection (QObject *parent = 0);
 
-        QString id() const;
-        QString nickname() const;
-        QImage profilePicture() const;
+    QString id() const;
+    QString nickname() const;
+    QImage profilePicture() const;
 
-        void sendStatus  (const QString& status);
-        void sendMessage (const QString& message);
-        void setGreetingMessage (const QByteArray& message);
+    void sendStatus  (const QString& status);
+    void sendMessage (const QString& message);
+    void setGreetingMessage (const QByteArray& message);
 
-    signals:
-        void readyForUse();
-        void statusChanged (const QString &id, const QString &status);
-        void newMessage (const QString& from, const QString& message);
+  signals:
+    void readyForUse();
+    void statusChanged (const QString &id, const QString &status);
+    void newMessage (const QString& from, const QString& message);
 
-    protected:
-        void timerEvent (QTimerEvent *timerEvent);
+  protected:
+    void timerEvent (QTimerEvent *timerEvent);
 
-        private
-    slots:
-        void sendPing();
-        void processReadyRead();
-        void sendGreetingMessage();
+    private
+  slots:
+    void sendPing();
+    void processReadyRead();
+    void sendGreetingMessage();
 
-    private:
-        void processData();
-        bool hasEnoughData();
-        int readDataIntoBuffer();
-        bool readProtocolHeader();
-        int dataLengthForCurrentDataType();
+  private:
+    void processData();
+    bool hasEnoughData();
+    int readDataIntoBuffer();
+    bool readProtocolHeader();
+    int dataLengthForCurrentDataType();
 
-        QTime pongTime;
-        QString m_nickname;
-        QTimer pingTimer;
-        QByteArray buffer;
-        int transferTimerId;
-        ConnectionState state;
-        QImage profile_picture;
-        QByteArray greetingMessage;
-        DataType currentDataType;
-        bool isGreetingMessageSent;
-        int numBytesForCurrentDataType;
+    QTime pongTime;
+    QString m_nickname;
+    QTimer pingTimer;
+    QByteArray buffer;
+    int transferTimerId;
+    ConnectionState state;
+    QImage profile_picture;
+    QByteArray greetingMessage;
+    DataType currentDataType;
+    bool isGreetingMessageSent;
+    int numBytesForCurrentDataType;
 
-        static const char SEPARATOR_TOKEN = ' ';
-        static const int PONG_TIMEOUT = 60 * 1000;
-        static const int PING_INTERVAL = 5 * 1000;
-        static const int TRANSFER_TIMEOUT = 30 * 1000;
-        static const int MAX_BUFFER_SIZE = 1024 * 1000;
+    static const char SEPARATOR_TOKEN = ' ';
+    static const int PONG_TIMEOUT = 60 * 1000;
+    static const int PING_INTERVAL = 5 * 1000;
+    static const int TRANSFER_TIMEOUT = 30 * 1000;
+    static const int MAX_BUFFER_SIZE = 1024 * 1000;
 };
 
 #endif

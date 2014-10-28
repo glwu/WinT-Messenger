@@ -77,7 +77,7 @@ Item {
         Rectangle {
             id: _background
             radius: units.gu(1)
-            color: Qt.lighter(theme.background)
+            color: theme.dialog
             width: app.width * 0.9 > units.gu(60) ? units.gu(60) : app.width * 0.9
             height: app.height * 0.8 > units.gu(60) ? units.gu(60) : app.height * 0.8
 

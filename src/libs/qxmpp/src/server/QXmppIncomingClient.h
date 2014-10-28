@@ -36,40 +36,39 @@ class QXmppPasswordChecker;
 /// from an XMPP client.
 ///
 
-class QXMPP_EXPORT QXmppIncomingClient : public QXmppStream
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppIncomingClient : public QXmppStream {
+    Q_OBJECT
 
-    public:
-        QXmppIncomingClient (QSslSocket *socket, const QString &domain, QObject *parent = 0);
-        ~QXmppIncomingClient();
+  public:
+    QXmppIncomingClient (QSslSocket *socket, const QString &domain, QObject *parent = 0);
+    ~QXmppIncomingClient();
 
-        bool isConnected() const;
-        QString jid() const;
+    bool isConnected() const;
+    QString jid() const;
 
-        void setInactivityTimeout (int secs);
-        void setPasswordChecker (QXmppPasswordChecker *checker);
+    void setInactivityTimeout (int secs);
+    void setPasswordChecker (QXmppPasswordChecker *checker);
 
-    signals:
-        /// This signal is emitted when an element is received.
-        void elementReceived (const QDomElement &element);
+  signals:
+    /// This signal is emitted when an element is received.
+    void elementReceived (const QDomElement &element);
 
-    protected:
-        /// \cond
-        void handleStream (const QDomElement &element);
-        void handleStanza (const QDomElement &element);
-        /// \endcond
+  protected:
+    /// \cond
+    void handleStream (const QDomElement &element);
+    void handleStanza (const QDomElement &element);
+    /// \endcond
 
-    private slots:
-        void onDigestReply();
-        void onPasswordReply();
-        void onSocketDisconnected();
-        void onTimeout();
+  private slots:
+    void onDigestReply();
+    void onPasswordReply();
+    void onSocketDisconnected();
+    void onTimeout();
 
-    private:
-        Q_DISABLE_COPY (QXmppIncomingClient)
-        QXmppIncomingClientPrivate *d;
-        friend class QXmppIncomingClientPrivate;
+  private:
+    Q_DISABLE_COPY (QXmppIncomingClient)
+    QXmppIncomingClientPrivate *d;
+    friend class QXmppIncomingClientPrivate;
 };
 
 #endif

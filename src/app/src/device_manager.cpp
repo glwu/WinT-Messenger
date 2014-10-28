@@ -9,10 +9,8 @@
 
 #include "device_manager.h"
 
-DeviceManager::DeviceManager()
-{
-    if (ANDROID)
-    {
+DeviceManager::DeviceManager() {
+    if (ANDROID) {
         QRect _screen = qApp->primaryScreen()->geometry();
         m_ratio = 1.8 * qMin (qMax (_screen.width(), _screen.height()) / 1136.,
                               qMin (_screen.width(), _screen.height()) / 640.);
@@ -22,12 +20,10 @@ DeviceManager::DeviceManager()
         m_ratio = 1.0;
 }
 
-bool DeviceManager::isMobile()
-{
+bool DeviceManager::isMobile() {
     return MOBILE_TARGET;
 }
 
-qreal DeviceManager::ratio (int value)
-{
+qreal DeviceManager::ratio (int value) {
     return value * m_ratio;
 }

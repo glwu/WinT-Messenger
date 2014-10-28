@@ -41,21 +41,19 @@
 static bool randomSeeded = false;
 static const QByteArray streamRootElementEnd = "</stream:stream>";
 
-class QXmppStreamPrivate
-{
-    public:
-        QXmppStreamPrivate();
+class QXmppStreamPrivate {
+  public:
+    QXmppStreamPrivate();
 
-        QByteArray dataBuffer;
-        QSslSocket *socket;
+    QByteArray dataBuffer;
+    QSslSocket *socket;
 
-        // stream state
-        QByteArray streamStart;
+    // stream state
+    QByteArray streamStart;
 };
 
 QXmppStreamPrivate::QXmppStreamPrivate()
-    : socket (0)
-{
+    : socket (0) {
 }
 
 /// Constructs a base XMPP stream.
@@ -64,11 +62,9 @@ QXmppStreamPrivate::QXmppStreamPrivate()
 
 QXmppStream::QXmppStream (QObject *parent)
     : QXmppLoggable (parent),
-      d (new QXmppStreamPrivate)
-{
+      d (new QXmppStreamPrivate) {
     // Make sure the random number generator is seeded
-    if (!randomSeeded)
-    {
+    if (!randomSeeded) {
         qsrand (QTime (0, 0, 0).msecsTo (QTime::currentTime()) ^ reinterpret_cast<quintptr> (this));
         randomSeeded = true;
     }
@@ -76,20 +72,17 @@ QXmppStream::QXmppStream (QObject *parent)
 
 /// Destroys a base XMPP stream.
 
-QXmppStream::~QXmppStream()
-{
+QXmppStream::~QXmppStream() {
     delete d;
 }
 
 /// Disconnects from the remote host.
 ///
 
-void QXmppStream::disconnectFromHost()
-{
+void QXmppStream::disconnectFromHost() {
     sendData (streamRootElementEnd);
 
-    if (d->socket)
-    {
+    if (d->socket) {
         d->socket->flush();
         d->socket->disconnectFromHost();
     }
@@ -100,8 +93,7 @@ void QXmppStream::disconnectFromHost()
 ///
 /// If you redefine handleStart(), make sure to call the base class's method.
 
-void QXmppStream::handleStart()
-{
+void QXmppStream::handleStart() {
     d->dataBuffer.clear();
     d->streamStart.clear();
 }
@@ -109,8 +101,7 @@ void QXmppStream::handleStart()
 /// Returns true if the stream is connected.
 ///
 
-bool QXmppStream::isConnected() const
-{
+bool QXmppStream::isConnected() const {
     return d->socket &&
            d->socket->state() == QAbstractSocket::ConnectedState;
 }
@@ -119,8 +110,7 @@ bool QXmppStream::isConnected() const
 ///
 /// \param data
 
-bool QXmppStream::sendData (const QByteArray &data)
-{
+bool QXmppStream::sendData (const QByteArray &data) {
     logSent (QString::fromUtf8 (data));
 
     if (!d->socket || d->socket->state() != QAbstractSocket::ConnectedState)
@@ -133,8 +123,7 @@ bool QXmppStream::sendData (const QByteArray &data)
 ///
 /// \param packet
 
-bool QXmppStream::sendPacket (const QXmppStanza &packet)
-{
+bool QXmppStream::sendPacket (const QXmppStanza &packet) {
     // prepare packet
     QByteArray data;
     QXmlStreamWriter xmlStream (&data);
@@ -147,16 +136,14 @@ bool QXmppStream::sendPacket (const QXmppStanza &packet)
 /// Returns the QSslSocket used for this stream.
 ///
 
-QSslSocket *QXmppStream::socket() const
-{
+QSslSocket *QXmppStream::socket() const {
     return d->socket;
 }
 
 /// Sets the QSslSocket used for this stream.
 ///
 
-void QXmppStream::setSocket (QSslSocket *socket)
-{
+void QXmppStream::setSocket (QSslSocket *socket) {
     bool check;
     Q_UNUSED (check);
 
@@ -183,33 +170,28 @@ void QXmppStream::setSocket (QSslSocket *socket)
     Q_ASSERT (check);
 }
 
-void QXmppStream::_q_socketConnected()
-{
+void QXmppStream::_q_socketConnected() {
     info (QString ("Socket connected to %1 %2").arg (
               d->socket->peerAddress().toString(),
               QString::number (d->socket->peerPort())));
     handleStart();
 }
 
-void QXmppStream::_q_socketEncrypted()
-{
+void QXmppStream::_q_socketEncrypted() {
     debug ("Socket encrypted");
     handleStart();
 }
 
-void QXmppStream::_q_socketError (QAbstractSocket::SocketError socketError)
-{
+void QXmppStream::_q_socketError (QAbstractSocket::SocketError socketError) {
     Q_UNUSED (socketError);
     warning (QString ("Socket error: " + socket()->errorString()));
 }
 
-void QXmppStream::_q_socketReadyRead()
-{
+void QXmppStream::_q_socketReadyRead() {
     d->dataBuffer.append (d->socket->readAll());
 
     // handle whitespace pings
-    if (!d->dataBuffer.isEmpty() && d->dataBuffer.trimmed().isEmpty())
-    {
+    if (!d->dataBuffer.isEmpty() && d->dataBuffer.trimmed().isEmpty()) {
         d->dataBuffer.clear();
         handleStanza (QDomElement());
     }
@@ -254,8 +236,7 @@ void QXmppStream::_q_socketReadyRead()
     // process stanzas
     QDomElement nodeRecv = doc.documentElement().firstChildElement();
 
-    while (!nodeRecv.isNull())
-    {
+    while (!nodeRecv.isNull()) {
         handleStanza (nodeRecv);
         nodeRecv = nodeRecv.nextSiblingElement();
     }

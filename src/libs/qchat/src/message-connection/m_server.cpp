@@ -9,13 +9,11 @@
 
 #include "m_server.h"
 
-MServer::MServer (QObject *parent) : QTcpServer (parent)
-{
+MServer::MServer (QObject *parent) : QTcpServer (parent) {
     listen (QHostAddress::Any);
 }
 
-void MServer::incomingConnection (qintptr socketDescriptor)
-{
+void MServer::incomingConnection (qintptr socketDescriptor) {
     MConnection *message_connection = new MConnection (this);
     message_connection->setSocketDescriptor (socketDescriptor);
     emit newConnection (message_connection);

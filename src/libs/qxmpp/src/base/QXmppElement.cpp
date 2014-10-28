@@ -27,32 +27,29 @@
 #include <QDomElement>
 #include <QTextStream>
 
-class QXmppElementPrivate
-{
-    public:
-        QXmppElementPrivate();
-        QXmppElementPrivate (const QDomElement &element);
-        ~QXmppElementPrivate();
+class QXmppElementPrivate {
+  public:
+    QXmppElementPrivate();
+    QXmppElementPrivate (const QDomElement &element);
+    ~QXmppElementPrivate();
 
-        QAtomicInt counter;
+    QAtomicInt counter;
 
-        QXmppElementPrivate *parent;
-        QMap<QString, QString> attributes;
-        QList<QXmppElementPrivate *> children;
-        QString name;
-        QString value;
+    QXmppElementPrivate *parent;
+    QMap<QString, QString> attributes;
+    QList<QXmppElementPrivate *> children;
+    QString name;
+    QString value;
 
-        QByteArray serializedSource;
+    QByteArray serializedSource;
 };
 
 QXmppElementPrivate::QXmppElementPrivate()
-    : counter (1), parent (NULL)
-{
+    : counter (1), parent (NULL) {
 }
 
 QXmppElementPrivate::QXmppElementPrivate (const QDomElement &element)
-    : counter (1), parent (NULL)
-{
+    : counter (1), parent (NULL) {
     if (element.isNull())
         return;
 
@@ -65,18 +62,15 @@ QXmppElementPrivate::QXmppElementPrivate (const QDomElement &element)
 
     QDomNamedNodeMap attrs = element.attributes();
 
-    for (int i = 0; i < attrs.size(); i++)
-    {
+    for (int i = 0; i < attrs.size(); i++) {
         QDomAttr attr = attrs.item (i).toAttr();
         attributes.insert (attr.name(), attr.value());
     }
 
     QDomNode childNode = element.firstChild();
 
-    while (!childNode.isNull())
-    {
-        if (childNode.isElement())
-        {
+    while (!childNode.isNull()) {
+        if (childNode.isElement()) {
             QXmppElementPrivate *child = new QXmppElementPrivate (childNode.toElement());
             child->parent = this;
             children.append (child);
@@ -92,44 +86,37 @@ QXmppElementPrivate::QXmppElementPrivate (const QDomElement &element)
     element.save (stream, 0);
 }
 
-QXmppElementPrivate::~QXmppElementPrivate()
-{
+QXmppElementPrivate::~QXmppElementPrivate() {
     foreach (QXmppElementPrivate * child, children)
 
     if (!child->counter.deref())
         delete child;
 }
 
-QXmppElement::QXmppElement()
-{
+QXmppElement::QXmppElement() {
     d = new QXmppElementPrivate();
 }
 
-QXmppElement::QXmppElement (const QXmppElement &other)
-{
+QXmppElement::QXmppElement (const QXmppElement &other) {
     other.d->counter.ref();
     d = other.d;
 }
 
-QXmppElement::QXmppElement (QXmppElementPrivate *other)
-{
+QXmppElement::QXmppElement (QXmppElementPrivate *other) {
     other->counter.ref();
     d = other;
 }
 
-QXmppElement::QXmppElement (const QDomElement &element)
-{
+QXmppElement::QXmppElement (const QDomElement &element) {
     d = new QXmppElementPrivate (element);
 }
 
-QXmppElement::~QXmppElement()
-{
+QXmppElement::~QXmppElement() {
     if (!d->counter.deref())
         delete d;
 }
 
-QXmppElement &QXmppElement::operator= (const QXmppElement &other)
-{
+QXmppElement &QXmppElement::operator= (const QXmppElement &other) {
     other.d->counter.ref();
 
     if (!d->counter.deref())
@@ -139,15 +126,13 @@ QXmppElement &QXmppElement::operator= (const QXmppElement &other)
     return *this;
 }
 
-QDomElement QXmppElement::sourceDomElement() const
-{
+QDomElement QXmppElement::sourceDomElement() const {
     if (d->serializedSource.isEmpty())
         return QDomElement();
 
     QDomDocument doc;
 
-    if (!doc.setContent (d->serializedSource, true))
-    {
+    if (!doc.setContent (d->serializedSource, true)) {
         qWarning ("[QXmpp] QXmppElement::sourceDomElement(): cannot parse source element");
         return QDomElement();
     }
@@ -155,23 +140,19 @@ QDomElement QXmppElement::sourceDomElement() const
     return doc.documentElement();
 }
 
-QStringList QXmppElement::attributeNames() const
-{
+QStringList QXmppElement::attributeNames() const {
     return d->attributes.keys();
 }
 
-QString QXmppElement::attribute (const QString &name) const
-{
+QString QXmppElement::attribute (const QString &name) const {
     return d->attributes.value (name);
 }
 
-void QXmppElement::setAttribute (const QString &name, const QString &value)
-{
+void QXmppElement::setAttribute (const QString &name, const QString &value) {
     d->attributes.insert (name, value);
 }
 
-void QXmppElement::appendChild (const QXmppElement &child)
-{
+void QXmppElement::appendChild (const QXmppElement &child) {
     if (child.d->parent == d)
         return;
 
@@ -185,8 +166,7 @@ void QXmppElement::appendChild (const QXmppElement &child)
     d->children.append (child.d);
 }
 
-QXmppElement QXmppElement::firstChildElement (const QString &name) const
-{
+QXmppElement QXmppElement::firstChildElement (const QString &name) const {
     foreach (QXmppElementPrivate * child_d, d->children)
 
     if (name.isEmpty() || child_d->name == name)
@@ -195,8 +175,7 @@ QXmppElement QXmppElement::firstChildElement (const QString &name) const
     return QXmppElement();
 }
 
-QXmppElement QXmppElement::nextSiblingElement (const QString &name) const
-{
+QXmppElement QXmppElement::nextSiblingElement (const QString &name) const {
     if (!d->parent)
         return QXmppElement();
 
@@ -209,13 +188,11 @@ QXmppElement QXmppElement::nextSiblingElement (const QString &name) const
     return QXmppElement();
 }
 
-bool QXmppElement::isNull() const
-{
+bool QXmppElement::isNull() const {
     return d->name.isEmpty();
 }
 
-void QXmppElement::removeChild (const QXmppElement &child)
-{
+void QXmppElement::removeChild (const QXmppElement &child) {
     if (child.d->parent != d)
         return;
 
@@ -224,28 +201,23 @@ void QXmppElement::removeChild (const QXmppElement &child)
     child.d->parent = NULL;
 }
 
-QString QXmppElement::tagName() const
-{
+QString QXmppElement::tagName() const {
     return d->name;
 }
 
-void QXmppElement::setTagName (const QString &tagName)
-{
+void QXmppElement::setTagName (const QString &tagName) {
     d->name = tagName;
 }
 
-QString QXmppElement::value() const
-{
+QString QXmppElement::value() const {
     return d->value;
 }
 
-void QXmppElement::setValue (const QString &value)
-{
+void QXmppElement::setValue (const QString &value) {
     d->value = value;
 }
 
-void QXmppElement::toXml (QXmlStreamWriter *writer) const
-{
+void QXmppElement::toXml (QXmlStreamWriter *writer) const {
     if (isNull())
         return;
 

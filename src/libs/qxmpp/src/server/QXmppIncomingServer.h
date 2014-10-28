@@ -34,38 +34,37 @@ class QXmppOutgoingServer;
 /// from an XMPP server.
 ///
 
-class QXMPP_EXPORT QXmppIncomingServer : public QXmppStream
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppIncomingServer : public QXmppStream {
+    Q_OBJECT
 
-    public:
-        QXmppIncomingServer (QSslSocket *socket, const QString &domain, QObject *parent);
-        ~QXmppIncomingServer();
+  public:
+    QXmppIncomingServer (QSslSocket *socket, const QString &domain, QObject *parent);
+    ~QXmppIncomingServer();
 
-        bool isConnected() const;
-        QString localStreamId() const;
+    bool isConnected() const;
+    QString localStreamId() const;
 
-    signals:
-        /// This signal is emitted when a dialback verify request is received.
-        void dialbackRequestReceived (const QXmppDialback &result);
+  signals:
+    /// This signal is emitted when a dialback verify request is received.
+    void dialbackRequestReceived (const QXmppDialback &result);
 
-        /// This signal is emitted when an element is received.
-        void elementReceived (const QDomElement &element);
+    /// This signal is emitted when an element is received.
+    void elementReceived (const QDomElement &element);
 
-    protected:
-        /// \cond
-        void handleStanza (const QDomElement &stanzaElement);
-        void handleStream (const QDomElement &streamElement);
-        /// \endcond
+  protected:
+    /// \cond
+    void handleStanza (const QDomElement &stanzaElement);
+    void handleStream (const QDomElement &streamElement);
+    /// \endcond
 
-    private slots:
-        void slotDialbackResponseReceived (const QXmppDialback &dialback);
-        void slotSocketDisconnected();
+  private slots:
+    void slotDialbackResponseReceived (const QXmppDialback &dialback);
+    void slotSocketDisconnected();
 
-    private:
-        Q_DISABLE_COPY (QXmppIncomingServer)
-        QXmppIncomingServerPrivate *d;
-        friend class QXmppIncomingServerPrivate;
+  private:
+    Q_DISABLE_COPY (QXmppIncomingServer)
+    QXmppIncomingServerPrivate *d;
+    friend class QXmppIncomingServerPrivate;
 };
 
 #endif

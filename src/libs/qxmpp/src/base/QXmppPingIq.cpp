@@ -27,19 +27,16 @@
 
 #include <QDomElement>
 
-QXmppPingIq::QXmppPingIq() : QXmppIq (QXmppIq::Get)
-{
+QXmppPingIq::QXmppPingIq() : QXmppIq (QXmppIq::Get) {
 }
 
-bool QXmppPingIq::isPingIq (const QDomElement &element)
-{
+bool QXmppPingIq::isPingIq (const QDomElement &element) {
     QDomElement pingElement = element.firstChildElement ("ping");
     return (element.attribute ("type") == "get" &&
             pingElement.namespaceURI() == ns_ping);
 }
 
-void QXmppPingIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
-{
+void QXmppPingIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("ping");
     writer->writeAttribute ("xmlns", ns_ping);
     writer->writeEndElement();

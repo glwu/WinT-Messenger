@@ -33,32 +33,27 @@
 ///
 /// \param item
 
-void QXmppRosterIq::addItem (const Item& item)
-{
+void QXmppRosterIq::addItem (const Item& item) {
     m_items.append (item);
 }
 
 /// Returns the roster IQ's items.
 
-QList<QXmppRosterIq::Item> QXmppRosterIq::items() const
-{
+QList<QXmppRosterIq::Item> QXmppRosterIq::items() const {
     return m_items;
 }
 
 /// \cond
-bool QXmppRosterIq::isRosterIq (const QDomElement &element)
-{
+bool QXmppRosterIq::isRosterIq (const QDomElement &element) {
     return (element.firstChildElement ("query").namespaceURI() == ns_roster);
 }
 
-void QXmppRosterIq::parseElementFromChild (const QDomElement &element)
-{
+void QXmppRosterIq::parseElementFromChild (const QDomElement &element) {
     QDomElement itemElement = element.
                               firstChildElement ("query").
                               firstChildElement ("item");
 
-    while (!itemElement.isNull())
-    {
+    while (!itemElement.isNull()) {
         QXmppRosterIq::Item item;
         item.parse (itemElement);
         m_items.append (item);
@@ -66,8 +61,7 @@ void QXmppRosterIq::parseElementFromChild (const QDomElement &element)
     }
 }
 
-void QXmppRosterIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
-{
+void QXmppRosterIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("query");
     writer->writeAttribute ( "xmlns", ns_roster);
 
@@ -81,8 +75,7 @@ void QXmppRosterIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
 /// Constructs a new roster entry.
 
 QXmppRosterIq::Item::Item()
-    : m_type (NotSet)
-{
+    : m_type (NotSet) {
 }
 
 /// Returns the bareJid of the roster entry.
@@ -90,8 +83,7 @@ QXmppRosterIq::Item::Item()
 /// \return bareJid as a QString
 ///
 
-QString QXmppRosterIq::Item::bareJid() const
-{
+QString QXmppRosterIq::Item::bareJid() const {
     return m_bareJid;
 }
 
@@ -100,8 +92,7 @@ QString QXmppRosterIq::Item::bareJid() const
 /// \param bareJid as a QString
 ///
 
-void QXmppRosterIq::Item::setBareJid (const QString &bareJid)
-{
+void QXmppRosterIq::Item::setBareJid (const QString &bareJid) {
     m_bareJid = bareJid;
 }
 
@@ -110,8 +101,7 @@ void QXmppRosterIq::Item::setBareJid (const QString &bareJid)
 /// \return QSet<QString> list of all the groups
 ///
 
-QSet<QString> QXmppRosterIq::Item::groups() const
-{
+QSet<QString> QXmppRosterIq::Item::groups() const {
     return m_groups;
 }
 
@@ -120,8 +110,7 @@ QSet<QString> QXmppRosterIq::Item::groups() const
 /// \param groups list of all the groups as a QSet<QString>
 ///
 
-void QXmppRosterIq::Item::setGroups (const QSet<QString>& groups)
-{
+void QXmppRosterIq::Item::setGroups (const QSet<QString>& groups) {
     m_groups = groups;
 }
 
@@ -130,8 +119,7 @@ void QXmppRosterIq::Item::setGroups (const QSet<QString>& groups)
 /// \return name as a QString
 ///
 
-QString QXmppRosterIq::Item::name() const
-{
+QString QXmppRosterIq::Item::name() const {
     return m_name;
 }
 
@@ -140,8 +128,7 @@ QString QXmppRosterIq::Item::name() const
 /// \param name as a QString
 ///
 
-void QXmppRosterIq::Item::setName (const QString &name)
-{
+void QXmppRosterIq::Item::setName (const QString &name) {
     m_name = name;
 }
 
@@ -153,8 +140,7 @@ void QXmppRosterIq::Item::setName (const QString &name)
 ///
 ///
 
-QString QXmppRosterIq::Item::subscriptionStatus() const
-{
+QString QXmppRosterIq::Item::subscriptionStatus() const {
     return m_subscriptionStatus;
 }
 
@@ -165,8 +151,7 @@ QString QXmppRosterIq::Item::subscriptionStatus() const
 /// \param status as a QString
 ///
 
-void QXmppRosterIq::Item::setSubscriptionStatus (const QString &status)
-{
+void QXmppRosterIq::Item::setSubscriptionStatus (const QString &status) {
     m_subscriptionStatus = status;
 }
 
@@ -174,8 +159,7 @@ void QXmppRosterIq::Item::setSubscriptionStatus (const QString &status)
 ///
 
 QXmppRosterIq::Item::SubscriptionType
-QXmppRosterIq::Item::subscriptionType() const
-{
+QXmppRosterIq::Item::subscriptionType() const {
     return m_type;
 }
 
@@ -184,15 +168,12 @@ QXmppRosterIq::Item::subscriptionType() const
 /// \param type
 ///
 
-void QXmppRosterIq::Item::setSubscriptionType (SubscriptionType type)
-{
+void QXmppRosterIq::Item::setSubscriptionType (SubscriptionType type) {
     m_type = type;
 }
 
-QString QXmppRosterIq::Item::getSubscriptionTypeStr() const
-{
-    switch (m_type)
-    {
+QString QXmppRosterIq::Item::getSubscriptionTypeStr() const {
+    switch (m_type) {
         case NotSet:
             return "";
 
@@ -211,16 +192,14 @@ QString QXmppRosterIq::Item::getSubscriptionTypeStr() const
         case Remove:
             return "remove";
 
-        default:
-            {
+        default: {
                 qWarning ("QXmppRosterIq::Item::getTypeStr(): invalid type");
                 return "";
             }
     }
 }
 
-void QXmppRosterIq::Item::setSubscriptionTypeFromStr (const QString& type)
-{
+void QXmppRosterIq::Item::setSubscriptionTypeFromStr (const QString& type) {
     if (type == "")
         setSubscriptionType (NotSet);
 
@@ -244,8 +223,7 @@ void QXmppRosterIq::Item::setSubscriptionTypeFromStr (const QString& type)
 }
 
 /// \cond
-void QXmppRosterIq::Item::parse (const QDomElement &element)
-{
+void QXmppRosterIq::Item::parse (const QDomElement &element) {
     m_name = element.attribute ("name");
     m_bareJid = element.attribute ("jid");
     setSubscriptionTypeFromStr (element.attribute ("subscription"));
@@ -253,15 +231,13 @@ void QXmppRosterIq::Item::parse (const QDomElement &element)
 
     QDomElement groupElement = element.firstChildElement ("group");
 
-    while (!groupElement.isNull())
-    {
+    while (!groupElement.isNull()) {
         m_groups << groupElement.text();
         groupElement = groupElement.nextSiblingElement ("group");
     }
 }
 
-void QXmppRosterIq::Item::toXml (QXmlStreamWriter *writer) const
-{
+void QXmppRosterIq::Item::toXml (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("item");
     helperToXmlAddAttribute (writer, "jid", m_bareJid);
     helperToXmlAddAttribute (writer, "name", m_name);
@@ -270,8 +246,7 @@ void QXmppRosterIq::Item::toXml (QXmlStreamWriter *writer) const
 
     QSet<QString>::const_iterator i = m_groups.constBegin();
 
-    while (i != m_groups.constEnd())
-    {
+    while (i != m_groups.constEnd()) {
         helperToXmlAddTextElement (writer, "group", *i);
         ++i;
     }

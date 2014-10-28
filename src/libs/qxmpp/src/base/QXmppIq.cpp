@@ -28,18 +28,16 @@
 #include <QDomElement>
 #include <QXmlStreamWriter>
 
-static const char *iq_types[] =
-{
+static const char *iq_types[] = {
     "error",
     "get",
     "set",
     "result"
 };
 
-class QXmppIqPrivate : public QSharedData
-{
-    public:
-        QXmppIq::Type type;
+class QXmppIqPrivate : public QSharedData {
+  public:
+    QXmppIq::Type type;
 };
 
 /// Constructs a QXmppIq with the specified \a type.
@@ -48,8 +46,7 @@ class QXmppIqPrivate : public QSharedData
 
 QXmppIq::QXmppIq (QXmppIq::Type type)
     : QXmppStanza()
-    , d (new QXmppIqPrivate)
-{
+    , d (new QXmppIqPrivate) {
     d->type = type;
     generateAndSetNextId();
 }
@@ -58,18 +55,15 @@ QXmppIq::QXmppIq (QXmppIq::Type type)
 
 QXmppIq::QXmppIq (const QXmppIq &other)
     : QXmppStanza (other)
-    , d (other.d)
-{
+    , d (other.d) {
 }
 
-QXmppIq::~QXmppIq()
-{
+QXmppIq::~QXmppIq() {
 }
 
 /// Assigns \a other to this IQ.
 
-QXmppIq& QXmppIq::operator= (const QXmppIq &other)
-{
+QXmppIq& QXmppIq::operator= (const QXmppIq &other) {
     QXmppStanza::operator= (other);
     d = other.d;
     return *this;
@@ -78,8 +72,7 @@ QXmppIq& QXmppIq::operator= (const QXmppIq &other)
 /// Returns the IQ's type.
 ///
 
-QXmppIq::Type QXmppIq::type() const
-{
+QXmppIq::Type QXmppIq::type() const {
     return d->type;
 }
 
@@ -87,22 +80,18 @@ QXmppIq::Type QXmppIq::type() const
 ///
 /// \param type
 
-void QXmppIq::setType (QXmppIq::Type type)
-{
+void QXmppIq::setType (QXmppIq::Type type) {
     d->type = type;
 }
 
 /// \cond
-void QXmppIq::parse (const QDomElement &element)
-{
+void QXmppIq::parse (const QDomElement &element) {
     QXmppStanza::parse (element);
 
     const QString type = element.attribute ("type");
 
-    for (int i = Error; i <= Result; i++)
-    {
-        if (type == iq_types[i])
-        {
+    for (int i = Error; i <= Result; i++) {
+        if (type == iq_types[i]) {
             d->type = static_cast<Type> (i);
             break;
         }
@@ -111,13 +100,11 @@ void QXmppIq::parse (const QDomElement &element)
     parseElementFromChild (element);
 }
 
-void QXmppIq::parseElementFromChild (const QDomElement &element)
-{
+void QXmppIq::parseElementFromChild (const QDomElement &element) {
     QXmppElementList extensions;
     QDomElement itemElement = element.firstChildElement();
 
-    while (!itemElement.isNull())
-    {
+    while (!itemElement.isNull()) {
         extensions.append (QXmppElement (itemElement));
         itemElement = itemElement.nextSiblingElement();
     }
@@ -125,8 +112,7 @@ void QXmppIq::parseElementFromChild (const QDomElement &element)
     setExtensions (extensions);
 }
 
-void QXmppIq::toXml ( QXmlStreamWriter *xmlWriter ) const
-{
+void QXmppIq::toXml ( QXmlStreamWriter *xmlWriter ) const {
     xmlWriter->writeStartElement ("iq");
 
     helperToXmlAddAttribute (xmlWriter, "id", id());
@@ -138,8 +124,7 @@ void QXmppIq::toXml ( QXmlStreamWriter *xmlWriter ) const
     xmlWriter->writeEndElement();
 }
 
-void QXmppIq::toXmlElementFromChild ( QXmlStreamWriter *writer ) const
-{
+void QXmppIq::toXmlElementFromChild ( QXmlStreamWriter *writer ) const {
     foreach (const QXmppElement & extension, extensions())
     extension.toXml (writer);
 }

@@ -26,50 +26,48 @@
 
 #include "QXmppStanza.h"
 
-class QXMPP_EXPORT QXmppStreamFeatures : public QXmppStanza
-{
-    public:
-        QXmppStreamFeatures();
+class QXMPP_EXPORT QXmppStreamFeatures : public QXmppStanza {
+  public:
+    QXmppStreamFeatures();
 
-        enum Mode
-        {
-            Disabled = 0,
-            Enabled,
-            Required
-        };
+    enum Mode {
+        Disabled = 0,
+        Enabled,
+        Required
+    };
 
-        Mode bindMode() const;
-        void setBindMode (Mode mode);
+    Mode bindMode() const;
+    void setBindMode (Mode mode);
 
-        Mode sessionMode() const;
-        void setSessionMode (Mode mode);
+    Mode sessionMode() const;
+    void setSessionMode (Mode mode);
 
-        Mode nonSaslAuthMode() const;
-        void setNonSaslAuthMode (Mode mode);
+    Mode nonSaslAuthMode() const;
+    void setNonSaslAuthMode (Mode mode);
 
-        QStringList authMechanisms() const;
-        void setAuthMechanisms (const QStringList &mechanisms);
+    QStringList authMechanisms() const;
+    void setAuthMechanisms (const QStringList &mechanisms);
 
-        QStringList compressionMethods() const;
-        void setCompressionMethods (const QStringList &methods);
+    QStringList compressionMethods() const;
+    void setCompressionMethods (const QStringList &methods);
 
-        Mode tlsMode() const;
-        void setTlsMode (Mode mode);
+    Mode tlsMode() const;
+    void setTlsMode (Mode mode);
 
-        /// \cond
-        void parse (const QDomElement &element);
-        void toXml (QXmlStreamWriter *writer) const;
-        /// \endcond
+    /// \cond
+    void parse (const QDomElement &element);
+    void toXml (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-        static bool isStreamFeatures (const QDomElement &element);
+    static bool isStreamFeatures (const QDomElement &element);
 
-    private:
-        Mode m_bindMode;
-        Mode m_sessionMode;
-        Mode m_nonSaslAuthMode;
-        Mode m_tlsMode;
-        QStringList m_authMechanisms;
-        QStringList m_compressionMethods;
+  private:
+    Mode m_bindMode;
+    Mode m_sessionMode;
+    Mode m_nonSaslAuthMode;
+    Mode m_tlsMode;
+    QStringList m_authMechanisms;
+    QStringList m_compressionMethods;
 };
 
 #endif

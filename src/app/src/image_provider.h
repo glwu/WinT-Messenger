@@ -12,28 +12,27 @@
 #include <QImage>
 #include <QtQuick/QQuickImageProvider>
 
-class ImageProvider : public QQuickImageProvider
-{
+class ImageProvider : public QQuickImageProvider {
 
-    public:
+  public:
 
-        explicit ImageProvider();
+    explicit ImageProvider();
 
-        /// Deletes all stored images
-        void clearImages();
+    /// Deletes all stored images
+    void clearImages();
 
-        /// Adds a new profile picture and creates a relationship
-        /// between the image and the user ID for later use
-        void addImage (const QImage& image, const QString& id);
+    /// Adds a new profile picture and creates a relationship
+    /// between the image and the user ID for later use
+    void addImage (const QImage& image, const QString& id);
 
-        /// Returns a QImage given the user ID
-        QImage requestImage (const QString& id, QSize *size,
-                             const QSize& requestedSize);
+    /// Returns a QImage given the user ID
+    QImage requestImage (const QString& id, QSize *size,
+                         const QSize& requestedSize);
 
-    private:
+  private:
 
-        QList<QString> m_id_list;
-        QList<QImage> m_image_list;
+    QList<QString> m_id_list;
+    QList<QImage> m_image_list;
 };
 
 #endif

@@ -38,51 +38,49 @@ class QXmppVCardIqPrivate;
 
 /// \brief Represent a vCard address.
 
-class QXMPP_EXPORT QXmppVCardAddress
-{
-    public:
-        /// \brief Describes e-mail address types.
-        enum TypeFlag
-        {
-            None        = 0x0,
-            Home        = 0x1,
-            Work        = 0x2,
-            Postal      = 0x4,
-            Preferred   = 0x8
-        };
-        Q_DECLARE_FLAGS (Type, TypeFlag)
+class QXMPP_EXPORT QXmppVCardAddress {
+  public:
+    /// \brief Describes e-mail address types.
+    enum TypeFlag {
+        None        = 0x0,
+        Home        = 0x1,
+        Work        = 0x2,
+        Postal      = 0x4,
+        Preferred   = 0x8
+    };
+    Q_DECLARE_FLAGS (Type, TypeFlag)
 
-        QXmppVCardAddress();
-        QXmppVCardAddress (const QXmppVCardAddress &other);
-        ~QXmppVCardAddress();
+    QXmppVCardAddress();
+    QXmppVCardAddress (const QXmppVCardAddress &other);
+    ~QXmppVCardAddress();
 
-        QXmppVCardAddress& operator= (const QXmppVCardAddress &other);
+    QXmppVCardAddress& operator= (const QXmppVCardAddress &other);
 
-        QString country() const;
-        void setCountry (const QString &country);
+    QString country() const;
+    void setCountry (const QString &country);
 
-        QString locality() const;
-        void setLocality (const QString &locality);
+    QString locality() const;
+    void setLocality (const QString &locality);
 
-        QString postcode() const;
-        void setPostcode (const QString &postcode);
+    QString postcode() const;
+    void setPostcode (const QString &postcode);
 
-        QString region() const;
-        void setRegion (const QString &region);
+    QString region() const;
+    void setRegion (const QString &region);
 
-        QString street() const;
-        void setStreet (const QString &street);
+    QString street() const;
+    void setStreet (const QString &street);
 
-        Type type() const;
-        void setType (Type type);
+    Type type() const;
+    void setType (Type type);
 
-        /// \cond
-        void parse (const QDomElement &element);
-        void toXml (QXmlStreamWriter *stream) const;
-        /// \endcond
+    /// \cond
+    void parse (const QDomElement &element);
+    void toXml (QXmlStreamWriter *stream) const;
+    /// \endcond
 
-    private:
-        QSharedDataPointer<QXmppVCardAddressPrivate> d;
+  private:
+    QSharedDataPointer<QXmppVCardAddressPrivate> d;
 };
 
 QXMPP_EXPORT bool operator== (const QXmppVCardAddress&, const QXmppVCardAddress&);
@@ -90,40 +88,38 @@ QXMPP_EXPORT bool operator!= (const QXmppVCardAddress&, const QXmppVCardAddress&
 
 /// \brief Represents a vCard e-mail address.
 
-class QXMPP_EXPORT QXmppVCardEmail
-{
-    public:
-        /// \brief Describes e-mail address types.
-        enum TypeFlag
-        {
-            None        = 0x0,
-            Home        = 0x1,
-            Work        = 0x2,
-            Internet    = 0x4,
-            Preferred   = 0x8,
-            X400        = 0x10
-        };
-        Q_DECLARE_FLAGS (Type, TypeFlag)
+class QXMPP_EXPORT QXmppVCardEmail {
+  public:
+    /// \brief Describes e-mail address types.
+    enum TypeFlag {
+        None        = 0x0,
+        Home        = 0x1,
+        Work        = 0x2,
+        Internet    = 0x4,
+        Preferred   = 0x8,
+        X400        = 0x10
+    };
+    Q_DECLARE_FLAGS (Type, TypeFlag)
 
-        QXmppVCardEmail();
-        QXmppVCardEmail (const QXmppVCardEmail &other);
-        ~QXmppVCardEmail();
+    QXmppVCardEmail();
+    QXmppVCardEmail (const QXmppVCardEmail &other);
+    ~QXmppVCardEmail();
 
-        QXmppVCardEmail& operator= (const QXmppVCardEmail &other);
+    QXmppVCardEmail& operator= (const QXmppVCardEmail &other);
 
-        QString address() const;
-        void setAddress (const QString &address);
+    QString address() const;
+    void setAddress (const QString &address);
 
-        Type type() const;
-        void setType (Type type);
+    Type type() const;
+    void setType (Type type);
 
-        /// \cond
-        void parse (const QDomElement &element);
-        void toXml (QXmlStreamWriter *stream) const;
-        /// \endcond
+    /// \cond
+    void parse (const QDomElement &element);
+    void toXml (QXmlStreamWriter *stream) const;
+    /// \endcond
 
-    private:
-        QSharedDataPointer<QXmppVCardEmailPrivate> d;
+  private:
+    QSharedDataPointer<QXmppVCardEmailPrivate> d;
 };
 
 QXMPP_EXPORT bool operator== (const QXmppVCardEmail&, const QXmppVCardEmail&);
@@ -131,48 +127,46 @@ QXMPP_EXPORT bool operator!= (const QXmppVCardEmail&, const QXmppVCardEmail&);
 
 /// \brief Represents a vCard phone number.
 
-class QXMPP_EXPORT QXmppVCardPhone
-{
-    public:
-        /// \brief Describes phone number types.
-        enum TypeFlag
-        {
-            None        = 0x0,
-            Home        = 0x1,
-            Work        = 0x2,
-            Voice       = 0x4,
-            Fax         = 0x8,
-            Pager       = 0x10,
-            Messaging   = 0x20,
-            Cell        = 0x40,
-            Video       = 0x80,
-            BBS         = 0x100,
-            Modem       = 0x200,
-            ISDN        = 0x400,
-            PCS         = 0x800,
-            Preferred   = 0x1000
-        };
-        Q_DECLARE_FLAGS (Type, TypeFlag)
+class QXMPP_EXPORT QXmppVCardPhone {
+  public:
+    /// \brief Describes phone number types.
+    enum TypeFlag {
+        None        = 0x0,
+        Home        = 0x1,
+        Work        = 0x2,
+        Voice       = 0x4,
+        Fax         = 0x8,
+        Pager       = 0x10,
+        Messaging   = 0x20,
+        Cell        = 0x40,
+        Video       = 0x80,
+        BBS         = 0x100,
+        Modem       = 0x200,
+        ISDN        = 0x400,
+        PCS         = 0x800,
+        Preferred   = 0x1000
+    };
+    Q_DECLARE_FLAGS (Type, TypeFlag)
 
-        QXmppVCardPhone();
-        QXmppVCardPhone (const QXmppVCardPhone &other);
-        ~QXmppVCardPhone();
+    QXmppVCardPhone();
+    QXmppVCardPhone (const QXmppVCardPhone &other);
+    ~QXmppVCardPhone();
 
-        QXmppVCardPhone& operator= (const QXmppVCardPhone &other);
+    QXmppVCardPhone& operator= (const QXmppVCardPhone &other);
 
-        QString number() const;
-        void setNumber (const QString &number);
+    QString number() const;
+    void setNumber (const QString &number);
 
-        Type type() const;
-        void setType (Type type);
+    Type type() const;
+    void setType (Type type);
 
-        /// \cond
-        void parse (const QDomElement &element);
-        void toXml (QXmlStreamWriter *stream) const;
-        /// \endcond
+    /// \cond
+    void parse (const QDomElement &element);
+    void toXml (QXmlStreamWriter *stream) const;
+    /// \endcond
 
-    private:
-        QSharedDataPointer<QXmppVCardPhonePrivate> d;
+  private:
+    QSharedDataPointer<QXmppVCardPhonePrivate> d;
 };
 
 QXMPP_EXPORT bool operator== (const QXmppVCardPhone&, const QXmppVCardPhone&);
@@ -183,34 +177,33 @@ QXMPP_EXPORT bool operator!= (const QXmppVCardPhone&, const QXmppVCardPhone&);
 /// This contains both information about organization itself and
 /// information about job position in the organization.
 
-class QXMPP_EXPORT QXmppVCardOrganization
-{
-    public:
-        QXmppVCardOrganization();
-        QXmppVCardOrganization (const QXmppVCardOrganization &other);
-        ~QXmppVCardOrganization();
+class QXMPP_EXPORT QXmppVCardOrganization {
+  public:
+    QXmppVCardOrganization();
+    QXmppVCardOrganization (const QXmppVCardOrganization &other);
+    ~QXmppVCardOrganization();
 
-        QXmppVCardOrganization& operator= (const QXmppVCardOrganization &other);
+    QXmppVCardOrganization& operator= (const QXmppVCardOrganization &other);
 
-        QString organization() const;
-        void setOrganization (const QString&);
+    QString organization() const;
+    void setOrganization (const QString&);
 
-        QString unit() const;
-        void setUnit (const QString&);
+    QString unit() const;
+    void setUnit (const QString&);
 
-        QString title() const;
-        void setTitle (const QString&);
+    QString title() const;
+    void setTitle (const QString&);
 
-        QString role() const;
-        void setRole (const QString&);
+    QString role() const;
+    void setRole (const QString&);
 
-        /// \cond
-        void parse (const QDomElement &element);
-        void toXml (QXmlStreamWriter *stream) const;
-        /// \endcond
+    /// \cond
+    void parse (const QDomElement &element);
+    void toXml (QXmlStreamWriter *stream) const;
+    /// \endcond
 
-    private:
-        QSharedDataPointer<QXmppVCardOrganizationPrivate> d;
+  private:
+    QSharedDataPointer<QXmppVCardOrganizationPrivate> d;
 };
 
 QXMPP_EXPORT bool operator== (const QXmppVCardOrganization&, const QXmppVCardOrganization&);
@@ -226,72 +219,71 @@ QXMPP_EXPORT bool operator!= (const QXmppVCardOrganization&, const QXmppVCardOrg
 /// field to this class.
 ///
 
-class QXMPP_EXPORT QXmppVCardIq : public QXmppIq
-{
-    public:
-        QXmppVCardIq (const QString& bareJid = QString());
-        QXmppVCardIq (const QXmppVCardIq &other);
-        ~QXmppVCardIq();
+class QXMPP_EXPORT QXmppVCardIq : public QXmppIq {
+  public:
+    QXmppVCardIq (const QString& bareJid = QString());
+    QXmppVCardIq (const QXmppVCardIq &other);
+    ~QXmppVCardIq();
 
-        QXmppVCardIq& operator= (const QXmppVCardIq &other);
+    QXmppVCardIq& operator= (const QXmppVCardIq &other);
 
-        QDate birthday() const;
-        void setBirthday (const QDate &birthday);
+    QDate birthday() const;
+    void setBirthday (const QDate &birthday);
 
-        QString description() const;
-        void setDescription (const QString &description);
+    QString description() const;
+    void setDescription (const QString &description);
 
-        QString email() const;
-        void setEmail (const QString&);
+    QString email() const;
+    void setEmail (const QString&);
 
-        QString firstName() const;
-        void setFirstName (const QString&);
+    QString firstName() const;
+    void setFirstName (const QString&);
 
-        QString fullName() const;
-        void setFullName (const QString&);
+    QString fullName() const;
+    void setFullName (const QString&);
 
-        QString lastName() const;
-        void setLastName (const QString&);
+    QString lastName() const;
+    void setLastName (const QString&);
 
-        QString middleName() const;
-        void setMiddleName (const QString&);
+    QString middleName() const;
+    void setMiddleName (const QString&);
 
-        QString nickName() const;
-        void setNickName (const QString&);
+    QString nickName() const;
+    void setNickName (const QString&);
 
-        QByteArray photo() const;
-        void setPhoto (const QByteArray&);
+    QByteArray photo() const;
+    void setPhoto (const QByteArray&);
 
-        QString photoType() const;
-        void setPhotoType (const QString &type);
+    QString photoType() const;
+    void setPhotoType (const QString &type);
 
-        QString url() const;
-        void setUrl (const QString&);
+    QString url() const;
+    void setUrl (const QString&);
 
-        QList<QXmppVCardAddress> addresses() const;
-        void setAddresses (const QList<QXmppVCardAddress> &addresses);
+    QList<QXmppVCardAddress> addresses() const;
+    void setAddresses (const QList<QXmppVCardAddress> &addresses);
 
-        QList<QXmppVCardEmail> emails() const;
-        void setEmails (const QList<QXmppVCardEmail> &emails);
+    QList<QXmppVCardEmail> emails() const;
+    void setEmails (const QList<QXmppVCardEmail> &emails);
 
-        QList<QXmppVCardPhone> phones() const;
-        void setPhones (const QList<QXmppVCardPhone> &phones);
+    QList<QXmppVCardPhone> phones() const;
+    void setPhones (const QList<QXmppVCardPhone> &phones);
 
-        QXmppVCardOrganization organization() const;
-        void setOrganization (const QXmppVCardOrganization&);
+    QXmppVCardOrganization organization() const;
+    void setOrganization (const QXmppVCardOrganization&);
 
-        /// \cond
-        static bool isVCard (const QDomElement &element);
-        /// \endcond
+    /// \cond
+    static bool isVCard (const QDomElement &element);
+    /// \endcond
 
-    protected:
-        /// \cond
-        void parseElementFromChild (const QDomElement&);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    /// \cond
+    void parseElementFromChild (const QDomElement&);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QSharedDataPointer<QXmppVCardIqPrivate> d;
+  private:
+    QSharedDataPointer<QXmppVCardIqPrivate> d;
 };
 
 QXMPP_EXPORT bool operator== (const QXmppVCardIq&, const QXmppVCardIq&);

@@ -8,6 +8,7 @@
 #
 
 TEMPLATE = app
+CONFIG += c++11
 TARGET = wint-messenger
 CONFIG += qtquickcompiler
 
@@ -55,7 +56,7 @@ win32* {
     CONFIG += openssl-linked
     TARGET = "WinT Messenger"
     RC_FILE = $$PWD/../../data/windows/manifest.rc
-    LIBS += -L$$PWD/../../bin/3rd-party/ -llibeay32
+    LIBS += -L$$PWD/../../bin/3rd-party/win32/ -llibeay32
 }
 
 android {

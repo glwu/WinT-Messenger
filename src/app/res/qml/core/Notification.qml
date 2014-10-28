@@ -39,8 +39,8 @@ Item {
     RectangularGlow {
         opacity: 0.5
         glowRadius: units.gu(2)
+        color: theme.borderColor
         anchors.fill: _background
-        color: settings.darkInterface() ? theme.shadow : theme.borderColor
     }
 
     Timer {

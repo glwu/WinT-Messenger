@@ -1,0 +1,6 @@
+NOTES
+-----
+
+- This library is not backwards compatible with releases of WinT Messenger prior to 1.4.12.
+
+- Some of the code used by this library comes from the Network Chat Example by Digia <http://qt-project.org/doc/qt-4.8/network-network-chat.html>

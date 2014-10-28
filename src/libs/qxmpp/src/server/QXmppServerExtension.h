@@ -45,33 +45,32 @@ class QXmppStream;
 ///
 /// \ingroup Core
 
-class QXMPP_EXPORT QXmppServerExtension : public QXmppLoggable
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppServerExtension : public QXmppLoggable {
+    Q_OBJECT
 
-    public:
-        QXmppServerExtension();
-        ~QXmppServerExtension();
-        virtual QString extensionName() const;
-        virtual int extensionPriority() const;
+  public:
+    QXmppServerExtension();
+    ~QXmppServerExtension();
+    virtual QString extensionName() const;
+    virtual int extensionPriority() const;
 
-        virtual QStringList discoveryFeatures() const;
-        virtual QStringList discoveryItems() const;
-        virtual bool handleStanza (const QDomElement &stanza);
-        virtual QSet<QString> presenceSubscribers (const QString &jid);
-        virtual QSet<QString> presenceSubscriptions (const QString &jid);
+    virtual QStringList discoveryFeatures() const;
+    virtual QStringList discoveryItems() const;
+    virtual bool handleStanza (const QDomElement &stanza);
+    virtual QSet<QString> presenceSubscribers (const QString &jid);
+    virtual QSet<QString> presenceSubscriptions (const QString &jid);
 
-        virtual bool start();
-        virtual void stop();
+    virtual bool start();
+    virtual void stop();
 
-    protected:
-        QXmppServer *server() const;
+  protected:
+    QXmppServer *server() const;
 
-    private:
-        void setServer (QXmppServer *server);
-        QXmppServerExtensionPrivate *const d;
+  private:
+    void setServer (QXmppServer *server);
+    QXmppServerExtensionPrivate *const d;
 
-        friend class QXmppServer;
+    friend class QXmppServer;
 };
 
 #endif

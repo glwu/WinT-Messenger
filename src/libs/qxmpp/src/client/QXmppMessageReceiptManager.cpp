@@ -34,18 +34,15 @@
 /// message delivery receipts.
 
 QXmppMessageReceiptManager::QXmppMessageReceiptManager()
-    : QXmppClientExtension()
-{
+    : QXmppClientExtension() {
 }
 
 /// \cond
-QStringList QXmppMessageReceiptManager::discoveryFeatures() const
-{
+QStringList QXmppMessageReceiptManager::discoveryFeatures() const {
     return QStringList (ns_message_receipts);
 }
 
-bool QXmppMessageReceiptManager::handleStanza (const QDomElement &stanza)
-{
+bool QXmppMessageReceiptManager::handleStanza (const QDomElement &stanza) {
     if (stanza.tagName() != "message")
         return false;
 
@@ -53,8 +50,7 @@ bool QXmppMessageReceiptManager::handleStanza (const QDomElement &stanza)
     message.parse (stanza);
 
     // Handle receipts and cancel any further processing.
-    if (!message.receiptId().isEmpty())
-    {
+    if (!message.receiptId().isEmpty()) {
         emit messageDelivered (message.from(), message.receiptId());
         return true;
     }
@@ -62,8 +58,7 @@ bool QXmppMessageReceiptManager::handleStanza (const QDomElement &stanza)
     // If requested, send a receipt.
     if (message.isReceiptRequested()
             && !message.from().isEmpty()
-            && !message.id().isEmpty())
-    {
+            && !message.id().isEmpty()) {
         QXmppMessage receipt;
         receipt.setTo (message.from());
         receipt.setReceiptId (message.id());

@@ -30,85 +30,80 @@
 
 /// \brief The QXmppPasswordRequest class represents a password request.
 ///
-class QXMPP_EXPORT QXmppPasswordRequest
-{
-    public:
-        /// This enum is used to describe request types.
-        enum Type
-        {
-            CheckPassword = 0,
-        };
+class QXMPP_EXPORT QXmppPasswordRequest {
+  public:
+    /// This enum is used to describe request types.
+    enum Type {
+        CheckPassword = 0,
+    };
 
-        QString domain() const;
-        void setDomain (const QString &domain);
+    QString domain() const;
+    void setDomain (const QString &domain);
 
-        QString password() const;
-        void setPassword (const QString &password);
+    QString password() const;
+    void setPassword (const QString &password);
 
-        QString username() const;
-        void setUsername (const QString &username);
+    QString username() const;
+    void setUsername (const QString &username);
 
-    private:
-        QString m_domain;
-        QString m_password;
-        QString m_username;
+  private:
+    QString m_domain;
+    QString m_password;
+    QString m_username;
 };
 
 /// \brief The QXmppPasswordReply class represents a password reply.
 ///
-class QXMPP_EXPORT QXmppPasswordReply : public QObject
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppPasswordReply : public QObject {
+    Q_OBJECT
 
-    public:
-        /// This enum is used to describe authentication errors.
-        enum Error
-        {
-            NoError = 0,
-            AuthorizationError,
-            TemporaryError,
-        };
+  public:
+    /// This enum is used to describe authentication errors.
+    enum Error {
+        NoError = 0,
+        AuthorizationError,
+        TemporaryError,
+    };
 
-        QXmppPasswordReply (QObject *parent = 0);
+    QXmppPasswordReply (QObject *parent = 0);
 
-        QByteArray digest() const;
-        void setDigest (const QByteArray &digest);
+    QByteArray digest() const;
+    void setDigest (const QByteArray &digest);
 
-        QString password() const;
-        void setPassword (const QString &password);
+    QString password() const;
+    void setPassword (const QString &password);
 
-        QXmppPasswordReply::Error error() const;
-        void setError (QXmppPasswordReply::Error error);
+    QXmppPasswordReply::Error error() const;
+    void setError (QXmppPasswordReply::Error error);
 
-        bool isFinished() const;
+    bool isFinished() const;
 
-    public slots:
-        void finish();
-        void finishLater();
+  public slots:
+    void finish();
+    void finishLater();
 
-    signals:
-        /// This signal is emitted when the reply has finished.
-        void finished();
+  signals:
+    /// This signal is emitted when the reply has finished.
+    void finished();
 
-    private:
-        QByteArray m_digest;
-        QString m_password;
-        QXmppPasswordReply::Error m_error;
-        bool m_isFinished;
+  private:
+    QByteArray m_digest;
+    QString m_password;
+    QXmppPasswordReply::Error m_error;
+    bool m_isFinished;
 };
 
 /// \brief The QXmppPasswordChecker class represents an abstract password checker.
 ///
 
-class QXMPP_EXPORT QXmppPasswordChecker
-{
-    public:
-        virtual QXmppPasswordReply *checkPassword (const QXmppPasswordRequest &request);
-        virtual QXmppPasswordReply *getDigest (const QXmppPasswordRequest &request);
-        virtual bool hasGetPassword() const;
+class QXMPP_EXPORT QXmppPasswordChecker {
+  public:
+    virtual QXmppPasswordReply *checkPassword (const QXmppPasswordRequest &request);
+    virtual QXmppPasswordReply *getDigest (const QXmppPasswordRequest &request);
+    virtual bool hasGetPassword() const;
 
-    protected:
-        virtual QXmppPasswordReply::Error getPassword (const QXmppPasswordRequest &request, QString &password);
+  protected:
+    virtual QXmppPasswordReply::Error getPassword (const QXmppPasswordRequest &request, QString &password);
 };
 
 #endif

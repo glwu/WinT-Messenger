@@ -31,6 +31,7 @@ Label {
                 "bitcoin": "",
                 "grid": "",
                 "google" : "",
+                "fullscreen": "",
                 "check-circle": "",
                 "check-square-o": "" ,
                 "circle": "",

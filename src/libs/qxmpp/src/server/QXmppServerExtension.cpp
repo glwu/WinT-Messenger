@@ -29,44 +29,38 @@
 #include "QXmppServer.h"
 #include "QXmppServerExtension.h"
 
-class QXmppServerExtensionPrivate
-{
-    public:
-        QXmppServer *server;
+class QXmppServerExtensionPrivate {
+  public:
+    QXmppServer *server;
 };
 
 QXmppServerExtension::QXmppServerExtension()
-    : d (new QXmppServerExtensionPrivate)
-{
+    : d (new QXmppServerExtensionPrivate) {
     d->server = 0;
 }
 
-QXmppServerExtension::~QXmppServerExtension()
-{
+QXmppServerExtension::~QXmppServerExtension() {
     delete d;
 }
 
 /// Returns the discovery features to add to the server.
 ///
 
-QStringList QXmppServerExtension::discoveryFeatures() const
-{
+QStringList QXmppServerExtension::discoveryFeatures() const {
     return QStringList();
 }
 
 /// Returns the discovery items to add to the server.
 ///
 
-QStringList QXmppServerExtension::discoveryItems() const
-{
+QStringList QXmppServerExtension::discoveryItems() const {
     return QStringList();
 }
 
 /// Returns the extension's name.
 ///
 
-QString QXmppServerExtension::extensionName() const
-{
+QString QXmppServerExtension::extensionName() const {
     int index = metaObject()->indexOfClassInfo ("ExtensionName");
 
     if (index < 0)
@@ -83,8 +77,7 @@ QString QXmppServerExtension::extensionName() const
 ///
 /// The default implementation returns 0.
 
-int QXmppServerExtension::extensionPriority() const
-{
+int QXmppServerExtension::extensionPriority() const {
     return 0;
 }
 
@@ -94,8 +87,7 @@ int QXmppServerExtension::extensionPriority() const
 ///
 /// \param stanza The received stanza.
 
-bool QXmppServerExtension::handleStanza (const QDomElement &stanza)
-{
+bool QXmppServerExtension::handleStanza (const QDomElement &stanza) {
     Q_UNUSED (stanza);
     return false;
 }
@@ -104,8 +96,7 @@ bool QXmppServerExtension::handleStanza (const QDomElement &stanza)
 ///
 /// \param jid
 
-QSet<QString> QXmppServerExtension::presenceSubscribers (const QString &jid)
-{
+QSet<QString> QXmppServerExtension::presenceSubscribers (const QString &jid) {
     Q_UNUSED (jid);
     return QSet<QString>();
 }
@@ -114,8 +105,7 @@ QSet<QString> QXmppServerExtension::presenceSubscribers (const QString &jid)
 ///
 /// \param jid
 
-QSet<QString> QXmppServerExtension::presenceSubscriptions (const QString &jid)
-{
+QSet<QString> QXmppServerExtension::presenceSubscriptions (const QString &jid) {
     Q_UNUSED (jid);
     return QSet<QString>();
 }
@@ -124,21 +114,18 @@ QSet<QString> QXmppServerExtension::presenceSubscriptions (const QString &jid)
 ///
 /// Return true if the extension was started, false otherwise.
 
-bool QXmppServerExtension::start()
-{
+bool QXmppServerExtension::start() {
     return true;
 }
 
 /// Stops the extension.
 
-void QXmppServerExtension::stop()
-{
+void QXmppServerExtension::stop() {
 }
 
 /// Returns the server which loaded this extension.
 
-QXmppServer *QXmppServerExtension::server() const
-{
+QXmppServer *QXmppServerExtension::server() const {
     return d->server;
 }
 
@@ -146,8 +133,7 @@ QXmppServer *QXmppServerExtension::server() const
 ///
 /// \param server
 
-void QXmppServerExtension::setServer (QXmppServer *server)
-{
+void QXmppServerExtension::setServer (QXmppServer *server) {
     d->server = server;
 }
 

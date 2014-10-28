@@ -50,6 +50,41 @@ Menu {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
+
+        Button {
+            flat: true
+            id: fullscreen
+            width: website.width
+            iconName: "fullscreen"
+            text: enter_full_screen
+            anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: {
+                app.appMenu.close()
+
+                if (text === enter_full_screen) {
+                    text = exit_full_screen
+                    app.hide()
+                    app.showFullScreen()
+                }
+
+                else {
+                    text = enter_full_screen
+                    app.hide()
+                    app.showNormal()
+                }
+            }
+
+            Component.onCompleted: {
+                if (app.mobileDevice) {
+                    height = 0
+                    enabled = false
+                }
+            }
+
+            property string exit_full_screen: qsTr("Exit Full Screen")
+            property string enter_full_screen: qsTr("Enter Full Screen")
+        }
+
         Button {
             flat: true
             id: website

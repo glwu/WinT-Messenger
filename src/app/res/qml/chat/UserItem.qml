@@ -125,7 +125,7 @@ Frame {
         elide: Text.ElideRight
         wrapMode: TextEdit.NoWrap
         color: isSelected || _mouseArea.containsMouse ? theme.navigationBarText :
-                                                        theme.logoTitle
+                                                        theme.logoSubtitle
 
         anchors {
             left: _image.right

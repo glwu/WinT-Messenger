@@ -25,50 +25,44 @@
 
 #include "QXmppClientExtension.h"
 
-class QXmppClientExtensionPrivate
-{
-    public:
-        QXmppClient *client;
+class QXmppClientExtensionPrivate {
+  public:
+    QXmppClient *client;
 };
 
 /// Constructs a QXmppClient extension.
 ///
 
 QXmppClientExtension::QXmppClientExtension()
-    : d (new QXmppClientExtensionPrivate)
-{
+    : d (new QXmppClientExtensionPrivate) {
     d->client = 0;
 }
 
 /// Destroys a QXmppClient extension.
 ///
 
-QXmppClientExtension::~QXmppClientExtension()
-{
+QXmppClientExtension::~QXmppClientExtension() {
     delete d;
 }
 
 /// Returns the discovery features to add to the client.
 ///
 
-QStringList QXmppClientExtension::discoveryFeatures() const
-{
+QStringList QXmppClientExtension::discoveryFeatures() const {
     return QStringList();
 }
 
 /// Returns the discovery identities to add to the client.
 ///
 
-QList<QXmppDiscoveryIq::Identity> QXmppClientExtension::discoveryIdentities() const
-{
+QList<QXmppDiscoveryIq::Identity> QXmppClientExtension::discoveryIdentities() const {
     return QList<QXmppDiscoveryIq::Identity>();
 }
 
 /// Returns the client which loaded this extension.
 ///
 
-QXmppClient *QXmppClientExtension::client()
-{
+QXmppClient *QXmppClientExtension::client() {
     return d->client;
 }
 
@@ -76,8 +70,7 @@ QXmppClient *QXmppClientExtension::client()
 ///
 /// \param client
 
-void QXmppClientExtension::setClient (QXmppClient *client)
-{
+void QXmppClientExtension::setClient (QXmppClient *client) {
     d->client = client;
 }
 

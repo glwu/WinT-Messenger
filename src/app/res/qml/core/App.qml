@@ -35,19 +35,13 @@ Window {
     property alias notification: _notification
     property bool  mobileDevice: device.isMobile()
 
-    property int controlNumber: 0
-
     property Page initialPage
 
     QtObject {
         id: _global
         property string font: "Roboto"
-        property var roboto_loader: FontLoader {
-            source: "qrc:/fonts/fonts/regular.ttf"
-        }
-        property var awesome_loader: FontLoader {
-            source: "qrc:/fonts/fonts/font_awesome.ttf"
-        }
+        property var regular_loader: FontLoader { source: "qrc:/fonts/fonts/regular.ttf" }
+        property var awesome_loader: FontLoader { source: "qrc:/fonts/fonts/font_awesome.ttf" }
     }
 
     MouseArea {
@@ -56,6 +50,14 @@ Window {
             appMenu.close()
             avatarMenu.close()
         }
+    }
+
+    Image {
+        cache: false
+        opacity: 0.4
+        fillMode: Image.Tile
+        anchors.fill: parent
+        source: "qrc:/textures/textures/background.png"
     }
 
     Controls.StackView {

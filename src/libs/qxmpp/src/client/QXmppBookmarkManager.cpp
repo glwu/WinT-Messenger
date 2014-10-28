@@ -35,82 +35,72 @@
 //
 // FIXME: currently, we only handle bookmarks
 
-class QXmppPrivateStorageIq : public QXmppIq
-{
-    public:
-        QXmppBookmarkSet bookmarks() const;
-        void setBookmarks (const QXmppBookmarkSet &bookmark);
+class QXmppPrivateStorageIq : public QXmppIq {
+  public:
+    QXmppBookmarkSet bookmarks() const;
+    void setBookmarks (const QXmppBookmarkSet &bookmark);
 
-        static bool isPrivateStorageIq (const QDomElement &element);
+    static bool isPrivateStorageIq (const QDomElement &element);
 
-    protected:
-        void parseElementFromChild (const QDomElement &element);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+  protected:
+    void parseElementFromChild (const QDomElement &element);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
 
-    private:
-        QXmppBookmarkSet m_bookmarks;
+  private:
+    QXmppBookmarkSet m_bookmarks;
 };
 
-QXmppBookmarkSet QXmppPrivateStorageIq::bookmarks() const
-{
+QXmppBookmarkSet QXmppPrivateStorageIq::bookmarks() const {
     return m_bookmarks;
 }
 
-void QXmppPrivateStorageIq::setBookmarks (const QXmppBookmarkSet &bookmarks)
-{
+void QXmppPrivateStorageIq::setBookmarks (const QXmppBookmarkSet &bookmarks) {
     m_bookmarks = bookmarks;
 }
 
-bool QXmppPrivateStorageIq::isPrivateStorageIq (const QDomElement &element)
-{
+bool QXmppPrivateStorageIq::isPrivateStorageIq (const QDomElement &element) {
     const QDomElement queryElement = element.firstChildElement ("query");
     return queryElement.namespaceURI() == ns_private &&
            QXmppBookmarkSet::isBookmarkSet (queryElement.firstChildElement());
 }
 
-void QXmppPrivateStorageIq::parseElementFromChild (const QDomElement &element)
-{
+void QXmppPrivateStorageIq::parseElementFromChild (const QDomElement &element) {
     const QDomElement queryElement = element.firstChildElement ("query");
     m_bookmarks.parse (queryElement.firstChildElement());
 }
 
-void QXmppPrivateStorageIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
-{
+void QXmppPrivateStorageIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("query");
     writer->writeAttribute ("xmlns", ns_private);
     m_bookmarks.toXml (writer);
     writer->writeEndElement();
 }
 
-class QXmppBookmarkManagerPrivate
-{
-    public:
-        QXmppBookmarkSet bookmarks;
-        QXmppBookmarkSet pendingBookmarks;
-        QString pendingId;
-        bool bookmarksReceived;
+class QXmppBookmarkManagerPrivate {
+  public:
+    QXmppBookmarkSet bookmarks;
+    QXmppBookmarkSet pendingBookmarks;
+    QString pendingId;
+    bool bookmarksReceived;
 };
 
 /// Constructs a new bookmark manager.
 ///
 QXmppBookmarkManager::QXmppBookmarkManager()
-    : d (new QXmppBookmarkManagerPrivate)
-{
+    : d (new QXmppBookmarkManagerPrivate) {
     d->bookmarksReceived = false;
 }
 
 /// Destroys a bookmark manager.
 ///
-QXmppBookmarkManager::~QXmppBookmarkManager()
-{
+QXmppBookmarkManager::~QXmppBookmarkManager() {
     delete d;
 }
 
 /// Returns true if the bookmarks have been received from the server,
 /// false otherwise.
 ///
-bool QXmppBookmarkManager::areBookmarksReceived() const
-{
+bool QXmppBookmarkManager::areBookmarksReceived() const {
     return d->bookmarksReceived;
 }
 
@@ -120,8 +110,7 @@ bool QXmppBookmarkManager::areBookmarksReceived() const
 /// have indeed been received by calling areBookmarksReceived().
 ///
 
-QXmppBookmarkSet QXmppBookmarkManager::bookmarks() const
-{
+QXmppBookmarkSet QXmppBookmarkManager::bookmarks() const {
     return d->bookmarks;
 }
 
@@ -129,8 +118,7 @@ QXmppBookmarkSet QXmppBookmarkManager::bookmarks() const
 ///
 /// \param bookmarks
 
-bool QXmppBookmarkManager::setBookmarks (const QXmppBookmarkSet &bookmarks)
-{
+bool QXmppBookmarkManager::setBookmarks (const QXmppBookmarkSet &bookmarks) {
     QXmppPrivateStorageIq iq;
     iq.setType (QXmppIq::Set);
     iq.setBookmarks (bookmarks);
@@ -144,8 +132,7 @@ bool QXmppBookmarkManager::setBookmarks (const QXmppBookmarkSet &bookmarks)
 }
 
 /// \cond
-void QXmppBookmarkManager::setClient (QXmppClient *client)
-{
+void QXmppBookmarkManager::setClient (QXmppClient *client) {
     bool check;
     Q_UNUSED (check);
 
@@ -160,17 +147,13 @@ void QXmppBookmarkManager::setClient (QXmppClient *client)
     Q_ASSERT (check);
 }
 
-bool QXmppBookmarkManager::handleStanza (const QDomElement &stanza)
-{
-    if (stanza.tagName() == "iq")
-    {
-        if (QXmppPrivateStorageIq::isPrivateStorageIq (stanza))
-        {
+bool QXmppBookmarkManager::handleStanza (const QDomElement &stanza) {
+    if (stanza.tagName() == "iq") {
+        if (QXmppPrivateStorageIq::isPrivateStorageIq (stanza)) {
             QXmppPrivateStorageIq iq;
             iq.parse (stanza);
 
-            if (iq.type() == QXmppIq::Result)
-            {
+            if (iq.type() == QXmppIq::Result) {
                 d->bookmarks = iq.bookmarks();
                 d->bookmarksReceived = true;
                 emit bookmarksReceived (d->bookmarks);
@@ -179,13 +162,11 @@ bool QXmppBookmarkManager::handleStanza (const QDomElement &stanza)
             return true;
         }
 
-        else if (!d->pendingId.isEmpty() && stanza.attribute ("id") == d->pendingId)
-        {
+        else if (!d->pendingId.isEmpty() && stanza.attribute ("id") == d->pendingId) {
             QXmppIq iq;
             iq.parse (stanza);
 
-            if (iq.type() == QXmppIq::Result)
-            {
+            if (iq.type() == QXmppIq::Result) {
                 d->bookmarks = d->pendingBookmarks;
                 emit bookmarksReceived (d->bookmarks);
             }
@@ -199,15 +180,13 @@ bool QXmppBookmarkManager::handleStanza (const QDomElement &stanza)
 }
 /// \endcond
 
-void QXmppBookmarkManager::slotConnected()
-{
+void QXmppBookmarkManager::slotConnected() {
     QXmppPrivateStorageIq iq;
     iq.setType (QXmppIq::Get);
     client()->sendPacket (iq);
 }
 
-void QXmppBookmarkManager::slotDisconnected()
-{
+void QXmppBookmarkManager::slotDisconnected() {
     d->bookmarks = QXmppBookmarkSet();
     d->bookmarksReceived = false;
 }

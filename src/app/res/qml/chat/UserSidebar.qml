@@ -98,7 +98,7 @@ Frame {
             z: 2
             id: searchItem
             height: units.gu(5.6)
-            color: settings.darkInterface() ? theme.dialog : theme.background
+            color: theme.background
 
             anchors.top: parent.top
             anchors.left: parent.left

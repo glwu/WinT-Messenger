@@ -18,26 +18,25 @@
 
 #include "platforms.h"
 
-class DeviceManager : public QObject
-{
-        Q_OBJECT
+class DeviceManager : public QObject {
+    Q_OBJECT
 
-    public:
+  public:
 
-        DeviceManager();
+    DeviceManager();
 
-        /// Returns \c true if target operating system
-        /// is Android, iOS or BlackBerry
-        Q_INVOKABLE bool isMobile();
+    /// Returns \c true if target operating system
+    /// is Android, iOS or BlackBerry
+    Q_INVOKABLE bool isMobile();
 
-        /// Multiplies input value by a calculated
-        /// constant based on the screen's resolution
-        Q_INVOKABLE qreal ratio (int value);
+    /// Multiplies input value by a calculated
+    /// constant based on the screen's resolution
+    Q_INVOKABLE qreal ratio (int value);
 
-    private:
+  private:
 
-        QRect m_rect;
-        double m_ratio;
+    QRect m_rect;
+    double m_ratio;
 };
 
 #endif

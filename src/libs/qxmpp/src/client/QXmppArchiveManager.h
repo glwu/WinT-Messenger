@@ -50,31 +50,30 @@ class QXmppArchivePrefIq;
 ///
 /// \ingroup Managers
 
-class QXMPP_EXPORT QXmppArchiveManager : public QXmppClientExtension
-{
-        Q_OBJECT
+class QXMPP_EXPORT QXmppArchiveManager : public QXmppClientExtension {
+    Q_OBJECT
 
-    public:
-        void listCollections (const QString &jid, const QDateTime &start = QDateTime(), const QDateTime &end = QDateTime(),
-                              const QXmppResultSetQuery &rsm = QXmppResultSetQuery());
-        void listCollections (const QString &jid, const QDateTime &start, const QDateTime &end, int max);
-        void removeCollections (const QString &jid, const QDateTime &start = QDateTime(), const QDateTime &end = QDateTime());
-        void retrieveCollection (const QString &jid, const QDateTime &start, const QXmppResultSetQuery &rsm = QXmppResultSetQuery());
-        void retrieveCollection (const QString &jid, const QDateTime &start, int max);
+  public:
+    void listCollections (const QString &jid, const QDateTime &start = QDateTime(), const QDateTime &end = QDateTime(),
+                          const QXmppResultSetQuery &rsm = QXmppResultSetQuery());
+    void listCollections (const QString &jid, const QDateTime &start, const QDateTime &end, int max);
+    void removeCollections (const QString &jid, const QDateTime &start = QDateTime(), const QDateTime &end = QDateTime());
+    void retrieveCollection (const QString &jid, const QDateTime &start, const QXmppResultSetQuery &rsm = QXmppResultSetQuery());
+    void retrieveCollection (const QString &jid, const QDateTime &start, int max);
 
-        /// \cond
-        QStringList discoveryFeatures() const;
-        bool handleStanza (const QDomElement &element);
-        /// \endcond
+    /// \cond
+    QStringList discoveryFeatures() const;
+    bool handleStanza (const QDomElement &element);
+    /// \endcond
 
-    signals:
-        /// This signal is emitted when archive list is received
-        /// after calling listCollections()
-        void archiveListReceived (const QList<QXmppArchiveChat>&, const QXmppResultSetReply &rsm = QXmppResultSetReply());
+  signals:
+    /// This signal is emitted when archive list is received
+    /// after calling listCollections()
+    void archiveListReceived (const QList<QXmppArchiveChat>&, const QXmppResultSetReply &rsm = QXmppResultSetReply());
 
-        /// This signal is emitted when archive chat is received
-        /// after calling retrieveCollection()
-        void archiveChatReceived (const QXmppArchiveChat&, const QXmppResultSetReply &rsm = QXmppResultSetReply());
+    /// This signal is emitted when archive chat is received
+    /// after calling retrieveCollection()
+    void archiveChatReceived (const QXmppArchiveChat&, const QXmppResultSetReply &rsm = QXmppResultSetReply());
 };
 
 #endif

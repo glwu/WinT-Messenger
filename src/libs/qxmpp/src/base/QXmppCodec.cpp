@@ -60,8 +60,7 @@
 #define SEG_SHIFT   (4)     /* Left shift for segment number. */
 #define SEG_MASK    (0x70)  /* Segment field mask. */
 
-enum FragmentType
-{
+enum FragmentType {
     NoFragment = 0,
     StartFragment,
     MiddleFragment,
@@ -75,12 +74,10 @@ static qint16 seg_uend[8] = {0x3F, 0x7F, 0xFF, 0x1FF,
                              0x3FF, 0x7FF, 0xFFF, 0x1FFF
                             };
 
-static qint16 search (qint16 val, qint16 *table, qint16 size)
-{
+static qint16 search (qint16 val, qint16 *table, qint16 size) {
     qint16 i;
 
-    for (i = 0; i < size; i++)
-    {
+    for (i = 0; i < size; i++) {
         if (val <= *table++)
             return (i);
     }
@@ -107,21 +104,18 @@ static qint16 search (qint16 val, qint16 *table, qint16 size)
  * For further information see John C. Bellamy's Digital Telephony, 1982,
  * John Wiley & Sons, pps 98-111 and 472-476.
  */
-static quint8 linear2alaw (qint16 pcm_val)
-{
+static quint8 linear2alaw (qint16 pcm_val) {
     qint16 mask;
     qint16 seg;
     quint8 aval;
 
     pcm_val = pcm_val >> 3;
 
-    if (pcm_val >= 0)
-    {
+    if (pcm_val >= 0) {
         mask = 0xD5;      /* sign (7th) bit = 1 */
     }
 
-    else
-    {
+    else {
         mask = 0x55;      /* sign bit = 0 */
         pcm_val = -pcm_val - 1;
     }
@@ -134,8 +128,7 @@ static quint8 linear2alaw (qint16 pcm_val)
     if (seg >= 8)        /* out of range, return maximum value. */
         return (quint8) (0x7F ^ mask);
 
-    else
-    {
+    else {
         aval = (quint8) seg << SEG_SHIFT;
 
         if (seg < 2)
@@ -152,8 +145,7 @@ static quint8 linear2alaw (qint16 pcm_val)
  * alaw2linear() - Convert an A-law value to 16-bit linear PCM
  *
  */
-static qint16 alaw2linear (quint8 a_val)
-{
+static qint16 alaw2linear (quint8 a_val) {
     qint16 t;
     qint16 seg;
 
@@ -162,8 +154,7 @@ static qint16 alaw2linear (quint8 a_val)
     t = (a_val & QUANT_MASK) << 4;
     seg = ((qint16)a_val & SEG_MASK) >> SEG_SHIFT;
 
-    switch (seg)
-    {
+    switch (seg) {
         case 0:
             t += 8;
             break;
@@ -209,8 +200,7 @@ static qint16 alaw2linear (quint8 a_val)
  * For further information see John C. Bellamy's Digital Telephony, 1982,
  * John Wiley & Sons, pps 98-111 and 472-476.
  */
-static quint8 linear2ulaw (qint16 pcm_val)
-{
+static quint8 linear2ulaw (qint16 pcm_val) {
     qint16 mask;
     qint16 seg;
     quint8 uval;
@@ -218,8 +208,7 @@ static quint8 linear2ulaw (qint16 pcm_val)
     /* Get the sign and the magnitude of the value. */
     pcm_val = pcm_val >> 2;
 
-    if (pcm_val < 0)
-    {
+    if (pcm_val < 0) {
         pcm_val = -pcm_val;
         mask = 0x7F;
     }
@@ -241,8 +230,7 @@ static quint8 linear2ulaw (qint16 pcm_val)
     if (seg >= 8)        /* out of range, return maximum value. */
         return (quint8) (0x7F ^ mask);
 
-    else
-    {
+    else {
         uval = (quint8) (seg << 4) | ((pcm_val >> (seg + 1)) & 0xF);
         return (uval ^ mask);
     }
@@ -257,8 +245,7 @@ static quint8 linear2ulaw (qint16 pcm_val)
  * Note that this function expects to be passed the complement of the
  * original code word. This is in keeping with ISDN conventions.
  */
-static qint16 ulaw2linear (quint8 u_val)
-{
+static qint16 ulaw2linear (quint8 u_val) {
     qint16 t;
 
     /* Complement to obtain normal u-law value. */
@@ -274,30 +261,24 @@ static qint16 ulaw2linear (quint8 u_val)
     return ((u_val & SIGN_BIT) ? (BIAS - t) : (t - BIAS));
 }
 
-QXmppCodec::~QXmppCodec()
-{
+QXmppCodec::~QXmppCodec() {
 }
 
-QXmppVideoDecoder::~QXmppVideoDecoder()
-{
+QXmppVideoDecoder::~QXmppVideoDecoder() {
 }
 
-QXmppVideoEncoder::~QXmppVideoEncoder()
-{
+QXmppVideoEncoder::~QXmppVideoEncoder() {
 }
 
-QXmppG711aCodec::QXmppG711aCodec (int clockrate)
-{
+QXmppG711aCodec::QXmppG711aCodec (int clockrate) {
     m_frequency = clockrate;
 }
 
-qint64 QXmppG711aCodec::encode (QDataStream &input, QDataStream &output)
-{
+qint64 QXmppG711aCodec::encode (QDataStream &input, QDataStream &output) {
     qint64 samples = 0;
     qint16 pcm;
 
-    while (!input.atEnd())
-    {
+    while (!input.atEnd()) {
         input >> pcm;
         output << linear2alaw (pcm);
         ++samples;
@@ -306,13 +287,11 @@ qint64 QXmppG711aCodec::encode (QDataStream &input, QDataStream &output)
     return samples;
 }
 
-qint64 QXmppG711aCodec::decode (QDataStream &input, QDataStream &output)
-{
+qint64 QXmppG711aCodec::decode (QDataStream &input, QDataStream &output) {
     qint64 samples = 0;
     quint8 g711;
 
-    while (!input.atEnd())
-    {
+    while (!input.atEnd()) {
         input >> g711;
         output << alaw2linear (g711);
         ++samples;
@@ -321,18 +300,15 @@ qint64 QXmppG711aCodec::decode (QDataStream &input, QDataStream &output)
     return samples;
 }
 
-QXmppG711uCodec::QXmppG711uCodec (int clockrate)
-{
+QXmppG711uCodec::QXmppG711uCodec (int clockrate) {
     m_frequency = clockrate;
 }
 
-qint64 QXmppG711uCodec::encode (QDataStream &input, QDataStream &output)
-{
+qint64 QXmppG711uCodec::encode (QDataStream &input, QDataStream &output) {
     qint64 samples = 0;
     qint16 pcm;
 
-    while (!input.atEnd())
-    {
+    while (!input.atEnd()) {
         input >> pcm;
         output << linear2ulaw (pcm);
         ++samples;
@@ -341,13 +317,11 @@ qint64 QXmppG711uCodec::encode (QDataStream &input, QDataStream &output)
     return samples;
 }
 
-qint64 QXmppG711uCodec::decode (QDataStream &input, QDataStream &output)
-{
+qint64 QXmppG711uCodec::decode (QDataStream &input, QDataStream &output) {
     qint64 samples = 0;
     quint8 g711;
 
-    while (!input.atEnd())
-    {
+    while (!input.atEnd()) {
         input >> g711;
         output << ulaw2linear (g711);
         ++samples;
@@ -357,8 +331,7 @@ qint64 QXmppG711uCodec::decode (QDataStream &input, QDataStream &output)
 }
 
 #ifdef QXMPP_USE_SPEEX
-QXmppSpeexCodec::QXmppSpeexCodec (int clockrate)
-{
+QXmppSpeexCodec::QXmppSpeexCodec (int clockrate) {
     const SpeexMode *mode = &speex_nb_mode;
 
     if (clockrate == 32000)
@@ -387,19 +360,16 @@ QXmppSpeexCodec::QXmppSpeexCodec (int clockrate)
     speex_encoder_ctl (encoder_state, SPEEX_GET_FRAME_SIZE, &frame_samples);
 }
 
-QXmppSpeexCodec::~QXmppSpeexCodec()
-{
+QXmppSpeexCodec::~QXmppSpeexCodec() {
     delete encoder_bits;
     delete decoder_bits;
 }
 
-qint64 QXmppSpeexCodec::encode (QDataStream &input, QDataStream &output)
-{
+qint64 QXmppSpeexCodec::encode (QDataStream &input, QDataStream &output) {
     QByteArray pcm_buffer (frame_samples * 2, 0);
     const int length = input.readRawData (pcm_buffer.data(), pcm_buffer.size());
 
-    if (length != pcm_buffer.size())
-    {
+    if (length != pcm_buffer.size()) {
         qWarning() << "Read only read" << length << "bytes";
         return 0;
     }
@@ -412,8 +382,7 @@ qint64 QXmppSpeexCodec::encode (QDataStream &input, QDataStream &output)
     return frame_samples;
 }
 
-qint64 QXmppSpeexCodec::decode (QDataStream &input, QDataStream &output)
-{
+qint64 QXmppSpeexCodec::decode (QDataStream &input, QDataStream &output) {
     const int length = input.device()->bytesAvailable();
     QByteArray speex_buffer (length, 0);
     input.readRawData (speex_buffer.data(), speex_buffer.size());
@@ -428,21 +397,19 @@ qint64 QXmppSpeexCodec::decode (QDataStream &input, QDataStream &output)
 
 #ifdef QXMPP_USE_THEORA
 
-class QXmppTheoraDecoderPrivate
-{
-    public:
-        bool decodeFrame (const QByteArray &buffer, QXmppVideoFrame *frame);
+class QXmppTheoraDecoderPrivate {
+  public:
+    bool decodeFrame (const QByteArray &buffer, QXmppVideoFrame *frame);
 
-        th_comment comment;
-        th_info info;
-        th_setup_info *setup_info;
-        th_dec_ctx *ctx;
+    th_comment comment;
+    th_info info;
+    th_setup_info *setup_info;
+    th_dec_ctx *ctx;
 
-        QByteArray packetBuffer;
+    QByteArray packetBuffer;
 };
 
-bool QXmppTheoraDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVideoFrame *frame)
-{
+bool QXmppTheoraDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVideoFrame *frame) {
     if (!ctx)
         return false;
 
@@ -454,24 +421,20 @@ bool QXmppTheoraDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVide
     packet.granulepos = -1;
     packet.packetno = 0;
 
-    if (th_decode_packetin (ctx, &packet, 0) != 0)
-    {
+    if (th_decode_packetin (ctx, &packet, 0) != 0) {
         qWarning ("Theora packet could not be decoded");
         return false;
     }
 
     th_ycbcr_buffer ycbcr_buffer;
 
-    if (th_decode_ycbcr_out (ctx, ycbcr_buffer) != 0)
-    {
+    if (th_decode_ycbcr_out (ctx, ycbcr_buffer) != 0) {
         qWarning ("Theora packet has no Y'CbCr");
         return false;
     }
 
-    if (info.pixel_fmt == TH_PF_420)
-    {
-        if (!frame->isValid())
-        {
+    if (info.pixel_fmt == TH_PF_420) {
+        if (!frame->isValid()) {
             const int bytes = ycbcr_buffer[0].stride * ycbcr_buffer[0].height
                               + ycbcr_buffer[1].stride * ycbcr_buffer[1].height
                               + ycbcr_buffer[2].stride * ycbcr_buffer[2].height;
@@ -484,8 +447,7 @@ bool QXmppTheoraDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVide
 
         uchar *output = frame->bits();
 
-        for (int i = 0; i < 3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             const int length = ycbcr_buffer[i].stride * ycbcr_buffer[i].height;
             memcpy (output, ycbcr_buffer[i].data, length);
             output += length;
@@ -494,10 +456,8 @@ bool QXmppTheoraDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVide
         return true;
     }
 
-    else if (info.pixel_fmt == TH_PF_422)
-    {
-        if (!frame->isValid())
-        {
+    else if (info.pixel_fmt == TH_PF_422) {
+        if (!frame->isValid()) {
             const int bytes = ycbcr_buffer[0].width * ycbcr_buffer[0].height * 2;
 
             *frame = QXmppVideoFrame (bytes,
@@ -516,14 +476,12 @@ bool QXmppTheoraDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVide
         const uchar *cr_row = ycbcr_buffer[2].data;
         uchar *output = frame->bits();
 
-        for (int y = 0; y < height; ++y)
-        {
+        for (int y = 0; y < height; ++y) {
             const uchar *y_ptr = y_row;
             const uchar *cb_ptr = cb_row;
             const uchar *cr_ptr = cr_row;
 
-            for (int x = 0; x < width; x += 2)
-            {
+            for (int x = 0; x < width; x += 2) {
                 * (output++) = * (y_ptr++);
                 * (output++) = * (cb_ptr++);
                 * (output++) = * (y_ptr++);
@@ -538,15 +496,13 @@ bool QXmppTheoraDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVide
         return true;
     }
 
-    else
-    {
+    else {
         qWarning ("Theora decoder received an unsupported frame format");
         return false;
     }
 }
 
-QXmppTheoraDecoder::QXmppTheoraDecoder()
-{
+QXmppTheoraDecoder::QXmppTheoraDecoder() {
     d = new QXmppTheoraDecoderPrivate;
     th_comment_init (&d->comment);
     th_info_init (&d->info);
@@ -554,8 +510,7 @@ QXmppTheoraDecoder::QXmppTheoraDecoder()
     d->ctx = 0;
 }
 
-QXmppTheoraDecoder::~QXmppTheoraDecoder()
-{
+QXmppTheoraDecoder::~QXmppTheoraDecoder() {
     th_comment_clear (&d->comment);
     th_info_clear (&d->info);
 
@@ -568,8 +523,7 @@ QXmppTheoraDecoder::~QXmppTheoraDecoder()
     delete d;
 }
 
-QXmppVideoFormat QXmppTheoraDecoder::format() const
-{
+QXmppVideoFormat QXmppTheoraDecoder::format() const {
     QXmppVideoFormat format;
     format.setFrameSize (QSize (d->info.frame_width, d->info.frame_height));
 
@@ -588,8 +542,7 @@ QXmppVideoFormat QXmppTheoraDecoder::format() const
     return format;
 }
 
-QList<QXmppVideoFrame> QXmppTheoraDecoder::handlePacket (const QXmppRtpPacket &packet)
-{
+QList<QXmppVideoFrame> QXmppTheoraDecoder::handlePacket (const QXmppRtpPacket &packet) {
     QList<QXmppVideoFrame> frames;
 
     // theora deframing: draft-ietf-avt-rtp-theora-00
@@ -612,15 +565,12 @@ QList<QXmppVideoFrame> QXmppTheoraDecoder::handlePacket (const QXmppRtpPacket &p
     QXmppVideoFrame frame;
     quint16 packetLength;
 
-    if (theora_frag == NoFragment)
-    {
+    if (theora_frag == NoFragment) {
         // unfragmented packet(s)
-        for (int i = 0; i < theora_packets; ++i)
-        {
+        for (int i = 0; i < theora_packets; ++i) {
             stream >> packetLength;
 
-            if (packetLength > stream.device()->bytesAvailable())
-            {
+            if (packetLength > stream.device()->bytesAvailable()) {
                 qWarning ("Theora unfragmented packet has an invalid length");
                 return frames;
             }
@@ -635,28 +585,24 @@ QList<QXmppVideoFrame> QXmppTheoraDecoder::handlePacket (const QXmppRtpPacket &p
         }
     }
 
-    else
-    {
+    else {
         // fragments
         stream >> packetLength;
 
-        if (packetLength > stream.device()->bytesAvailable())
-        {
+        if (packetLength > stream.device()->bytesAvailable()) {
             qWarning ("Theora packet has an invalid length");
             return frames;
         }
 
         int pos;
 
-        if (theora_frag == StartFragment)
-        {
+        if (theora_frag == StartFragment) {
             // start fragment
             pos = 0;
             d->packetBuffer.resize (packetLength);
         }
 
-        else
-        {
+        else {
             // continuation or end fragment
             pos = d->packetBuffer.size();
             d->packetBuffer.resize (pos + packetLength);
@@ -664,8 +610,7 @@ QList<QXmppVideoFrame> QXmppTheoraDecoder::handlePacket (const QXmppRtpPacket &p
 
         stream.readRawData (d->packetBuffer.data() + pos, packetLength);
 
-        if (theora_frag == EndFragment)
-        {
+        if (theora_frag == EndFragment) {
             // end fragment
             if (d->decodeFrame (d->packetBuffer, &frame))
                 frames << frame;
@@ -677,14 +622,12 @@ QList<QXmppVideoFrame> QXmppTheoraDecoder::handlePacket (const QXmppRtpPacket &p
     return frames;
 }
 
-bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters)
-{
+bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters) {
     QByteArray config = QByteArray::fromBase64 (parameters.value ("configuration").toLatin1());
     QDataStream stream (config);
     const QIODevice *device = stream.device();
 
-    if (device->bytesAvailable() < 4)
-    {
+    if (device->bytesAvailable() < 4) {
         qWarning ("Theora configuration is too small");
         return false;
     }
@@ -694,10 +637,8 @@ bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters
     quint32 header_count;
     stream >> header_count;
 
-    for (quint32 i = 0; i < header_count; ++i)
-    {
-        if (device->bytesAvailable() < 6)
-        {
+    for (quint32 i = 0; i < header_count; ++i) {
+        if (device->bytesAvailable() < 6) {
             qWarning ("Theora configuration is too small");
             return false;
         }
@@ -716,15 +657,12 @@ bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters
         // get header sizes
         QList<qint64> h_sizes;
 
-        for (int h = 0; h < h_count; ++h)
-        {
+        for (int h = 0; h < h_count; ++h) {
             quint16 h_size = 0;
             quint8 b;
 
-            do
-            {
-                if (device->bytesAvailable() < 1)
-                {
+            do {
+                if (device->bytesAvailable() < 1) {
                     qWarning ("Theora configuration is too small");
                     return false;
                 }
@@ -753,10 +691,8 @@ bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters
         packet.granulepos = -1;
         packet.packetno = 0;
 
-        foreach (int h_size, h_sizes)
-        {
-            if (device->bytesAvailable() < h_size)
-            {
+        foreach (int h_size, h_sizes) {
+            if (device->bytesAvailable() < h_size) {
                 qWarning ("Theora configuration is too small");
                 return false;
             }
@@ -765,8 +701,7 @@ bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters
             packet.bytes = h_size;
             int ret = th_decode_headerin (&d->info, &d->comment, &d->setup_info, &packet);
 
-            if (ret < 0)
-            {
+            if (ret < 0) {
                 qWarning ("Theora header could not be decoded");
                 return false;
             }
@@ -777,8 +712,7 @@ bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters
     }
 
     // check for completion
-    if (done < 3)
-    {
+    if (done < 3) {
         qWarning ("Theora configuration did not contain enough headers");
         return false;
     }
@@ -794,8 +728,7 @@ bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters
             d->info.keyframe_granule_shift);
 #endif
 
-    if (d->info.pixel_fmt != TH_PF_420 && d->info.pixel_fmt != TH_PF_422)
-    {
+    if (d->info.pixel_fmt != TH_PF_420 && d->info.pixel_fmt != TH_PF_422) {
         qWarning ("Theora frames have an unsupported pixel format %d", d->info.pixel_fmt);
         return false;
     }
@@ -805,8 +738,7 @@ bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters
 
     d->ctx = th_decode_alloc (&d->info, d->setup_info);
 
-    if (!d->ctx)
-    {
+    if (!d->ctx) {
         qWarning ("Theora decoder could not be allocated");
         return false;
     }
@@ -814,24 +746,22 @@ bool QXmppTheoraDecoder::setParameters (const QMap<QString, QString> &parameters
     return true;
 }
 
-class QXmppTheoraEncoderPrivate
-{
-    public:
-        void writeFragment (QDataStream &stream, FragmentType frag_type, quint8 theora_packets, const char *data, quint16 length);
+class QXmppTheoraEncoderPrivate {
+  public:
+    void writeFragment (QDataStream &stream, FragmentType frag_type, quint8 theora_packets, const char *data, quint16 length);
 
-        th_comment comment;
-        th_info info;
-        th_setup_info *setup_info;
-        th_enc_ctx *ctx;
-        th_ycbcr_buffer ycbcr_buffer;
+    th_comment comment;
+    th_info info;
+    th_setup_info *setup_info;
+    th_enc_ctx *ctx;
+    th_ycbcr_buffer ycbcr_buffer;
 
-        QByteArray buffer;
-        QByteArray configuration;
-        QByteArray ident;
+    QByteArray buffer;
+    QByteArray configuration;
+    QByteArray ident;
 };
 
-void QXmppTheoraEncoderPrivate::writeFragment (QDataStream &stream, FragmentType frag_type, quint8 theora_packets, const char *data, quint16 length)
-{
+void QXmppTheoraEncoderPrivate::writeFragment (QDataStream &stream, FragmentType frag_type, quint8 theora_packets, const char *data, quint16 length) {
     // theora framing: draft-ietf-avt-rtp-theora-00
     const quint8 theora_type = 0; // raw data
     stream.writeRawData (ident.constData(), ident.size());
@@ -842,8 +772,7 @@ void QXmppTheoraEncoderPrivate::writeFragment (QDataStream &stream, FragmentType
     stream.writeRawData (data, length);
 }
 
-QXmppTheoraEncoder::QXmppTheoraEncoder()
-{
+QXmppTheoraEncoder::QXmppTheoraEncoder() {
     d = new QXmppTheoraEncoderPrivate;
     d->ident = QByteArray ("\xc3\x45\xae");
     th_comment_init (&d->comment);
@@ -852,8 +781,7 @@ QXmppTheoraEncoder::QXmppTheoraEncoder()
     d->ctx = 0;
 }
 
-QXmppTheoraEncoder::~QXmppTheoraEncoder()
-{
+QXmppTheoraEncoder::~QXmppTheoraEncoder() {
     th_comment_clear (&d->comment);
     th_info_clear (&d->info);
 
@@ -866,13 +794,11 @@ QXmppTheoraEncoder::~QXmppTheoraEncoder()
     delete d;
 }
 
-bool QXmppTheoraEncoder::setFormat (const QXmppVideoFormat &format)
-{
+bool QXmppTheoraEncoder::setFormat (const QXmppVideoFormat &format) {
     const QXmppVideoFrame::PixelFormat pixelFormat = format.pixelFormat();
 
     if ((pixelFormat != QXmppVideoFrame::Format_YUV420P) &&
-            (pixelFormat != QXmppVideoFrame::Format_YUYV))
-    {
+            (pixelFormat != QXmppVideoFrame::Format_YUYV)) {
         qWarning ("Theora encoder does not support the given format");
         return false;
     }
@@ -892,8 +818,7 @@ bool QXmppTheoraEncoder::setFormat (const QXmppVideoFormat &format)
     d->info.fps_numerator = format.frameRate();
     d->info.fps_denominator = 1;
 
-    if (pixelFormat == QXmppVideoFrame::Format_YUV420P)
-    {
+    if (pixelFormat == QXmppVideoFrame::Format_YUV420P) {
         d->info.pixel_fmt = TH_PF_420;
         d->ycbcr_buffer[0].width = d->info.frame_width;
         d->ycbcr_buffer[0].height = d->info.frame_height;
@@ -903,8 +828,7 @@ bool QXmppTheoraEncoder::setFormat (const QXmppVideoFormat &format)
         d->ycbcr_buffer[2].height = d->ycbcr_buffer[1].height;
     }
 
-    else if (pixelFormat == QXmppVideoFrame::Format_YUYV)
-    {
+    else if (pixelFormat == QXmppVideoFrame::Format_YUYV) {
         d->info.pixel_fmt = TH_PF_422;
         d->buffer.resize (d->info.frame_width * d->info.frame_height * 2);
         d->ycbcr_buffer[0].width = d->info.frame_width;
@@ -922,16 +846,14 @@ bool QXmppTheoraEncoder::setFormat (const QXmppVideoFormat &format)
     }
 
     // create encoder
-    if (d->ctx)
-    {
+    if (d->ctx) {
         th_encode_free (d->ctx);
         d->ctx = 0;
     }
 
     d->ctx = th_encode_alloc (&d->info);
 
-    if (!d->ctx)
-    {
+    if (!d->ctx) {
         qWarning ("Theora encoder could not be allocated");
         return false;
     }
@@ -961,12 +883,10 @@ bool QXmppTheoraEncoder::setFormat (const QXmppVideoFormat &format)
 #endif
 
     // write header sizes
-    for (int h = 0; h < h_count; ++h)
-    {
+    for (int h = 0; h < h_count; ++h) {
         quint16 h_size = headers[h].size();
 
-        do
-        {
+        do {
             quint8 b = (h_size & 0x7f);
             h_size >>= 7;
 
@@ -979,8 +899,7 @@ bool QXmppTheoraEncoder::setFormat (const QXmppVideoFormat &format)
     }
 
     // write headers
-    for (int h = 0; h < headers.size(); ++h)
-    {
+    for (int h = 0; h < headers.size(); ++h) {
 #ifdef QXMPP_DEBUG_THEORA
         qDebug ("Header %d size %d", h, headers[h].size());
 #endif
@@ -990,16 +909,14 @@ bool QXmppTheoraEncoder::setFormat (const QXmppVideoFormat &format)
     return true;
 }
 
-QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame)
-{
+QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame) {
     QList<QByteArray> packets;
     const int PACKET_MAX = 1388;
 
     if (!d->ctx)
         return packets;
 
-    if (d->info.pixel_fmt == TH_PF_420)
-    {
+    if (d->info.pixel_fmt == TH_PF_420) {
         d->ycbcr_buffer[0].stride = frame.bytesPerLine();
         d->ycbcr_buffer[0].data = (unsigned char *) frame.bits();
         d->ycbcr_buffer[1].stride = d->ycbcr_buffer[0].stride / 2;
@@ -1008,8 +925,7 @@ QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame)
         d->ycbcr_buffer[2].data = d->ycbcr_buffer[1].data + d->ycbcr_buffer[1].stride * d->ycbcr_buffer[1].height;
     }
 
-    else if (d->info.pixel_fmt == TH_PF_422)
-    {
+    else if (d->info.pixel_fmt == TH_PF_422) {
         // YUV 4:2:2 unpacking
         const int width = frame.width();
         const int height = frame.height();
@@ -1019,12 +935,10 @@ QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame)
         uchar *cb_out = d->ycbcr_buffer[1].data;
         uchar *cr_out = d->ycbcr_buffer[2].data;
 
-        for (int y = 0; y < height; ++y)
-        {
+        for (int y = 0; y < height; ++y) {
             const uchar *ptr = row;
 
-            for (int x = 0; x < width; x += 2)
-            {
+            for (int x = 0; x < width; x += 2) {
                 * (y_out++) = * (ptr++);
                 * (cb_out++) = * (ptr++);
                 * (y_out++) = * (ptr++);
@@ -1035,14 +949,12 @@ QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame)
         }
     }
 
-    else
-    {
+    else {
         qWarning ("Theora encoder received an unsupported frame format");
         return packets;
     }
 
-    if (th_encode_ycbcr_in (d->ctx, d->ycbcr_buffer) != 0)
-    {
+    if (th_encode_ycbcr_in (d->ctx, d->ycbcr_buffer) != 0) {
         qWarning ("Theora encoder could not handle frame");
         return packets;
     }
@@ -1050,8 +962,7 @@ QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame)
     QByteArray payload;
     ogg_packet packet;
 
-    while (th_encode_packetout (d->ctx, 0, &packet) > 0)
-    {
+    while (th_encode_packetout (d->ctx, 0, &packet) > 0) {
 #ifdef QXMPP_DEBUG_THEORA
         qDebug ("Theora encoded packet %d bytes", packet.bytes);
 #endif
@@ -1059,8 +970,7 @@ QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame)
         const char *data = (const char *) packet.packet;
         int size = packet.bytes;
 
-        if (size <= PACKET_MAX)
-        {
+        if (size <= PACKET_MAX) {
             // no fragmentation
             stream.device()->reset();
             payload.resize (0);
@@ -1068,13 +978,11 @@ QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame)
             packets << payload;
         }
 
-        else
-        {
+        else {
             // fragmentation
             FragmentType frag_type = StartFragment;
 
-            while (size)
-            {
+            while (size) {
                 const int length = qMin (PACKET_MAX, size);
                 stream.device()->reset();
                 payload.resize (0);
@@ -1090,12 +998,10 @@ QList<QByteArray> QXmppTheoraEncoder::handleFrame (const QXmppVideoFrame &frame)
     return packets;
 }
 
-QMap<QString, QString> QXmppTheoraEncoder::parameters() const
-{
+QMap<QString, QString> QXmppTheoraEncoder::parameters() const {
     QMap<QString, QString> params;
 
-    if (d->ctx)
-    {
+    if (d->ctx) {
         params.insert ("delivery-method", "inline");
         params.insert ("configuration", d->configuration.toBase64());
     }
@@ -1107,19 +1013,16 @@ QMap<QString, QString> QXmppTheoraEncoder::parameters() const
 
 #ifdef QXMPP_USE_VPX
 
-class QXmppVpxDecoderPrivate
-{
-    public:
-        bool decodeFrame (const QByteArray &buffer, QXmppVideoFrame *frame);
+class QXmppVpxDecoderPrivate {
+  public:
+    bool decodeFrame (const QByteArray &buffer, QXmppVideoFrame *frame);
 
-        vpx_codec_ctx_t codec;
-        QByteArray packetBuffer;
+    vpx_codec_ctx_t codec;
+    QByteArray packetBuffer;
 };
 
-bool QXmppVpxDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVideoFrame *frame)
-{
-    if (vpx_codec_decode (&codec, (const uint8_t *)buffer.constData(), buffer.size(), NULL, 0) != VPX_CODEC_OK)
-    {
+bool QXmppVpxDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVideoFrame *frame) {
+    if (vpx_codec_decode (&codec, (const uint8_t *)buffer.constData(), buffer.size(), NULL, 0) != VPX_CODEC_OK) {
         qWarning ("Vpx packet could not be decoded: %s", vpx_codec_error_detail (&codec));
         return false;
     }
@@ -1127,12 +1030,9 @@ bool QXmppVpxDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVideoFr
     vpx_codec_iter_t iter = NULL;
     vpx_image_t *img;
 
-    while ((img = vpx_codec_get_frame (&codec, &iter)))
-    {
-        if (img->fmt == VPX_IMG_FMT_I420)
-        {
-            if (!frame->isValid())
-            {
+    while ((img = vpx_codec_get_frame (&codec, &iter))) {
+        if (img->fmt == VPX_IMG_FMT_I420) {
+            if (!frame->isValid()) {
                 const int bytes = img->d_w * img->d_h * 3 / 2;
 
                 *frame = QXmppVideoFrame (bytes,
@@ -1143,13 +1043,11 @@ bool QXmppVpxDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVideoFr
 
             uchar *output = frame->bits();
 
-            for (int i = 0; i < 3; ++i)
-            {
+            for (int i = 0; i < 3; ++i) {
                 uchar *input = img->planes[i];
                 const int div = (i == 0) ? 1 : 2;
 
-                for (unsigned int y = 0; y < img->d_h / div; ++y)
-                {
+                for (unsigned int y = 0; y < img->d_h / div; ++y) {
                     memcpy (output, input, img->d_w / div);
                     input += img->stride[i];
                     output += img->d_w / div;
@@ -1164,22 +1062,19 @@ bool QXmppVpxDecoderPrivate::decodeFrame (const QByteArray &buffer, QXmppVideoFr
     return true;
 }
 
-QXmppVpxDecoder::QXmppVpxDecoder()
-{
+QXmppVpxDecoder::QXmppVpxDecoder() {
     d = new QXmppVpxDecoderPrivate;
 
     if (vpx_codec_dec_init (&d->codec, vpx_codec_vp8_dx(), NULL, 0) != VPX_CODEC_OK)
         qWarning ("Vpx decoder could not be initialised");
 }
 
-QXmppVpxDecoder::~QXmppVpxDecoder()
-{
+QXmppVpxDecoder::~QXmppVpxDecoder() {
     vpx_codec_destroy (&d->codec);
     delete d;
 }
 
-QXmppVideoFormat QXmppVpxDecoder::format() const
-{
+QXmppVideoFormat QXmppVpxDecoder::format() const {
     QXmppVideoFormat format;
     format.setFrameRate (15.0);
     format.setFrameSize (QSize (320, 240));
@@ -1187,8 +1082,7 @@ QXmppVideoFormat QXmppVpxDecoder::format() const
     return format;
 }
 
-QList<QXmppVideoFrame> QXmppVpxDecoder::handlePacket (const QXmppRtpPacket &packet)
-{
+QList<QXmppVideoFrame> QXmppVpxDecoder::handlePacket (const QXmppRtpPacket &packet) {
     QList<QXmppVideoFrame> frames;
 
     // vp8 deframing: http://tools.ietf.org/html/draft-westin-payload-vp8-00
@@ -1199,8 +1093,7 @@ QList<QXmppVideoFrame> QXmppVpxDecoder::handlePacket (const QXmppRtpPacket &pack
     const bool have_id = (vpx_header & 0x10) != 0;
     const quint8 frag_type = (vpx_header & 0x6) >> 1;
 
-    if (have_id)
-    {
+    if (have_id) {
         qWarning ("Vpx decoder does not support pictureId yet");
         return frames;
     }
@@ -1212,8 +1105,7 @@ QList<QXmppVideoFrame> QXmppVpxDecoder::handlePacket (const QXmppRtpPacket &pack
 
     QXmppVideoFrame frame;
 
-    if (frag_type == NoFragment)
-    {
+    if (frag_type == NoFragment) {
         // unfragmented packet
         if (d->decodeFrame (packet.payload.mid (1), &frame))
             frames << frame;
@@ -1221,25 +1113,21 @@ QList<QXmppVideoFrame> QXmppVpxDecoder::handlePacket (const QXmppRtpPacket &pack
         d->packetBuffer.resize (0);
     }
 
-    else
-    {
+    else {
         // fragments
-        if (frag_type == StartFragment)
-        {
+        if (frag_type == StartFragment) {
             // start fragment
             d->packetBuffer = packet.payload.mid (1);
         }
 
-        else
-        {
+        else {
             // continuation or end fragment
             const int packetPos = d->packetBuffer.size();
             d->packetBuffer.resize (packetPos + packetLength);
             stream.readRawData (d->packetBuffer.data() + packetPos, packetLength);
         }
 
-        if (frag_type == EndFragment)
-        {
+        if (frag_type == EndFragment) {
             // end fragment
             if (d->decodeFrame (d->packetBuffer, &frame))
                 frames << frame;
@@ -1252,24 +1140,21 @@ QList<QXmppVideoFrame> QXmppVpxDecoder::handlePacket (const QXmppRtpPacket &pack
     return frames;
 }
 
-bool QXmppVpxDecoder::setParameters (const QMap<QString, QString> &parameters)
-{
+bool QXmppVpxDecoder::setParameters (const QMap<QString, QString> &parameters) {
     return true;
 }
 
-class QXmppVpxEncoderPrivate
-{
-    public:
-        void writeFragment (QDataStream &stream, FragmentType frag_type, const char *data, quint16 length);
+class QXmppVpxEncoderPrivate {
+  public:
+    void writeFragment (QDataStream &stream, FragmentType frag_type, const char *data, quint16 length);
 
-        vpx_codec_ctx_t codec;
-        vpx_codec_enc_cfg_t cfg;
-        vpx_image_t *imageBuffer;
-        int frameCount;
+    vpx_codec_ctx_t codec;
+    vpx_codec_enc_cfg_t cfg;
+    vpx_image_t *imageBuffer;
+    int frameCount;
 };
 
-void QXmppVpxEncoderPrivate::writeFragment (QDataStream &stream, FragmentType frag_type, const char *data, quint16 length)
-{
+void QXmppVpxEncoderPrivate::writeFragment (QDataStream &stream, FragmentType frag_type, const char *data, quint16 length) {
     // vp8 framing: http://tools.ietf.org/html/draft-westin-payload-vp8-00
 #ifdef QXMPP_DEBUG_VPX
     qDebug ("Vpx encoder writing packet frag: %i, size: %u", frag_type, length);
@@ -1279,16 +1164,14 @@ void QXmppVpxEncoderPrivate::writeFragment (QDataStream &stream, FragmentType fr
     stream.writeRawData (data, length);
 }
 
-QXmppVpxEncoder::QXmppVpxEncoder()
-{
+QXmppVpxEncoder::QXmppVpxEncoder() {
     d = new QXmppVpxEncoderPrivate;
     d->frameCount = 0;
     d->imageBuffer = 0;
     vpx_codec_enc_config_default (vpx_codec_vp8_cx(), &d->cfg, 0);
 }
 
-QXmppVpxEncoder::~QXmppVpxEncoder()
-{
+QXmppVpxEncoder::~QXmppVpxEncoder() {
     vpx_codec_destroy (&d->codec);
 
     if (d->imageBuffer)
@@ -1297,12 +1180,10 @@ QXmppVpxEncoder::~QXmppVpxEncoder()
     delete d;
 }
 
-bool QXmppVpxEncoder::setFormat (const QXmppVideoFormat &format)
-{
+bool QXmppVpxEncoder::setFormat (const QXmppVideoFormat &format) {
     const QXmppVideoFrame::PixelFormat pixelFormat = format.pixelFormat();
 
-    if (pixelFormat != QXmppVideoFrame::Format_YUYV)
-    {
+    if (pixelFormat != QXmppVideoFrame::Format_YUYV) {
         qWarning ("Vpx encoder does not support the given format");
         return false;
     }
@@ -1311,8 +1192,7 @@ bool QXmppVpxEncoder::setFormat (const QXmppVideoFormat &format)
     d->cfg.g_w = format.frameSize().width();
     d->cfg.g_h = format.frameSize().height();
 
-    if (vpx_codec_enc_init (&d->codec, vpx_codec_vp8_cx(), &d->cfg, 0) != VPX_CODEC_OK)
-    {
+    if (vpx_codec_enc_init (&d->codec, vpx_codec_vp8_cx(), &d->cfg, 0) != VPX_CODEC_OK) {
         qWarning ("Vpx encoder could not be initialised");
         return false;
     }
@@ -1322,14 +1202,12 @@ bool QXmppVpxEncoder::setFormat (const QXmppVideoFormat &format)
     return true;
 }
 
-QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame)
-{
+QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame) {
     const int PACKET_MAX = 1388;
     QList<QByteArray> packets;
 
     // try to encode frame
-    if (frame.pixelFormat() == QXmppVideoFrame::Format_YUYV)
-    {
+    if (frame.pixelFormat() == QXmppVideoFrame::Format_YUYV) {
         // YUYV -> YUV420P
         const int width = frame.width();
         const int height = frame.height();
@@ -1339,16 +1217,14 @@ QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame)
         uchar *cb_row = d->imageBuffer->planes[VPX_PLANE_U];
         uchar *cr_row = d->imageBuffer->planes[VPX_PLANE_V];
 
-        for (int y = 0; y < height; y += 2)
-        {
+        for (int y = 0; y < height; y += 2) {
             // odd row
             const uchar *ptr = row;
             uchar *y_out = y_row;
             uchar *cb_out = cb_row;
             uchar *cr_out = cr_row;
 
-            for (int x = 0; x < width; x += 2)
-            {
+            for (int x = 0; x < width; x += 2) {
                 * (y_out++) = * (ptr++);
                 * (cb_out++) = * (ptr++);
                 * (y_out++) = * (ptr++);
@@ -1364,8 +1240,7 @@ QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame)
             ptr = row;
             y_out = y_row;
 
-            for (int x = 0; x < width; x += 2)
-            {
+            for (int x = 0; x < width; x += 2) {
                 * (y_out++) = * (ptr++);
                 ptr++;
                 * (y_out++) = * (ptr++);
@@ -1377,14 +1252,12 @@ QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame)
         }
     }
 
-    else
-    {
+    else {
         qWarning ("Vpx encoder does not support the given format");
         return packets;
     }
 
-    if (vpx_codec_encode (&d->codec, d->imageBuffer, d->frameCount, 1,  0, VPX_DL_REALTIME) != VPX_CODEC_OK)
-    {
+    if (vpx_codec_encode (&d->codec, d->imageBuffer, d->frameCount, 1,  0, VPX_DL_REALTIME) != VPX_CODEC_OK) {
         qWarning ("Vpx encoder could not handle frame: %s", vpx_codec_error_detail (&d->codec));
         return packets;
     }
@@ -1394,10 +1267,8 @@ QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame)
     vpx_codec_iter_t iter = NULL;
     const vpx_codec_cx_pkt_t *pkt;
 
-    while ((pkt = vpx_codec_get_cx_data (&d->codec, &iter)))
-    {
-        if (pkt->kind == VPX_CODEC_CX_FRAME_PKT)
-        {
+    while ((pkt = vpx_codec_get_cx_data (&d->codec, &iter))) {
+        if (pkt->kind == VPX_CODEC_CX_FRAME_PKT) {
 #ifdef QXMPP_DEBUG_VPX
             qDebug ("Vpx encoded packet %lu bytes", pkt->data.frame.sz);
 #endif
@@ -1405,8 +1276,7 @@ QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame)
             const char *data = (const char *) pkt->data.frame.buf;
             int size = pkt->data.frame.sz;
 
-            if (size <= PACKET_MAX)
-            {
+            if (size <= PACKET_MAX) {
                 // no fragmentation
                 stream.device()->reset();
                 payload.resize (0);
@@ -1414,13 +1284,11 @@ QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame)
                 packets << payload;
             }
 
-            else
-            {
+            else {
                 // fragmentation
                 FragmentType frag_type = StartFragment;
 
-                while (size)
-                {
+                while (size) {
                     const int length = qMin (PACKET_MAX, size);
                     stream.device()->reset();
                     payload.resize (0);
@@ -1439,8 +1307,7 @@ QList<QByteArray> QXmppVpxEncoder::handleFrame (const QXmppVideoFrame &frame)
     return packets;
 }
 
-QMap<QString, QString> QXmppVpxEncoder::parameters() const
-{
+QMap<QString, QString> QXmppVpxEncoder::parameters() const {
     return QMap<QString, QString>();
 }
 

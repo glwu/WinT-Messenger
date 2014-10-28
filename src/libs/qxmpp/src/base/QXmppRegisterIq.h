@@ -35,40 +35,39 @@
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppRegisterIq : public QXmppIq
-{
-    public:
-        QString email() const;
-        void setEmail (const QString &email);
+class QXMPP_EXPORT QXmppRegisterIq : public QXmppIq {
+  public:
+    QString email() const;
+    void setEmail (const QString &email);
 
-        QXmppDataForm form() const;
-        void setForm (const QXmppDataForm &form);
+    QXmppDataForm form() const;
+    void setForm (const QXmppDataForm &form);
 
-        QString instructions() const;
-        void setInstructions (const QString &instructions);
+    QString instructions() const;
+    void setInstructions (const QString &instructions);
 
-        QString password() const;
-        void setPassword (const QString &username);
+    QString password() const;
+    void setPassword (const QString &username);
 
-        QString username() const;
-        void setUsername (const QString &username);
+    QString username() const;
+    void setUsername (const QString &username);
 
-        /// \cond
-        static bool isRegisterIq (const QDomElement &element);
-        /// \endcond
+    /// \cond
+    static bool isRegisterIq (const QDomElement &element);
+    /// \endcond
 
-    protected:
-        /// \cond
-        void parseElementFromChild (const QDomElement &element);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    /// \cond
+    void parseElementFromChild (const QDomElement &element);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QXmppDataForm m_form;
-        QString m_email;
-        QString m_instructions;
-        QString m_password;
-        QString m_username;
+  private:
+    QXmppDataForm m_form;
+    QString m_email;
+    QString m_instructions;
+    QString m_password;
+    QString m_username;
 };
 
 #endif

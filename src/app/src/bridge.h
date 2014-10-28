@@ -10,7 +10,6 @@
 #ifndef BRIDGE_H
 #define BRIDGE_H
 
-#include <QSound>
 #include <QImage>
 #include <QClipboard>
 #include <QFileDialog>
@@ -24,96 +23,70 @@
 #include "image_provider.h"
 #include "device_manager.h"
 
-class Bridge : public QObject
-{
-        Q_OBJECT
+class Bridge : public QObject {
+    Q_OBJECT
 
-    public:
+  public:
 
-        Bridge();
+    Bridge();
 
-        /// Stops the current instance of QChat
-        Q_INVOKABLE void stopLanChat();
+    Q_INVOKABLE void stopLanChat();
+    Q_INVOKABLE void startLanChat();
 
-        /// Starts a new instance of QChat
-        Q_INVOKABLE void startLanChat();
+    Q_INVOKABLE void stopXmpp();
+    Q_INVOKABLE void startXmpp (QString jid, QString passwd);
 
-        /// Stops the current instance of Xmpp
-        Q_INVOKABLE void stopXmpp();
+    Q_INVOKABLE QString getId (QString nickname);
+    Q_INVOKABLE void shareFiles (const QString& peer);
+    Q_INVOKABLE QString manageSmileys (const QString &data);
+    Q_INVOKABLE void sendStatus (const QString &to, const QString &status);
+    Q_INVOKABLE void sendMessage (const QString& to, const QString &message);
 
-        /// Starts a new instance of Xmpp
-        Q_INVOKABLE void startXmpp (QString jid, QString passwd);
+    Q_INVOKABLE QString downloadPath();
+    Q_INVOKABLE void checkForUpdates();
+    Q_INVOKABLE void copy (const QString &string);
 
-        /// Plays a specified sound file
-        Q_INVOKABLE void playSound (QString name);
+    DeviceManager manager;
+    ImageProvider *imageProvider;
 
-        /// Sends a series of files to the specified peer
-        Q_INVOKABLE void shareFiles (const QString& peer);
+  signals:
 
-        /// Sends a message to the specified peer
-        Q_INVOKABLE void sendMessage (const QString& to, const QString &message);
+    void xmppConnected();
+    void xmppDisconnected();
 
-        /// Sends the specified string to the system's clipboard
-        Q_INVOKABLE void copy (const QString &string);
+    void delUser (QString nick, QString id);
+    void newUser (QString nick, QString id);
+    void sendFile (QString file, QString peer);
+    void drawMessage (QString from, QString message);
+    void sendStatusSignal (QString to, QString status);
+    void returnPressed (QString message, QString peer);
+    void downloadComplete (QString name, QString file);
+    void newDownload (QString name, QString file, int size);
+    void presenceChanged (const QString &id, bool connected);
+    void updateAvailable (bool newUpdate, const QString &version);
+    void updateProgress (QString name, QString file, int progress);
+    void statusChanged (const QString &from, const QString &status);
 
-        /// Returns the ID of the specified nickname
-        Q_INVOKABLE QString getId (QString nickname);
+  private slots:
 
-        /// Returns the path where the chat modules should
-        /// save downloaded files
-        Q_INVOKABLE QString downloadPath();
+    void processNewUser (const QString& nickname, const QString& id, const QImage& profilePicture);
 
-        /// Finds smiley codes in a message and converts them to
-        /// HTML images
-        Q_INVOKABLE QString manageSmileys (const QString &data);
+  private:
 
-        /// Returns \c true when a new update is released
-        Q_INVOKABLE bool checkForUpdates();
+    Xmpp *m_xmpp;
+    QChat *m_qchat;
+    Updater *m_updater;
 
-        /// Sends a status message to the specified peer
-        Q_INVOKABLE void sendStatus (const QString &to, const QString &status);
+    QStringList m_uuids;
+    QStringList m_nicknames;
 
-        DeviceManager manager;
-        ImageProvider *imageProvider;
+    QClipboard *m_clipboard;
 
-    signals:
+    bool m_xmpp_enabled;
+    bool m_qchat_enabled;
 
-        void xmppConnected();
-        void xmppDisconnected();
-        void delUser (QString nick, QString id);
-        void newUser (QString nick, QString id);
-        void sendFile (QString file, QString peer);
-        void drawMessage (QString from, QString message);
-        void sendStatusSignal (QString to, QString status);
-        void returnPressed (QString message, QString peer);
-        void downloadComplete (QString name, QString file);
-        void newDownload (QString name, QString file, int size);
-        void presenceChanged (const QString &id, bool connected);
-        void updateAvailable(bool newUpdate, const QString &version);
-        void updateProgress (QString name, QString file, int progress);
-        void statusChanged (const QString &from, const QString &status);
-
-    private slots:
-
-        void processNewUser (const QString& nickname, const QString& id, const QImage& profilePicture);
-
-    private:
-
-        Xmpp *m_xmpp;
-        QChat *m_qchat;
-        QSound *m_sound;
-        Updater *m_updater;
-
-        QStringList m_uuids;
-        QStringList m_nicknames;
-
-        QClipboard *m_clipboard;
-
-        bool m_xmpp_enabled;
-        bool m_qchat_enabled;
-
-        QList<Xmpp *> m_xmpp_objects;
-        QList<QChat *> m_qchat_objects;
+    QList<Xmpp *> m_xmpp_objects;
+    QList<QChat *> m_qchat_objects;
 };
 
 #endif

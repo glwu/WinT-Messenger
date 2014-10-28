@@ -37,50 +37,47 @@ class QXmppVideoFrame;
 ///
 /// Samples must be 16-bit little endian.
 
-class QXMPP_AUTOTEST_EXPORT QXmppCodec
-{
-    public:
-        virtual ~QXmppCodec();
+class QXMPP_AUTOTEST_EXPORT QXmppCodec {
+  public:
+    virtual ~QXmppCodec();
 
-        /// Reads samples from the input stream, encodes them and writes the
-        /// encoded data to the output stream.
-        virtual qint64 encode (QDataStream &input, QDataStream &output) = 0;
+    /// Reads samples from the input stream, encodes them and writes the
+    /// encoded data to the output stream.
+    virtual qint64 encode (QDataStream &input, QDataStream &output) = 0;
 
-        /// Reads encoded data from the input stream, decodes it and writes the
-        /// decoded samples to the output stream.
-        virtual qint64 decode (QDataStream &input, QDataStream &output) = 0;
+    /// Reads encoded data from the input stream, decodes it and writes the
+    /// decoded samples to the output stream.
+    virtual qint64 decode (QDataStream &input, QDataStream &output) = 0;
 };
 
 /// \internal
 ///
 /// The QXmppG711aCodec class represent a G.711 a-law PCM codec.
 
-class QXmppG711aCodec : public QXmppCodec
-{
-    public:
-        QXmppG711aCodec (int clockrate);
+class QXmppG711aCodec : public QXmppCodec {
+  public:
+    QXmppG711aCodec (int clockrate);
 
-        qint64 encode (QDataStream &input, QDataStream &output);
-        qint64 decode (QDataStream &input, QDataStream &output);
+    qint64 encode (QDataStream &input, QDataStream &output);
+    qint64 decode (QDataStream &input, QDataStream &output);
 
-    private:
-        int m_frequency;
+  private:
+    int m_frequency;
 };
 
 /// \internal
 ///
 /// The QXmppG711uCodec class represent a G.711 u-law PCM codec.
 
-class QXmppG711uCodec : public QXmppCodec
-{
-    public:
-        QXmppG711uCodec (int clockrate);
+class QXmppG711uCodec : public QXmppCodec {
+  public:
+    QXmppG711uCodec (int clockrate);
 
-        qint64 encode (QDataStream &input, QDataStream &output);
-        qint64 decode (QDataStream &input, QDataStream &output);
+    qint64 encode (QDataStream &input, QDataStream &output);
+    qint64 decode (QDataStream &input, QDataStream &output);
 
-    private:
-        int m_frequency;
+  private:
+    int m_frequency;
 };
 
 #ifdef QXMPP_USE_SPEEX
@@ -90,90 +87,85 @@ typedef struct SpeexBits SpeexBits;
 ///
 /// The QXmppSpeexCodec class represent a SPEEX codec.
 
-class QXMPP_AUTOTEST_EXPORT QXmppSpeexCodec : public QXmppCodec
-{
-    public:
-        QXmppSpeexCodec (int clockrate);
-        ~QXmppSpeexCodec();
+class QXMPP_AUTOTEST_EXPORT QXmppSpeexCodec : public QXmppCodec {
+  public:
+    QXmppSpeexCodec (int clockrate);
+    ~QXmppSpeexCodec();
 
-        qint64 encode (QDataStream &input, QDataStream &output);
-        qint64 decode (QDataStream &input, QDataStream &output);
+    qint64 encode (QDataStream &input, QDataStream &output);
+    qint64 decode (QDataStream &input, QDataStream &output);
 
-    private:
-        SpeexBits *encoder_bits;
-        void *encoder_state;
-        SpeexBits *decoder_bits;
-        void *decoder_state;
-        int frame_samples;
+  private:
+    SpeexBits *encoder_bits;
+    void *encoder_state;
+    SpeexBits *decoder_bits;
+    void *decoder_state;
+    int frame_samples;
 };
 #endif
 
 /// \brief The QXmppVideoDecoder class is the base class for video decoders.
 ///
 
-class QXMPP_AUTOTEST_EXPORT QXmppVideoDecoder
-{
-    public:
-        virtual ~QXmppVideoDecoder();
+class QXMPP_AUTOTEST_EXPORT QXmppVideoDecoder {
+  public:
+    virtual ~QXmppVideoDecoder();
 
-        /// Returns the format of the video stream.
-        virtual QXmppVideoFormat format() const = 0;
+    /// Returns the format of the video stream.
+    virtual QXmppVideoFormat format() const = 0;
 
-        /// Handles an RTP \a packet and returns a list of decoded video frames.
-        virtual QList<QXmppVideoFrame> handlePacket (const QXmppRtpPacket &packet) = 0;
+    /// Handles an RTP \a packet and returns a list of decoded video frames.
+    virtual QList<QXmppVideoFrame> handlePacket (const QXmppRtpPacket &packet) = 0;
 
-        /// Sets the video stream's \a parameters.
-        virtual bool setParameters (const QMap<QString, QString> &parameters) = 0;
+    /// Sets the video stream's \a parameters.
+    virtual bool setParameters (const QMap<QString, QString> &parameters) = 0;
 };
 
 /// \brief The QXmppVideoEncoder class is the base class for video encoders.
 ///
 
-class QXMPP_AUTOTEST_EXPORT QXmppVideoEncoder
-{
-    public:
-        virtual ~QXmppVideoEncoder();
+class QXMPP_AUTOTEST_EXPORT QXmppVideoEncoder {
+  public:
+    virtual ~QXmppVideoEncoder();
 
-        /// Sets the \a format of the video stream.
-        virtual bool setFormat (const QXmppVideoFormat &format) = 0;
+    /// Sets the \a format of the video stream.
+    virtual bool setFormat (const QXmppVideoFormat &format) = 0;
 
-        /// Handles a video \a frame and returns a list of RTP packet payloads.
-        virtual QList<QByteArray> handleFrame (const QXmppVideoFrame &frame) = 0;
+    /// Handles a video \a frame and returns a list of RTP packet payloads.
+    virtual QList<QByteArray> handleFrame (const QXmppVideoFrame &frame) = 0;
 
-        /// Returns the video stream's parameters.
-        virtual QMap<QString, QString> parameters() const = 0;
+    /// Returns the video stream's parameters.
+    virtual QMap<QString, QString> parameters() const = 0;
 };
 
 #ifdef QXMPP_USE_THEORA
 class QXmppTheoraDecoderPrivate;
 class QXmppTheoraEncoderPrivate;
 
-class QXMPP_AUTOTEST_EXPORT QXmppTheoraDecoder : public QXmppVideoDecoder
-{
-    public:
-        QXmppTheoraDecoder();
-        ~QXmppTheoraDecoder();
+class QXMPP_AUTOTEST_EXPORT QXmppTheoraDecoder : public QXmppVideoDecoder {
+  public:
+    QXmppTheoraDecoder();
+    ~QXmppTheoraDecoder();
 
-        QXmppVideoFormat format() const;
-        QList<QXmppVideoFrame> handlePacket (const QXmppRtpPacket &packet);
-        bool setParameters (const QMap<QString, QString> &parameters);
+    QXmppVideoFormat format() const;
+    QList<QXmppVideoFrame> handlePacket (const QXmppRtpPacket &packet);
+    bool setParameters (const QMap<QString, QString> &parameters);
 
-    private:
-        QXmppTheoraDecoderPrivate *d;
+  private:
+    QXmppTheoraDecoderPrivate *d;
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppTheoraEncoder : public QXmppVideoEncoder
-{
-    public:
-        QXmppTheoraEncoder();
-        ~QXmppTheoraEncoder();
+class QXMPP_AUTOTEST_EXPORT QXmppTheoraEncoder : public QXmppVideoEncoder {
+  public:
+    QXmppTheoraEncoder();
+    ~QXmppTheoraEncoder();
 
-        bool setFormat (const QXmppVideoFormat &format);
-        QList<QByteArray> handleFrame (const QXmppVideoFrame &frame);
-        QMap<QString, QString> parameters() const;
+    bool setFormat (const QXmppVideoFormat &format);
+    QList<QByteArray> handleFrame (const QXmppVideoFrame &frame);
+    QMap<QString, QString> parameters() const;
 
-    private:
-        QXmppTheoraEncoderPrivate *d;
+  private:
+    QXmppTheoraEncoderPrivate *d;
 };
 #endif
 
@@ -181,32 +173,30 @@ class QXMPP_AUTOTEST_EXPORT QXmppTheoraEncoder : public QXmppVideoEncoder
 class QXmppVpxDecoderPrivate;
 class QXmppVpxEncoderPrivate;
 
-class QXMPP_AUTOTEST_EXPORT QXmppVpxDecoder : public QXmppVideoDecoder
-{
-    public:
-        QXmppVpxDecoder();
-        ~QXmppVpxDecoder();
+class QXMPP_AUTOTEST_EXPORT QXmppVpxDecoder : public QXmppVideoDecoder {
+  public:
+    QXmppVpxDecoder();
+    ~QXmppVpxDecoder();
 
-        QXmppVideoFormat format() const;
-        QList<QXmppVideoFrame> handlePacket (const QXmppRtpPacket &packet);
-        bool setParameters (const QMap<QString, QString> &parameters);
+    QXmppVideoFormat format() const;
+    QList<QXmppVideoFrame> handlePacket (const QXmppRtpPacket &packet);
+    bool setParameters (const QMap<QString, QString> &parameters);
 
-    private:
-        QXmppVpxDecoderPrivate *d;
+  private:
+    QXmppVpxDecoderPrivate *d;
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppVpxEncoder : public QXmppVideoEncoder
-{
-    public:
-        QXmppVpxEncoder();
-        ~QXmppVpxEncoder();
+class QXMPP_AUTOTEST_EXPORT QXmppVpxEncoder : public QXmppVideoEncoder {
+  public:
+    QXmppVpxEncoder();
+    ~QXmppVpxEncoder();
 
-        bool setFormat (const QXmppVideoFormat &format);
-        QList<QByteArray> handleFrame (const QXmppVideoFrame &frame);
-        QMap<QString, QString> parameters() const;
+    bool setFormat (const QXmppVideoFormat &format);
+    QList<QByteArray> handleFrame (const QXmppVideoFrame &frame);
+    QMap<QString, QString> parameters() const;
 
-    private:
-        QXmppVpxEncoderPrivate *d;
+  private:
+    QXmppVpxEncoderPrivate *d;
 };
 #endif
 

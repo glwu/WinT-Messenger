@@ -11,6 +11,7 @@ import "../core"
 import "../controls"
 
 import QtQuick 2.0
+import QtMultimedia 5.0
 
 Item {
     opacity: 0
@@ -21,17 +22,13 @@ Item {
 
     signal userButtonClicked
     signal userChanged(string user)
-    Behavior on opacity {NumberAnimation{}}
 
-    onVisibleChanged: {
-        if (!visible)
-            _status.text = ""
-    }
+    Behavior on opacity {NumberAnimation{}}
 
     function drawMessage(from, to,  message, isLocal) {
         if (message) {
             _status.opacity = 0
-            bridge.playSound("receive")
+            receiveSound.play()
             _bubble_model.append({"_from": from,
                                      "_to": to,
                                      "_message": message,
@@ -55,6 +52,11 @@ Item {
         _bubble_view.positionViewAtEnd()
     }
 
+    onVisibleChanged: {
+        if (!visible)
+            _status.text = ""
+    }
+
     Connections {
         target: bridge
         onDelUser: {
@@ -66,6 +68,25 @@ Item {
             drawMessage(from, "local user", message, false)
         }
     }
+
+    SoundEffect {
+        id: sendSound
+        source: "qrc:/sounds/sounds/send.wav"
+        volume: settings.soundsEnabled() ? 1 : 0
+    }
+
+    SoundEffect {
+        id: receiveSound
+        source: "qrc:/sounds/sounds/receive.wav"
+        volume: settings.soundsEnabled() ? 1 : 0
+    }
+
+    SoundEffect {
+        id: alertSound
+        source: "qrc:/sounds/sounds/alert.wav"
+        volume: settings.soundsEnabled() ? 1 : 0
+    }
+
 
     NiceScrollView {
         anchors {
@@ -147,10 +168,11 @@ Item {
 
         onNewMessage: {
             if (message) {
+                sendSound.play()
                 bridge.sendMessage(uuid, message)
                 drawMessage("local user", peer, message, true)
             } else {
-                bridge.playSound("alert")
+                alertSound.play()
             }
         }
     }

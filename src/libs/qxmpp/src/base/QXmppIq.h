@@ -39,38 +39,36 @@ class QXmppIqPrivate;
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppIq : public QXmppStanza
-{
-    public:
-        /// This enum describes the type of IQ.
-        enum Type
-        {
-            Error = 0,  ///< Error response.
-            Get,        ///< Get request.
-            Set,        ///< Set request.
-            Result      ///< Result.
-        };
+class QXMPP_EXPORT QXmppIq : public QXmppStanza {
+  public:
+    /// This enum describes the type of IQ.
+    enum Type {
+        Error = 0,  ///< Error response.
+        Get,        ///< Get request.
+        Set,        ///< Set request.
+        Result      ///< Result.
+    };
 
-        QXmppIq (QXmppIq::Type type = QXmppIq::Get);
-        QXmppIq (const QXmppIq &other);
-        ~QXmppIq();
+    QXmppIq (QXmppIq::Type type = QXmppIq::Get);
+    QXmppIq (const QXmppIq &other);
+    ~QXmppIq();
 
-        QXmppIq& operator= (const QXmppIq &other);
+    QXmppIq& operator= (const QXmppIq &other);
 
-        QXmppIq::Type type() const;
-        void setType (QXmppIq::Type);
+    QXmppIq::Type type() const;
+    void setType (QXmppIq::Type);
 
-        /// \cond
-        void parse (const QDomElement &element);
-        void toXml (QXmlStreamWriter *writer) const;
+    /// \cond
+    void parse (const QDomElement &element);
+    void toXml (QXmlStreamWriter *writer) const;
 
-    protected:
-        virtual void parseElementFromChild (const QDomElement &element);
-        virtual void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    virtual void parseElementFromChild (const QDomElement &element);
+    virtual void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QSharedDataPointer<QXmppIqPrivate> d;
+  private:
+    QSharedDataPointer<QXmppIqPrivate> d;
 };
 
 #endif // QXMPPIQ_H

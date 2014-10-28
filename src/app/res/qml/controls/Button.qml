@@ -11,58 +11,68 @@ import QtQuick 2.0
 
 Frame {
     id: button
+    height: units.gu(4)
+    color: "transparent"
+    radius: units.scale(2)
+    opacity: enabled ? 1 : 0.5
+    border.color: "transparent"
+    style: primary ? "primary" : "default"
+    width: text === "" ? height : Math.max(units.gu(10), row.width + 2 * units.gu(2))
+
     signal clicked
 
     property string style
     property bool primary
-    property color textColor
+    property string textColor
     property bool flat: false
-    property color background
-    property color borderColor
     property bool toggled: false
     property alias text: label.text
     property bool toggleButton: false
     property alias iconName: icon.name
-    property int minWidth: units.gu(10)
-    property color background_mouseOver
-    property int horizPadding: units.gu(2)
     property alias fontSize: label.fontSize
 
     function updateColors() {
-        borderColor = theme.borderColor
-        background = style === "default" ? theme.panel : theme.getStyleColor(style)
-        background_mouseOver = style == "default" ? Qt.darker(background, 1.05) : Qt.darker(background, 1.15)
-        textColor = settings.darkInterface() ? theme.navigationBarText : style === "default" ? theme.textColor : "white"
+        textColor = style === "default" ? theme.textColor : "white"
     }
+
+    Component.onCompleted: updateColors()
+
+    Behavior on opacity {NumberAnimation{}}
 
     Connections {
         target: theme
         onThemeChanged: updateColors()
     }
 
-    Component.onCompleted: updateColors()
+    Rectangle {
+        smooth: true
+        visible: !flat
+        anchors.fill: parent
+        radius: parent.radius
+        border.color: "#D4DCE3"
+        border.width: units.scale(1)
 
-    height: units.gu(4)
-    opacity: enabled ? 1 : 0.5
-    style: primary ? "primary" : "default"
-    border.color: {
-        if (flat)
-            return "transparent"
-
-        return borderColor
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "#FEFEFE" }
+            GradientStop { position: 1.0; color: "#F8F8F8" }
+        }
     }
 
-    width: text === "" ? height : Math.max(minWidth, row.width + 2 * horizPadding)
+    Rectangle {
+        anchors.fill: parent
+        radius: parent.radius
+        color: primary ? theme.primary : theme.secondary
 
-    color: {
-        if (flat)
-            return "transparent"
-        else {
-            if (mouseArea.containsMouse || toggled)
-                return background_mouseOver
+        opacity: {
+            if (!flat && (primary || style == "primary"))
+                return 1.0
+            else if (mouseArea.containsMouse && !flat)
+                return 0.1
             else
-                return background
+                return 0.0
         }
+
+        Behavior on opacity {NumberAnimation{}}
     }
 
     Row {

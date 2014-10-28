@@ -8,6 +8,7 @@
 #
 
 TEMPLATE = lib
+CONFIG += c++11
 CONFIG += shared
 QT += core network
 DEFINES += QCHAT_LIBRARY

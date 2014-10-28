@@ -31,8 +31,7 @@
 #include "QXmppMessage.h"
 #include "QXmppUtils.h"
 
-static const char *chat_states[] =
-{
+static const char *chat_states[] = {
     "",
     "active",
     "inactive",
@@ -41,8 +40,7 @@ static const char *chat_states[] =
     "paused",
 };
 
-static const char *message_types[] =
-{
+static const char *message_types[] = {
     "error",
     "normal",
     "chat",
@@ -50,8 +48,7 @@ static const char *message_types[] =
     "headline"
 };
 
-static const char *marker_types[] =
-{
+static const char *marker_types[] = {
     "",
     "received",
     "displayed",
@@ -60,42 +57,40 @@ static const char *marker_types[] =
 
 static const char *ns_xhtml = "http://www.w3.org/1999/xhtml";
 
-enum StampType
-{
+enum StampType {
     LegacyDelayedDelivery,  // XEP-0091: Legacy Delayed Delivery
     DelayedDelivery,        // XEP-0203: Delayed Delivery
 };
 
-class QXmppMessagePrivate : public QSharedData
-{
-    public:
-        QXmppMessage::Type type;
-        QDateTime stamp;
-        StampType stampType;
-        QXmppMessage::State state;
+class QXmppMessagePrivate : public QSharedData {
+  public:
+    QXmppMessage::Type type;
+    QDateTime stamp;
+    StampType stampType;
+    QXmppMessage::State state;
 
-        bool attentionRequested;
-        QString body;
-        QString subject;
-        QString thread;
+    bool attentionRequested;
+    QString body;
+    QString subject;
+    QString thread;
 
-        // XEP-0071: XHTML-IM
-        QString xhtml;
+    // XEP-0071: XHTML-IM
+    QString xhtml;
 
-        // Request message receipt as per XEP-0184.
-        QString receiptId;
-        bool receiptRequested;
+    // Request message receipt as per XEP-0184.
+    QString receiptId;
+    bool receiptRequested;
 
-        // XEP-0249: Direct MUC Invitations
-        QString mucInvitationJid;
-        QString mucInvitationPassword;
-        QString mucInvitationReason;
+    // XEP-0249: Direct MUC Invitations
+    QString mucInvitationJid;
+    QString mucInvitationPassword;
+    QString mucInvitationReason;
 
-        // XEP-0333: Chat Markers
-        bool markable;
-        QXmppMessage::Marker marker;
-        QString markedId;
-        QString markedThread;
+    // XEP-0333: Chat Markers
+    bool markable;
+    QXmppMessage::Marker marker;
+    QString markedId;
+    QString markedThread;
 };
 
 /// Constructs a QXmppMessage.
@@ -108,8 +103,7 @@ class QXmppMessagePrivate : public QSharedData
 QXmppMessage::QXmppMessage (const QString& from, const QString& to, const
                             QString& body, const QString& thread)
     : QXmppStanza (from, to)
-    , d (new QXmppMessagePrivate)
-{
+    , d (new QXmppMessagePrivate) {
     d->type = Chat;
     d->stampType = DelayedDelivery;
     d->state = None;
@@ -126,19 +120,16 @@ QXmppMessage::QXmppMessage (const QString& from, const QString& to, const
 
 QXmppMessage::QXmppMessage (const QXmppMessage &other)
     : QXmppStanza (other)
-    , d (other.d)
-{
+    , d (other.d) {
 }
 
-QXmppMessage::~QXmppMessage()
-{
+QXmppMessage::~QXmppMessage() {
 
 }
 
 /// Assigns \a other to this message.
 
-QXmppMessage& QXmppMessage::operator= (const QXmppMessage &other)
-{
+QXmppMessage& QXmppMessage::operator= (const QXmppMessage &other) {
     QXmppStanza::operator= (other);
     d = other.d;
     return *this;
@@ -147,8 +138,7 @@ QXmppMessage& QXmppMessage::operator= (const QXmppMessage &other)
 /// Returns the message's body.
 ///
 
-QString QXmppMessage::body() const
-{
+QString QXmppMessage::body() const {
     return d->body;
 }
 
@@ -156,16 +146,14 @@ QString QXmppMessage::body() const
 ///
 /// \param body
 
-void QXmppMessage::setBody (const QString& body)
-{
+void QXmppMessage::setBody (const QString& body) {
     d->body = body;
 }
 
 /// Returns true if the user's attention is requested, as defined
 /// by XEP-0224: Attention.
 
-bool QXmppMessage::isAttentionRequested() const
-{
+bool QXmppMessage::isAttentionRequested() const {
     return d->attentionRequested;
 }
 
@@ -174,16 +162,14 @@ bool QXmppMessage::isAttentionRequested() const
 ///
 /// \a param requested
 
-void QXmppMessage::setAttentionRequested (bool requested)
-{
+void QXmppMessage::setAttentionRequested (bool requested) {
     d->attentionRequested = requested;
 }
 
 /// Returns true if a delivery receipt is requested, as defined
 /// by XEP-0184: Message Delivery Receipts.
 
-bool QXmppMessage::isReceiptRequested() const
-{
+bool QXmppMessage::isReceiptRequested() const {
     return d->receiptRequested;
 }
 
@@ -192,8 +178,7 @@ bool QXmppMessage::isReceiptRequested() const
 ///
 /// \a param requested
 
-void QXmppMessage::setReceiptRequested (bool requested)
-{
+void QXmppMessage::setReceiptRequested (bool requested) {
     d->receiptRequested = requested;
 
     if (requested && id().isEmpty())
@@ -203,72 +188,63 @@ void QXmppMessage::setReceiptRequested (bool requested)
 /// If this message is a delivery receipt, returns the ID of the
 /// original message.
 
-QString QXmppMessage::receiptId() const
-{
+QString QXmppMessage::receiptId() const {
     return d->receiptId;
 }
 
 /// Make this message a delivery receipt for the message with
 /// the given \a id.
 
-void QXmppMessage::setReceiptId (const QString &id)
-{
+void QXmppMessage::setReceiptId (const QString &id) {
     d->receiptId = id;
 }
 
 /// Returns the JID for a multi-user chat direct invitation as defined
 /// by XEP-0249: Direct MUC Invitations.
 
-QString QXmppMessage::mucInvitationJid() const
-{
+QString QXmppMessage::mucInvitationJid() const {
     return d->mucInvitationJid;
 }
 
 /// Sets the JID for a multi-user chat direct invitation as defined
 /// by XEP-0249: Direct MUC Invitations.
 
-void QXmppMessage::setMucInvitationJid (const QString &jid)
-{
+void QXmppMessage::setMucInvitationJid (const QString &jid) {
     d->mucInvitationJid = jid;
 }
 
 /// Returns the password for a multi-user chat direct invitation as defined
 /// by XEP-0249: Direct MUC Invitations.
 
-QString QXmppMessage::mucInvitationPassword() const
-{
+QString QXmppMessage::mucInvitationPassword() const {
     return d->mucInvitationPassword;
 }
 
 /// Sets the \a password for a multi-user chat direct invitation as defined
 /// by XEP-0249: Direct MUC Invitations.
 
-void QXmppMessage::setMucInvitationPassword (const QString &password)
-{
+void QXmppMessage::setMucInvitationPassword (const QString &password) {
     d->mucInvitationPassword = password;
 }
 
 /// Returns the reason for a multi-user chat direct invitation as defined
 /// by XEP-0249: Direct MUC Invitations.
 
-QString QXmppMessage::mucInvitationReason() const
-{
+QString QXmppMessage::mucInvitationReason() const {
     return d->mucInvitationReason;
 }
 
 /// Sets the \a reason for a multi-user chat direct invitation as defined
 /// by XEP-0249: Direct MUC Invitations.
 
-void QXmppMessage::setMucInvitationReason (const QString &reason)
-{
+void QXmppMessage::setMucInvitationReason (const QString &reason) {
     d->mucInvitationReason = reason;
 }
 
 /// Returns the message's type.
 ///
 
-QXmppMessage::Type QXmppMessage::type() const
-{
+QXmppMessage::Type QXmppMessage::type() const {
     return d->type;
 }
 
@@ -276,15 +252,13 @@ QXmppMessage::Type QXmppMessage::type() const
 ///
 /// \param type
 
-void QXmppMessage::setType (QXmppMessage::Type type)
-{
+void QXmppMessage::setType (QXmppMessage::Type type) {
     d->type = type;
 }
 
 /// Returns the message's timestamp (if any).
 
-QDateTime QXmppMessage::stamp() const
-{
+QDateTime QXmppMessage::stamp() const {
     return d->stamp;
 }
 
@@ -292,16 +266,14 @@ QDateTime QXmppMessage::stamp() const
 ///
 /// \param stamp
 
-void QXmppMessage::setStamp (const QDateTime &stamp)
-{
+void QXmppMessage::setStamp (const QDateTime &stamp) {
     d->stamp = stamp;
 }
 
 /// Returns the message's chat state.
 ///
 
-QXmppMessage::State QXmppMessage::state() const
-{
+QXmppMessage::State QXmppMessage::state() const {
     return d->state;
 }
 
@@ -309,16 +281,14 @@ QXmppMessage::State QXmppMessage::state() const
 ///
 /// \param state
 
-void QXmppMessage::setState (QXmppMessage::State state)
-{
+void QXmppMessage::setState (QXmppMessage::State state) {
     d->state = state;
 }
 
 /// Returns the message's subject.
 ///
 
-QString QXmppMessage::subject() const
-{
+QString QXmppMessage::subject() const {
     return d->subject;
 }
 
@@ -326,15 +296,13 @@ QString QXmppMessage::subject() const
 ///
 /// \param subject
 
-void QXmppMessage::setSubject (const QString& subject)
-{
+void QXmppMessage::setSubject (const QString& subject) {
     d->subject = subject;
 }
 
 /// Returns the message's thread.
 
-QString QXmppMessage::thread() const
-{
+QString QXmppMessage::thread() const {
     return d->thread;
 }
 
@@ -342,31 +310,26 @@ QString QXmppMessage::thread() const
 ///
 /// \param thread
 
-void QXmppMessage::setThread (const QString& thread)
-{
+void QXmppMessage::setThread (const QString& thread) {
     d->thread = thread;
 }
 
 /// Returns the message's XHTML body as defined by
 /// XEP-0071: XHTML-IM.
 
-QString QXmppMessage::xhtml() const
-{
+QString QXmppMessage::xhtml() const {
     return d->xhtml;
 }
 
 /// Sets the message's XHTML body as defined by
 /// XEP-0071: XHTML-IM.
 
-void QXmppMessage::setXhtml (const QString &xhtml)
-{
+void QXmppMessage::setXhtml (const QString &xhtml) {
     d->xhtml = xhtml;
 }
 
-namespace
-{
-static QList<QPair<QString, QString> > knownMessageSubelems()
-{
+namespace {
+static QList<QPair<QString, QString> > knownMessageSubelems() {
     QList<QPair<QString, QString> > result;
     result << qMakePair (QString ("body"), QString())
            << qMakePair (QString ("subject"), QString())
@@ -388,79 +351,68 @@ static QList<QPair<QString, QString> > knownMessageSubelems()
 /// Returns true if a message is markable, as defined
 /// XEP-0333: Chat Markers.
 
-bool QXmppMessage::isMarkable() const
-{
+bool QXmppMessage::isMarkable() const {
     return d->markable;
 }
 
 /// Sets if the message is markable, as defined
 /// XEP-0333: Chat Markers.
 
-void QXmppMessage::setMarkable (const bool markable)
-{
+void QXmppMessage::setMarkable (const bool markable) {
     d->markable = markable;
 }
 
 /// Returns the message's marker id, as defined
 /// XEP-0333: Chat Markers.
 
-QString QXmppMessage::markedId() const
-{
+QString QXmppMessage::markedId() const {
     return d->markedId;
 }
 
 /// Sets the message's marker id, as defined
 /// XEP-0333: Chat Markers.
 
-void QXmppMessage::setMarkerId (const QString &markerId)
-{
+void QXmppMessage::setMarkerId (const QString &markerId) {
     d->markedId = markerId;
 }
 
 /// Returns the message's marker thread, as defined
 /// XEP-0333: Chat Markers.
 
-QString QXmppMessage::markedThread() const
-{
+QString QXmppMessage::markedThread() const {
     return d->markedThread;
 }
 
 /// Sets the message's marked thread, as defined
 /// XEP-0333: Chat Markers.
 
-void QXmppMessage::setMarkedThread (const QString &markedThread)
-{
+void QXmppMessage::setMarkedThread (const QString &markedThread) {
     d->markedThread = markedThread;
 }
 
 /// Returns the message's marker, as defined
 /// XEP-0333: Chat Markers.
 
-QXmppMessage::Marker QXmppMessage::marker() const
-{
+QXmppMessage::Marker QXmppMessage::marker() const {
     return d->marker;
 }
 
 /// Sets the message's marker, as defined
 /// XEP-0333: Chat Markers
 
-void QXmppMessage::setMarker (const Marker marker)
-{
+void QXmppMessage::setMarker (const Marker marker) {
     d->marker = marker;
 }
 
 /// \cond
-void QXmppMessage::parse (const QDomElement &element)
-{
+void QXmppMessage::parse (const QDomElement &element) {
     QXmppStanza::parse (element);
 
     const QString type = element.attribute ("type");
     d->type = Normal;
 
-    for (int i = Error; i <= Headline; i++)
-    {
-        if (type == message_types[i])
-        {
+    for (int i = Error; i <= Headline; i++) {
+        if (type == message_types[i]) {
             d->type = static_cast<Type> (i);
             break;
         }
@@ -471,13 +423,11 @@ void QXmppMessage::parse (const QDomElement &element)
     d->thread = element.firstChildElement ("thread").text();
 
     // chat states
-    for (int i = Active; i <= Paused; i++)
-    {
+    for (int i = Active; i <= Paused; i++) {
         QDomElement stateElement = element.firstChildElement (chat_states[i]);
 
         if (!stateElement.isNull() &&
-                stateElement.namespaceURI() == ns_chat_states)
-        {
+                stateElement.namespaceURI() == ns_chat_states) {
             d->state = static_cast<QXmppMessage::State> (i);
             break;
         }
@@ -486,12 +436,10 @@ void QXmppMessage::parse (const QDomElement &element)
     // XEP-0071: XHTML-IM
     QDomElement htmlElement = element.firstChildElement ("html");
 
-    if (!htmlElement.isNull() && htmlElement.namespaceURI() == ns_xhtml_im)
-    {
+    if (!htmlElement.isNull() && htmlElement.namespaceURI() == ns_xhtml_im) {
         QDomElement bodyElement = htmlElement.firstChildElement ("body");
 
-        if (!bodyElement.isNull() && bodyElement.namespaceURI() == ns_xhtml)
-        {
+        if (!bodyElement.isNull() && bodyElement.namespaceURI() == ns_xhtml) {
             QTextStream stream (&d->xhtml, QIODevice::WriteOnly);
             bodyElement.save (stream, 0);
 
@@ -505,8 +453,7 @@ void QXmppMessage::parse (const QDomElement &element)
     // XEP-0184: Message Delivery Receipts
     QDomElement receivedElement = element.firstChildElement ("received");
 
-    if (!receivedElement.isNull() && receivedElement.namespaceURI() == ns_message_receipts)
-    {
+    if (!receivedElement.isNull() && receivedElement.namespaceURI() == ns_message_receipts) {
         d->receiptId = receivedElement.attribute ("id");
 
         // compatibility with old-style XEP
@@ -522,8 +469,7 @@ void QXmppMessage::parse (const QDomElement &element)
     // XEP-0203: Delayed Delivery
     QDomElement delayElement = element.firstChildElement ("delay");
 
-    if (!delayElement.isNull() && delayElement.namespaceURI() == ns_delayed_delivery)
-    {
+    if (!delayElement.isNull() && delayElement.namespaceURI() == ns_delayed_delivery) {
         const QString str = delayElement.attribute ("stamp");
         d->stamp = QXmppUtils::datetimeFromString (str);
         d->stampType = DelayedDelivery;
@@ -542,23 +488,19 @@ void QXmppMessage::parse (const QDomElement &element)
     QDomElement chatStateElement;
     QXmppMessage::Marker marker = QXmppMessage::NoMarker;
 
-    for (int i = Received; i <= Acknowledged; i++)
-    {
+    for (int i = Received; i <= Acknowledged; i++) {
         chatStateElement = element.firstChildElement (marker_types[i]);
 
         if (!chatStateElement.isNull() &&
-                chatStateElement.namespaceURI() == ns_chat_markers)
-        {
+                chatStateElement.namespaceURI() == ns_chat_markers) {
             marker = static_cast<QXmppMessage::Marker> (i);
             break;
         }
     }
 
     // if marker is present, check it's the right ns
-    if (!chatStateElement.isNull())
-    {
-        if (chatStateElement.namespaceURI() == ns_chat_markers)
-        {
+    if (!chatStateElement.isNull()) {
+        if (chatStateElement.namespaceURI() == ns_chat_markers) {
             d->marker = marker;
             d->markedId = chatStateElement.attribute ("id", QString());
             d->markedThread = chatStateElement.attribute ("thread", QString());
@@ -570,12 +512,9 @@ void QXmppMessage::parse (const QDomElement &element)
     QXmppElementList extensions;
     QDomElement xElement = element.firstChildElement();
 
-    while (!xElement.isNull())
-    {
-        if (xElement.tagName() == "x")
-        {
-            if (xElement.namespaceURI() == ns_legacy_delayed_delivery)
-            {
+    while (!xElement.isNull()) {
+        if (xElement.tagName() == "x") {
+            if (xElement.namespaceURI() == ns_legacy_delayed_delivery) {
                 // XEP-0091: Legacy Delayed Delivery
                 const QString str = xElement.attribute ("stamp");
                 d->stamp = QDateTime::fromString (str, "yyyyMMddThh:mm:ss");
@@ -583,8 +522,7 @@ void QXmppMessage::parse (const QDomElement &element)
                 d->stampType = LegacyDelayedDelivery;
             }
 
-            else if (xElement.namespaceURI() == ns_conference)
-            {
+            else if (xElement.namespaceURI() == ns_conference) {
                 // XEP-0249: Direct MUC Invitations
                 d->mucInvitationJid = xElement.attribute ("jid");
                 d->mucInvitationPassword = xElement.attribute ("password");
@@ -596,8 +534,7 @@ void QXmppMessage::parse (const QDomElement &element)
         }
 
         else if (!knownElems.contains (qMakePair (xElement.tagName(), xElement.namespaceURI())) &&
-                 !knownElems.contains (qMakePair (xElement.tagName(), QString())))
-        {
+                 !knownElems.contains (qMakePair (xElement.tagName(), QString()))) {
             // other extensions
             extensions << QXmppElement (xElement);
         }
@@ -608,8 +545,7 @@ void QXmppMessage::parse (const QDomElement &element)
     setExtensions (extensions);
 }
 
-void QXmppMessage::toXml (QXmlStreamWriter *xmlWriter) const
-{
+void QXmppMessage::toXml (QXmlStreamWriter *xmlWriter) const {
     xmlWriter->writeStartElement ("message");
     helperToXmlAddAttribute (xmlWriter, "xml:lang", lang());
     helperToXmlAddAttribute (xmlWriter, "id", id());
@@ -629,16 +565,14 @@ void QXmppMessage::toXml (QXmlStreamWriter *xmlWriter) const
     error().toXml (xmlWriter);
 
     // chat states
-    if (d->state > None && d->state <= Paused)
-    {
+    if (d->state > None && d->state <= Paused) {
         xmlWriter->writeStartElement (chat_states[d->state]);
         xmlWriter->writeAttribute ("xmlns", ns_chat_states);
         xmlWriter->writeEndElement();
     }
 
     // XEP-0071: XHTML-IM
-    if (!d->xhtml.isEmpty())
-    {
+    if (!d->xhtml.isEmpty()) {
         xmlWriter->writeStartElement ("html");
         xmlWriter->writeAttribute ("xmlns", ns_xhtml_im);
         xmlWriter->writeStartElement ("body");
@@ -650,12 +584,10 @@ void QXmppMessage::toXml (QXmlStreamWriter *xmlWriter) const
     }
 
     // time stamp
-    if (d->stamp.isValid())
-    {
+    if (d->stamp.isValid()) {
         QDateTime utcStamp = d->stamp.toUTC();
 
-        if (d->stampType == DelayedDelivery)
-        {
+        if (d->stampType == DelayedDelivery) {
             // XEP-0203: Delayed Delivery
             xmlWriter->writeStartElement ("delay");
             xmlWriter->writeAttribute ("xmlns", ns_delayed_delivery);
@@ -663,8 +595,7 @@ void QXmppMessage::toXml (QXmlStreamWriter *xmlWriter) const
             xmlWriter->writeEndElement();
         }
 
-        else
-        {
+        else {
             // XEP-0091: Legacy Delayed Delivery
             xmlWriter->writeStartElement ("x");
             xmlWriter->writeAttribute ("xmlns", ns_legacy_delayed_delivery);
@@ -674,32 +605,28 @@ void QXmppMessage::toXml (QXmlStreamWriter *xmlWriter) const
     }
 
     // XEP-0184: Message Delivery Receipts
-    if (!d->receiptId.isEmpty())
-    {
+    if (!d->receiptId.isEmpty()) {
         xmlWriter->writeStartElement ("received");
         xmlWriter->writeAttribute ("xmlns", ns_message_receipts);
         xmlWriter->writeAttribute ("id", d->receiptId);
         xmlWriter->writeEndElement();
     }
 
-    if (d->receiptRequested)
-    {
+    if (d->receiptRequested) {
         xmlWriter->writeStartElement ("request");
         xmlWriter->writeAttribute ("xmlns", ns_message_receipts);
         xmlWriter->writeEndElement();
     }
 
     // XEP-0224: Attention
-    if (d->attentionRequested)
-    {
+    if (d->attentionRequested) {
         xmlWriter->writeStartElement ("attention");
         xmlWriter->writeAttribute ("xmlns", ns_attention);
         xmlWriter->writeEndElement();
     }
 
     // XEP-0249: Direct MUC Invitations
-    if (!d->mucInvitationJid.isEmpty())
-    {
+    if (!d->mucInvitationJid.isEmpty()) {
         xmlWriter->writeStartElement ("x");
         xmlWriter->writeAttribute ("xmlns", ns_conference);
         xmlWriter->writeAttribute ("jid", d->mucInvitationJid);
@@ -714,15 +641,13 @@ void QXmppMessage::toXml (QXmlStreamWriter *xmlWriter) const
     }
 
     // XEP-0333: Chat Markers
-    if (d->markable)
-    {
+    if (d->markable) {
         xmlWriter->writeStartElement ("markable");
         xmlWriter->writeAttribute ("xmlns", ns_chat_markers);
         xmlWriter->writeEndElement();
     }
 
-    if (d->marker != NoMarker)
-    {
+    if (d->marker != NoMarker) {
         xmlWriter->writeStartElement (marker_types[d->marker]);
         xmlWriter->writeAttribute ("xmlns", ns_chat_markers);
         xmlWriter->writeAttribute ("id", d->markedId);

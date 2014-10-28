@@ -35,7 +35,6 @@ Dialog {
 
     function updateValues() {
         customColor.selected = settings.customColor()
-        darkInterface.selected = settings.darkInterface()
         notifyUpdates.selected = settings.notifyUpdates()
         soundsEnabled.selected = settings.soundsEnabled()
 
@@ -59,7 +58,7 @@ Dialog {
 
         Label {
             fontSize: "medium"
-            color: theme.logoTitle
+            color: theme.secondary
             text: qsTr("User profile")
             anchors.left: parent.left
             anchors.margins: units.gu(1)
@@ -148,12 +147,16 @@ Dialog {
             }
 
             Frame {
-                width: height
                 id: colorRectangle
                 height: textBox.height
                 color: theme.primary
                 anchors.right: parent.right
+                opacity: customColor.selected ? 1 : 0
+                width: customColor.selected ?  height : 0
                 anchors.verticalCenter: avatarImage.verticalCenter
+
+                Behavior on width {NumberAnimation{}}
+                Behavior on opacity {NumberAnimation{}}
 
                 MouseArea {
                     id: mouseArea
@@ -173,7 +176,7 @@ Dialog {
 
         Label {
             fontSize: "medium"
-            color: theme.logoTitle
+            color: theme.secondary
             anchors.left: parent.left
             text: qsTr("Other settings")
             anchors.margins: units.gu(1)
@@ -199,16 +202,6 @@ Dialog {
                     id: soundsEnabled
                     text: qsTr("Enable sound effects")
                     onSelectedChanged: settings.setValue("soundsEnabled", selected)
-                }
-
-                CheckBox {
-                    width: height
-                    id: darkInterface
-                    text: qsTr("Use a dark interface theme")
-                    onSelectedChanged: {
-                        settings.setValue("darkInterface", selected)
-                        theme.setColors()
-                    }
                 }
 
                 CheckBox {

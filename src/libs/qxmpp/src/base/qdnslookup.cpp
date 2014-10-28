@@ -53,8 +53,7 @@ QT_BEGIN_NAMESPACE
 Q_GLOBAL_STATIC (QDnsLookupThreadPool, theDnsLookupThreadPool);
 Q_GLOBAL_STATIC (QThreadStorage<bool *>, theDnsLookupSeedStorage);
 
-static bool qt_qdnsmailexchangerecord_less_than (const QDnsMailExchangeRecord &r1, const QDnsMailExchangeRecord &r2)
-{
+static bool qt_qdnsmailexchangerecord_less_than (const QDnsMailExchangeRecord &r1, const QDnsMailExchangeRecord &r2) {
     // Lower numbers are more preferred than higher ones.
     return r1.preference() < r2.preference();
 }
@@ -63,8 +62,7 @@ static bool qt_qdnsmailexchangerecord_less_than (const QDnsMailExchangeRecord &r
     Sorts a list of QDnsMailExchangeRecord objects according to RFC 5321.
 */
 
-static void qt_qdnsmailexchangerecord_sort (QList<QDnsMailExchangeRecord> &records)
-{
+static void qt_qdnsmailexchangerecord_sort (QList<QDnsMailExchangeRecord> &records) {
     // If we have no more than one result, we are done.
     if (records.size() <= 1)
         return;
@@ -74,15 +72,13 @@ static void qt_qdnsmailexchangerecord_sort (QList<QDnsMailExchangeRecord> &recor
 
     int i = 0;
 
-    while (i < records.size())
-    {
+    while (i < records.size()) {
 
         // Determine the slice of records with the current preference.
         QList<QDnsMailExchangeRecord> slice;
         const quint16 slicePreference = records[i].preference();
 
-        for (int j = i; j < records.size(); ++j)
-        {
+        for (int j = i; j < records.size(); ++j) {
             if (records[j].preference() != slicePreference)
                 break;
 
@@ -90,16 +86,14 @@ static void qt_qdnsmailexchangerecord_sort (QList<QDnsMailExchangeRecord> &recor
         }
 
         // Randomize the slice of records.
-        while (!slice.isEmpty())
-        {
+        while (!slice.isEmpty()) {
             const unsigned int pos = qrand() % slice.size();
             records[i++] = slice.takeAt (pos);
         }
     }
 }
 
-static bool qt_qdnsservicerecord_less_than (const QDnsServiceRecord &r1, const QDnsServiceRecord &r2)
-{
+static bool qt_qdnsservicerecord_less_than (const QDnsServiceRecord &r1, const QDnsServiceRecord &r2) {
     // Order by priority, or if the priorities are equal,
     // put zero weight records first.
     return r1.priority() < r2.priority()
@@ -111,8 +105,7 @@ static bool qt_qdnsservicerecord_less_than (const QDnsServiceRecord &r1, const Q
     Sorts a list of QDnsServiceRecord objects according to RFC 2782.
 */
 
-static void qt_qdnsservicerecord_sort (QList<QDnsServiceRecord> &records)
-{
+static void qt_qdnsservicerecord_sort (QList<QDnsServiceRecord> &records) {
     // If we have no more than one result, we are done.
     if (records.size() <= 1)
         return;
@@ -123,16 +116,14 @@ static void qt_qdnsservicerecord_sort (QList<QDnsServiceRecord> &records)
 
     int i = 0;
 
-    while (i < records.size())
-    {
+    while (i < records.size()) {
 
         // Determine the slice of records with the current priority.
         QList<QDnsServiceRecord> slice;
         const quint16 slicePriority = records[i].priority();
         unsigned int sliceWeight = 0;
 
-        for (int j = i; j < records.size(); ++j)
-        {
+        for (int j = i; j < records.size(); ++j) {
             if (records[j].priority() != slicePriority)
                 break;
 
@@ -146,17 +137,14 @@ static void qt_qdnsservicerecord_sort (QList<QDnsServiceRecord> &records)
 #endif
 
         // Order the slice of records.
-        while (!slice.isEmpty())
-        {
+        while (!slice.isEmpty()) {
             const unsigned int weightThreshold = qrand() % (sliceWeight + 1);
             unsigned int summedWeight = 0;
 
-            for (int j = 0; j < slice.size(); ++j)
-            {
+            for (int j = 0; j < slice.size(); ++j) {
                 summedWeight += slice[j].weight();
 
-                if (summedWeight >= weightThreshold)
-                {
+                if (summedWeight >= weightThreshold) {
 #ifdef QDNSLOOKUP_DEBUG
                     qDebug ("qt_qdnsservicerecord_sort() : adding %s %i (weight: %i)",
                             qPrintable (slice[j].target()), slice[j].port(),
@@ -279,8 +267,7 @@ static void qt_qdnsservicerecord_sort (QList<QDnsServiceRecord> &records)
 
 QDnsLookup::QDnsLookup (QObject *parent)
     : QObject (parent)
-    , d_ptr (new QDnsLookupPrivate (this))
-{
+    , d_ptr (new QDnsLookupPrivate (this)) {
     qRegisterMetaType<QDnsLookupReply>();
 }
 /*!
@@ -290,8 +277,7 @@ QDnsLookup::QDnsLookup (QObject *parent)
 
 QDnsLookup::QDnsLookup (Type type, const QString &name, QObject *parent)
     : QObject (parent)
-    , d_ptr (new QDnsLookupPrivate (this))
-{
+    , d_ptr (new QDnsLookupPrivate (this)) {
     Q_D (QDnsLookup);
     qRegisterMetaType<QDnsLookupReply>();
     d->name = name;
@@ -305,8 +291,7 @@ QDnsLookup::QDnsLookup (Type type, const QString &name, QObject *parent)
     will simply never receive its results.
 */
 
-QDnsLookup::~QDnsLookup()
-{
+QDnsLookup::~QDnsLookup() {
 }
 
 /*!
@@ -314,8 +299,7 @@ QDnsLookup::~QDnsLookup()
     \brief the type of error that occurred if the DNS lookup failed, or NoError.
 */
 
-QDnsLookup::Error QDnsLookup::error() const
-{
+QDnsLookup::Error QDnsLookup::error() const {
     return d_func()->reply.error;
 }
 
@@ -324,8 +308,7 @@ QDnsLookup::Error QDnsLookup::error() const
     \brief a human-readable description of the error if the DNS lookup failed.
 */
 
-QString QDnsLookup::errorString() const
-{
+QString QDnsLookup::errorString() const {
     return d_func()->reply.errorString;
 }
 
@@ -334,8 +317,7 @@ QString QDnsLookup::errorString() const
     \brief whether the reply has finished or was aborted.
 */
 
-bool QDnsLookup::isFinished() const
-{
+bool QDnsLookup::isFinished() const {
     return d_func()->isFinished;
 }
 
@@ -347,17 +329,14 @@ bool QDnsLookup::isFinished() const
     querying SRV records compatible with the DNS-SD specification.
 */
 
-QString QDnsLookup::name() const
-{
+QString QDnsLookup::name() const {
     return d_func()->name;
 }
 
-void QDnsLookup::setName (const QString &name)
-{
+void QDnsLookup::setName (const QString &name) {
     Q_D (QDnsLookup);
 
-    if (name != d->name)
-    {
+    if (name != d->name) {
         d->name = name;
         emit nameChanged (name);
     }
@@ -368,17 +347,14 @@ void QDnsLookup::setName (const QString &name)
     \brief the type of DNS lookup.
 */
 
-QDnsLookup::Type QDnsLookup::type() const
-{
+QDnsLookup::Type QDnsLookup::type() const {
     return d_func()->type;
 }
 
-void QDnsLookup::setType (Type type)
-{
+void QDnsLookup::setType (Type type) {
     Q_D (QDnsLookup);
 
-    if (type != d->type)
-    {
+    if (type != d->type) {
         d->type = type;
         emit typeChanged (type);
     }
@@ -388,8 +364,7 @@ void QDnsLookup::setType (Type type)
     Returns the list of canonical name records associated with this lookup.
 */
 
-QList<QDnsDomainNameRecord> QDnsLookup::canonicalNameRecords() const
-{
+QList<QDnsDomainNameRecord> QDnsLookup::canonicalNameRecords() const {
     return d_func()->reply.canonicalNameRecords;
 }
 
@@ -397,8 +372,7 @@ QList<QDnsDomainNameRecord> QDnsLookup::canonicalNameRecords() const
     Returns the list of host address records associated with this lookup.
 */
 
-QList<QDnsHostAddressRecord> QDnsLookup::hostAddressRecords() const
-{
+QList<QDnsHostAddressRecord> QDnsLookup::hostAddressRecords() const {
     return d_func()->reply.hostAddressRecords;
 }
 
@@ -410,8 +384,7 @@ QList<QDnsHostAddressRecord> QDnsLookup::hostAddressRecords() const
     to connect to servers, you should try them in the order they are listed.
 */
 
-QList<QDnsMailExchangeRecord> QDnsLookup::mailExchangeRecords() const
-{
+QList<QDnsMailExchangeRecord> QDnsLookup::mailExchangeRecords() const {
     return d_func()->reply.mailExchangeRecords;
 }
 
@@ -419,8 +392,7 @@ QList<QDnsMailExchangeRecord> QDnsLookup::mailExchangeRecords() const
     Returns the list of name server records associated with this lookup.
 */
 
-QList<QDnsDomainNameRecord> QDnsLookup::nameServerRecords() const
-{
+QList<QDnsDomainNameRecord> QDnsLookup::nameServerRecords() const {
     return d_func()->reply.nameServerRecords;
 }
 
@@ -428,8 +400,7 @@ QList<QDnsDomainNameRecord> QDnsLookup::nameServerRecords() const
     Returns the list of pointer records associated with this lookup.
 */
 
-QList<QDnsDomainNameRecord> QDnsLookup::pointerRecords() const
-{
+QList<QDnsDomainNameRecord> QDnsLookup::pointerRecords() const {
     return d_func()->reply.pointerRecords;
 }
 
@@ -441,8 +412,7 @@ QList<QDnsDomainNameRecord> QDnsLookup::pointerRecords() const
     to connect to servers, you should try them in the order they are listed.
 */
 
-QList<QDnsServiceRecord> QDnsLookup::serviceRecords() const
-{
+QList<QDnsServiceRecord> QDnsLookup::serviceRecords() const {
     return d_func()->reply.serviceRecords;
 }
 
@@ -450,8 +420,7 @@ QList<QDnsServiceRecord> QDnsLookup::serviceRecords() const
     Returns the list of text records associated with this lookup.
 */
 
-QList<QDnsTextRecord> QDnsLookup::textRecords() const
-{
+QList<QDnsTextRecord> QDnsLookup::textRecords() const {
     return d_func()->reply.textRecords;
 }
 
@@ -461,12 +430,10 @@ QList<QDnsTextRecord> QDnsLookup::textRecords() const
     If the lookup is already finished, does nothing.
 */
 
-void QDnsLookup::abort()
-{
+void QDnsLookup::abort() {
     Q_D (QDnsLookup);
 
-    if (d->runnable)
-    {
+    if (d->runnable) {
         d->runnable = 0;
         d->reply = QDnsLookupReply();
         d->reply.error = QDnsLookup::OperationCancelledError;
@@ -482,8 +449,7 @@ void QDnsLookup::abort()
     The \l{QDnsLookup::finished()}{finished()} signal is emitted upon completion.
 */
 
-void QDnsLookup::lookup()
-{
+void QDnsLookup::lookup() {
     Q_D (QDnsLookup);
     d->isFinished = false;
     d->reply = QDnsLookupReply();
@@ -513,8 +479,7 @@ void QDnsLookup::lookup()
 */
 
 QDnsDomainNameRecord::QDnsDomainNameRecord()
-    : d (new QDnsDomainNameRecordPrivate)
-{
+    : d (new QDnsDomainNameRecordPrivate) {
 }
 
 /*!
@@ -522,24 +487,21 @@ QDnsDomainNameRecord::QDnsDomainNameRecord()
 */
 
 QDnsDomainNameRecord::QDnsDomainNameRecord (const QDnsDomainNameRecord &other)
-    : d (other.d)
-{
+    : d (other.d) {
 }
 
 /*!
     Destroys a domain name record.
 */
 
-QDnsDomainNameRecord::~QDnsDomainNameRecord()
-{
+QDnsDomainNameRecord::~QDnsDomainNameRecord() {
 }
 
 /*!
     Returns the name for this record.
 */
 
-QString QDnsDomainNameRecord::name() const
-{
+QString QDnsDomainNameRecord::name() const {
     return d->name;
 }
 
@@ -547,8 +509,7 @@ QString QDnsDomainNameRecord::name() const
     Returns the duration in seconds for which this record is valid.
 */
 
-quint32 QDnsDomainNameRecord::timeToLive() const
-{
+quint32 QDnsDomainNameRecord::timeToLive() const {
     return d->timeToLive;
 }
 
@@ -556,8 +517,7 @@ quint32 QDnsDomainNameRecord::timeToLive() const
     Returns the value for this domain name record.
 */
 
-QString QDnsDomainNameRecord::value() const
-{
+QString QDnsDomainNameRecord::value() const {
     return d->value;
 }
 
@@ -566,8 +526,7 @@ QString QDnsDomainNameRecord::value() const
     and returns a reference to it.
 */
 
-QDnsDomainNameRecord &QDnsDomainNameRecord::operator= (const QDnsDomainNameRecord &other)
-{
+QDnsDomainNameRecord &QDnsDomainNameRecord::operator= (const QDnsDomainNameRecord &other) {
     d = other.d;
     return *this;
 }
@@ -591,8 +550,7 @@ QDnsDomainNameRecord &QDnsDomainNameRecord::operator= (const QDnsDomainNameRecor
 */
 
 QDnsHostAddressRecord::QDnsHostAddressRecord()
-    : d (new QDnsHostAddressRecordPrivate)
-{
+    : d (new QDnsHostAddressRecordPrivate) {
 }
 
 /*!
@@ -600,24 +558,21 @@ QDnsHostAddressRecord::QDnsHostAddressRecord()
 */
 
 QDnsHostAddressRecord::QDnsHostAddressRecord (const QDnsHostAddressRecord &other)
-    : d (other.d)
-{
+    : d (other.d) {
 }
 
 /*!
     Destroys a host address record.
 */
 
-QDnsHostAddressRecord::~QDnsHostAddressRecord()
-{
+QDnsHostAddressRecord::~QDnsHostAddressRecord() {
 }
 
 /*!
     Returns the name for this record.
 */
 
-QString QDnsHostAddressRecord::name() const
-{
+QString QDnsHostAddressRecord::name() const {
     return d->name;
 }
 
@@ -625,8 +580,7 @@ QString QDnsHostAddressRecord::name() const
     Returns the duration in seconds for which this record is valid.
 */
 
-quint32 QDnsHostAddressRecord::timeToLive() const
-{
+quint32 QDnsHostAddressRecord::timeToLive() const {
     return d->timeToLive;
 }
 
@@ -634,8 +588,7 @@ quint32 QDnsHostAddressRecord::timeToLive() const
     Returns the value for this host address record.
 */
 
-QHostAddress QDnsHostAddressRecord::value() const
-{
+QHostAddress QDnsHostAddressRecord::value() const {
     return d->value;
 }
 
@@ -644,8 +597,7 @@ QHostAddress QDnsHostAddressRecord::value() const
     and returns a reference to it.
 */
 
-QDnsHostAddressRecord &QDnsHostAddressRecord::operator= (const QDnsHostAddressRecord &other)
-{
+QDnsHostAddressRecord &QDnsHostAddressRecord::operator= (const QDnsHostAddressRecord &other) {
     d = other.d;
     return *this;
 }
@@ -671,8 +623,7 @@ QDnsHostAddressRecord &QDnsHostAddressRecord::operator= (const QDnsHostAddressRe
 */
 
 QDnsMailExchangeRecord::QDnsMailExchangeRecord()
-    : d (new QDnsMailExchangeRecordPrivate)
-{
+    : d (new QDnsMailExchangeRecordPrivate) {
 }
 
 /*!
@@ -680,24 +631,21 @@ QDnsMailExchangeRecord::QDnsMailExchangeRecord()
 */
 
 QDnsMailExchangeRecord::QDnsMailExchangeRecord (const QDnsMailExchangeRecord &other)
-    : d (other.d)
-{
+    : d (other.d) {
 }
 
 /*!
     Destroys a mail exchange record.
 */
 
-QDnsMailExchangeRecord::~QDnsMailExchangeRecord()
-{
+QDnsMailExchangeRecord::~QDnsMailExchangeRecord() {
 }
 
 /*!
     Returns the domain name of the mail exchange for this record.
 */
 
-QString QDnsMailExchangeRecord::exchange() const
-{
+QString QDnsMailExchangeRecord::exchange() const {
     return d->exchange;
 }
 
@@ -705,8 +653,7 @@ QString QDnsMailExchangeRecord::exchange() const
     Returns the name for this record.
 */
 
-QString QDnsMailExchangeRecord::name() const
-{
+QString QDnsMailExchangeRecord::name() const {
     return d->name;
 }
 
@@ -714,8 +661,7 @@ QString QDnsMailExchangeRecord::name() const
     Returns the preference for this record.
 */
 
-quint16 QDnsMailExchangeRecord::preference() const
-{
+quint16 QDnsMailExchangeRecord::preference() const {
     return d->preference;
 }
 
@@ -723,8 +669,7 @@ quint16 QDnsMailExchangeRecord::preference() const
     Returns the duration in seconds for which this record is valid.
 */
 
-quint32 QDnsMailExchangeRecord::timeToLive() const
-{
+quint32 QDnsMailExchangeRecord::timeToLive() const {
     return d->timeToLive;
 }
 
@@ -733,8 +678,7 @@ quint32 QDnsMailExchangeRecord::timeToLive() const
     and returns a reference to it.
 */
 
-QDnsMailExchangeRecord &QDnsMailExchangeRecord::operator= (const QDnsMailExchangeRecord &other)
-{
+QDnsMailExchangeRecord &QDnsMailExchangeRecord::operator= (const QDnsMailExchangeRecord &other) {
     d = other.d;
     return *this;
 }
@@ -760,8 +704,7 @@ QDnsMailExchangeRecord &QDnsMailExchangeRecord::operator= (const QDnsMailExchang
 */
 
 QDnsServiceRecord::QDnsServiceRecord()
-    : d (new QDnsServiceRecordPrivate)
-{
+    : d (new QDnsServiceRecordPrivate) {
 }
 
 /*!
@@ -769,24 +712,21 @@ QDnsServiceRecord::QDnsServiceRecord()
 */
 
 QDnsServiceRecord::QDnsServiceRecord (const QDnsServiceRecord &other)
-    : d (other.d)
-{
+    : d (other.d) {
 }
 
 /*!
     Destroys a service record.
 */
 
-QDnsServiceRecord::~QDnsServiceRecord()
-{
+QDnsServiceRecord::~QDnsServiceRecord() {
 }
 
 /*!
     Returns the name for this record.
 */
 
-QString QDnsServiceRecord::name() const
-{
+QString QDnsServiceRecord::name() const {
     return d->name;
 }
 
@@ -794,8 +734,7 @@ QString QDnsServiceRecord::name() const
     Returns the port on the target host for this service record.
 */
 
-quint16 QDnsServiceRecord::port() const
-{
+quint16 QDnsServiceRecord::port() const {
     return d->port;
 }
 
@@ -806,8 +745,7 @@ quint16 QDnsServiceRecord::port() const
     priority.
 */
 
-quint16 QDnsServiceRecord::priority() const
-{
+quint16 QDnsServiceRecord::priority() const {
     return d->priority;
 }
 
@@ -815,8 +753,7 @@ quint16 QDnsServiceRecord::priority() const
     Returns the domain name of the target host for this service record.
 */
 
-QString QDnsServiceRecord::target() const
-{
+QString QDnsServiceRecord::target() const {
     return d->target;
 }
 
@@ -824,8 +761,7 @@ QString QDnsServiceRecord::target() const
     Returns the duration in seconds for which this record is valid.
 */
 
-quint32 QDnsServiceRecord::timeToLive() const
-{
+quint32 QDnsServiceRecord::timeToLive() const {
     return d->timeToLive;
 }
 
@@ -837,8 +773,7 @@ quint32 QDnsServiceRecord::timeToLive() const
     probability.
 */
 
-quint16 QDnsServiceRecord::weight() const
-{
+quint16 QDnsServiceRecord::weight() const {
     return d->weight;
 }
 
@@ -847,8 +782,7 @@ quint16 QDnsServiceRecord::weight() const
     and returns a reference to it.
 */
 
-QDnsServiceRecord &QDnsServiceRecord::operator= (const QDnsServiceRecord &other)
-{
+QDnsServiceRecord &QDnsServiceRecord::operator= (const QDnsServiceRecord &other) {
     d = other.d;
     return *this;
 }
@@ -874,8 +808,7 @@ QDnsServiceRecord &QDnsServiceRecord::operator= (const QDnsServiceRecord &other)
 */
 
 QDnsTextRecord::QDnsTextRecord()
-    : d (new QDnsTextRecordPrivate)
-{
+    : d (new QDnsTextRecordPrivate) {
 }
 
 /*!
@@ -883,24 +816,21 @@ QDnsTextRecord::QDnsTextRecord()
 */
 
 QDnsTextRecord::QDnsTextRecord (const QDnsTextRecord &other)
-    : d (other.d)
-{
+    : d (other.d) {
 }
 
 /*!
     Destroys a text record.
 */
 
-QDnsTextRecord::~QDnsTextRecord()
-{
+QDnsTextRecord::~QDnsTextRecord() {
 }
 
 /*!
     Returns the name for this text record.
 */
 
-QString QDnsTextRecord::name() const
-{
+QString QDnsTextRecord::name() const {
     return d->name;
 }
 
@@ -908,8 +838,7 @@ QString QDnsTextRecord::name() const
     Returns the duration in seconds for which this record is valid.
 */
 
-quint32 QDnsTextRecord::timeToLive() const
-{
+quint32 QDnsTextRecord::timeToLive() const {
     return d->timeToLive;
 }
 
@@ -917,8 +846,7 @@ quint32 QDnsTextRecord::timeToLive() const
     Returns the values for this text record.
 */
 
-QList<QByteArray> QDnsTextRecord::values() const
-{
+QList<QByteArray> QDnsTextRecord::values() const {
     return d->values;
 }
 
@@ -927,18 +855,15 @@ QList<QByteArray> QDnsTextRecord::values() const
     and returns a reference to it.
 */
 
-QDnsTextRecord &QDnsTextRecord::operator= (const QDnsTextRecord &other)
-{
+QDnsTextRecord &QDnsTextRecord::operator= (const QDnsTextRecord &other) {
     d = other.d;
     return *this;
 }
 
-void QDnsLookupPrivate::_q_lookupFinished (const QDnsLookupReply &_reply)
-{
+void QDnsLookupPrivate::_q_lookupFinished (const QDnsLookupReply &_reply) {
     Q_Q (QDnsLookup);
 
-    if (runnable == q->sender())
-    {
+    if (runnable == q->sender()) {
 #ifdef QDNSLOOKUP_DEBUG
         qDebug ("DNS reply for %s: %i (%s)", qPrintable (name), _reply.error, qPrintable (_reply.errorString));
 #endif
@@ -949,13 +874,11 @@ void QDnsLookupPrivate::_q_lookupFinished (const QDnsLookupReply &_reply)
     }
 }
 
-void QDnsLookupRunnable::run()
-{
+void QDnsLookupRunnable::run() {
     QDnsLookupReply reply;
 
     // Validate input.
-    if (requestName.isEmpty())
-    {
+    if (requestName.isEmpty()) {
         reply.error = QDnsLookup::InvalidRequestError;
         reply.errorString = tr ("Invalid domain name");
         emit finished (reply);
@@ -966,8 +889,7 @@ void QDnsLookupRunnable::run()
     query (requestType, requestName, &reply);
 
     // Sort results.
-    if (!theDnsLookupSeedStorage()->hasLocalData())
-    {
+    if (!theDnsLookupSeedStorage()->hasLocalData()) {
         qsrand (QTime (0, 0, 0).msecsTo (QTime::currentTime()) ^ reinterpret_cast<quintptr> (this));
         theDnsLookupSeedStorage()->setLocalData (new bool (true));
     }
@@ -979,25 +901,20 @@ void QDnsLookupRunnable::run()
 }
 
 QDnsLookupThreadPool::QDnsLookupThreadPool()
-    : signalsConnected (false)
-{
+    : signalsConnected (false) {
     // Run up to 5 lookups in parallel.
     setMaxThreadCount (5);
 }
 
-void QDnsLookupThreadPool::start (QRunnable *runnable)
-{
+void QDnsLookupThreadPool::start (QRunnable *runnable) {
     // Ensure threads complete at application destruction.
-    if (!signalsConnected)
-    {
+    if (!signalsConnected) {
         QMutexLocker signalsLocker (&signalsMutex);
 
-        if (!signalsConnected)
-        {
+        if (!signalsConnected) {
             QCoreApplication *app = QCoreApplication::instance();
 
-            if (!app)
-            {
+            if (!app) {
                 qWarning ("QDnsLookup requires a QCoreApplication");
                 delete runnable;
                 return;
@@ -1013,8 +930,7 @@ void QDnsLookupThreadPool::start (QRunnable *runnable)
     QThreadPool::start (runnable);
 }
 
-void QDnsLookupThreadPool::_q_applicationDestroyed()
-{
+void QDnsLookupThreadPool::_q_applicationDestroyed() {
     waitForDone();
     signalsConnected = false;
 }

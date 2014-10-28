@@ -26,36 +26,35 @@
 
 #include "QXmppIq.h"
 
-class QXMPP_EXPORT QXmppNonSASLAuthIq : public QXmppIq
-{
-    public:
-        QXmppNonSASLAuthIq();
+class QXMPP_EXPORT QXmppNonSASLAuthIq : public QXmppIq {
+  public:
+    QXmppNonSASLAuthIq();
 
-        QString username() const;
-        void setUsername (const QString &username);
+    QString username() const;
+    void setUsername (const QString &username);
 
-        QByteArray digest() const;
-        void setDigest (const QString &streamId, const QString &password);
+    QByteArray digest() const;
+    void setDigest (const QString &streamId, const QString &password);
 
-        QString password() const;
-        void setPassword (const QString &password);
+    QString password() const;
+    void setPassword (const QString &password);
 
-        QString resource() const;
-        void setResource (const QString &resource);
+    QString resource() const;
+    void setResource (const QString &resource);
 
-        static bool isNonSASLAuthIq (const QDomElement &element);
+    static bool isNonSASLAuthIq (const QDomElement &element);
 
-    protected:
-        /// \cond
-        void parseElementFromChild (const QDomElement &element);
-        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-        /// \endcond
+  protected:
+    /// \cond
+    void parseElementFromChild (const QDomElement &element);
+    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+    /// \endcond
 
-    private:
-        QString m_username;
-        QByteArray m_digest;
-        QString m_password;
-        QString m_resource;
+  private:
+    QString m_username;
+    QByteArray m_digest;
+    QString m_password;
+    QString m_resource;
 };
 
 #endif // QXmppNonSASLAuth_H

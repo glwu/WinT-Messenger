@@ -11,6 +11,7 @@ import "../core"
 import "../controls"
 
 import QtQuick 2.0
+import QtMultimedia 5.0
 
 Dialog {
     id: dialog
@@ -19,13 +20,6 @@ Dialog {
     onVisibleChanged: _password_edit.text = ""
 
     signal xmppConnected
-
-    onClosed: {
-        if (connecting) {
-            disconnectXmpp()
-            _login_button.performActions()
-        }
-    }
 
     property int numberOfTries : 0
     property MessageBox gmailMessage
@@ -69,10 +63,23 @@ Dialog {
         }
     }
 
+    onClosed: {
+        if (connecting) {
+            disconnectXmpp()
+            _login_button.performActions()
+        }
+    }
+
     Connections {
         target: bridge
         onXmppConnected: connectXmpp()
         onXmppDisconnected: disconnectXmpp()
+    }
+
+    SoundEffect {
+        id: alertSound
+        source: "qrc:/sounds/sounds/alert.wav"
+        volume: settings.soundsEnabled() ? 1 : 0
     }
 
     contents: Column {
@@ -99,7 +106,7 @@ Dialog {
             centered: true
             id: _user_label
             fontSize: "large"
-            color: theme.logoTitle
+            color: theme.secondary
             text: qsTr("Sign in to chat online")
         }
 
@@ -164,7 +171,7 @@ Dialog {
 
                 function show() {
                     opacity = 1
-                    bridge.playSound("alert")
+                    alertSound.play()
                 }
 
                 function hide() {

@@ -18,79 +18,76 @@
 #include <QTcpSocket>
 #include <QHostAddress>
 
-class FConnection : public QTcpSocket
-{
-        Q_OBJECT
+class FConnection : public QTcpSocket {
+    Q_OBJECT
 
-    public:
-        enum ConnectionState
-        {
-            WaitingForGreeting,
-            ReadingGreeting,
-            ReadyForUse
-        };
+  public:
+    enum ConnectionState {
+        WaitingForGreeting,
+        ReadingGreeting,
+        ReadyForUse
+    };
 
-        enum DataType
-        {
-            Ping,
-            Pong,
-            Greeting,
-            Binary,
-            FileData,
-            Undefined
-        };
+    enum DataType {
+        Ping,
+        Pong,
+        Greeting,
+        Binary,
+        FileData,
+        Undefined
+    };
 
-        FConnection (QObject *parent = 0);
+    FConnection (QObject *parent = 0);
 
-        void sendFile (const QString& path);
-        void setDownloadPath (const QString& path);
+    void sendFile (const QString& path);
+    void setDownloadPath (const QString& path);
 
-    signals:
-        void readyForUse();
-        void downloadComplete (const QString& name, const QString& file);
-        void updateProgress (const QString& name, const QString& file, int progress);
-        void newDownload (const QString& name, const QString& file, const int& size);
+  signals:
+    void readyForUse();
+    void downloadComplete (const QString& name, const QString& file);
+    void updateProgress (const QString& name, const QString& file, int progress);
+    void newDownload (const QString& name, const QString& file, const int& size);
 
-    protected:
-        void timerEvent (QTimerEvent *timerEvent);
+  protected:
+    void timerEvent (QTimerEvent *timerEvent);
 
-        private
-    slots:
-        void sendPing();
-        void processReadyRead();
-        void sendGreetingMessage();
-        void calculateDownloadProgress();
+    private
+  slots:
+    void sendPing();
+    void processReadyRead();
+    void sendGreetingMessage();
+    void calculateDownloadProgress();
 
-    private:
-        void processData();
-        bool hasEnoughData();
-        int readDataIntoBuffer();
-        bool readProtocolHeader();
-        int dataLengthForCurrentDataType();
+  private:
+    void processData();
+    bool hasEnoughData();
+    int readDataIntoBuffer();
+    bool readProtocolHeader();
+    int dataLengthForCurrentDataType();
 
-        QTime pongTime;
-        QTimer pingTimer;
-        QString m_nickname;
-        QByteArray buffer;
-        QTimer downloadTimer;
-        int transferTimerId;
-        ConnectionState state;
-        QString currentFileName;
-        DataType currentDataType;
-        bool isGreetingMessageSent;
-        int numBytesForCurrentDataType;
+    QTime pongTime;
+    QTimer pingTimer;
+    QString m_nickname;
+    QByteArray buffer;
+    QTimer downloadTimer;
+    int transferTimerId;
+    ConnectionState state;
+    QString currentFileName;
+    DataType currentDataType;
+    bool isGreetingMessageSent;
+    int numBytesForCurrentDataType;
 
-        bool downloadStarted;
-        qreal downloadedBytes;
-        qreal currentDownloadSize;
+    bool downloadStarted;
+    qreal downloadedBytes;
+    qreal currentDownloadSize;
 
-        QString m_download_dir;
+    QString m_download_dir;
 
-        static const char SEPARATOR_TOKEN = ' ';
-        static const int PONG_TIMEOUT = 60 * 1000;
-        static const int PING_INTERVAL = 5 * 1000;
-        static const int TRANSFER_TIMEOUT = 30 * 1000;
-        static const int MAX_BUFFER_SIZE = 1024 * 1000;
+    static const char SEPARATOR_TOKEN = ' ';
+    static const int PONG_TIMEOUT = 60 * 1000;
+    static const int PING_INTERVAL = 5 * 1000;
+    static const int TRANSFER_TIMEOUT = 30 * 1000;
+    static const int MAX_BUFFER_SIZE = 1024 * 1000;
 };
 
 #endif

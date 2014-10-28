@@ -28,22 +28,19 @@
 
 /// Returns the email for this registration IQ.
 
-QString QXmppRegisterIq::email() const
-{
+QString QXmppRegisterIq::email() const {
     return m_email;
 }
 
 /// Sets the \a email for this registration IQ.
 
-void QXmppRegisterIq::setEmail (const QString &email)
-{
+void QXmppRegisterIq::setEmail (const QString &email) {
     m_email = email;
 }
 
 /// Returns the QXmppDataForm for this registration IQ.
 
-QXmppDataForm QXmppRegisterIq::form() const
-{
+QXmppDataForm QXmppRegisterIq::form() const {
     return m_form;
 }
 
@@ -51,61 +48,52 @@ QXmppDataForm QXmppRegisterIq::form() const
 ///
 /// \param form
 
-void QXmppRegisterIq::setForm (const QXmppDataForm &form)
-{
+void QXmppRegisterIq::setForm (const QXmppDataForm &form) {
     m_form = form;
 }
 
 /// Returns the instructions for this registration IQ.
 
-QString QXmppRegisterIq::instructions() const
-{
+QString QXmppRegisterIq::instructions() const {
     return m_instructions;
 }
 
 /// Sets the \a instructions for this registration IQ.
 
-void QXmppRegisterIq::setInstructions (const QString &instructions)
-{
+void QXmppRegisterIq::setInstructions (const QString &instructions) {
     m_instructions = instructions;
 }
 
 /// Returns the password for this registration IQ.
 
-QString QXmppRegisterIq::password() const
-{
+QString QXmppRegisterIq::password() const {
     return m_password;
 }
 
 /// Sets the \a password for this registration IQ.
 
-void QXmppRegisterIq::setPassword (const QString &password)
-{
+void QXmppRegisterIq::setPassword (const QString &password) {
     m_password = password;
 }
 
 /// Returns the username for this registration IQ.
 
-QString QXmppRegisterIq::username() const
-{
+QString QXmppRegisterIq::username() const {
     return m_username;
 }
 
 /// Sets the \a username for this registration IQ.
 
-void QXmppRegisterIq::setUsername (const QString &username)
-{
+void QXmppRegisterIq::setUsername (const QString &username) {
     m_username = username;
 }
 
 /// \cond
-bool QXmppRegisterIq::isRegisterIq (const QDomElement &element)
-{
+bool QXmppRegisterIq::isRegisterIq (const QDomElement &element) {
     return (element.firstChildElement ("query").namespaceURI() == ns_register);
 }
 
-void QXmppRegisterIq::parseElementFromChild (const QDomElement &element)
-{
+void QXmppRegisterIq::parseElementFromChild (const QDomElement &element) {
     QDomElement queryElement = element.firstChildElement ("query");
     m_instructions = queryElement.firstChildElement ("instructions").text();
     m_username = queryElement.firstChildElement ("username").text();
@@ -114,8 +102,7 @@ void QXmppRegisterIq::parseElementFromChild (const QDomElement &element)
     m_form.parse (queryElement.firstChildElement ("x"));
 }
 
-void QXmppRegisterIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
-{
+void QXmppRegisterIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
     writer->writeStartElement ("query");
     writer->writeAttribute ("xmlns", ns_register);
 

@@ -116,22 +116,22 @@ Frame {
         opacity: 0.5
         width: parent.width
         height: parent.height
+        color: theme.borderColor
         anchors.centerIn: parent
         glowRadius: units.scale(3)
         anchors.verticalCenterOffset: glowRadius
         anchors.horizontalCenterOffset: glowRadius
-        color: settings.darkInterface() ? theme.shadow : theme.borderColor
     }
 
     RectangularGlow {
         opacity: 0.5
         width: triangle.width
         height: triangle.height
+        color: theme.borderColor
         anchors.centerIn: triangle
         glowRadius: units.scale(3)
         anchors.verticalCenterOffset: glowRadius
         anchors.horizontalCenterOffset: glowRadius
-        color: settings.darkInterface() ? theme.shadow : theme.borderColor
     }
 
     Frame {

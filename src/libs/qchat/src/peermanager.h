@@ -27,48 +27,47 @@
 
 class Client;
 
-class PeerManager : public QObject
-{
-        Q_OBJECT
+class PeerManager : public QObject {
+    Q_OBJECT
 
-    public:
+  public:
 
-        PeerManager (Client *client);
+    PeerManager (Client *client);
 
-        void startBroadcasting();
-        void setFileServerPort (int port);
-        void setMessageServerPort (int port);
-        bool isLocalHostAddress (const QHostAddress& address);
+    void startBroadcasting();
+    void setFileServerPort (int port);
+    void setMessageServerPort (int port);
+    bool isLocalHostAddress (const QHostAddress& address);
 
-        QByteArray nickname;
-        QByteArray profile_picture;
+    QByteArray nickname;
+    QByteArray profile_picture;
 
-    signals:
+  signals:
 
-        void newFileConnection (FConnection *mc);
-        void newMessageConnection (MConnection *mc);
+    void newFileConnection (FConnection *mc);
+    void newMessageConnection (MConnection *mc);
 
-    private slots:
+  private slots:
 
-        void sendBroadcastDatagram();
-        void readBroadcastDatagram();
+    void sendBroadcastDatagram();
+    void readBroadcastDatagram();
 
-    private:
+  private:
 
-        void updateAddresses();
+    void updateAddresses();
 
-        Client *client;
+    Client *client;
 
-        int m_serverPort;
-        int f_serverPort;
+    int m_serverPort;
+    int f_serverPort;
 
-        QTimer broadcastTimer;
-        QUdpSocket broadcastSocket;
-        QList<QHostAddress> ipAddresses;
-        QList<QHostAddress> broadcastAddresses;
+    QTimer broadcastTimer;
+    QUdpSocket broadcastSocket;
+    QList<QHostAddress> ipAddresses;
+    QList<QHostAddress> broadcastAddresses;
 
-        static const qint32 BroadcastInterval = 2000;
-        static const unsigned broadcastPort = 45000;
+    static const qint32 BroadcastInterval = 2000;
+    static const unsigned broadcastPort = 45000;
 };
 
 #endif
