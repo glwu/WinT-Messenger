@@ -50,7 +50,7 @@ Page {
     rightWidgets: [
         Icon {
             name: "download"
-            color: theme.navigationBarText
+            color: theme.primaryForeground
             opacity: _sidebar.sidebarFitsScreen()
                      && downloadMenu.activeDownloads > 0 ? 1 : 0
 
@@ -216,8 +216,6 @@ Page {
         onHideMessageStack: {
             if (page.visible)
                 page.setTitle(qsTr("Chat"))
-
-            _messageStack.opacity = 0
         }
 
         Connections {

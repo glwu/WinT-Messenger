@@ -15,17 +15,29 @@ import QtGraphicalEffects 1.0
 Rectangle {
     id: bubble
 
+    // The receiver of the message
     property string to
+
+    // The sender of the message
     property string from
+
+    // The actual string of the message
     property string message
 
+    // Tells us if the message has been seen by the receiver
     property bool read: false
+
+    // Tells us if the message was sent by the local user or
+    // has been sent by a remote user
     property bool isLocal: false
 
+    // Returns the time in a string
     function dateTime() {
         return Qt.formatDateTime(new Date(), "hh:mm:ss AP")
     }
 
+    // Detects and appens hyperlinks and emotes to the input string.
+    // For example, it transforms "www.google.com" to "<a href="http://www.google.com">www.google.com</a>"
     function autoFormat(string) {
         var http, www, mailto;
 
@@ -42,17 +54,52 @@ Rectangle {
         return string
     }
 
+    // Decides if we should show the message or not
+    // on the MessageStack (based on the user that we
+    // are talking to).
+    //
+    // To make this shit more clear, suppose that you have the
+    // following users:
+    //     - Bob
+    //     - Alice
+    //     - And you
+    //
+    // You are talking with Alice about how much you hate Bob,
+    // so you can see her messages and the messages that you sent to her.
+    // BTW, your messages to Alice will never reach Bob's computer or mobile device.
+    // You can use Wireshark if you don't believe me...or look at the source code.
+    //
+    // In the meantime, Bob sends you a message, however, his message
+    // will not be shown because you are currently talking to Alice...not him!
+    // Take into account that the messages that you sent to Bob will be also hidden
+    // while you are talking to Alice.
+    //
+    // Now then, when you click on the UserItem assigned to Bob, you will be
+    // able to see the messages that you sent to him and the messages that he sent to you,
+    // however, you won't be able to see Alice's messages or the messages
+    // that you sent to Alice...all this magic is done by the following function:
+    //
     function assignConversation(user) {
+
+        // The message was sent by the local user,
+        // however, the receiver of the message is
+        // not the current user, so we hide the message.
         if (isLocal && user !== to) {
             height = 0
             visible = false
         }
 
+        // The message was sent by a remote user,
+        // however, we hide it because the sender
+        // is not the current user
         else if (!isLocal && user !== from) {
             height = 0
             visible = false
         }
 
+        // The message was sent by us to the current
+        // user, OR the message was sent by the current
+        // user to us.
         else {
             visible = true
             sendMessageRead()
@@ -60,6 +107,8 @@ Rectangle {
         }
     }
 
+    // Calculates the required size for the message to be shown
+    // nicely and applies the calculated values
     function drawMessage() {
         _bg.calculateWidth()
         _bg.calculateHeight()
@@ -67,6 +116,8 @@ Rectangle {
         width = childrenRect.width + units.scale(20)
     }
 
+    // The message has been seen by the local user, so we alert the
+    // remote user that his/her message has been seen
     function sendMessageRead() {
         if (visible && !read && !isLocal) {
             read = true
@@ -75,6 +126,9 @@ Rectangle {
     }
 
     states: [
+
+        // Displays the message to the right area of the
+        // screen and hides the profile picture
         State {
             name: "local"
 
@@ -95,6 +149,8 @@ Rectangle {
             }
         },
 
+        // Displays the message to the left area of the screen
+        // and shows the profile picture of the remote user
         State {
             name: "remote"
 
@@ -120,7 +176,11 @@ Rectangle {
     height: _bg.height + units.scale(21)
     width: childrenRect.width + units.scale(20)
 
+    // Tell the remote user that his/her message
+    // has been seen when the local user views the message
     onVisibleChanged: sendMessageRead()
+
+    // Draw the message and show a sliding animation
     Component.onCompleted: {
         drawMessage()
         xAni.start()
@@ -128,14 +188,21 @@ Rectangle {
 
     Connections {
         target: messageStack
+
+        // Redraw the message when the size
+        // of the window changes
         onWidthChanged: drawMessage()
         onHeightChanged: drawMessage()
 
+        // Hide/show the message when the
+        // user changes the conversation between
+        // one user and another
         onUserChanged: {
             assignConversation(user)
         }
     }
 
+    // Slide the message horizontally upon its generation...
     NumberAnimation {
         id: xAni
         property: "x"
@@ -150,6 +217,7 @@ Rectangle {
         }
     }
 
+    // Add a shadow to the main rectangle of the message
     RectangularGlow {
         opacity: 0.5
         width: _bg.width
@@ -161,6 +229,7 @@ Rectangle {
         anchors.horizontalCenterOffset: glowRadius
     }
 
+    // Add a shadow to the triangle generated below
     RectangularGlow {
         opacity: 0.5
         width: triangle.width
@@ -173,6 +242,8 @@ Rectangle {
         anchors.horizontalCenterOffset: glowRadius
     }
 
+    // The name says it all...its a triangle that points
+    // to the current user (left or right)
     Frame {
         id: triangle
         rotation: 45
@@ -182,6 +253,8 @@ Rectangle {
         anchors.rightMargin: -units.gu(1) + units.scale(2)
     }
 
+    // This image shows the profile picture only when the message is
+    // sent by a remote user
     CircularImage {
         id: image
         height: width
@@ -191,13 +264,18 @@ Rectangle {
         source: isLocal ? "" : "image://profile-pictures/" + bridge.getId(from)
     }
 
+    // This is the actual rectangle that contains the message...finally!
     Frame {
         id: _bg
 
+        // Calculates the required height so that our message will
+        // be displayed as nicely as possible
         function calculateHeight() {
             height = text.paintedHeight + units.gu(3)
         }
 
+        // Calculates the required width so that our message will
+        // be displayed as nicely as possible
         function calculateWidth() {
             if (text.paintedWidth > (bubble.parent.width * 0.8 - units.gu(14)))
                 width = bubble.parent.width * 0.95 - units.gu(10)
@@ -205,6 +283,7 @@ Rectangle {
                 width = text.paintedWidth + units.gu(4)
         }
 
+        // Apply the calculated sizes when the rectangle is created
         Component.onCompleted: {
             calculateWidth()
             calculateHeight()
@@ -217,6 +296,8 @@ Rectangle {
         anchors.bottomMargin: 0
         anchors.margins: units.gu(1.5)
 
+        // This label contains the processed message string as
+        // a rich text HTML string
         Label {
             id: text
             anchors.fill: parent
@@ -236,6 +317,8 @@ Rectangle {
         }
     }
 
+    // This rectangle hides the triangle's border that colides with the
+    // background rectangle's border
     Rectangle {
         color: _bg.color
         height: triangle.height

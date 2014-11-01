@@ -37,7 +37,9 @@ class Updater : public QObject {
 
     Updater();
 
-    /// Returns \c true if there is an update available
+    /// Downloads a text file from the Internet
+    /// and configures the class to emit the updateAvailable()
+    /// signal when ready.
     void checkForUpdates();
 
   private slots:
@@ -47,6 +49,8 @@ class Updater : public QObject {
 
   signals:
 
+    /// \param newUpdate returns \c true if there's a newer version available
+    /// \param version returns a string with the latest version available
     void updateAvailable (bool newUpdate, const QString &version);
 
   private:

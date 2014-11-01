@@ -238,7 +238,7 @@ Dialog {
 
         Button {
             id: _login_button
-            style: "primary"
+            primary: true
             text: qsTr("Login")
             anchors.left: center.right
             onClicked: performActions()

@@ -18,6 +18,10 @@ Page {
     property alias subtitle: _subtitle.text
     default property alias contents: _contents.data
 
+    function canShowRectangle() {
+        return !(app.width < 1.25 * _bg.width)
+    }
+
     RectangularGlow {
         opacity: 0.2
         width: _bg.width
@@ -25,43 +29,19 @@ Page {
         anchors.centerIn: _bg
         color: theme.borderColor
         glowRadius: units.scale(3)
+        visible: canShowRectangle()
         anchors.verticalCenterOffset: glowRadius
         anchors.horizontalCenterOffset: glowRadius
     }
 
-    Rectangle {
-        color: theme.dialog
-        anchors.fill: parent
-        id: fallbackRectangle
-        opacity: app.width < 1.25 * _bg.width ? 1 : 0
-
-        Rectangle {
-            height: units.scale(1)
-            color: theme.borderColor
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-        }
-
-        Rectangle {
-            height: units.scale(1)
-            color: theme.borderColor
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-        }
-
-        Behavior on opacity {NumberAnimation{}}
-    }
-
     Frame {
         id: _bg
-        color: theme.dialog
         height: 1.125 * width
         anchors.centerIn: parent
         anchors.margins: units.scale(24)
         width: _image.width + units.gu(32)
-        border.color: fallbackRectangle.opacity > 0 ? "transparent" : theme.borderColor
+        color: canShowRectangle() ? theme.dialog : "transparent"
+        border.color: canShowRectangle() ? theme.borderColor : "transparent"
 
         Label {
             id: _caption

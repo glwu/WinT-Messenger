@@ -20,6 +20,8 @@ Item {
     property string peer
     property string uuid
 
+    property bool peer_disconnected: false
+
     signal userButtonClicked
     signal userChanged(string user)
 
@@ -27,8 +29,11 @@ Item {
 
     function drawMessage(from, to,  message, isLocal) {
         if (message) {
-            _status.opacity = 0
-            receiveSound.play()
+            if (!peer_disconnected) {
+                _status.opacity = 0
+                receiveSound.play()
+            }
+
             _bubble_model.append({"_from": from,
                                      "_to": to,
                                      "_message": message,
@@ -39,16 +44,15 @@ Item {
     }
 
     function clear() {
-        opacity = 0
         _bubble_model.clear()
     }
 
-    function setPeer(nickname, id) {
+    function setPeer(nickname, id) {   
         peer = nickname
         uuid = id
         opacity = 1
-
         userChanged(nickname)
+        peer_disconnected = false
         _bubble_view.positionViewAtEnd()
     }
 
@@ -60,8 +64,10 @@ Item {
     Connections {
         target: bridge
         onDelUser: {
-            if (id === uuid)
-                opacity = 0
+            if (id === uuid) {
+                peer_disconnected = true
+                _status.text = peer + " " + qsTr("is no longer available")
+            }
         }
 
         onDrawMessage: {
@@ -135,7 +141,7 @@ Item {
         Timer {
             id: _timer
             interval: 500
-            onTriggered: _status.opacity = 0
+            onTriggered: !peer_disconnected ? _status.opacity = 0 : undefined
         }
 
         function show() {

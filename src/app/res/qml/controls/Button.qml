@@ -14,7 +14,6 @@ Frame {
     height: units.gu(4)
     color: "transparent"
     radius: units.scale(2)
-    opacity: enabled ? 1 : 0.5
     border.color: "transparent"
     style: primary ? "primary" : "default"
     width: text === "" ? height : Math.max(units.gu(10), row.width + 2 * units.gu(2))
@@ -32,17 +31,17 @@ Frame {
     property alias fontSize: label.fontSize
 
     function updateColors() {
-        textColor = style === "default" ? theme.textColor : "white"
+        textColor = (style === "default") ? "#666" : theme.secondaryForeground
     }
 
     Component.onCompleted: updateColors()
-
-    Behavior on opacity {NumberAnimation{}}
 
     Connections {
         target: theme
         onThemeChanged: updateColors()
     }
+
+    Behavior on opacity {NumberAnimation{}}
 
     Rectangle {
         smooth: true
@@ -53,15 +52,15 @@ Frame {
         border.width: units.scale(1)
 
         gradient: Gradient {
-            GradientStop { position: 0.0; color: "#FEFEFE" }
-            GradientStop { position: 1.0; color: "#F8F8F8" }
+            GradientStop { position: 0.0; color: "#F7F7F7" }
+            GradientStop { position: 1.0; color: "#F3F3F3" }
         }
     }
 
     Rectangle {
         anchors.fill: parent
         radius: parent.radius
-        color: primary ? theme.primary : theme.secondary
+        color: theme.secondary
 
         opacity: {
             if (!flat && (primary || style == "primary"))

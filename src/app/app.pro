@@ -35,6 +35,13 @@ HEADERS += $$PWD/src/*.h
 SOURCES += $$PWD/src/*.cpp
 RESOURCES += $$PWD/res/res.qrc
 
+OTHER_FILES += $$PWD/res/qml/*.qml
+OTHER_FILES += $$PWD/res/qml/chat/*.qml
+OTHER_FILES += $$PWD/res/qml/controls/*.qml
+OTHER_FILES += $$PWD/res/qml/core/*.qml
+OTHER_FILES += $$PWD/res/qml/dialogs/*.qml
+OTHER_FILES += $$PWD/res/qml/menus/*.qml
+
 macx {
     CONFIG += app_bundle
     LIBS += -lcrypto -lssl

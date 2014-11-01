@@ -23,11 +23,11 @@ Frame {
     Frame {
         id: progressRect
         radius: parent.radius
+        color: theme.secondary
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         width: (parent.width * value) / 100
-        color: theme.getStyleColor("primary")
     }
 
     Label {
@@ -41,8 +41,8 @@ Frame {
     Label {
         opacity: value / 100
         anchors.centerIn: parent
-        color: theme.navigationBarText
         font.pixelSize: units.scale(12)
+        color: theme.primaryForeground
         text: value < 100 ? " " + valueText : valueText
     }
 }

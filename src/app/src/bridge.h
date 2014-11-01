@@ -30,20 +30,46 @@ class Bridge : public QObject {
 
     Bridge();
 
+    /// Stops and deletes the current instances
+    /// of the qChat module
     Q_INVOKABLE void stopLanChat();
+
+    /// Starts and configures a new instance of
+    /// the qChat module
     Q_INVOKABLE void startLanChat();
 
+    /// Stops and deletes the current instances
+    /// of the XMPP module
     Q_INVOKABLE void stopXmpp();
+
+    /// Starts and configures a new instance of
+    /// the XMPP module with the given JID and password
     Q_INVOKABLE void startXmpp (QString jid, QString passwd);
 
+    /// Returns the fullname of an user given its ID
     Q_INVOKABLE QString getId (QString nickname);
+
+    /// Shares a selection of files to the given user
     Q_INVOKABLE void shareFiles (const QString& peer);
+
+    /// Returns a smiley code or a HTML image based on the
+    /// input string
     Q_INVOKABLE QString manageSmileys (const QString &data);
+
+    /// Sends a status message to given peer
     Q_INVOKABLE void sendStatus (const QString &to, const QString &status);
+
+    /// Sends a message to the given peer
     Q_INVOKABLE void sendMessage (const QString& to, const QString &message);
 
+    /// Returns the path where WinT Messenger should write downloaded files
     Q_INVOKABLE QString downloadPath();
+
+    /// Requests the \c Updater class to check for a newer version of the application
     Q_INVOKABLE void checkForUpdates();
+
+    /// Copies the given string to the system's clipboard (the JS implementation
+    /// was too complicated for our needs)
     Q_INVOKABLE void copy (const QString &string);
 
     DeviceManager manager;
@@ -53,7 +79,6 @@ class Bridge : public QObject {
 
     void xmppConnected();
     void xmppDisconnected();
-
     void delUser (QString nick, QString id);
     void newUser (QString nick, QString id);
     void sendFile (QString file, QString peer);

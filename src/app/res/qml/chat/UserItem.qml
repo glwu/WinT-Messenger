@@ -124,7 +124,7 @@ Frame {
         maximumLineCount: 1
         elide: Text.ElideRight
         wrapMode: TextEdit.NoWrap
-        color: isSelected || _mouseArea.containsMouse ? theme.navigationBarText :
+        color: isSelected || _mouseArea.containsMouse ? theme.primaryForeground :
                                                         theme.logoSubtitle
 
         anchors {

@@ -37,7 +37,7 @@ Flickable {
     property list<Item> leftWidgets: [
         Icon {
             name: "chevron-left"
-            color: theme.navigationBarText
+            color: theme.primaryForeground
             opacity: stack.depth > 1 ? 1 : 0
 
             Behavior on opacity {
@@ -55,7 +55,7 @@ Flickable {
     property list<Item> rightWidgets: [
         Icon {
             name: "bars"
-            color: theme.navigationBarText
+            color: theme.primaryForeground
 
             MouseArea {
                 anchors.fill: parent

@@ -22,32 +22,18 @@ Dialog {
 
     onVisibleChanged: updateValues()
     Component.onCompleted: {
-        updateValues()
-
-        if (settings.firstLaunch())
+        if (settings.firstLaunch()) {
             dialog.open()
+            closeButton.text = qsTr("Done")
+        } else {
+            closeButton.text = qsTr("Close")
+            textBox.text = settings.value("nickname", "unknown")
+        }
     }
 
     onClosed: {
         if (settings.firstLaunch())
             dialog.open()
-    }
-
-    function updateValues() {
-        customColor.selected = settings.customColor()
-        notifyUpdates.selected = settings.notifyUpdates()
-        soundsEnabled.selected = settings.soundsEnabled()
-
-        colorDialog.color = theme.primary
-
-        if (settings.firstLaunch()) {
-            closeButton.text = qsTr("Done")
-        }
-
-        else {
-            closeButton.text = qsTr("Close")
-            textBox.text = settings.value("nickname", "unknown")
-        }
     }
 
     contents: Column {
@@ -204,6 +190,7 @@ Dialog {
                 CheckBox {
                     width: height
                     id: soundsEnabled
+                    selected: settings.soundsEnabled()
                     text: qsTr("Enable sound effects")
                     onSelectedChanged: settings.setValue("soundsEnabled", selected)
                 }
@@ -211,6 +198,7 @@ Dialog {
                 CheckBox {
                     width: height
                     id: customColor
+                    selected: settings.customColor()
                     text: qsTr("Use the profile color to theme the app")
                     onSelectedChanged: {
                         settings.setValue("customColor", selected)
@@ -221,6 +209,7 @@ Dialog {
                 CheckBox {
                     width: height
                     id: notifyUpdates
+                    selected: settings.notifyUpdates()
                     text: qsTr("Notify me when a new update is released")
                     onSelectedChanged: settings.setValue("notifyUpdates", selected)
                 }
@@ -261,7 +250,8 @@ Dialog {
 
     ColorDialog {
         id: colorDialog
-        title: qsTr("Chose profile color")
+        color: theme.primary
+        title: qsTr("Choose profile color")
         onRejected: color = theme.primary
         onAccepted : {
             theme.primary = color

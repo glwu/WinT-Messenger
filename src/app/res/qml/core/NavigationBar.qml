@@ -15,13 +15,7 @@ import QtGraphicalEffects 1.0
 Item {
     height: units.gu(6)
 
-    // The property represents the current page,
-    // it is used to display the page's left and
-    // right widgets
     property Page currentPage
-
-    // This property is used to change the title
-    // of the navigation bar
     property alias title: _title.text
 
     anchors {
@@ -30,8 +24,6 @@ Item {
         right: parent.right
     }
 
-    // Add a shadow to the navigation bar to give it
-    // more depth.
     RectangularGlow {
         opacity: 0.5
         color: theme.shadow
@@ -39,14 +31,11 @@ Item {
         glowRadius: units.scale(6)
     }
 
-    // This rectangle is used to draw the background
-    // of the navigation bar
     Rectangle {
         id: _panel
         anchors.fill: parent
-        color: theme.navigationBar
+        color: theme.primary
 
-        // Create the bottom border line
         Rectangle {
             id: _border
             height: units.scale(1)
@@ -60,7 +49,6 @@ Item {
         }
     }
 
-    // Create the left item widgets
     Row {
         id: leftItem
         spacing: units.gu(1)
@@ -73,7 +61,6 @@ Item {
         }
     }
 
-    // Create the right item widgets
     Row {
         id: rightItem
         spacing: units.gu(2)
@@ -87,19 +74,15 @@ Item {
         }
     }
 
-    // This label is used to display the title
-    // of the navigation bar
     Label {
         id: _title
         fontSize: "x-large"
         maximumLineCount: 1
         elide: Text.ElideRight
         textFormat: Text.PlainText
-        color: theme.navigationBarText
+        color: theme.primaryForeground
         horizontalAlignment: Text.AlignHCenter
 
-        // Calculate the required left margin to center
-        // the label
         property int leftMargin: {
             if (rightItem.width > leftItem.width)
                 return rightItem.width - units.gu(1)
@@ -107,8 +90,6 @@ Item {
                 return units.gu(1)
         }
 
-        // Calculate the required right matgin to center
-        // the label
         property int rightMargin: {
             if (rightItem.width < leftItem.width)
                 return leftItem.width - units.gu(1)
@@ -116,7 +97,6 @@ Item {
                 return units.gu(1)
         }
 
-        // Anchor the title label
         anchors {
             left: leftItem.right
             right: rightItem.left

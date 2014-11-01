@@ -84,10 +84,6 @@ Frame {
     function autoAdjustWidth() {
         if (_usersModel.count >= 1)
             show()
-        else if (_usersModel.count >= 1)
-            return
-        else
-            hide()
     }
 
     Item {
@@ -118,11 +114,20 @@ Frame {
                 id: search_edit
                 anchors.left: _search.right
                 anchors.right: parent.right
+                visible: _sidebar.width > 0
                 anchors.leftMargin: units.gu(2)
                 anchors.rightMargin: units.gu(2)
                 placeholderText: qsTr("Search...")
                 anchors.verticalCenter: parent.verticalCenter
             }
+        }
+
+        Label {
+            fontSize: "medium"
+            text: qsTr("No users")
+            anchors.centerIn: parent
+            opacity: _usersModel.count <= 0 && _sidebar.width > 0 ? 1 : 0
+            Behavior on opacity {NumberAnimation{}}
         }
 
         NiceScrollView {

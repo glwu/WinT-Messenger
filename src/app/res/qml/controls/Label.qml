@@ -11,15 +11,14 @@ import QtQuick 2.0
 
 Text {
     property bool centered: false
-    property string style: "default"
     property string fontSize: "small"
 
     smooth: true
+    color: theme.textColor
     font.family: global.font
     textFormat: Text.PlainText
     font.pixelSize: units.size(fontSize)
     linkColor: Qt.darker(theme.primary, 1.2)
     onLinkActivated: Qt.openUrlExternally(link)
     anchors.horizontalCenter: centered ? parent.horizontalCenter : undefined
-    color: style === "default" ? theme.textColor : theme.getStyleColor(style)
 }

@@ -35,7 +35,7 @@ Rectangle {
 
         Icon {
             name: "check"
-            color: theme.primary
+            color: theme.secondary
             anchors.centerIn: parent
             opacity: selected ? 1 : 0
             iconSize: parent.height * 1.25

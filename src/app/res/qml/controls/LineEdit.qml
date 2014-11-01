@@ -57,7 +57,7 @@ TextField {
             anchors.fill: parent
             iconSize: units.gu(1.25)
             anchors.centerIn: parent
-            color: theme.navigationBarText
+            color: theme.textFieldBackground
         }
 
         MouseArea {
