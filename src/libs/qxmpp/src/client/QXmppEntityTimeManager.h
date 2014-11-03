@@ -34,20 +34,21 @@ class QXmppEntityTimeIq;
 ///
 /// \ingroup Managers
 
-class QXMPP_EXPORT QXmppEntityTimeManager : public QXmppClientExtension {
-    Q_OBJECT
+class QXMPP_EXPORT QXmppEntityTimeManager : public QXmppClientExtension
+{
+        Q_OBJECT
 
-  public:
-    QString requestTime (const QString& jid);
+    public:
+        QString requestTime (const QString& jid);
 
-    /// \cond
-    QStringList discoveryFeatures() const;
-    bool handleStanza (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        QStringList discoveryFeatures() const;
+        bool handleStanza (const QDomElement &element);
+        /// \endcond
 
-  signals:
-    /// \brief This signal is emitted when a time response is received.
-    void timeReceived (const QXmppEntityTimeIq&);
+    signals:
+        /// \brief This signal is emitted when a time response is received.
+        void timeReceived (const QXmppEntityTimeIq&);
 };
 
 #endif // QXMPPENTITYTIMEMANAGER_H

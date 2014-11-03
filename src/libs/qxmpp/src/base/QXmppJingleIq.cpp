@@ -29,7 +29,8 @@
 
 static const char *ns_jingle_rtp_info = "urn:xmpp:jingle:apps:rtp:info:1";
 
-static const char *jingle_actions[] = {
+static const char *jingle_actions[] =
+{
     "content-accept",
     "content-add",
     "content-modify",
@@ -47,7 +48,8 @@ static const char *jingle_actions[] = {
     "transport-replace",
 };
 
-static const char *jingle_reasons[] = {
+static const char *jingle_reasons[] =
+{
     "",
     "alternative-session",
     "busy",
@@ -68,82 +70,101 @@ static const char *jingle_reasons[] = {
     "unsupported-transports",
 };
 
-QXmppJingleIq::Content::Content() {
+QXmppJingleIq::Content::Content()
+{
 }
 
-QString QXmppJingleIq::Content::creator() const {
+QString QXmppJingleIq::Content::creator() const
+{
     return m_creator;
 }
 
-void QXmppJingleIq::Content::setCreator (const QString &creator) {
+void QXmppJingleIq::Content::setCreator (const QString &creator)
+{
     m_creator = creator;
 }
 
-QString QXmppJingleIq::Content::name() const {
+QString QXmppJingleIq::Content::name() const
+{
     return m_name;
 }
 
-void QXmppJingleIq::Content::setName (const QString &name) {
+void QXmppJingleIq::Content::setName (const QString &name)
+{
     m_name = name;
 }
 
-QString QXmppJingleIq::Content::senders() const {
+QString QXmppJingleIq::Content::senders() const
+{
     return m_senders;
 }
 
-void QXmppJingleIq::Content::setSenders (const QString &senders) {
+void QXmppJingleIq::Content::setSenders (const QString &senders)
+{
     m_senders = senders;
 }
 
-QString QXmppJingleIq::Content::descriptionMedia() const {
+QString QXmppJingleIq::Content::descriptionMedia() const
+{
     return m_descriptionMedia;
 }
 
-void QXmppJingleIq::Content::setDescriptionMedia (const QString &media) {
+void QXmppJingleIq::Content::setDescriptionMedia (const QString &media)
+{
     m_descriptionMedia = media;
 }
 
-void QXmppJingleIq::Content::addPayloadType (const QXmppJinglePayloadType &payload) {
+void QXmppJingleIq::Content::addPayloadType (const QXmppJinglePayloadType &payload)
+{
     m_descriptionType = ns_jingle_rtp;
     m_payloadTypes << payload;
 }
 
-QList<QXmppJinglePayloadType> QXmppJingleIq::Content::payloadTypes() const {
+QList<QXmppJinglePayloadType> QXmppJingleIq::Content::payloadTypes() const
+{
     return m_payloadTypes;
 }
 
-void QXmppJingleIq::Content::setPayloadTypes (const QList<QXmppJinglePayloadType> &payloadTypes) {
+void QXmppJingleIq::Content::setPayloadTypes (const QList<QXmppJinglePayloadType> &payloadTypes)
+{
     m_descriptionType = payloadTypes.isEmpty() ? QString() : ns_jingle_rtp;
     m_payloadTypes = payloadTypes;
 }
 
-void QXmppJingleIq::Content::addTransportCandidate (const QXmppJingleCandidate &candidate) {
+void QXmppJingleIq::Content::addTransportCandidate (const QXmppJingleCandidate &candidate)
+{
     m_transportType = ns_jingle_ice_udp;
     m_transportCandidates << candidate;
 }
 
-QList<QXmppJingleCandidate> QXmppJingleIq::Content::transportCandidates() const {
+QList<QXmppJingleCandidate> QXmppJingleIq::Content::transportCandidates() const
+{
     return m_transportCandidates;
 }
 
-QString QXmppJingleIq::Content::transportUser() const {
+QString QXmppJingleIq::Content::transportUser() const
+{
     return m_transportUser;
 }
 
-void QXmppJingleIq::Content::setTransportUser (const QString &user) {
+void QXmppJingleIq::Content::setTransportUser (const QString &user)
+{
     m_transportUser = user;
 }
 
-QString QXmppJingleIq::Content::transportPassword() const {
+QString QXmppJingleIq::Content::transportPassword() const
+{
     return m_transportPassword;
 }
 
-void QXmppJingleIq::Content::setTransportPassword (const QString &password) {
+void QXmppJingleIq::Content::setTransportPassword (const QString &password)
+{
     m_transportPassword = password;
 }
 
 /// \cond
-void QXmppJingleIq::Content::parse (const QDomElement &element) {
+void QXmppJingleIq::Content::parse (const QDomElement &element)
+{
     m_creator = element.attribute ("creator");
     m_disposition = element.attribute ("disposition");
     m_name = element.attribute ("name");
@@ -155,7 +176,8 @@ void QXmppJingleIq::Content::parse (const QDomElement &element) {
     m_descriptionMedia = descriptionElement.attribute ("media");
     QDomElement child = descriptionElement.firstChildElement ("payload-type");
 
-    while (!child.isNull()) {
+    while (!child.isNull())
+    {
         QXmppJinglePayloadType payload;
         payload.parse (child);
         m_payloadTypes << payload;
@@ -169,7 +191,8 @@ void QXmppJingleIq::Content::parse (const QDomElement &element) {
     m_transportPassword = transportElement.attribute ("pwd");
     child = transportElement.firstChildElement ("candidate");
 
-    while (!child.isNull()) {
+    while (!child.isNull())
+    {
         QXmppJingleCandidate candidate;
         candidate.parse (child);
         m_transportCandidates << candidate;
@@ -177,7 +200,8 @@ void QXmppJingleIq::Content::parse (const QDomElement &element) {
     }
 }
 
-void QXmppJingleIq::Content::toXml (QXmlStreamWriter *writer) const {
+void QXmppJingleIq::Content::toXml (QXmlStreamWriter *writer) const
+{
     if (m_creator.isEmpty() || m_name.isEmpty())
         return;
 
@@ -188,7 +212,8 @@ void QXmppJingleIq::Content::toXml (QXmlStreamWriter *writer) const {
     helperToXmlAddAttribute (writer, "senders", m_senders);
 
     // description
-    if (!m_descriptionType.isEmpty() || !m_payloadTypes.isEmpty()) {
+    if (!m_descriptionType.isEmpty() || !m_payloadTypes.isEmpty())
+    {
         writer->writeStartElement ("description");
         writer->writeAttribute ("xmlns", m_descriptionType);
         helperToXmlAddAttribute (writer, "media", m_descriptionMedia);
@@ -198,7 +223,8 @@ void QXmppJingleIq::Content::toXml (QXmlStreamWriter *writer) const {
     }
 
     // transport
-    if (!m_transportType.isEmpty() || !m_transportCandidates.isEmpty()) {
+    if (!m_transportType.isEmpty() || !m_transportCandidates.isEmpty())
+    {
         writer->writeStartElement ("transport");
         writer->writeAttribute ("xmlns", m_transportType);
         helperToXmlAddAttribute (writer, "ufrag", m_transportUser);
@@ -213,38 +239,47 @@ void QXmppJingleIq::Content::toXml (QXmlStreamWriter *writer) const {
 /// \endcond
 
 QXmppJingleIq::Reason::Reason()
-    : m_type (None) {
+    : m_type (None)
+{
 }
 
-QString QXmppJingleIq::Reason::text() const {
+QString QXmppJingleIq::Reason::text() const
+{
     return m_text;
 }
 
-void QXmppJingleIq::Reason::setText (const QString &text) {
+void QXmppJingleIq::Reason::setText (const QString &text)
+{
     m_text = text;
 }
 
-QXmppJingleIq::Reason::Type QXmppJingleIq::Reason::type() const {
+QXmppJingleIq::Reason::Type QXmppJingleIq::Reason::type() const
+{
     return m_type;
 }
 
-void QXmppJingleIq::Reason::setType (QXmppJingleIq::Reason::Type type) {
+void QXmppJingleIq::Reason::setType (QXmppJingleIq::Reason::Type type)
+{
     m_type = type;
 }
 
 /// \cond
-void QXmppJingleIq::Reason::parse (const QDomElement &element) {
+void QXmppJingleIq::Reason::parse (const QDomElement &element)
+{
     m_text = element.firstChildElement ("text").text();
 
-    for (int i = AlternativeSession; i <= UnsupportedTransports; i++) {
-        if (!element.firstChildElement (jingle_reasons[i]).isNull()) {
+    for (int i = AlternativeSession; i <= UnsupportedTransports; i++)
+    {
+        if (!element.firstChildElement (jingle_reasons[i]).isNull())
+        {
             m_type = static_cast<Type> (i);
             break;
         }
     }
 }
 
-void QXmppJingleIq::Reason::toXml (QXmlStreamWriter *writer) const {
+void QXmppJingleIq::Reason::toXml (QXmlStreamWriter *writer) const
+{
     if (m_type < AlternativeSession || m_type > UnsupportedTransports)
         return;
 
@@ -261,12 +296,14 @@ void QXmppJingleIq::Reason::toXml (QXmlStreamWriter *writer) const {
 /// Constructs a QXmppJingleIq.
 
 QXmppJingleIq::QXmppJingleIq()
-    : m_ringing (false) {
+    : m_ringing (false)
+{
 }
 
 /// Returns the Jingle IQ's action.
 
-QXmppJingleIq::Action QXmppJingleIq::action() const {
+QXmppJingleIq::Action QXmppJingleIq::action() const
+{
     return m_action;
 }
 
@@ -274,13 +311,15 @@ QXmppJingleIq::Action QXmppJingleIq::action() const {
 ///
 /// \param action
 
-void QXmppJingleIq::setAction (QXmppJingleIq::Action action) {
+void QXmppJingleIq::setAction (QXmppJingleIq::Action action)
+{
     m_action = action;
 }
 
 /// Returns the session initiator.
 
-QString QXmppJingleIq::initiator() const {
+QString QXmppJingleIq::initiator() const
+{
     return m_initiator;
 }
 
@@ -288,13 +327,15 @@ QString QXmppJingleIq::initiator() const {
 ///
 /// \param initiator
 
-void QXmppJingleIq::setInitiator (const QString &initiator) {
+void QXmppJingleIq::setInitiator (const QString &initiator)
+{
     m_initiator = initiator;
 }
 
 /// Returns the session responder.
 
-QString QXmppJingleIq::responder() const {
+QString QXmppJingleIq::responder() const
+{
     return m_responder;
 }
 
@@ -302,13 +343,15 @@ QString QXmppJingleIq::responder() const {
 ///
 /// \param responder
 
-void QXmppJingleIq::setResponder (const QString &responder) {
+void QXmppJingleIq::setResponder (const QString &responder)
+{
     m_responder = responder;
 }
 
 /// Returns the session ID.
 
-QString QXmppJingleIq::sid() const {
+QString QXmppJingleIq::sid() const
+{
     return m_sid;
 }
 
@@ -316,13 +359,15 @@ QString QXmppJingleIq::sid() const {
 ///
 /// \param sid
 
-void QXmppJingleIq::setSid (const QString &sid) {
+void QXmppJingleIq::setSid (const QString &sid)
+{
     m_sid = sid;
 }
 
 /// Returns true if the call is ringing.
 
-bool QXmppJingleIq::ringing() const {
+bool QXmppJingleIq::ringing() const
+{
     return m_ringing;
 }
 
@@ -330,22 +375,27 @@ bool QXmppJingleIq::ringing() const {
 ///
 /// \param ringing
 
-void QXmppJingleIq::setRinging (bool ringing) {
+void QXmppJingleIq::setRinging (bool ringing)
+{
     m_ringing = ringing;
 }
 
 /// \cond
-bool QXmppJingleIq::isJingleIq (const QDomElement &element) {
+bool QXmppJingleIq::isJingleIq (const QDomElement &element)
+{
     QDomElement jingleElement = element.firstChildElement ("jingle");
     return (jingleElement.namespaceURI() == ns_jingle);
 }
 
-void QXmppJingleIq::parseElementFromChild (const QDomElement &element) {
+void QXmppJingleIq::parseElementFromChild (const QDomElement &element)
+{
     QDomElement jingleElement = element.firstChildElement ("jingle");
     const QString action = jingleElement.attribute ("action");
 
-    for (int i = ContentAccept; i <= TransportReplace; i++) {
-        if (action == jingle_actions[i]) {
+    for (int i = ContentAccept; i <= TransportReplace; i++)
+    {
+        if (action == jingle_actions[i])
+        {
             m_action = static_cast<Action> (i);
             break;
         }
@@ -366,7 +416,8 @@ void QXmppJingleIq::parseElementFromChild (const QDomElement &element) {
     m_ringing = (ringingElement.namespaceURI() == ns_jingle_rtp_info);
 }
 
-void QXmppJingleIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppJingleIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("jingle");
     writer->writeAttribute ("xmlns", ns_jingle);
     helperToXmlAddAttribute (writer, "action", jingle_actions[m_action]);
@@ -377,7 +428,8 @@ void QXmppJingleIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
     m_reason.toXml (writer);
 
     // ringing
-    if (m_ringing) {
+    if (m_ringing)
+    {
         writer->writeStartElement ("ringing");
         writer->writeAttribute ("xmlns", ns_jingle_rtp_info);
         writer->writeEndElement();
@@ -394,12 +446,14 @@ QXmppJingleCandidate::QXmppJingleCandidate()
       m_network (0),
       m_port (0),
       m_priority (0),
-      m_type (HostType) {
+      m_type (HostType)
+{
 }
 
 /// Returns the candidate's component ID.
 
-int QXmppJingleCandidate::component() const {
+int QXmppJingleCandidate::component() const
+{
     return m_component;
 }
 
@@ -407,13 +461,15 @@ int QXmppJingleCandidate::component() const {
 ///
 /// \param component
 
-void QXmppJingleCandidate::setComponent (int component) {
+void QXmppJingleCandidate::setComponent (int component)
+{
     m_component = component;
 }
 
 /// Returns the candidate's foundation.
 
-int QXmppJingleCandidate::foundation() const {
+int QXmppJingleCandidate::foundation() const
+{
     return m_foundation;
 }
 
@@ -421,14 +477,16 @@ int QXmppJingleCandidate::foundation() const {
 ///
 /// \param foundation
 
-void QXmppJingleCandidate::setFoundation (int foundation) {
+void QXmppJingleCandidate::setFoundation (int foundation)
+{
     m_foundation = foundation;
 }
 
 /// Returns the candidate's host address.
 ///
 
-QHostAddress QXmppJingleCandidate::host() const {
+QHostAddress QXmppJingleCandidate::host() const
+{
     return m_host;
 }
 
@@ -436,14 +494,16 @@ QHostAddress QXmppJingleCandidate::host() const {
 ///
 /// \param host
 
-void QXmppJingleCandidate::setHost (const QHostAddress &host) {
+void QXmppJingleCandidate::setHost (const QHostAddress &host)
+{
     m_host = host;
 }
 
 /// Returns the candidate's unique identifier.
 ///
 
-QString QXmppJingleCandidate::id() const {
+QString QXmppJingleCandidate::id() const
+{
     return m_id;
 }
 
@@ -451,14 +511,16 @@ QString QXmppJingleCandidate::id() const {
 ///
 /// \param id
 
-void QXmppJingleCandidate::setId (const QString &id) {
+void QXmppJingleCandidate::setId (const QString &id)
+{
     m_id = id;
 }
 
 /// Returns the network index (starting at 0) the candidate is on.
 ///
 
-int QXmppJingleCandidate::network() const {
+int QXmppJingleCandidate::network() const
+{
     return m_network;
 }
 
@@ -466,14 +528,16 @@ int QXmppJingleCandidate::network() const {
 ///
 /// \param network
 
-void QXmppJingleCandidate::setNetwork (int network) {
+void QXmppJingleCandidate::setNetwork (int network)
+{
     m_network = network;
 }
 
 /// Returns the candidate's port number.
 ///
 
-quint16 QXmppJingleCandidate::port() const {
+quint16 QXmppJingleCandidate::port() const
+{
     return m_port;
 }
 
@@ -481,14 +545,16 @@ quint16 QXmppJingleCandidate::port() const {
 ///
 /// \param port
 
-void QXmppJingleCandidate::setPort (quint16 port) {
+void QXmppJingleCandidate::setPort (quint16 port)
+{
     m_port = port;
 }
 
 /// Returns the candidate's priority.
 ///
 
-int QXmppJingleCandidate::priority() const {
+int QXmppJingleCandidate::priority() const
+{
     return m_priority;
 }
 
@@ -496,14 +562,16 @@ int QXmppJingleCandidate::priority() const {
 ///
 /// \param priority
 
-void QXmppJingleCandidate::setPriority (int priority) {
+void QXmppJingleCandidate::setPriority (int priority)
+{
     m_priority = priority;
 }
 
 /// Returns the candidate's protocol (e.g. "udp").
 ///
 
-QString QXmppJingleCandidate::protocol() const {
+QString QXmppJingleCandidate::protocol() const
+{
     return m_protocol;
 }
 
@@ -511,14 +579,16 @@ QString QXmppJingleCandidate::protocol() const {
 ///
 /// \param protocol
 
-void QXmppJingleCandidate::setProtocol (const QString &protocol) {
+void QXmppJingleCandidate::setProtocol (const QString &protocol)
+{
     m_protocol = protocol;
 }
 
 /// Returns the candidate type (e.g. "host").
 ///
 
-QXmppJingleCandidate::Type QXmppJingleCandidate::type() const {
+QXmppJingleCandidate::Type QXmppJingleCandidate::type() const
+{
     return m_type;
 }
 
@@ -526,19 +596,22 @@ QXmppJingleCandidate::Type QXmppJingleCandidate::type() const {
 ///
 /// \param type
 
-void QXmppJingleCandidate::setType (QXmppJingleCandidate::Type type) {
+void QXmppJingleCandidate::setType (QXmppJingleCandidate::Type type)
+{
     m_type = type;
 }
 
 /// Returns true if the host address or port are empty.
 ///
 
-bool QXmppJingleCandidate::isNull() const {
+bool QXmppJingleCandidate::isNull() const
+{
     return m_host.isNull() || !m_port;
 }
 
 /// \cond
-void QXmppJingleCandidate::parse (const QDomElement &element) {
+void QXmppJingleCandidate::parse (const QDomElement &element)
+{
     m_component = element.attribute ("component").toInt();
     m_foundation = element.attribute ("foundation").toInt();
     m_generation = element.attribute ("generation").toInt();
@@ -551,7 +624,8 @@ void QXmppJingleCandidate::parse (const QDomElement &element) {
     m_type = typeFromString (element.attribute ("type"));
 }
 
-void QXmppJingleCandidate::toXml (QXmlStreamWriter *writer) const {
+void QXmppJingleCandidate::toXml (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("candidate");
     helperToXmlAddAttribute (writer, "component", QString::number (m_component));
     helperToXmlAddAttribute (writer, "foundation", QString::number (m_foundation));
@@ -566,7 +640,8 @@ void QXmppJingleCandidate::toXml (QXmlStreamWriter *writer) const {
     writer->writeEndElement();
 }
 
-QXmppJingleCandidate::Type QXmppJingleCandidate::typeFromString (const QString &typeStr, bool *ok) {
+QXmppJingleCandidate::Type QXmppJingleCandidate::typeFromString (const QString &typeStr, bool *ok)
+{
     QXmppJingleCandidate::Type type;
 
     if (typeStr == "host")
@@ -581,7 +656,8 @@ QXmppJingleCandidate::Type QXmppJingleCandidate::typeFromString (const QString &
     else if (typeStr == "relay")
         type = RelayedType;
 
-    else {
+    else
+    {
         qWarning() << "Unknown candidate type" << typeStr;
 
         if (ok)
@@ -596,10 +672,12 @@ QXmppJingleCandidate::Type QXmppJingleCandidate::typeFromString (const QString &
     return type;
 }
 
-QString QXmppJingleCandidate::typeToString (QXmppJingleCandidate::Type type) {
+QString QXmppJingleCandidate::typeToString (QXmppJingleCandidate::Type type)
+{
     QString typeStr;
 
-    switch (type) {
+    switch (type)
+    {
         case HostType:
             typeStr = "host";
             break;
@@ -626,13 +704,15 @@ QXmppJinglePayloadType::QXmppJinglePayloadType()
       m_clockrate (0),
       m_id (0),
       m_maxptime (0),
-      m_ptime (0) {
+      m_ptime (0)
+{
 }
 
 /// Returns the number of channels (e.g. 1 for mono, 2 for stereo).
 ///
 
-unsigned char QXmppJinglePayloadType::channels() const {
+unsigned char QXmppJinglePayloadType::channels() const
+{
     return m_channels;
 }
 
@@ -640,14 +720,16 @@ unsigned char QXmppJinglePayloadType::channels() const {
 ///
 /// \param channels
 
-void QXmppJinglePayloadType::setChannels (unsigned char channels) {
+void QXmppJinglePayloadType::setChannels (unsigned char channels)
+{
     m_channels = channels;
 }
 
 /// Returns the clockrate in Hz, i.e. the number of samples per second.
 ///
 
-unsigned int QXmppJinglePayloadType::clockrate() const {
+unsigned int QXmppJinglePayloadType::clockrate() const
+{
     return m_clockrate;
 }
 
@@ -655,21 +737,24 @@ unsigned int QXmppJinglePayloadType::clockrate() const {
 ///
 /// \param clockrate
 
-void QXmppJinglePayloadType::setClockrate (unsigned int clockrate) {
+void QXmppJinglePayloadType::setClockrate (unsigned int clockrate)
+{
     m_clockrate = clockrate;
 }
 
 /// Returns the payload type identifier.
 ///
 
-unsigned char QXmppJinglePayloadType::id() const {
+unsigned char QXmppJinglePayloadType::id() const
+{
     return m_id;
 }
 
 /// Sets the payload type identifier.
 ///
 
-void QXmppJinglePayloadType::setId (unsigned char id) {
+void QXmppJinglePayloadType::setId (unsigned char id)
+{
     Q_ASSERT (id <= 127);
     m_id = id;
 }
@@ -677,7 +762,8 @@ void QXmppJinglePayloadType::setId (unsigned char id) {
 /// Returns the maximum packet time in milliseconds.
 ///
 
-unsigned int QXmppJinglePayloadType::maxptime() const {
+unsigned int QXmppJinglePayloadType::maxptime() const
+{
     return m_maxptime;
 }
 
@@ -685,14 +771,16 @@ unsigned int QXmppJinglePayloadType::maxptime() const {
 ///
 /// \param maxptime
 
-void QXmppJinglePayloadType::setMaxptime (unsigned int maxptime) {
+void QXmppJinglePayloadType::setMaxptime (unsigned int maxptime)
+{
     m_maxptime = maxptime;
 }
 
 /// Returns the payload type name.
 ///
 
-QString QXmppJinglePayloadType::name() const {
+QString QXmppJinglePayloadType::name() const
+{
     return m_name;
 }
 
@@ -700,26 +788,30 @@ QString QXmppJinglePayloadType::name() const {
 ///
 /// \param name
 
-void QXmppJinglePayloadType::setName (const QString &name) {
+void QXmppJinglePayloadType::setName (const QString &name)
+{
     m_name = name;
 }
 
 /// Returns the payload parameters.
 
-QMap<QString, QString> QXmppJinglePayloadType::parameters() const {
+QMap<QString, QString> QXmppJinglePayloadType::parameters() const
+{
     return m_parameters;
 }
 
 /// Sets the payload parameters.
 
-void QXmppJinglePayloadType::setParameters (const QMap<QString, QString> &parameters) {
+void QXmppJinglePayloadType::setParameters (const QMap<QString, QString> &parameters)
+{
     m_parameters = parameters;
 }
 
 /// Returns the packet time in milliseconds (20 by default).
 ///
 
-unsigned int QXmppJinglePayloadType::ptime() const {
+unsigned int QXmppJinglePayloadType::ptime() const
+{
     return m_ptime ? m_ptime : 20;
 }
 
@@ -727,12 +819,14 @@ unsigned int QXmppJinglePayloadType::ptime() const {
 ///
 /// \param ptime
 
-void QXmppJinglePayloadType::setPtime (unsigned int ptime) {
+void QXmppJinglePayloadType::setPtime (unsigned int ptime)
+{
     m_ptime = ptime;
 }
 
 /// \cond
-void QXmppJinglePayloadType::parse (const QDomElement &element) {
+void QXmppJinglePayloadType::parse (const QDomElement &element)
+{
     m_id = element.attribute ("id").toInt();
     m_name = element.attribute ("name");
     m_channels = element.attribute ("channels").toInt();
@@ -746,13 +840,15 @@ void QXmppJinglePayloadType::parse (const QDomElement &element) {
 
     QDomElement child = element.firstChildElement ("parameter");
 
-    while (!child.isNull()) {
+    while (!child.isNull())
+    {
         m_parameters.insert (child.attribute ("name"), child.attribute ("value"));
         child = child.nextSiblingElement ("parameter");
     }
 }
 
-void QXmppJinglePayloadType::toXml (QXmlStreamWriter *writer) const {
+void QXmppJinglePayloadType::toXml (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("payload-type");
     helperToXmlAddAttribute (writer, "id", QString::number (m_id));
     helperToXmlAddAttribute (writer, "name", m_name);
@@ -769,7 +865,8 @@ void QXmppJinglePayloadType::toXml (QXmlStreamWriter *writer) const {
     if (m_ptime > 0)
         helperToXmlAddAttribute (writer, "ptime", QString::number (m_ptime));
 
-    foreach (const QString & key, m_parameters.keys()) {
+    foreach (const QString & key, m_parameters.keys())
+    {
         writer->writeStartElement ("parameter");
         writer->writeAttribute ("name", key);
         writer->writeAttribute ("value", m_parameters.value (key));
@@ -783,7 +880,8 @@ void QXmppJinglePayloadType::toXml (QXmlStreamWriter *writer) const {
 ///
 /// \param other
 
-bool QXmppJinglePayloadType::operator== (const QXmppJinglePayloadType &other) const {
+bool QXmppJinglePayloadType::operator== (const QXmppJinglePayloadType &other) const
+{
     // FIXME : what to do with m_ptime and m_maxptime?
     if (m_id <= 95)
         return other.m_id == m_id && other.m_clockrate == m_clockrate;

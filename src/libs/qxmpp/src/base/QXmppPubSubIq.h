@@ -30,22 +30,23 @@
 /// as defined by XEP-0060: Publish-Subscribe.
 ///
 
-class QXMPP_EXPORT QXmppPubSubItem {
-  public:
-    QString id() const;
-    void setId (const QString &id);
+class QXMPP_EXPORT QXmppPubSubItem
+{
+    public:
+        QString id() const;
+        void setId (const QString &id);
 
-    QXmppElement contents() const;
-    void setContents (const QXmppElement &contents);
+        QXmppElement contents() const;
+        void setContents (const QXmppElement &contents);
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
-    /// \endcond
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QString m_id;
-    QXmppElement m_contents;
+    private:
+        QString m_id;
+        QXmppElement m_contents;
 };
 
 /// \brief The QXmppPubSubIq class represents an IQ used for the
@@ -53,53 +54,55 @@ class QXMPP_EXPORT QXmppPubSubItem {
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppPubSubIq : public QXmppIq {
-  public:
-    /// This enum is used to describe a publish-subscribe query type.
-    enum QueryType {
-        AffiliationsQuery,
-        DefaultQuery,
-        ItemsQuery,
-        PublishQuery,
-        RetractQuery,
-        SubscribeQuery,
-        SubscriptionQuery,
-        SubscriptionsQuery,
-        UnsubscribeQuery,
-    };
+class QXMPP_EXPORT QXmppPubSubIq : public QXmppIq
+{
+    public:
+        /// This enum is used to describe a publish-subscribe query type.
+        enum QueryType
+        {
+            AffiliationsQuery,
+            DefaultQuery,
+            ItemsQuery,
+            PublishQuery,
+            RetractQuery,
+            SubscribeQuery,
+            SubscriptionQuery,
+            SubscriptionsQuery,
+            UnsubscribeQuery,
+        };
 
-    QXmppPubSubIq::QueryType queryType() const;
-    void setQueryType (QXmppPubSubIq::QueryType queryType);
+        QXmppPubSubIq::QueryType queryType() const;
+        void setQueryType (QXmppPubSubIq::QueryType queryType);
 
-    QString queryJid() const;
-    void setQueryJid (const QString &jid);
+        QString queryJid() const;
+        void setQueryJid (const QString &jid);
 
-    QString queryNode() const;
-    void setQueryNode (const QString &node);
+        QString queryNode() const;
+        void setQueryNode (const QString &node);
 
-    QList<QXmppPubSubItem> items() const;
-    void setItems (const QList<QXmppPubSubItem> &items);
+        QList<QXmppPubSubItem> items() const;
+        void setItems (const QList<QXmppPubSubItem> &items);
 
-    QString subscriptionId() const;
-    void setSubscriptionId (const QString &id);
+        QString subscriptionId() const;
+        void setSubscriptionId (const QString &id);
 
-    /// \cond
-    static bool isPubSubIq (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        static bool isPubSubIq (const QDomElement &element);
+        /// \endcond
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement&);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement&);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QXmppPubSubIq::QueryType m_queryType;
-    QString m_queryJid;
-    QString m_queryNode;
-    QList<QXmppPubSubItem> m_items;
-    QString m_subscriptionId;
-    QString m_subscriptionType;
+    private:
+        QXmppPubSubIq::QueryType m_queryType;
+        QString m_queryJid;
+        QString m_queryNode;
+        QList<QXmppPubSubItem> m_items;
+        QString m_subscriptionId;
+        QString m_subscriptionType;
 };
 
 #endif

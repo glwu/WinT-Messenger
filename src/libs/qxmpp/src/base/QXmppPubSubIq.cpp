@@ -29,7 +29,8 @@
 
 static const char *ns_pubsub = "http://jabber.org/protocol/pubsub";
 
-static const char *pubsub_queries[] = {
+static const char *pubsub_queries[] =
+{
     "affiliations",
     "default",
     "items",
@@ -44,7 +45,8 @@ static const char *pubsub_queries[] = {
 /// Returns the ID of the PubSub item.
 ///
 
-QString QXmppPubSubItem::id() const {
+QString QXmppPubSubItem::id() const
+{
     return m_id;
 }
 
@@ -52,14 +54,16 @@ QString QXmppPubSubItem::id() const {
 ///
 /// \param id
 
-void QXmppPubSubItem::setId (const QString &id) {
+void QXmppPubSubItem::setId (const QString &id)
+{
     m_id = id;
 }
 
 /// Returns the contents of the PubSub item.
 ///
 
-QXmppElement QXmppPubSubItem::contents() const {
+QXmppElement QXmppPubSubItem::contents() const
+{
     return m_contents;
 }
 
@@ -67,17 +71,20 @@ QXmppElement QXmppPubSubItem::contents() const {
 ///
 /// \param contents
 
-void QXmppPubSubItem::setContents (const QXmppElement &contents) {
+void QXmppPubSubItem::setContents (const QXmppElement &contents)
+{
     m_contents = contents;
 }
 
 /// \cond
-void QXmppPubSubItem::parse (const QDomElement &element) {
+void QXmppPubSubItem::parse (const QDomElement &element)
+{
     m_id = element.attribute ("id");
     m_contents = QXmppElement (element.firstChildElement());
 }
 
-void QXmppPubSubItem::toXml (QXmlStreamWriter *writer) const {
+void QXmppPubSubItem::toXml (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("item");
     helperToXmlAddAttribute (writer, "id", m_id);
     m_contents.toXml (writer);
@@ -88,7 +95,8 @@ void QXmppPubSubItem::toXml (QXmlStreamWriter *writer) const {
 /// Returns the PubSub queryType for this IQ.
 ///
 
-QXmppPubSubIq::QueryType QXmppPubSubIq::queryType() const {
+QXmppPubSubIq::QueryType QXmppPubSubIq::queryType() const
+{
     return m_queryType;
 }
 
@@ -96,14 +104,16 @@ QXmppPubSubIq::QueryType QXmppPubSubIq::queryType() const {
 ///
 /// \param queryType
 
-void QXmppPubSubIq::setQueryType (QXmppPubSubIq::QueryType queryType) {
+void QXmppPubSubIq::setQueryType (QXmppPubSubIq::QueryType queryType)
+{
     m_queryType = queryType;
 }
 
 /// Returns the JID being queried.
 ///
 
-QString QXmppPubSubIq::queryJid() const {
+QString QXmppPubSubIq::queryJid() const
+{
     return m_queryJid;
 }
 
@@ -111,14 +121,16 @@ QString QXmppPubSubIq::queryJid() const {
 ///
 /// \param queryJid
 
-void QXmppPubSubIq::setQueryJid (const QString &queryJid) {
+void QXmppPubSubIq::setQueryJid (const QString &queryJid)
+{
     m_queryJid = queryJid;
 }
 
 /// Returns the node being queried.
 ///
 
-QString QXmppPubSubIq::queryNode() const {
+QString QXmppPubSubIq::queryNode() const
+{
     return m_queryNode;
 }
 
@@ -126,14 +138,16 @@ QString QXmppPubSubIq::queryNode() const {
 ///
 /// \param queryNode
 
-void QXmppPubSubIq::setQueryNode (const QString &queryNode) {
+void QXmppPubSubIq::setQueryNode (const QString &queryNode)
+{
     m_queryNode = queryNode;
 }
 
 /// Returns the subscription ID.
 ///
 
-QString QXmppPubSubIq::subscriptionId() const {
+QString QXmppPubSubIq::subscriptionId() const
+{
     return m_subscriptionId;
 }
 
@@ -141,14 +155,16 @@ QString QXmppPubSubIq::subscriptionId() const {
 ///
 /// \param subscriptionId
 
-void QXmppPubSubIq::setSubscriptionId (const QString &subscriptionId) {
+void QXmppPubSubIq::setSubscriptionId (const QString &subscriptionId)
+{
     m_subscriptionId = subscriptionId;
 }
 
 /// Returns the IQ's items.
 ///
 
-QList<QXmppPubSubItem> QXmppPubSubIq::items() const {
+QList<QXmppPubSubItem> QXmppPubSubIq::items() const
+{
     return m_items;
 }
 
@@ -156,17 +172,20 @@ QList<QXmppPubSubItem> QXmppPubSubIq::items() const {
 ///
 /// \param items
 
-void QXmppPubSubIq::setItems (const QList<QXmppPubSubItem> &items) {
+void QXmppPubSubIq::setItems (const QList<QXmppPubSubItem> &items)
+{
     m_items = items;
 }
 
 /// \cond
-bool QXmppPubSubIq::isPubSubIq (const QDomElement &element) {
+bool QXmppPubSubIq::isPubSubIq (const QDomElement &element)
+{
     const QDomElement pubSubElement = element.firstChildElement ("pubsub");
     return pubSubElement.namespaceURI() == ns_pubsub;
 }
 
-void QXmppPubSubIq::parseElementFromChild (const QDomElement &element) {
+void QXmppPubSubIq::parseElementFromChild (const QDomElement &element)
+{
     const QDomElement pubSubElement = element.firstChildElement ("pubsub");
 
     const QDomElement queryElement = pubSubElement.firstChildElement();
@@ -174,8 +193,10 @@ void QXmppPubSubIq::parseElementFromChild (const QDomElement &element) {
     // determine query type
     const QString tagName = queryElement.tagName();
 
-    for (int i = ItemsQuery; i <= SubscriptionsQuery; i++) {
-        if (tagName == pubsub_queries[i]) {
+    for (int i = ItemsQuery; i <= SubscriptionsQuery; i++)
+    {
+        if (tagName == pubsub_queries[i])
+        {
             m_queryType = static_cast<QueryType> (i);
             break;
         }
@@ -187,12 +208,14 @@ void QXmppPubSubIq::parseElementFromChild (const QDomElement &element) {
     // parse contents
     QDomElement childElement;
 
-    switch (m_queryType) {
+    switch (m_queryType)
+    {
         case QXmppPubSubIq::ItemsQuery:
         case QXmppPubSubIq::PublishQuery:
             childElement = queryElement.firstChildElement ("item");
 
-            while (!childElement.isNull()) {
+            while (!childElement.isNull())
+            {
                 QXmppPubSubItem item;
                 item.parse (childElement);
                 m_items << item;
@@ -211,7 +234,8 @@ void QXmppPubSubIq::parseElementFromChild (const QDomElement &element) {
     }
 }
 
-void QXmppPubSubIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppPubSubIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("pubsub");
     writer->writeAttribute ("xmlns", ns_pubsub);
 
@@ -221,7 +245,8 @@ void QXmppPubSubIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
     helperToXmlAddAttribute (writer, "node", m_queryNode);
 
     // write contents
-    switch (m_queryType) {
+    switch (m_queryType)
+    {
         case QXmppPubSubIq::ItemsQuery:
         case QXmppPubSubIq::PublishQuery:
             foreach (const QXmppPubSubItem & item, m_items)

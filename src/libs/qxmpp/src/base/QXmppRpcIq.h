@@ -28,10 +28,11 @@
 #include "QXmppIq.h"
 #include <QVariant>
 
-class QXMPP_EXPORT QXmppRpcMarshaller {
-  public:
-    static void marshall ( QXmlStreamWriter *writer, const QVariant &value);
-    static QVariant demarshall (const QDomElement &elem, QStringList &errors);
+class QXMPP_EXPORT QXmppRpcMarshaller
+{
+    public:
+        static void marshall ( QXmlStreamWriter *writer, const QVariant &value);
+        static QVariant demarshall (const QDomElement &elem, QStringList &errors);
 };
 
 /// \brief The QXmppRpcResponseIq class represents an IQ used to carry
@@ -39,33 +40,34 @@ class QXMPP_EXPORT QXmppRpcMarshaller {
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppRpcResponseIq : public QXmppIq {
-  public:
-    QXmppRpcResponseIq();
+class QXMPP_EXPORT QXmppRpcResponseIq : public QXmppIq
+{
+    public:
+        QXmppRpcResponseIq();
 
-    int faultCode() const;
-    void setFaultCode (int faultCode);
+        int faultCode() const;
+        void setFaultCode (int faultCode);
 
-    QString faultString() const;
-    void setFaultString (const QString &faultString);
+        QString faultString() const;
+        void setFaultString (const QString &faultString);
 
-    QVariantList values() const;
-    void setValues (const QVariantList &values);
+        QVariantList values() const;
+        void setValues (const QVariantList &values);
 
-    /// \cond
-    static bool isRpcResponseIq (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        static bool isRpcResponseIq (const QDomElement &element);
+        /// \endcond
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement &element);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement &element);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    int m_faultCode;
-    QString m_faultString;
-    QVariantList m_values;
+    private:
+        int m_faultCode;
+        QString m_faultString;
+        QVariantList m_values;
 };
 
 /// \brief The QXmppRpcInvokeIq class represents an IQ used to carry
@@ -73,52 +75,54 @@ class QXMPP_EXPORT QXmppRpcResponseIq : public QXmppIq {
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppRpcInvokeIq : public QXmppIq {
-  public:
-    QXmppRpcInvokeIq();
+class QXMPP_EXPORT QXmppRpcInvokeIq : public QXmppIq
+{
+    public:
+        QXmppRpcInvokeIq();
 
-    QString method() const;
-    void setMethod ( const QString &method );
+        QString method() const;
+        void setMethod ( const QString &method );
 
-    QVariantList arguments() const;
-    void setArguments (const QVariantList &arguments);
+        QVariantList arguments() const;
+        void setArguments (const QVariantList &arguments);
 
-    /// \cond
-    static bool isRpcInvokeIq (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        static bool isRpcInvokeIq (const QDomElement &element);
+        /// \endcond
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement &element);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement &element);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QVariantList m_arguments;
-    QString m_method;
+    private:
+        QVariantList m_arguments;
+        QString m_method;
 
-    friend class QXmppRpcErrorIq;
+        friend class QXmppRpcErrorIq;
 };
 
-class QXMPP_EXPORT QXmppRpcErrorIq : public QXmppIq {
-  public:
-    QXmppRpcErrorIq();
+class QXMPP_EXPORT QXmppRpcErrorIq : public QXmppIq
+{
+    public:
+        QXmppRpcErrorIq();
 
-    QXmppRpcInvokeIq query() const;
-    void setQuery (const QXmppRpcInvokeIq &query);
+        QXmppRpcInvokeIq query() const;
+        void setQuery (const QXmppRpcInvokeIq &query);
 
-    /// \cond
-    static bool isRpcErrorIq (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        static bool isRpcErrorIq (const QDomElement &element);
+        /// \endcond
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement &element);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement &element);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QXmppRpcInvokeIq m_query;
+    private:
+        QXmppRpcInvokeIq m_query;
 };
 
 #endif // QXMPPRPCIQ_H

@@ -31,38 +31,40 @@
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppDialback : public QXmppStanza {
-  public:
-    /// This enum is used to describe a dialback command.
-    enum Command {
-        Result, ///< A dialback command between the originating server
-        ///< and the receiving server.
-        Verify, ///< A dialback command between the receiving server
-        ///< and the authoritative server.
-    };
+class QXMPP_EXPORT QXmppDialback : public QXmppStanza
+{
+    public:
+        /// This enum is used to describe a dialback command.
+        enum Command
+        {
+            Result, ///< A dialback command between the originating server
+            ///< and the receiving server.
+            Verify, ///< A dialback command between the receiving server
+            ///< and the authoritative server.
+        };
 
-    QXmppDialback();
+        QXmppDialback();
 
-    Command command() const;
-    void setCommand (Command command);
+        Command command() const;
+        void setCommand (Command command);
 
-    QString key() const;
-    void setKey (const QString &key);
+        QString key() const;
+        void setKey (const QString &key);
 
-    QString type() const;
-    void setType (const QString &type);
+        QString type() const;
+        void setType (const QString &type);
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
 
-    static bool isDialback (const QDomElement &element);
-    /// \endcond
+        static bool isDialback (const QDomElement &element);
+        /// \endcond
 
-  private:
-    Command m_command;
-    QString m_key;
-    QString m_type;
+    private:
+        Command m_command;
+        QString m_key;
+        QString m_type;
 };
 
 #endif

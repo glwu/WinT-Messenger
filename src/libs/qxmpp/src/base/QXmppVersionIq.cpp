@@ -30,7 +30,8 @@
 /// Returns the name of the software.
 ///
 
-QString QXmppVersionIq::name() const {
+QString QXmppVersionIq::name() const
+{
     return m_name;
 }
 
@@ -38,14 +39,16 @@ QString QXmppVersionIq::name() const {
 ///
 /// \param name
 
-void QXmppVersionIq::setName (const QString &name) {
+void QXmppVersionIq::setName (const QString &name)
+{
     m_name = name;
 }
 
 /// Returns the operating system.
 ///
 
-QString QXmppVersionIq::os() const {
+QString QXmppVersionIq::os() const
+{
     return m_os;
 }
 
@@ -53,14 +56,16 @@ QString QXmppVersionIq::os() const {
 ///
 /// \param os
 
-void QXmppVersionIq::setOs (const QString &os) {
+void QXmppVersionIq::setOs (const QString &os)
+{
     m_os = os;
 }
 
 /// Returns the software version.
 ///
 
-QString QXmppVersionIq::version() const {
+QString QXmppVersionIq::version() const
+{
     return m_version;
 }
 
@@ -68,24 +73,28 @@ QString QXmppVersionIq::version() const {
 ///
 /// \param version
 
-void QXmppVersionIq::setVersion (const QString &version) {
+void QXmppVersionIq::setVersion (const QString &version)
+{
     m_version = version;
 }
 
 /// \cond
-bool QXmppVersionIq::isVersionIq (const QDomElement &element) {
+bool QXmppVersionIq::isVersionIq (const QDomElement &element)
+{
     QDomElement queryElement = element.firstChildElement ("query");
     return queryElement.namespaceURI() == ns_version;
 }
 
-void QXmppVersionIq::parseElementFromChild (const QDomElement &element) {
+void QXmppVersionIq::parseElementFromChild (const QDomElement &element)
+{
     QDomElement queryElement = element.firstChildElement ("query");
     m_name = queryElement.firstChildElement ("name").text();
     m_os = queryElement.firstChildElement ("os").text();
     m_version = queryElement.firstChildElement ("version").text();
 }
 
-void QXmppVersionIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppVersionIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("query");
     writer->writeAttribute ("xmlns", ns_version);
 

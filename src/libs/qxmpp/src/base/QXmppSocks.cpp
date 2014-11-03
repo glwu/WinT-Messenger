@@ -30,25 +30,29 @@
 
 const static char SocksVersion = 5;
 
-enum AuthenticationMethod {
+enum AuthenticationMethod
+{
     NoAuthentication = 0,
     GSSAPI = 1,
     UsernamePassword = 2,
 };
 
-enum Command {
+enum Command
+{
     ConnectCommand = 1,
     BindCommand = 2,
     AssociateCommand = 3,
 };
 
-enum AddressType {
+enum AddressType
+{
     IPv4Address = 1,
     DomainName = 3,
     IPv6Address = 4,
 };
 
-enum ReplyType {
+enum ReplyType
+{
     Succeeded = 0,
     SocksFailure = 1,
     ConnectionNotAllowed = 2,
@@ -60,13 +64,15 @@ enum ReplyType {
     AddressTypeNotSupported = 8,
 };
 
-enum State {
+enum State
+{
     ConnectState = 0,
     CommandState = 1,
     ReadyState = 2,
 };
 
-static QByteArray encodeHostAndPort (quint8 type, const QByteArray &host, quint16 port) {
+static QByteArray encodeHostAndPort (quint8 type, const QByteArray &host, quint16 port)
+{
     QByteArray buffer;
     QDataStream stream (&buffer, QIODevice::WriteOnly);
     // set host name
@@ -79,7 +85,8 @@ static QByteArray encodeHostAndPort (quint8 type, const QByteArray &host, quint1
     return buffer;
 }
 
-static bool parseHostAndPort (const QByteArray buffer, quint8 &type, QByteArray &host, quint16 &port) {
+static bool parseHostAndPort (const QByteArray buffer, quint8 &type, QByteArray &host, quint16 &port)
+{
     if (buffer.size() < 4)
         return false;
 
@@ -89,7 +96,8 @@ static bool parseHostAndPort (const QByteArray buffer, quint8 &type, QByteArray 
     stream >> type;
     stream >> hostLength;
 
-    if (buffer.size() < hostLength + 4) {
+    if (buffer.size() < hostLength + 4)
+    {
         qWarning ("Invalid host length");
         return false;
     }
@@ -105,18 +113,21 @@ QXmppSocksClient::QXmppSocksClient (const QString &proxyHost, quint16 proxyPort,
     : QTcpSocket (parent),
       m_proxyHost (proxyHost),
       m_proxyPort (proxyPort),
-      m_step (ConnectState) {
+      m_step (ConnectState)
+{
     connect (this, SIGNAL (connected()), this, SLOT (slotConnected()));
     connect (this, SIGNAL (readyRead()), this, SLOT (slotReadyRead()));
 }
 
-void QXmppSocksClient::connectToHost (const QString &hostName, quint16 hostPort) {
+void QXmppSocksClient::connectToHost (const QString &hostName, quint16 hostPort)
+{
     m_hostName = hostName;
     m_hostPort = hostPort;
     QTcpSocket::connectToHost (m_proxyHost, m_proxyPort);
 }
 
-void QXmppSocksClient::slotConnected() {
+void QXmppSocksClient::slotConnected()
+{
     m_step = ConnectState;
 
     // disconnect from signal
@@ -131,14 +142,17 @@ void QXmppSocksClient::slotConnected() {
     write (buffer);
 }
 
-void QXmppSocksClient::slotReadyRead() {
-    if (m_step == ConnectState) {
+void QXmppSocksClient::slotReadyRead()
+{
+    if (m_step == ConnectState)
+    {
         m_step++;
 
         // receive connect to server response
         QByteArray buffer = readAll();
 
-        if (buffer.size() != 2 || buffer.at (0) != SocksVersion || buffer.at (1) != NoAuthentication) {
+        if (buffer.size() != 2 || buffer.at (0) != SocksVersion || buffer.at (1) != NoAuthentication)
+        {
             qWarning ("QXmppSocksClient received an invalid response during handshake");
             close();
             return;
@@ -157,7 +171,8 @@ void QXmppSocksClient::slotReadyRead() {
 
     }
 
-    else if (m_step == CommandState) {
+    else if (m_step == CommandState)
+    {
         m_step++;
 
         // disconnect from signal
@@ -169,7 +184,8 @@ void QXmppSocksClient::slotReadyRead() {
         if (buffer.size() < 6 ||
                 buffer.at (0) != SocksVersion ||
                 buffer.at (1) != Succeeded ||
-                buffer.at (2) != 0) {
+                buffer.at (2) != 0)
+        {
             qWarning ("QXmppSocksClient received an invalid response to CONNECT command");
             close();
             return;
@@ -180,7 +196,8 @@ void QXmppSocksClient::slotReadyRead() {
         QByteArray hostName;
         quint16 hostPort;
 
-        if (!parseHostAndPort (buffer.mid (3), hostType, hostName, hostPort)) {
+        if (!parseHostAndPort (buffer.mid (3), hostType, hostName, hostPort))
+        {
             qWarning ("QXmppSocksClient could not parse type/host/port");
             close();
             return;
@@ -194,7 +211,8 @@ void QXmppSocksClient::slotReadyRead() {
 }
 
 QXmppSocksServer::QXmppSocksServer (QObject *parent)
-    : QObject (parent) {
+    : QObject (parent)
+{
     m_server = new QTcpServer (this);
     connect (m_server, SIGNAL (newConnection()), this, SLOT (slotNewConnection()));
 
@@ -202,12 +220,14 @@ QXmppSocksServer::QXmppSocksServer (QObject *parent)
     connect (m_server_v6, SIGNAL (newConnection()), this, SLOT (slotNewConnection()));
 }
 
-void QXmppSocksServer::close() {
+void QXmppSocksServer::close()
+{
     m_server->close();
     m_server_v6->close();
 }
 
-bool QXmppSocksServer::listen (quint16 port) {
+bool QXmppSocksServer::listen (quint16 port)
+{
     if (!m_server->listen (QHostAddress::Any, port))
         return false;
 
@@ -216,11 +236,13 @@ bool QXmppSocksServer::listen (quint16 port) {
     return true;
 }
 
-quint16 QXmppSocksServer::serverPort() const {
+quint16 QXmppSocksServer::serverPort() const
+{
     return m_server->serverPort();
 }
 
-void QXmppSocksServer::slotNewConnection() {
+void QXmppSocksServer::slotNewConnection()
+{
     QTcpServer *server = qobject_cast<QTcpServer *> (sender());
 
     if (!server)
@@ -236,13 +258,15 @@ void QXmppSocksServer::slotNewConnection() {
     connect (socket, SIGNAL (readyRead()), this, SLOT (slotReadyRead()));
 }
 
-void QXmppSocksServer::slotReadyRead() {
+void QXmppSocksServer::slotReadyRead()
+{
     QTcpSocket *socket = qobject_cast<QTcpSocket *> (sender());
 
     if (!socket || !m_states.contains (socket))
         return;
 
-    if (m_states.value (socket) == ConnectState) {
+    if (m_states.value (socket) == ConnectState)
+    {
         m_states.insert (socket, CommandState);
 
         // receive connect to server request
@@ -250,7 +274,8 @@ void QXmppSocksServer::slotReadyRead() {
 
         if (buffer.size() < 3 ||
                 buffer.at (0) != SocksVersion ||
-                buffer.at (1) + 2 != buffer.size()) {
+                buffer.at (1) + 2 != buffer.size())
+        {
             qWarning ("QXmppSocksServer received invalid handshake");
             socket->close();
             return;
@@ -259,14 +284,17 @@ void QXmppSocksServer::slotReadyRead() {
         // check authentication method
         bool foundMethod = false;
 
-        for (int i = 2; i < buffer.size(); i++) {
-            if (buffer.at (i) == NoAuthentication) {
+        for (int i = 2; i < buffer.size(); i++)
+        {
+            if (buffer.at (i) == NoAuthentication)
+            {
                 foundMethod = true;
                 break;
             }
         }
 
-        if (!foundMethod) {
+        if (!foundMethod)
+        {
             qWarning ("QXmppSocksServer received bad authentication method");
             socket->close();
             return;
@@ -280,7 +308,8 @@ void QXmppSocksServer::slotReadyRead() {
 
     }
 
-    else if (m_states.value (socket) == CommandState) {
+    else if (m_states.value (socket) == CommandState)
+    {
         m_states.insert (socket, ReadyState);
 
         // disconnect from signals
@@ -292,7 +321,8 @@ void QXmppSocksServer::slotReadyRead() {
         if (buffer.size() < 4 ||
                 buffer.at (0) != SocksVersion ||
                 buffer.at (1) != ConnectCommand ||
-                buffer.at (2) != 0x00) {
+                buffer.at (2) != 0x00)
+        {
             qWarning ("QXmppSocksServer received an invalid command");
             socket->close();
             return;
@@ -303,7 +333,8 @@ void QXmppSocksServer::slotReadyRead() {
         QByteArray hostName;
         quint16 hostPort;
 
-        if (!parseHostAndPort (buffer.mid (3), hostType, hostName, hostPort)) {
+        if (!parseHostAndPort (buffer.mid (3), hostType, hostName, hostPort))
+        {
             qWarning ("QXmppSocksServer could not parse type/host/port");
             socket->close();
             return;

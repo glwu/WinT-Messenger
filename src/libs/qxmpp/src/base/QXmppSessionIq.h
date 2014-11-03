@@ -33,16 +33,17 @@
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppSessionIq : public QXmppIq {
-  public:
-    /// \cond
-    static bool isSessionIq (const QDomElement &element);
-    /// \endcond
+class QXMPP_EXPORT QXmppSessionIq : public QXmppIq
+{
+    public:
+        /// \cond
+        static bool isSessionIq (const QDomElement &element);
+        /// \endcond
 
-  private:
-    /// \cond
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    private:
+        /// \cond
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 };
 
 #endif // QXMPPSESSION_H

@@ -11,19 +11,22 @@
 ImageProvider::ImageProvider()
     : QQuickImageProvider (QQuickImageProvider::Image) {}
 
-void ImageProvider::clearImages() {
+void ImageProvider::clearImages()
+{
     m_id_list.clear();
     m_image_list.clear();
 }
 
-void ImageProvider::addImage (const QImage& image, const QString& id) {
+void ImageProvider::addImage (const QImage& image, const QString& id)
+{
     m_id_list.append (id);
     m_image_list.append (image);
 }
 
 QImage ImageProvider::requestImage (const QString& id,
                                     QSize *size,
-                                    const QSize& requestedSize) {
+                                    const QSize& requestedSize)
+{
     Q_UNUSED (size);
     Q_UNUSED (requestedSize);
 

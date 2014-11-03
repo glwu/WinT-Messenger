@@ -26,66 +26,67 @@
 
 class PeerManager;
 
-class Client : public QObject {
-    Q_OBJECT
+class Client : public QObject
+{
+        Q_OBJECT
 
-  public:
+    public:
 
-    Client();
-    PeerManager *peerManager;
+        Client();
+        PeerManager *peerManager;
 
-    QString nickName() const;
+        QString nickName() const;
 
-  public slots:
+    public slots:
 
-    void sendStatus (const QString to, const QString &status);
-    void setNickname (const QString& nick);
-    void setDownloadPath (const QString& path);
-    void setProfilePicture (const QImage& image);
-    void sendFile (const QString &to, QString path);
-    void sendMessage (QString to, const QString& message);
-    bool hasConnection (const QHostAddress& senderIp, int senderPort = -1) const;
+        void sendStatus (const QString to, const QString &status);
+        void setNickname (const QString& nick);
+        void setDownloadPath (const QString& path);
+        void setProfilePicture (const QImage& image);
+        void sendFile (const QString &to, QString path);
+        void sendMessage (QString to, const QString& message);
+        bool hasConnection (const QHostAddress& senderIp, int senderPort = -1) const;
 
-  signals:
+    signals:
 
-    void statusChanged (const QString &id, const QString &status);
-    void participantLeft (const QString& nick, const QString& id);
-    void newMessage (const QString& from, const QString& message);
-    void downloadComplete (const QString& nick, const QString& file);
-    void newDownload (const QString& name, const QString& file, int size);
-    void newParticipant (const QString& nick, const QString &id, const QImage& profile_picture);
-    void updateProgress (const QString& name, const QString& file, int progress);
+        void statusChanged (const QString &id, const QString &status);
+        void participantLeft (const QString& nick, const QString& id);
+        void newMessage (const QString& from, const QString& message);
+        void downloadComplete (const QString& nick, const QString& file);
+        void newDownload (const QString& name, const QString& file, int size);
+        void newParticipant (const QString& nick, const QString &id, const QImage& profile_picture);
+        void updateProgress (const QString& name, const QString& file, int progress);
 
-  private slots:
+    private slots:
 
-    void readyForUseMsg();
-    void disconnectedMsg();
-    void connectionErrorMsg (QAbstractSocket::SocketError socketError);
+        void readyForUseMsg();
+        void disconnectedMsg();
+        void connectionErrorMsg (QAbstractSocket::SocketError socketError);
 
-    void readyForUseFile();
-    void disconnectedFile();
-    void connectionErrorFile (QAbstractSocket::SocketError socketError);
+        void readyForUseFile();
+        void disconnectedFile();
+        void connectionErrorFile (QAbstractSocket::SocketError socketError);
 
-    void newFileConnection (FConnection *fc);
-    void newMessageConnection (MConnection *mc);
+        void newFileConnection (FConnection *fc);
+        void newMessageConnection (MConnection *mc);
 
-  private:
+    private:
 
-    MServer m_server;
-    FServer f_server;
+        MServer m_server;
+        FServer f_server;
 
-    QString m_download_dir;
+        QString m_download_dir;
 
-    QMultiHash<QHostAddress, FConnection *> file_peers;
-    QMultiHash<QHostAddress, MConnection *> message_peers;
+        QMultiHash<QHostAddress, FConnection *> file_peers;
+        QMultiHash<QHostAddress, MConnection *> message_peers;
 
-    QList<FConnection *> f_peers;
-    QList<MConnection *> m_peers;
-    QList<QString> m_peers_names;
-    QList<QString> f_peers_names;
+        QList<FConnection *> f_peers;
+        QList<MConnection *> m_peers;
+        QList<QString> m_peers_names;
+        QList<QString> f_peers_names;
 
-    void removeConnectionMsg (MConnection *connection);
-    void removeConnectionFile (FConnection *connection);
+        void removeConnectionMsg (MConnection *connection);
+        void removeConnectionFile (FConnection *connection);
 };
 
 #endif

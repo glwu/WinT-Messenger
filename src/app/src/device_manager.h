@@ -16,27 +16,20 @@
 #include <QScreen>
 #include <QApplication>
 
-#include "platforms.h"
+class DeviceManager : public QObject
+{
+        Q_OBJECT
 
-class DeviceManager : public QObject {
-    Q_OBJECT
+    public:
+        DeviceManager();
 
-  public:
+        Q_INVOKABLE bool isMobile();
+        Q_INVOKABLE qreal ratio (int value);
 
-    DeviceManager();
+    private:
 
-    /// Returns \c true if target operating system
-    /// is Android, iOS or BlackBerry
-    Q_INVOKABLE bool isMobile();
-
-    /// Multiplies input value by a calculated
-    /// constant based on the screen's resolution
-    Q_INVOKABLE qreal ratio (int value);
-
-  private:
-
-    QRect m_rect;
-    double m_ratio;
+        QRect m_rect;
+        double m_ratio;
 };
 
 #endif

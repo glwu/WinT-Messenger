@@ -29,31 +29,36 @@
 #include "QXmppConstants.h"
 
 /// \cond
-QStringList QXmppArchiveManager::discoveryFeatures() const {
+QStringList QXmppArchiveManager::discoveryFeatures() const
+{
     // XEP-0036: Message Archiving
     return QStringList() << ns_archive;
 }
 
-bool QXmppArchiveManager::handleStanza (const QDomElement &element) {
+bool QXmppArchiveManager::handleStanza (const QDomElement &element)
+{
     if (element.tagName() != "iq")
         return false;
 
     // XEP-0136: Message Archiving
-    if (QXmppArchiveChatIq::isArchiveChatIq (element)) {
+    if (QXmppArchiveChatIq::isArchiveChatIq (element))
+    {
         QXmppArchiveChatIq archiveIq;
         archiveIq.parse (element);
         emit archiveChatReceived (archiveIq.chat(), archiveIq.resultSetReply());
         return true;
     }
 
-    else if (QXmppArchiveListIq::isArchiveListIq (element)) {
+    else if (QXmppArchiveListIq::isArchiveListIq (element))
+    {
         QXmppArchiveListIq archiveIq;
         archiveIq.parse (element);
         emit archiveListReceived (archiveIq.chats(), archiveIq.resultSetReply());
         return true;
     }
 
-    else if (QXmppArchivePrefIq::isArchivePrefIq (element)) {
+    else if (QXmppArchivePrefIq::isArchivePrefIq (element))
+    {
         // TODO: handle preference iq
         QXmppArchivePrefIq archiveIq;
         archiveIq.parse (element);
@@ -73,7 +78,8 @@ bool QXmppArchiveManager::handleStanza (const QDomElement &element) {
 /// \param rsm Optional Result Set Management query
 ///
 void QXmppArchiveManager::listCollections (const QString& jid, const QDateTime& start,
-        const QDateTime& end, const QXmppResultSetQuery &rsm) {
+        const QDateTime& end, const QXmppResultSetQuery &rsm)
+{
     QXmppArchiveListIq packet;
     packet.setResultSetQuery (rsm);
     packet.setWith (jid);
@@ -91,7 +97,8 @@ void QXmppArchiveManager::listCollections (const QString& jid, const QDateTime& 
 /// \param end End time.
 /// \param max Maximum number of collections to list.
 ///
-void QXmppArchiveManager::listCollections (const QString &jid, const QDateTime &start, const QDateTime &end, int max) {
+void QXmppArchiveManager::listCollections (const QString &jid, const QDateTime &start, const QDateTime &end, int max)
+{
     QXmppResultSetQuery rsm;
     rsm.setMax (max);
     listCollections (jid, start, end, rsm);
@@ -104,7 +111,8 @@ void QXmppArchiveManager::listCollections (const QString &jid, const QDateTime &
 /// \param start Optional start time.
 /// \param end Optional end time.
 ///
-void QXmppArchiveManager::removeCollections (const QString &jid, const QDateTime &start, const QDateTime &end) {
+void QXmppArchiveManager::removeCollections (const QString &jid, const QDateTime &start, const QDateTime &end)
+{
     QXmppArchiveRemoveIq packet;
     packet.setType (QXmppIq::Set);
     packet.setWith (jid);
@@ -120,7 +128,8 @@ void QXmppArchiveManager::removeCollections (const QString &jid, const QDateTime
 /// \param start The start time of the collection.
 /// \param rsm Optional Result Set Management query
 ///
-void QXmppArchiveManager::retrieveCollection (const QString &jid, const QDateTime &start, const QXmppResultSetQuery &rsm) {
+void QXmppArchiveManager::retrieveCollection (const QString &jid, const QDateTime &start, const QXmppResultSetQuery &rsm)
+{
     QXmppArchiveRetrieveIq packet;
     packet.setResultSetQuery (rsm);
     packet.setStart (start);
@@ -136,14 +145,16 @@ void QXmppArchiveManager::retrieveCollection (const QString &jid, const QDateTim
 /// \param start The start time of the collection.
 /// \param max Maximum number of messages to retrieve.
 ///
-void QXmppArchiveManager::retrieveCollection (const QString &jid, const QDateTime &start, int max) {
+void QXmppArchiveManager::retrieveCollection (const QString &jid, const QDateTime &start, int max)
+{
     QXmppResultSetQuery rsm;
     rsm.setMax (max);
     retrieveCollection (jid, start, rsm);
 }
 
 #if 0
-void QXmppArchiveManager::getPreferences() {
+void QXmppArchiveManager::getPreferences()
+{
     QXmppArchivePrefIq packet;
     client()->sendPacket (packet);
 }

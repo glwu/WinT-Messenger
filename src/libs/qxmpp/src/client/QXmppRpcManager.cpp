@@ -30,14 +30,16 @@
 
 /// Constructs a QXmppRpcManager.
 
-QXmppRpcManager::QXmppRpcManager() {
+QXmppRpcManager::QXmppRpcManager()
+{
 }
 
 /// Adds a local interface which can be queried using RPC.
 ///
 /// \param interface
 
-void QXmppRpcManager::addInvokableInterface ( QXmppInvokable *interface ) {
+void QXmppRpcManager::addInvokableInterface ( QXmppInvokable *interface )
+{
     m_interfaces[ interface->metaObject()->className() ] = interface;
 }
 
@@ -45,7 +47,8 @@ void QXmppRpcManager::addInvokableInterface ( QXmppInvokable *interface ) {
 ///
 /// \param iq
 
-void QXmppRpcManager::invokeInterfaceMethod ( const QXmppRpcInvokeIq &iq ) {
+void QXmppRpcManager::invokeInterfaceMethod ( const QXmppRpcInvokeIq &iq )
+{
     QXmppStanza::Error error;
 
     const QStringList methodBits = iq.method().split ('.');
@@ -57,10 +60,13 @@ void QXmppRpcManager::invokeInterfaceMethod ( const QXmppRpcInvokeIq &iq ) {
     const QString method = methodBits.last();
     QXmppInvokable *iface = m_interfaces.value (interface);
 
-    if (iface) {
-        if ( iface->isAuthorized ( iq.from() ) ) {
+    if (iface)
+    {
+        if ( iface->isAuthorized ( iq.from() ) )
+        {
 
-            if ( iface->interfaces().contains (method) ) {
+            if ( iface->interfaces().contains (method) )
+            {
                 QVariant result = iface->dispatch (method.toLatin1(),
                                                    iq.arguments() );
                 QXmppRpcResponseIq resultIq;
@@ -71,19 +77,22 @@ void QXmppRpcManager::invokeInterfaceMethod ( const QXmppRpcInvokeIq &iq ) {
                 return;
             }
 
-            else {
+            else
+            {
                 error.setType (QXmppStanza::Error::Cancel);
                 error.setCondition (QXmppStanza::Error::ItemNotFound);
             }
         }
 
-        else {
+        else
+        {
             error.setType (QXmppStanza::Error::Auth);
             error.setCondition (QXmppStanza::Error::Forbidden);
         }
     }
 
-    else {
+    else
+    {
         error.setType (QXmppStanza::Error::Cancel);
         error.setCondition (QXmppStanza::Error::ItemNotFound);
     }
@@ -112,7 +121,8 @@ QXmppRemoteMethodResult QXmppRpcManager::callRemoteMethod ( const QString &jid,
         const QVariant &arg7,
         const QVariant &arg8,
         const QVariant &arg9,
-        const QVariant &arg10 ) {
+        const QVariant &arg10 )
+{
     QVariantList args;
 
     if ( arg1.isValid() ) args << arg1;
@@ -145,35 +155,41 @@ QXmppRemoteMethodResult QXmppRpcManager::callRemoteMethod ( const QString &jid,
 }
 
 /// \cond
-QStringList QXmppRpcManager::discoveryFeatures() const {
+QStringList QXmppRpcManager::discoveryFeatures() const
+{
     // XEP-0009: Jabber-RPC
     return QStringList() << ns_rpc;
 }
 
-QList<QXmppDiscoveryIq::Identity> QXmppRpcManager::discoveryIdentities() const {
+QList<QXmppDiscoveryIq::Identity> QXmppRpcManager::discoveryIdentities() const
+{
     QXmppDiscoveryIq::Identity identity;
     identity.setCategory ("automation");
     identity.setType ("rpc");
     return QList<QXmppDiscoveryIq::Identity>() << identity;
 }
 
-bool QXmppRpcManager::handleStanza (const QDomElement &element) {
+bool QXmppRpcManager::handleStanza (const QDomElement &element)
+{
     // XEP-0009: Jabber-RPC
-    if (QXmppRpcInvokeIq::isRpcInvokeIq (element)) {
+    if (QXmppRpcInvokeIq::isRpcInvokeIq (element))
+    {
         QXmppRpcInvokeIq rpcIqPacket;
         rpcIqPacket.parse (element);
         invokeInterfaceMethod (rpcIqPacket);
         return true;
     }
 
-    else if (QXmppRpcResponseIq::isRpcResponseIq (element)) {
+    else if (QXmppRpcResponseIq::isRpcResponseIq (element))
+    {
         QXmppRpcResponseIq rpcResponseIq;
         rpcResponseIq.parse (element);
         emit rpcCallResponse (rpcResponseIq);
         return true;
     }
 
-    else if (QXmppRpcErrorIq::isRpcErrorIq (element)) {
+    else if (QXmppRpcErrorIq::isRpcErrorIq (element))
+    {
         QXmppRpcErrorIq rpcErrorIq;
         rpcErrorIq.parse (element);
         emit rpcCallError (rpcErrorIq);

@@ -10,7 +10,8 @@
 
 #include "peermanager.h"
 
-PeerManager::PeerManager (Client *client) : QObject (client) {
+PeerManager::PeerManager (Client *client) : QObject (client)
+{
     this->client = client;
     updateAddresses();
     f_serverPort = 0;
@@ -27,19 +28,23 @@ PeerManager::PeerManager (Client *client) : QObject (client) {
         &broadcastTimer, SIGNAL (timeout()), this, SLOT (sendBroadcastDatagram()));
 }
 
-void PeerManager::setFileServerPort (int port) {
+void PeerManager::setFileServerPort (int port)
+{
     f_serverPort = port;
 }
 
-void PeerManager::setMessageServerPort (int port) {
+void PeerManager::setMessageServerPort (int port)
+{
     m_serverPort = port;
 }
 
-void PeerManager::startBroadcasting() {
+void PeerManager::startBroadcasting()
+{
     broadcastTimer.start();
 }
 
-bool PeerManager::isLocalHostAddress (const QHostAddress& address) {
+bool PeerManager::isLocalHostAddress (const QHostAddress& address)
+{
     foreach (QHostAddress localAddress, ipAddresses)
 
     if (address == localAddress)
@@ -48,7 +53,8 @@ bool PeerManager::isLocalHostAddress (const QHostAddress& address) {
     return false;
 }
 
-void PeerManager::sendBroadcastDatagram() {
+void PeerManager::sendBroadcastDatagram()
+{
     QByteArray datagram (nickname);
     datagram.append ('@');
     datagram.append (QByteArray::number (f_serverPort));
@@ -64,8 +70,10 @@ void PeerManager::sendBroadcastDatagram() {
         updateAddresses();
 }
 
-void PeerManager::readBroadcastDatagram() {
-    while (broadcastSocket.hasPendingDatagrams()) {
+void PeerManager::readBroadcastDatagram()
+{
+    while (broadcastSocket.hasPendingDatagrams())
+    {
         QHostAddress senderIp;
         quint16 senderPort;
         QByteArray datagram;
@@ -87,7 +95,8 @@ void PeerManager::readBroadcastDatagram() {
                 senderFilePort == f_serverPort)
             continue;
 
-        if (!client->hasConnection (senderIp)) {
+        if (!client->hasConnection (senderIp))
+        {
             FConnection *fc = new FConnection (this);
             MConnection *mc = new MConnection (this);
             fc->connectToHost (senderIp, senderFilePort);
@@ -98,15 +107,19 @@ void PeerManager::readBroadcastDatagram() {
     }
 }
 
-void PeerManager::updateAddresses() {
+void PeerManager::updateAddresses()
+{
     broadcastAddresses.clear();
     ipAddresses.clear();
-    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces()) {
-        foreach (QNetworkAddressEntry entry, interface.addressEntries()) {
+    foreach (QNetworkInterface interface, QNetworkInterface::allInterfaces())
+    {
+        foreach (QNetworkAddressEntry entry, interface.addressEntries())
+        {
             QHostAddress broadcastAddress = entry.broadcast();
 
             if (broadcastAddress != QHostAddress::Null &&
-                    entry.ip() != QHostAddress::LocalHost) {
+                    entry.ip() != QHostAddress::LocalHost)
+            {
                 broadcastAddresses << broadcastAddress;
                 ipAddresses << entry.ip();
             }

@@ -30,14 +30,16 @@
 #include <QTimer>
 
 QXmppRemoteMethod::QXmppRemoteMethod (const QString &jid, const QString &method, const QVariantList &args, QXmppClient *client) :
-    QObject (client), m_client (client) {
+    QObject (client), m_client (client)
+{
     m_payload.setTo ( jid );
     m_payload.setFrom ( client->configuration().jid() );
     m_payload.setMethod ( method );
     m_payload.setArguments ( args );
 }
 
-QXmppRemoteMethodResult QXmppRemoteMethod::call( ) {
+QXmppRemoteMethodResult QXmppRemoteMethod::call( )
+{
     // FIXME : spinning an event loop is a VERY bad idea, it can cause
     // us to lose incoming packets
     QEventLoop loop (this);
@@ -50,8 +52,10 @@ QXmppRemoteMethodResult QXmppRemoteMethod::call( ) {
     return m_result;
 }
 
-void QXmppRemoteMethod::gotError ( const QXmppRpcErrorIq &iq ) {
-    if ( iq.id() == m_payload.id() ) {
+void QXmppRemoteMethod::gotError ( const QXmppRpcErrorIq &iq )
+{
+    if ( iq.id() == m_payload.id() )
+    {
         m_result.hasError = true;
         m_result.errorMessage = iq.error().text();
         m_result.code = iq.error().type();
@@ -59,8 +63,10 @@ void QXmppRemoteMethod::gotError ( const QXmppRpcErrorIq &iq ) {
     }
 }
 
-void QXmppRemoteMethod::gotResult ( const QXmppRpcResponseIq &iq ) {
-    if ( iq.id() == m_payload.id() ) {
+void QXmppRemoteMethod::gotResult ( const QXmppRpcResponseIq &iq )
+{
+    if ( iq.id() == m_payload.id() )
+    {
         m_result.hasError = false;
         // FIXME: we don't handle multiple responses
         m_result.result = iq.values().first();

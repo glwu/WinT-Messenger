@@ -33,7 +33,8 @@
 /// Returns the bound JID.
 ///
 
-QString QXmppBindIq::jid() const {
+QString QXmppBindIq::jid() const
+{
     return m_jid;
 }
 
@@ -41,14 +42,16 @@ QString QXmppBindIq::jid() const {
 ///
 /// \param jid
 
-void QXmppBindIq::setJid (const QString& jid) {
+void QXmppBindIq::setJid (const QString& jid)
+{
     m_jid = jid;
 }
 
 /// Returns the requested resource.
 ///
 
-QString QXmppBindIq::resource() const {
+QString QXmppBindIq::resource() const
+{
     return m_resource;
 }
 
@@ -56,23 +59,27 @@ QString QXmppBindIq::resource() const {
 ///
 /// \param resource
 
-void QXmppBindIq::setResource (const QString& resource) {
+void QXmppBindIq::setResource (const QString& resource)
+{
     m_resource = resource;
 }
 
 /// \cond
-bool QXmppBindIq::isBindIq (const QDomElement &element) {
+bool QXmppBindIq::isBindIq (const QDomElement &element)
+{
     QDomElement bindElement = element.firstChildElement ("bind");
     return (bindElement.namespaceURI() == ns_bind);
 }
 
-void QXmppBindIq::parseElementFromChild (const QDomElement &element) {
+void QXmppBindIq::parseElementFromChild (const QDomElement &element)
+{
     QDomElement bindElement = element.firstChildElement ("bind");
     m_jid = bindElement.firstChildElement ("jid").text();
     m_resource = bindElement.firstChildElement ("resource").text();
 }
 
-void QXmppBindIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppBindIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("bind");
     writer->writeAttribute ("xmlns", ns_bind);
 

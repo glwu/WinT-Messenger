@@ -61,74 +61,75 @@ class QXmppRosterManagerPrivate;
 ///
 /// \ingroup Managers
 
-class QXMPP_EXPORT QXmppRosterManager : public QXmppClientExtension {
-    Q_OBJECT
+class QXMPP_EXPORT QXmppRosterManager : public QXmppClientExtension
+{
+        Q_OBJECT
 
-  public:
-    QXmppRosterManager (QXmppClient *stream);
-    ~QXmppRosterManager();
+    public:
+        QXmppRosterManager (QXmppClient *stream);
+        ~QXmppRosterManager();
 
-    bool isRosterReceived() const;
-    QStringList getRosterBareJids() const;
-    QXmppRosterIq::Item getRosterEntry (const QString& bareJid) const;
+        bool isRosterReceived() const;
+        QStringList getRosterBareJids() const;
+        QXmppRosterIq::Item getRosterEntry (const QString& bareJid) const;
 
-    QStringList getResources (const QString& bareJid) const;
-    QMap<QString, QXmppPresence> getAllPresencesForBareJid (
-        const QString& bareJid) const;
-    QXmppPresence getPresence (const QString& bareJid,
-                               const QString& resource) const;
+        QStringList getResources (const QString& bareJid) const;
+        QMap<QString, QXmppPresence> getAllPresencesForBareJid (
+            const QString& bareJid) const;
+        QXmppPresence getPresence (const QString& bareJid,
+                                   const QString& resource) const;
 
-    /// \cond
-    bool handleStanza (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        bool handleStanza (const QDomElement &element);
+        /// \endcond
 
-  public slots:
-    bool acceptSubscription (const QString &bareJid, const QString &reason = QString());
-    bool refuseSubscription (const QString &bareJid, const QString &reason = QString());
-    bool addItem (const QString &bareJid, const QString &name = QString(), const QSet<QString> &groups = QSet<QString>());
-    bool removeItem (const QString &bareJid);
-    bool renameItem (const QString &bareJid, const QString &name);
-    bool subscribe (const QString &bareJid, const QString &reason = QString());
-    bool unsubscribe (const QString &bareJid, const QString &reason = QString());
+    public slots:
+        bool acceptSubscription (const QString &bareJid, const QString &reason = QString());
+        bool refuseSubscription (const QString &bareJid, const QString &reason = QString());
+        bool addItem (const QString &bareJid, const QString &name = QString(), const QSet<QString> &groups = QSet<QString>());
+        bool removeItem (const QString &bareJid);
+        bool renameItem (const QString &bareJid, const QString &name);
+        bool subscribe (const QString &bareJid, const QString &reason = QString());
+        bool unsubscribe (const QString &bareJid, const QString &reason = QString());
 
-  signals:
-    /// This signal is emitted when the Roster IQ is received after a successful
-    /// connection. That is the roster entries are empty before this signal is emitted.
-    /// One should use getRosterBareJids() and getRosterEntry() only after
-    /// this signal has been emitted.
-    void rosterReceived();
+    signals:
+        /// This signal is emitted when the Roster IQ is received after a successful
+        /// connection. That is the roster entries are empty before this signal is emitted.
+        /// One should use getRosterBareJids() and getRosterEntry() only after
+        /// this signal has been emitted.
+        void rosterReceived();
 
-    /// This signal is emitted when the presence of a particular bareJid and resource changes.
-    void presenceChanged (const QString& bareJid, const QString& resource);
+        /// This signal is emitted when the presence of a particular bareJid and resource changes.
+        void presenceChanged (const QString& bareJid, const QString& resource);
 
-    /// This signal is emitted when a contact asks to subscribe to your presence.
-    ///
-    /// You can either accept the request by calling acceptSubscription() or refuse it
-    /// by calling refuseSubscription().
-    ///
-    /// \note If you set QXmppConfiguration::autoAcceptSubscriptions() to true, this
-    /// signal will not be emitted.
-    void subscriptionReceived (const QString& bareJid);
+        /// This signal is emitted when a contact asks to subscribe to your presence.
+        ///
+        /// You can either accept the request by calling acceptSubscription() or refuse it
+        /// by calling refuseSubscription().
+        ///
+        /// \note If you set QXmppConfiguration::autoAcceptSubscriptions() to true, this
+        /// signal will not be emitted.
+        void subscriptionReceived (const QString& bareJid);
 
-    /// This signal is emitted when the roster entry of a particular bareJid is
-    /// added as a result of roster push.
-    void itemAdded (const QString& bareJid);
+        /// This signal is emitted when the roster entry of a particular bareJid is
+        /// added as a result of roster push.
+        void itemAdded (const QString& bareJid);
 
-    /// This signal is emitted when the roster entry of a particular bareJid
-    /// changes as a result of roster push.
-    void itemChanged (const QString& bareJid);
+        /// This signal is emitted when the roster entry of a particular bareJid
+        /// changes as a result of roster push.
+        void itemChanged (const QString& bareJid);
 
-    /// This signal is emitted when the roster entry of a particular bareJid is
-    /// removed as a result of roster push.
-    void itemRemoved (const QString& bareJid);
+        /// This signal is emitted when the roster entry of a particular bareJid is
+        /// removed as a result of roster push.
+        void itemRemoved (const QString& bareJid);
 
-  private slots:
-    void _q_connected();
-    void _q_disconnected();
-    void _q_presenceReceived (const QXmppPresence&);
+    private slots:
+        void _q_connected();
+        void _q_disconnected();
+        void _q_presenceReceived (const QXmppPresence&);
 
-  private:
-    QXmppRosterManagerPrivate *d;
+    private:
+        QXmppRosterManagerPrivate *d;
 };
 
 #endif // QXMPPROSTER_H

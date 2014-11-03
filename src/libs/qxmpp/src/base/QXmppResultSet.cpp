@@ -31,7 +31,8 @@
 
 QXmppResultSetQuery::QXmppResultSetQuery()
     : m_index (-1)
-    , m_max (-1) {
+    , m_max (-1)
+{
 }
 
 /// Returns the maximum number of results.
@@ -39,7 +40,8 @@ QXmppResultSetQuery::QXmppResultSetQuery()
 /// \note -1 means no limit, 0 means no results are wanted.
 ///
 
-int QXmppResultSetQuery::max() const {
+int QXmppResultSetQuery::max() const
+{
     return m_max;
 }
 
@@ -47,7 +49,8 @@ int QXmppResultSetQuery::max() const {
 ///
 /// \note -1 means no limit, 0 means no results are wanted.
 
-void QXmppResultSetQuery::setMax (int max) {
+void QXmppResultSetQuery::setMax (int max)
+{
     m_max = max;
 }
 
@@ -55,7 +58,8 @@ void QXmppResultSetQuery::setMax (int max) {
 ///
 /// This is used for retrieving pages out of order.
 
-int QXmppResultSetQuery::index() const {
+int QXmppResultSetQuery::index() const
+{
     return m_index;
 }
 
@@ -63,7 +67,8 @@ int QXmppResultSetQuery::index() const {
 ///
 /// This is used for retrieving pages out of order.
 
-void QXmppResultSetQuery::setIndex (int index) {
+void QXmppResultSetQuery::setIndex (int index)
+{
     m_index = index;
 }
 
@@ -71,7 +76,8 @@ void QXmppResultSetQuery::setIndex (int index) {
 ///
 /// This is used for for paging backwards through results.
 
-QString QXmppResultSetQuery::before() const {
+QString QXmppResultSetQuery::before() const
+{
     return m_before;
 }
 
@@ -79,7 +85,8 @@ QString QXmppResultSetQuery::before() const {
 ///
 /// This is used for for paging backwards through results.
 
-void QXmppResultSetQuery::setBefore (const QString& before) {
+void QXmppResultSetQuery::setBefore (const QString& before)
+{
     m_before = before;
 }
 
@@ -87,7 +94,8 @@ void QXmppResultSetQuery::setBefore (const QString& before) {
 ///
 /// This is used for for paging forwards through results.
 
-QString QXmppResultSetQuery::after() const {
+QString QXmppResultSetQuery::after() const
+{
     return m_after;
 }
 
@@ -95,21 +103,25 @@ QString QXmppResultSetQuery::after() const {
 ///
 /// This is used for for paging forwards through results.
 
-void QXmppResultSetQuery::setAfter (const QString& after) {
+void QXmppResultSetQuery::setAfter (const QString& after)
+{
     m_after = after;
 }
 
 /// Returns true if no result set information is present.
 
-bool QXmppResultSetQuery::isNull() const {
+bool QXmppResultSetQuery::isNull() const
+{
     return m_max == -1 && m_index == -1 && m_after.isNull() && m_before.isNull();
 }
 
 /// \cond
-void QXmppResultSetQuery::parse (const QDomElement& element) {
+void QXmppResultSetQuery::parse (const QDomElement& element)
+{
     QDomElement setElement = (element.tagName() == "set") ? element : element.firstChildElement ("set");
 
-    if (setElement.namespaceURI() == ns_rsm) {
+    if (setElement.namespaceURI() == ns_rsm)
+    {
         bool ok = false;
         m_max = setElement.firstChildElement ("max").text().toInt (&ok);
 
@@ -123,7 +135,8 @@ void QXmppResultSetQuery::parse (const QDomElement& element) {
     }
 }
 
-void QXmppResultSetQuery::toXml (QXmlStreamWriter *writer) const {
+void QXmppResultSetQuery::toXml (QXmlStreamWriter *writer) const
+{
     if (isNull())
         return;
 
@@ -148,30 +161,35 @@ void QXmppResultSetQuery::toXml (QXmlStreamWriter *writer) const {
 
 QXmppResultSetReply::QXmppResultSetReply()
     : m_count (-1)
-    , m_index (-1) {
+    , m_index (-1)
+{
 }
 
 /// Returns the UID of the first result in the page.
 
-QString QXmppResultSetReply::first() const {
+QString QXmppResultSetReply::first() const
+{
     return m_first;
 }
 
 /// Sets the UID of the first result in the page.
 
-void QXmppResultSetReply::setFirst (const QString& first) {
+void QXmppResultSetReply::setFirst (const QString& first)
+{
     m_first = first;
 }
 
 /// Returns the UID of the last result in the page.
 
-QString QXmppResultSetReply::last() const {
+QString QXmppResultSetReply::last() const
+{
     return m_last;
 }
 
 /// Sets the UID of the last result in the page.
 
-void QXmppResultSetReply::setLast (const QString& last) {
+void QXmppResultSetReply::setLast (const QString& last)
+{
     m_last = last;
 }
 
@@ -179,7 +197,8 @@ void QXmppResultSetReply::setLast (const QString& last) {
 ///
 /// \note This may be an approximate count.
 
-int QXmppResultSetReply::count() const {
+int QXmppResultSetReply::count() const
+{
     return m_count;
 }
 
@@ -187,7 +206,8 @@ int QXmppResultSetReply::count() const {
 ///
 /// \note This may be an approximate count.
 
-void QXmppResultSetReply::setCount (int count) {
+void QXmppResultSetReply::setCount (int count)
+{
     m_count = count;
 }
 
@@ -197,7 +217,8 @@ void QXmppResultSetReply::setCount (int count) {
 ///
 /// \note This may be an approximate index.
 
-int QXmppResultSetReply::index() const {
+int QXmppResultSetReply::index() const
+{
     return m_index;
 }
 
@@ -207,21 +228,25 @@ int QXmppResultSetReply::index() const {
 ///
 /// \note This may be an approximate index.
 
-void QXmppResultSetReply::setIndex (int index) {
+void QXmppResultSetReply::setIndex (int index)
+{
     m_index = index;
 }
 
 /// Returns true if no result set information is present.
 
-bool QXmppResultSetReply::isNull() const {
+bool QXmppResultSetReply::isNull() const
+{
     return m_count == -1 && m_index == -1 && m_first.isNull() && m_last.isNull();
 }
 
 /// \cond
-void QXmppResultSetReply::parse (const QDomElement& element) {
+void QXmppResultSetReply::parse (const QDomElement& element)
+{
     QDomElement setElement = (element.tagName() == "set") ? element : element.firstChildElement ("set");
 
-    if (setElement.namespaceURI() == ns_rsm) {
+    if (setElement.namespaceURI() == ns_rsm)
+    {
         m_count = setElement.firstChildElement ("count").text().toInt();
         QDomElement firstElem = setElement.firstChildElement ("first");
         m_first = firstElem.text();
@@ -234,14 +259,16 @@ void QXmppResultSetReply::parse (const QDomElement& element) {
     }
 }
 
-void QXmppResultSetReply::toXml (QXmlStreamWriter *writer) const {
+void QXmppResultSetReply::toXml (QXmlStreamWriter *writer) const
+{
     if (isNull())
         return;
 
     writer->writeStartElement ("set");
     writer->writeAttribute ("xmlns", ns_rsm);
 
-    if (!m_first.isNull() || m_index >= 0) {
+    if (!m_first.isNull() || m_index >= 0)
+    {
         writer->writeStartElement ("first");
 
         if (m_index >= 0)

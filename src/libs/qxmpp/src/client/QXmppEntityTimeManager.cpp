@@ -36,7 +36,8 @@
 ///
 /// \param jid
 
-QString QXmppEntityTimeManager::requestTime (const QString& jid) {
+QString QXmppEntityTimeManager::requestTime (const QString& jid)
+{
     QXmppEntityTimeIq request;
     request.setType (QXmppIq::Get);
     request.setTo (jid);
@@ -49,16 +50,20 @@ QString QXmppEntityTimeManager::requestTime (const QString& jid) {
 }
 
 /// \cond
-QStringList QXmppEntityTimeManager::discoveryFeatures() const {
+QStringList QXmppEntityTimeManager::discoveryFeatures() const
+{
     return QStringList() << ns_entity_time;
 }
 
-bool QXmppEntityTimeManager::handleStanza (const QDomElement &element) {
-    if (element.tagName() == "iq" && QXmppEntityTimeIq::isEntityTimeIq (element)) {
+bool QXmppEntityTimeManager::handleStanza (const QDomElement &element)
+{
+    if (element.tagName() == "iq" && QXmppEntityTimeIq::isEntityTimeIq (element))
+    {
         QXmppEntityTimeIq entityTime;
         entityTime.parse (element);
 
-        if (entityTime.type() == QXmppIq::Get) {
+        if (entityTime.type() == QXmppIq::Get)
+        {
             // respond to query
             QXmppEntityTimeIq responseIq;
             responseIq.setType (QXmppIq::Result);

@@ -37,46 +37,47 @@ class QXmppOutgoingServerPrivate;
 /// to another XMPP server.
 ///
 
-class QXMPP_EXPORT QXmppOutgoingServer : public QXmppStream {
-    Q_OBJECT
+class QXMPP_EXPORT QXmppOutgoingServer : public QXmppStream
+{
+        Q_OBJECT
 
-  public:
-    QXmppOutgoingServer (const QString &domain, QObject *parent);
-    ~QXmppOutgoingServer();
+    public:
+        QXmppOutgoingServer (const QString &domain, QObject *parent);
+        ~QXmppOutgoingServer();
 
-    bool isConnected() const;
+        bool isConnected() const;
 
-    QString localStreamKey() const;
-    void setLocalStreamKey (const QString &key);
-    void setVerify (const QString &id, const QString &key);
+        QString localStreamKey() const;
+        void setLocalStreamKey (const QString &key);
+        void setVerify (const QString &id, const QString &key);
 
-    QString remoteDomain() const;
+        QString remoteDomain() const;
 
-  signals:
-    /// This signal is emitted when a dialback verify response is received.
-    void dialbackResponseReceived (const QXmppDialback &response);
+    signals:
+        /// This signal is emitted when a dialback verify response is received.
+        void dialbackResponseReceived (const QXmppDialback &response);
 
-  protected:
-    /// \cond
-    void handleStart();
-    void handleStream (const QDomElement &streamElement);
-    void handleStanza (const QDomElement &stanzaElement);
-    /// \endcond
+    protected:
+        /// \cond
+        void handleStart();
+        void handleStream (const QDomElement &streamElement);
+        void handleStanza (const QDomElement &stanzaElement);
+        /// \endcond
 
-  public slots:
-    void connectToHost (const QString &domain);
-    void queueData (const QByteArray &data);
+    public slots:
+        void connectToHost (const QString &domain);
+        void queueData (const QByteArray &data);
 
-  private slots:
-    void _q_dnsLookupFinished();
-    void _q_socketDisconnected();
-    void sendDialback();
-    void slotSslErrors (const QList<QSslError> &errors);
-    void socketError (QAbstractSocket::SocketError error);
+    private slots:
+        void _q_dnsLookupFinished();
+        void _q_socketDisconnected();
+        void sendDialback();
+        void slotSslErrors (const QList<QSslError> &errors);
+        void socketError (QAbstractSocket::SocketError error);
 
-  private:
-    Q_DISABLE_COPY (QXmppOutgoingServer)
-    QXmppOutgoingServerPrivate *const d;
+    private:
+        Q_DISABLE_COPY (QXmppOutgoingServer)
+        QXmppOutgoingServerPrivate *const d;
 };
 
 #endif

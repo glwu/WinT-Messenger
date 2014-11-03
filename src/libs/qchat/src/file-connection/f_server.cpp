@@ -9,11 +9,13 @@
 
 #include "f_server.h"
 
-FServer::FServer (QObject *parent) : QTcpServer (parent) {
+FServer::FServer (QObject *parent) : QTcpServer (parent)
+{
     listen (QHostAddress::Any);
 }
 
-void FServer::incomingConnection (qintptr socketDescriptor) {
+void FServer::incomingConnection (qintptr socketDescriptor)
+{
     FConnection *file_connection = new FConnection (this);
     file_connection->setSocketDescriptor (socketDescriptor);
     emit newConnection (file_connection);

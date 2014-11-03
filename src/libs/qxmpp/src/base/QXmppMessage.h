@@ -35,104 +35,108 @@ class QXmppMessagePrivate;
 /// \ingroup Stanzas
 ///
 
-class QXMPP_EXPORT QXmppMessage : public QXmppStanza {
-  public:
-    /// This enum described a message type.
-    enum Type {
-        Error = 0,
-        Normal,
-        Chat,
-        GroupChat,
-        Headline
-    };
+class QXMPP_EXPORT QXmppMessage : public QXmppStanza
+{
+    public:
+        /// This enum described a message type.
+        enum Type
+        {
+            Error = 0,
+            Normal,
+            Chat,
+            GroupChat,
+            Headline
+        };
 
-    /// This enum describes a chat state as defined by
-    /// XEP-0085 : Chat State Notifications.
-    enum State {
-        None = 0,   ///< The message does not contain any chat state information.
-        Active,     ///< User is actively participating in the chat session.
-        Inactive,   ///< User has not been actively participating in the chat session.
-        Gone,       ///< User has effectively ended their participation in the chat session.
-        Composing,  ///< User is composing a message.
-        Paused,     ///< User had been composing but now has stopped.
-    };
+        /// This enum describes a chat state as defined by
+        /// XEP-0085 : Chat State Notifications.
+        enum State
+        {
+            None = 0,   ///< The message does not contain any chat state information.
+            Active,     ///< User is actively participating in the chat session.
+            Inactive,   ///< User has not been actively participating in the chat session.
+            Gone,       ///< User has effectively ended their participation in the chat session.
+            Composing,  ///< User is composing a message.
+            Paused,     ///< User had been composing but now has stopped.
+        };
 
-    /// This enum describes a chat marker as defined by
-    /// XEP-0333 : Char Markers
-    enum Marker {
-        NoMarker = 0,
-        Received,
-        Displayed,
-        Acknowledged
-    };
+        /// This enum describes a chat marker as defined by
+        /// XEP-0333 : Char Markers
+        enum Marker
+        {
+            NoMarker = 0,
+            Received,
+            Displayed,
+            Acknowledged
+        };
 
-    QXmppMessage (const QString& from = QString(), const QString& to = QString(),
-                  const QString& body = QString(), const QString& thread = QString());
+        QXmppMessage (const QString& from = QString(), const QString& to = QString(),
+                      const QString& body = QString(), const QString& thread = QString());
 
-    QXmppMessage (const QXmppMessage &other);
-    ~QXmppMessage();
+        QXmppMessage (const QXmppMessage &other);
+        ~QXmppMessage();
 
-    QXmppMessage& operator= (const QXmppMessage &other);
+        QXmppMessage& operator= (const QXmppMessage &other);
 
-    QString body() const;
-    void setBody (const QString&);
+        QString body() const;
+        void setBody (const QString&);
 
-    bool isAttentionRequested() const;
-    void setAttentionRequested (bool requested);
+        bool isAttentionRequested() const;
+        void setAttentionRequested (bool requested);
 
-    bool isReceiptRequested() const;
-    void setReceiptRequested (bool requested);
+        bool isReceiptRequested() const;
+        void setReceiptRequested (bool requested);
 
-    QString mucInvitationJid() const;
-    void setMucInvitationJid (const QString &jid);
+        QString mucInvitationJid() const;
+        void setMucInvitationJid (const QString &jid);
 
-    QString mucInvitationPassword() const;
-    void setMucInvitationPassword (const QString &password);
+        QString mucInvitationPassword() const;
+        void setMucInvitationPassword (const QString &password);
 
-    QString mucInvitationReason() const;
-    void setMucInvitationReason (const QString &reason);
+        QString mucInvitationReason() const;
+        void setMucInvitationReason (const QString &reason);
 
-    QString receiptId() const;
-    void setReceiptId (const QString &id);
+        QString receiptId() const;
+        void setReceiptId (const QString &id);
 
-    QDateTime stamp() const;
-    void setStamp (const QDateTime &stamp);
+        QDateTime stamp() const;
+        void setStamp (const QDateTime &stamp);
 
-    QXmppMessage::State state() const;
-    void setState (QXmppMessage::State);
+        QXmppMessage::State state() const;
+        void setState (QXmppMessage::State);
 
-    QString subject() const;
-    void setSubject (const QString&);
+        QString subject() const;
+        void setSubject (const QString&);
 
-    QString thread() const;
-    void setThread (const QString&);
+        QString thread() const;
+        void setThread (const QString&);
 
-    QXmppMessage::Type type() const;
-    void setType (QXmppMessage::Type);
+        QXmppMessage::Type type() const;
+        void setType (QXmppMessage::Type);
 
-    QString xhtml() const;
-    void setXhtml (const QString &xhtml);
+        QString xhtml() const;
+        void setXhtml (const QString &xhtml);
 
-    // XEP-0333
-    bool isMarkable() const;
-    void setMarkable (const bool);
+        // XEP-0333
+        bool isMarkable() const;
+        void setMarkable (const bool);
 
-    QString markedId() const;
-    void setMarkerId (const QString&);
+        QString markedId() const;
+        void setMarkerId (const QString&);
 
-    QString markedThread() const;
-    void setMarkedThread (const QString&);
+        QString markedThread() const;
+        void setMarkedThread (const QString&);
 
-    Marker marker() const;
-    void setMarker (const Marker);
+        Marker marker() const;
+        void setMarker (const Marker);
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
-    /// \endcond
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QSharedDataPointer<QXmppMessagePrivate> d;
+    private:
+        QSharedDataPointer<QXmppMessagePrivate> d;
 };
 
 #endif // QXMPPMESSAGE_H

@@ -53,37 +53,38 @@ class QXmppVCardManagerPrivate;
 ///
 /// \ingroup Managers
 
-class QXMPP_EXPORT QXmppVCardManager : public QXmppClientExtension {
-    Q_OBJECT
+class QXMPP_EXPORT QXmppVCardManager : public QXmppClientExtension
+{
+        Q_OBJECT
 
-  public:
-    QXmppVCardManager();
-    ~QXmppVCardManager();
+    public:
+        QXmppVCardManager();
+        ~QXmppVCardManager();
 
-    QString requestVCard (const QString& bareJid = QString());
+        QString requestVCard (const QString& bareJid = QString());
 
-    const QXmppVCardIq& clientVCard() const;
-    void setClientVCard (const QXmppVCardIq&);
+        const QXmppVCardIq& clientVCard() const;
+        void setClientVCard (const QXmppVCardIq&);
 
-    QString requestClientVCard();
-    bool isClientVCardReceived() const;
+        QString requestClientVCard();
+        bool isClientVCardReceived() const;
 
-    /// \cond
-    QStringList discoveryFeatures() const;
-    bool handleStanza (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        QStringList discoveryFeatures() const;
+        bool handleStanza (const QDomElement &element);
+        /// \endcond
 
-  signals:
-    /// This signal is emitted when the requested vCard is received
-    /// after calling the requestVCard() function.
-    void vCardReceived (const QXmppVCardIq&);
+    signals:
+        /// This signal is emitted when the requested vCard is received
+        /// after calling the requestVCard() function.
+        void vCardReceived (const QXmppVCardIq&);
 
-    /// This signal is emitted when the client's vCard is received
-    /// after calling the requestClientVCard() function.
-    void clientVCardReceived();
+        /// This signal is emitted when the client's vCard is received
+        /// after calling the requestClientVCard() function.
+        void clientVCardReceived();
 
-  private:
-    QXmppVCardManagerPrivate *d;
+    private:
+        QXmppVCardManagerPrivate *d;
 };
 
 #endif // QXMPPVCARDMANAGER_H

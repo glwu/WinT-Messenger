@@ -33,17 +33,19 @@
 #include "QXmppStream.h"
 #include "QXmppGlobal.h"
 
-class QXmppDiscoveryManagerPrivate {
-  public:
-    QString clientCapabilitiesNode;
-    QString clientCategory;
-    QString clientType;
-    QString clientName;
-    QXmppDataForm clientInfoForm;
+class QXmppDiscoveryManagerPrivate
+{
+    public:
+        QString clientCapabilitiesNode;
+        QString clientCategory;
+        QString clientType;
+        QString clientName;
+        QXmppDataForm clientInfoForm;
 };
 
 QXmppDiscoveryManager::QXmppDiscoveryManager()
-    : d (new QXmppDiscoveryManagerPrivate) {
+    : d (new QXmppDiscoveryManagerPrivate)
+{
     d->clientCapabilitiesNode = "https://github.com/qxmpp-project/qxmpp";
     d->clientCategory = "client";
     d->clientType = "pc";
@@ -55,7 +57,8 @@ QXmppDiscoveryManager::QXmppDiscoveryManager()
         d->clientName = QString ("%1 %2").arg (qApp->applicationName(), qApp->applicationVersion());
 }
 
-QXmppDiscoveryManager::~QXmppDiscoveryManager() {
+QXmppDiscoveryManager::~QXmppDiscoveryManager()
+{
     delete d;
 }
 
@@ -64,7 +67,8 @@ QXmppDiscoveryManager::~QXmppDiscoveryManager() {
 /// \param jid  The target entity's JID.
 /// \param node The target node (optional).
 
-QString QXmppDiscoveryManager::requestInfo (const QString& jid, const QString& node) {
+QString QXmppDiscoveryManager::requestInfo (const QString& jid, const QString& node)
+{
     QXmppDiscoveryIq request;
     request.setType (QXmppIq::Get);
     request.setQueryType (QXmppDiscoveryIq::InfoQuery);
@@ -85,7 +89,8 @@ QString QXmppDiscoveryManager::requestInfo (const QString& jid, const QString& n
 /// \param jid  The target entity's JID.
 /// \param node The target node (optional).
 
-QString QXmppDiscoveryManager::requestItems (const QString& jid, const QString& node) {
+QString QXmppDiscoveryManager::requestItems (const QString& jid, const QString& node)
+{
     QXmppDiscoveryIq request;
     request.setType (QXmppIq::Get);
     request.setQueryType (QXmppDiscoveryIq::ItemsQuery);
@@ -103,7 +108,8 @@ QString QXmppDiscoveryManager::requestItems (const QString& jid, const QString& 
 
 /// Returns the client's full capabilities.
 
-QXmppDiscoveryIq QXmppDiscoveryManager::capabilities() {
+QXmppDiscoveryIq QXmppDiscoveryManager::capabilities()
+{
     QXmppDiscoveryIq iq;
     iq.setType (QXmppIq::Result);
     iq.setQueryType (QXmppDiscoveryIq::InfoQuery);
@@ -120,7 +126,8 @@ QXmppDiscoveryIq QXmppDiscoveryManager::capabilities() {
             << ns_attention         // XEP-0224: Attention
             << ns_chat_markers;     // XEP-0333: Chat Markers
 
-    foreach (QXmppClientExtension * extension, client()->extensions()) {
+    foreach (QXmppClientExtension * extension, client()->extensions())
+    {
         if (extension)
             features << extension->discoveryFeatures();
     }
@@ -136,7 +143,8 @@ QXmppDiscoveryIq QXmppDiscoveryManager::capabilities() {
     identity.setName (clientName());
     identities << identity;
 
-    foreach (QXmppClientExtension * extension, client()->extensions()) {
+    foreach (QXmppClientExtension * extension, client()->extensions())
+    {
         if (extension)
             identities << extension->discoveryIdentities();
     }
@@ -154,7 +162,8 @@ QXmppDiscoveryIq QXmppDiscoveryManager::capabilities() {
 ///
 /// \param node
 
-void QXmppDiscoveryManager::setClientCapabilitiesNode (const QString &node) {
+void QXmppDiscoveryManager::setClientCapabilitiesNode (const QString &node)
+{
     d->clientCapabilitiesNode = node;
 }
 
@@ -165,7 +174,8 @@ void QXmppDiscoveryManager::setClientCapabilitiesNode (const QString &node) {
 ///
 /// \param category
 
-void QXmppDiscoveryManager::setClientCategory (const QString& category) {
+void QXmppDiscoveryManager::setClientCategory (const QString& category)
+{
     d->clientCategory = category;
 }
 
@@ -176,7 +186,8 @@ void QXmppDiscoveryManager::setClientCategory (const QString& category) {
 ///
 /// \param type
 
-void QXmppDiscoveryManager::setClientType (const QString& type) {
+void QXmppDiscoveryManager::setClientType (const QString& type)
+{
     d->clientType = type;
 }
 
@@ -184,7 +195,8 @@ void QXmppDiscoveryManager::setClientType (const QString& type) {
 ///
 /// \param name
 
-void QXmppDiscoveryManager::setClientName (const QString& name) {
+void QXmppDiscoveryManager::setClientName (const QString& name)
+{
     d->clientName = name;
 }
 
@@ -192,7 +204,8 @@ void QXmppDiscoveryManager::setClientName (const QString& name) {
 ///
 /// By default this is "https://github.com/qxmpp-project/qxmpp".
 
-QString QXmppDiscoveryManager::clientCapabilitiesNode() const {
+QString QXmppDiscoveryManager::clientCapabilitiesNode() const
+{
     return d->clientCapabilitiesNode;
 }
 
@@ -200,7 +213,8 @@ QString QXmppDiscoveryManager::clientCapabilitiesNode() const {
 ///
 /// By default this is "client".
 
-QString QXmppDiscoveryManager::clientCategory() const {
+QString QXmppDiscoveryManager::clientCategory() const
+{
     return d->clientCategory;
 }
 
@@ -208,7 +222,8 @@ QString QXmppDiscoveryManager::clientCategory() const {
 ///
 /// By default this is "pc".
 
-QString QXmppDiscoveryManager::clientType() const {
+QString QXmppDiscoveryManager::clientType() const
+{
     return d->clientType;
 }
 
@@ -216,39 +231,47 @@ QString QXmppDiscoveryManager::clientType() const {
 ///
 /// By default this is "Based on QXmpp x.y.z".
 
-QString QXmppDiscoveryManager::clientName() const {
+QString QXmppDiscoveryManager::clientName() const
+{
     return d->clientName;
 }
 
 /// Returns the client's extended information form, as defined
 /// by XEP-0128 Service Discovery Extensions.
 
-QXmppDataForm QXmppDiscoveryManager::clientInfoForm() const {
+QXmppDataForm QXmppDiscoveryManager::clientInfoForm() const
+{
     return d->clientInfoForm;
 }
 
 /// Sets the client's extended information form, as defined
 /// by XEP-0128 Service Discovery Extensions.
 
-void QXmppDiscoveryManager::setClientInfoForm (const QXmppDataForm &form) {
+void QXmppDiscoveryManager::setClientInfoForm (const QXmppDataForm &form)
+{
     d->clientInfoForm = form;
 }
 
 /// \cond
-QStringList QXmppDiscoveryManager::discoveryFeatures() const {
+QStringList QXmppDiscoveryManager::discoveryFeatures() const
+{
     return QStringList() << ns_disco_info;
 }
 
-bool QXmppDiscoveryManager::handleStanza (const QDomElement &element) {
-    if (element.tagName() == "iq" && QXmppDiscoveryIq::isDiscoveryIq (element)) {
+bool QXmppDiscoveryManager::handleStanza (const QDomElement &element)
+{
+    if (element.tagName() == "iq" && QXmppDiscoveryIq::isDiscoveryIq (element))
+    {
         QXmppDiscoveryIq receivedIq;
         receivedIq.parse (element);
 
-        switch (receivedIq.type()) {
+        switch (receivedIq.type())
+        {
             case QXmppIq::Get:
                 if (receivedIq.queryType() == QXmppDiscoveryIq::InfoQuery &&
                         (receivedIq.queryNode().isEmpty() ||
-                         receivedIq.queryNode().startsWith (d->clientCapabilitiesNode))) {
+                         receivedIq.queryNode().startsWith (d->clientCapabilitiesNode)))
+                {
 
                     // respond to info queries for the client itself
                     QXmppDiscoveryIq qxmppFeatures = capabilities();
@@ -259,7 +282,8 @@ bool QXmppDiscoveryManager::handleStanza (const QDomElement &element) {
                     return true;
                 }
 
-                else {
+                else
+                {
                     // let other managers handle other queries
                     return false;
                 }

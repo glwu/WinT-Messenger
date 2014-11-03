@@ -48,263 +48,282 @@ class QXmppSaslServerPrivate;
 // We mean it.
 //
 
-class QXMPP_AUTOTEST_EXPORT QXmppSaslClient : public QXmppLoggable {
-  public:
-    QXmppSaslClient (QObject *parent = 0);
-    virtual ~QXmppSaslClient();
+class QXMPP_AUTOTEST_EXPORT QXmppSaslClient : public QXmppLoggable
+{
+    public:
+        QXmppSaslClient (QObject *parent = 0);
+        virtual ~QXmppSaslClient();
 
-    QString host() const;
-    void setHost (const QString &host);
+        QString host() const;
+        void setHost (const QString &host);
 
-    QString serviceType() const;
-    void setServiceType (const QString &serviceType);
+        QString serviceType() const;
+        void setServiceType (const QString &serviceType);
 
-    QString username() const;
-    void setUsername (const QString &username);
+        QString username() const;
+        void setUsername (const QString &username);
 
-    QString password() const;
-    void setPassword (const QString &password);
+        QString password() const;
+        void setPassword (const QString &password);
 
-    virtual QString mechanism() const = 0;
-    virtual bool respond (const QByteArray &challenge, QByteArray &response) = 0;
+        virtual QString mechanism() const = 0;
+        virtual bool respond (const QByteArray &challenge, QByteArray &response) = 0;
 
-    static QStringList availableMechanisms();
-    static QXmppSaslClient *create (const QString &mechanism, QObject *parent = 0);
+        static QStringList availableMechanisms();
+        static QXmppSaslClient *create (const QString &mechanism, QObject *parent = 0);
 
-  private:
-    QXmppSaslClientPrivate *d;
+    private:
+        QXmppSaslClientPrivate *d;
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppSaslServer : public QXmppLoggable {
-  public:
-    enum Response {
-        Challenge = 0,
-        Succeeded = 1,
-        Failed = 2,
-        InputNeeded = 3
-    };
+class QXMPP_AUTOTEST_EXPORT QXmppSaslServer : public QXmppLoggable
+{
+    public:
+        enum Response
+        {
+            Challenge = 0,
+            Succeeded = 1,
+            Failed = 2,
+            InputNeeded = 3
+        };
 
-    QXmppSaslServer (QObject *parent = 0);
-    virtual ~QXmppSaslServer();
+        QXmppSaslServer (QObject *parent = 0);
+        virtual ~QXmppSaslServer();
 
-    QString username() const;
-    void setUsername (const QString &username);
+        QString username() const;
+        void setUsername (const QString &username);
 
-    QString password() const;
-    void setPassword (const QString &password);
+        QString password() const;
+        void setPassword (const QString &password);
 
-    QByteArray passwordDigest() const;
-    void setPasswordDigest (const QByteArray &digest);
+        QByteArray passwordDigest() const;
+        void setPasswordDigest (const QByteArray &digest);
 
-    QString realm() const;
-    void setRealm (const QString &realm);
+        QString realm() const;
+        void setRealm (const QString &realm);
 
-    virtual QString mechanism() const = 0;
-    virtual Response respond (const QByteArray &challenge, QByteArray &response) = 0;
+        virtual QString mechanism() const = 0;
+        virtual Response respond (const QByteArray &challenge, QByteArray &response) = 0;
 
-    static QXmppSaslServer *create (const QString &mechanism, QObject *parent = 0);
+        static QXmppSaslServer *create (const QString &mechanism, QObject *parent = 0);
 
-  private:
-    QXmppSaslServerPrivate *d;
+    private:
+        QXmppSaslServerPrivate *d;
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppSaslDigestMd5 {
-  public:
-    static void setNonce (const QByteArray &nonce);
+class QXMPP_AUTOTEST_EXPORT QXmppSaslDigestMd5
+{
+    public:
+        static void setNonce (const QByteArray &nonce);
 
-    // message parsing and serialization
-    static QMap<QByteArray, QByteArray> parseMessage (const QByteArray &ba);
-    static QByteArray serializeMessage (const QMap<QByteArray, QByteArray> &map);
+        // message parsing and serialization
+        static QMap<QByteArray, QByteArray> parseMessage (const QByteArray &ba);
+        static QByteArray serializeMessage (const QMap<QByteArray, QByteArray> &map);
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppSaslAuth : public QXmppStanza {
-  public:
-    QXmppSaslAuth (const QString &mechanism = QString(), const QByteArray &value = QByteArray());
+class QXMPP_AUTOTEST_EXPORT QXmppSaslAuth : public QXmppStanza
+{
+    public:
+        QXmppSaslAuth (const QString &mechanism = QString(), const QByteArray &value = QByteArray());
 
-    QString mechanism() const;
-    void setMechanism (const QString &mechanism);
+        QString mechanism() const;
+        void setMechanism (const QString &mechanism);
 
-    QByteArray value() const;
-    void setValue (const QByteArray &value);
+        QByteArray value() const;
+        void setValue (const QByteArray &value);
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
-    /// \endcond
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QString m_mechanism;
-    QByteArray m_value;
+    private:
+        QString m_mechanism;
+        QByteArray m_value;
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppSaslChallenge : public QXmppStanza {
-  public:
-    QXmppSaslChallenge (const QByteArray &value = QByteArray());
+class QXMPP_AUTOTEST_EXPORT QXmppSaslChallenge : public QXmppStanza
+{
+    public:
+        QXmppSaslChallenge (const QByteArray &value = QByteArray());
 
-    QByteArray value() const;
-    void setValue (const QByteArray &value);
+        QByteArray value() const;
+        void setValue (const QByteArray &value);
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
-    /// \endcond
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QByteArray m_value;
+    private:
+        QByteArray m_value;
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppSaslFailure : public QXmppStanza {
-  public:
-    QXmppSaslFailure (const QString &condition = QString());
+class QXMPP_AUTOTEST_EXPORT QXmppSaslFailure : public QXmppStanza
+{
+    public:
+        QXmppSaslFailure (const QString &condition = QString());
 
-    QString condition() const;
-    void setCondition (const QString &condition);
+        QString condition() const;
+        void setCondition (const QString &condition);
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
-    /// \endcond
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QString m_condition;
+    private:
+        QString m_condition;
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppSaslResponse : public QXmppStanza {
-  public:
-    QXmppSaslResponse (const QByteArray &value = QByteArray());
+class QXMPP_AUTOTEST_EXPORT QXmppSaslResponse : public QXmppStanza
+{
+    public:
+        QXmppSaslResponse (const QByteArray &value = QByteArray());
 
-    QByteArray value() const;
-    void setValue (const QByteArray &value);
+        QByteArray value() const;
+        void setValue (const QByteArray &value);
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
-    /// \endcond
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QByteArray m_value;
+    private:
+        QByteArray m_value;
 };
 
-class QXMPP_AUTOTEST_EXPORT QXmppSaslSuccess : public QXmppStanza {
-  public:
-    QXmppSaslSuccess();
+class QXMPP_AUTOTEST_EXPORT QXmppSaslSuccess : public QXmppStanza
+{
+    public:
+        QXmppSaslSuccess();
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
-    /// \endcond
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
+        /// \endcond
 };
 
-class QXmppSaslClientAnonymous : public QXmppSaslClient {
-  public:
-    QXmppSaslClientAnonymous (QObject *parent = 0);
-    QString mechanism() const;
-    bool respond (const QByteArray &challenge, QByteArray &response);
+class QXmppSaslClientAnonymous : public QXmppSaslClient
+{
+    public:
+        QXmppSaslClientAnonymous (QObject *parent = 0);
+        QString mechanism() const;
+        bool respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    int m_step;
+    private:
+        int m_step;
 };
 
-class QXmppSaslClientDigestMd5 : public QXmppSaslClient {
-  public:
-    QXmppSaslClientDigestMd5 (QObject *parent = 0);
-    QString mechanism() const;
-    bool respond (const QByteArray &challenge, QByteArray &response);
+class QXmppSaslClientDigestMd5 : public QXmppSaslClient
+{
+    public:
+        QXmppSaslClientDigestMd5 (QObject *parent = 0);
+        QString mechanism() const;
+        bool respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    QByteArray m_cnonce;
-    QByteArray m_nc;
-    QByteArray m_nonce;
-    QByteArray m_secret;
-    int m_step;
+    private:
+        QByteArray m_cnonce;
+        QByteArray m_nc;
+        QByteArray m_nonce;
+        QByteArray m_secret;
+        int m_step;
 };
 
-class QXmppSaslClientFacebook : public QXmppSaslClient {
-  public:
-    QXmppSaslClientFacebook (QObject *parent = 0);
-    QString mechanism() const;
-    bool respond (const QByteArray &challenge, QByteArray &response);
+class QXmppSaslClientFacebook : public QXmppSaslClient
+{
+    public:
+        QXmppSaslClientFacebook (QObject *parent = 0);
+        QString mechanism() const;
+        bool respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    int m_step;
+    private:
+        int m_step;
 };
 
-class QXmppSaslClientGoogle : public QXmppSaslClient {
-  public:
-    QXmppSaslClientGoogle (QObject *parent = 0);
-    QString mechanism() const;
-    bool respond (const QByteArray &challenge, QByteArray &response);
+class QXmppSaslClientGoogle : public QXmppSaslClient
+{
+    public:
+        QXmppSaslClientGoogle (QObject *parent = 0);
+        QString mechanism() const;
+        bool respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    int m_step;
+    private:
+        int m_step;
 };
 
-class QXmppSaslClientPlain : public QXmppSaslClient {
-  public:
-    QXmppSaslClientPlain (QObject *parent = 0);
-    QString mechanism() const;
-    bool respond (const QByteArray &challenge, QByteArray &response);
+class QXmppSaslClientPlain : public QXmppSaslClient
+{
+    public:
+        QXmppSaslClientPlain (QObject *parent = 0);
+        QString mechanism() const;
+        bool respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    int m_step;
+    private:
+        int m_step;
 };
 
-class QXmppSaslClientWindowsLive : public QXmppSaslClient {
-  public:
-    QXmppSaslClientWindowsLive (QObject *parent = 0);
-    QString mechanism() const;
-    bool respond (const QByteArray &challenge, QByteArray &response);
+class QXmppSaslClientWindowsLive : public QXmppSaslClient
+{
+    public:
+        QXmppSaslClientWindowsLive (QObject *parent = 0);
+        QString mechanism() const;
+        bool respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    int m_step;
+    private:
+        int m_step;
 };
 
-class QXmppSaslServerAnonymous : public QXmppSaslServer {
-  public:
-    QXmppSaslServerAnonymous (QObject *parent = 0);
-    QString mechanism() const;
+class QXmppSaslServerAnonymous : public QXmppSaslServer
+{
+    public:
+        QXmppSaslServerAnonymous (QObject *parent = 0);
+        QString mechanism() const;
 
-    Response respond (const QByteArray &challenge, QByteArray &response);
+        Response respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    int m_step;
+    private:
+        int m_step;
 };
 
-class QXmppSaslServerDigestMd5 : public QXmppSaslServer {
-  public:
-    QXmppSaslServerDigestMd5 (QObject *parent = 0);
-    QString mechanism() const;
+class QXmppSaslServerDigestMd5 : public QXmppSaslServer
+{
+    public:
+        QXmppSaslServerDigestMd5 (QObject *parent = 0);
+        QString mechanism() const;
 
-    Response respond (const QByteArray &challenge, QByteArray &response);
+        Response respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    QByteArray m_cnonce;
-    QByteArray m_nc;
-    QByteArray m_nonce;
-    QByteArray m_secret;
-    int m_step;
+    private:
+        QByteArray m_cnonce;
+        QByteArray m_nc;
+        QByteArray m_nonce;
+        QByteArray m_secret;
+        int m_step;
 };
 
-class QXmppSaslServerFacebook : public QXmppSaslServer {
-  public:
-    QXmppSaslServerFacebook (QObject *parent = 0);
-    QString mechanism() const;
+class QXmppSaslServerFacebook : public QXmppSaslServer
+{
+    public:
+        QXmppSaslServerFacebook (QObject *parent = 0);
+        QString mechanism() const;
 
-    Response respond (const QByteArray &challenge, QByteArray &response);
+        Response respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    int m_step;
+    private:
+        int m_step;
 };
 
-class QXmppSaslServerPlain : public QXmppSaslServer {
-  public:
-    QXmppSaslServerPlain (QObject *parent = 0);
-    QString mechanism() const;
+class QXmppSaslServerPlain : public QXmppSaslServer
+{
+    public:
+        QXmppSaslServerPlain (QObject *parent = 0);
+        QString mechanism() const;
 
-    Response respond (const QByteArray &challenge, QByteArray &response);
+        Response respond (const QByteArray &challenge, QByteArray &response);
 
-  private:
-    int m_step;
+    private:
+        int m_step;
 };
 
 #endif

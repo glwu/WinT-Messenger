@@ -30,12 +30,14 @@
 #include "QXmppUtils.h"
 
 /// \cond
-bool QXmppSessionIq::isSessionIq (const QDomElement &element) {
+bool QXmppSessionIq::isSessionIq (const QDomElement &element)
+{
     QDomElement sessionElement = element.firstChildElement ("session");
     return (sessionElement.namespaceURI() == ns_session);
 }
 
-void QXmppSessionIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppSessionIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("session");;
     writer->writeAttribute ("xmlns", ns_session);
     writer->writeEndElement();

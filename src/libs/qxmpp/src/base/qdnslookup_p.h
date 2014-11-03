@@ -68,135 +68,154 @@ QT_BEGIN_NAMESPACE
 
 class QDnsLookupRunnable;
 
-class QDnsLookupReply {
-  public:
-    QDnsLookupReply()
-        : error (QDnsLookup::NoError) {
-    }
+class QDnsLookupReply
+{
+    public:
+        QDnsLookupReply()
+            : error (QDnsLookup::NoError)
+        {
+        }
 
-    QDnsLookup::Error error;
-    QString errorString;
+        QDnsLookup::Error error;
+        QString errorString;
 
-    QList<QDnsDomainNameRecord> canonicalNameRecords;
-    QList<QDnsHostAddressRecord> hostAddressRecords;
-    QList<QDnsMailExchangeRecord> mailExchangeRecords;
-    QList<QDnsDomainNameRecord> nameServerRecords;
-    QList<QDnsDomainNameRecord> pointerRecords;
-    QList<QDnsServiceRecord> serviceRecords;
-    QList<QDnsTextRecord> textRecords;
+        QList<QDnsDomainNameRecord> canonicalNameRecords;
+        QList<QDnsHostAddressRecord> hostAddressRecords;
+        QList<QDnsMailExchangeRecord> mailExchangeRecords;
+        QList<QDnsDomainNameRecord> nameServerRecords;
+        QList<QDnsDomainNameRecord> pointerRecords;
+        QList<QDnsServiceRecord> serviceRecords;
+        QList<QDnsTextRecord> textRecords;
 };
 
-class QDnsLookupPrivate {
-  public:
-    QDnsLookupPrivate (QDnsLookup *qq)
-        : isFinished (false)
-        , type (QDnsLookup::A)
-        , runnable (0)
-        , q_ptr (qq) {
-    }
+class QDnsLookupPrivate
+{
+    public:
+        QDnsLookupPrivate (QDnsLookup *qq)
+            : isFinished (false)
+            , type (QDnsLookup::A)
+            , runnable (0)
+            , q_ptr (qq)
+        {
+        }
 
-    void _q_lookupFinished (const QDnsLookupReply &reply);
+        void _q_lookupFinished (const QDnsLookupReply &reply);
 
-    bool isFinished;
-    QString name;
-    QDnsLookup::Type type;
-    QDnsLookupReply reply;
-    QDnsLookupRunnable *runnable;
-    QDnsLookup *q_ptr;
+        bool isFinished;
+        QString name;
+        QDnsLookup::Type type;
+        QDnsLookupReply reply;
+        QDnsLookupRunnable *runnable;
+        QDnsLookup *q_ptr;
 
-    Q_DECLARE_PUBLIC (QDnsLookup)
+        Q_DECLARE_PUBLIC (QDnsLookup)
 };
 
-class QDnsLookupRunnable : public QObject, public QRunnable {
-    Q_OBJECT
+class QDnsLookupRunnable : public QObject, public QRunnable
+{
+        Q_OBJECT
 
-  public:
-    QDnsLookupRunnable (QDnsLookup::Type type, const QByteArray &name)
-        : requestType (type)
-        , requestName (name) {
-    }
-    void run();
+    public:
+        QDnsLookupRunnable (QDnsLookup::Type type, const QByteArray &name)
+            : requestType (type)
+            , requestName (name)
+        {
+        }
+        void run();
 
-  signals:
-    void finished (const QDnsLookupReply &reply);
+    signals:
+        void finished (const QDnsLookupReply &reply);
 
-  private:
-    static void query (const int requestType, const QByteArray &requestName, QDnsLookupReply *reply);
-    QDnsLookup::Type requestType;
-    QByteArray requestName;
+    private:
+        static void query (const int requestType, const QByteArray &requestName, QDnsLookupReply *reply);
+        QDnsLookup::Type requestType;
+        QByteArray requestName;
 };
 
-class QDnsLookupThreadPool : public QThreadPool {
-    Q_OBJECT
+class QDnsLookupThreadPool : public QThreadPool
+{
+        Q_OBJECT
 
-  public:
-    QDnsLookupThreadPool();
-    void start (QRunnable *runnable);
+    public:
+        QDnsLookupThreadPool();
+        void start (QRunnable *runnable);
 
-  private slots:
-    void _q_applicationDestroyed();
+    private slots:
+        void _q_applicationDestroyed();
 
-  private:
-    QMutex signalsMutex;
-    bool signalsConnected;
+    private:
+        QMutex signalsMutex;
+        bool signalsConnected;
 };
 
-class QDnsRecordPrivate : public QSharedData {
-  public:
-    QDnsRecordPrivate()
-        : timeToLive (0) {
-    }
+class QDnsRecordPrivate : public QSharedData
+{
+    public:
+        QDnsRecordPrivate()
+            : timeToLive (0)
+        {
+        }
 
-    QString name;
-    quint32 timeToLive;
+        QString name;
+        quint32 timeToLive;
 };
 
-class QDnsDomainNameRecordPrivate : public QDnsRecordPrivate {
-  public:
-    QDnsDomainNameRecordPrivate() {
-    }
+class QDnsDomainNameRecordPrivate : public QDnsRecordPrivate
+{
+    public:
+        QDnsDomainNameRecordPrivate()
+        {
+        }
 
-    QString value;
+        QString value;
 };
 
-class QDnsHostAddressRecordPrivate : public QDnsRecordPrivate {
-  public:
-    QDnsHostAddressRecordPrivate() {
-    }
+class QDnsHostAddressRecordPrivate : public QDnsRecordPrivate
+{
+    public:
+        QDnsHostAddressRecordPrivate()
+        {
+        }
 
-    QHostAddress value;
+        QHostAddress value;
 };
 
-class QDnsMailExchangeRecordPrivate : public QDnsRecordPrivate {
-  public:
-    QDnsMailExchangeRecordPrivate()
-        : preference (0) {
-    }
+class QDnsMailExchangeRecordPrivate : public QDnsRecordPrivate
+{
+    public:
+        QDnsMailExchangeRecordPrivate()
+            : preference (0)
+        {
+        }
 
-    QString exchange;
-    quint16 preference;
+        QString exchange;
+        quint16 preference;
 };
 
-class QDnsServiceRecordPrivate : public QDnsRecordPrivate {
-  public:
-    QDnsServiceRecordPrivate()
-        : port (0),
-          priority (0),
-          weight (0) {
-    }
+class QDnsServiceRecordPrivate : public QDnsRecordPrivate
+{
+    public:
+        QDnsServiceRecordPrivate()
+            : port (0),
+              priority (0),
+              weight (0)
+        {
+        }
 
-    QString target;
-    quint16 port;
-    quint16 priority;
-    quint16 weight;
+        QString target;
+        quint16 port;
+        quint16 priority;
+        quint16 weight;
 };
 
-class QDnsTextRecordPrivate : public QDnsRecordPrivate {
-  public:
-    QDnsTextRecordPrivate() {
-    }
+class QDnsTextRecordPrivate : public QDnsRecordPrivate
+{
+    public:
+        QDnsTextRecordPrivate()
+        {
+        }
 
-    QList<QByteArray> values;
+        QList<QByteArray> values;
 };
 
 QT_END_NAMESPACE

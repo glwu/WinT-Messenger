@@ -2,13 +2,8 @@ QT += network xml
 
 CONFIG += c++11
 QXMPP_LIBRARY_NAME = qxmpp
-QXMPP_LIBRARY_TYPE = shared
+QXMPP_LIBRARY_TYPE = static
 QXMPP_INCLUDEPATH = $$PWD/src/base $$PWD/src/client $$PWD/src/server
-
-
-macx {
-    QXMPP_LIBRARY_TYPE = static
-}
 
 # Libraries used internally by QXmpp
 android {

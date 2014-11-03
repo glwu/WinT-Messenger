@@ -32,14 +32,16 @@ static const char *ns_bookmarks = "storage:bookmarks";
 ///
 
 QXmppBookmarkConference::QXmppBookmarkConference()
-    : m_autoJoin (false) {
+    : m_autoJoin (false)
+{
 }
 
 /// Returns whether the client should automatically join the conference room
 /// on login.
 ///
 
-bool QXmppBookmarkConference::autoJoin() const {
+bool QXmppBookmarkConference::autoJoin() const
+{
     return m_autoJoin;
 }
 
@@ -48,14 +50,16 @@ bool QXmppBookmarkConference::autoJoin() const {
 ///
 /// \param autoJoin
 
-void QXmppBookmarkConference::setAutoJoin (bool autoJoin) {
+void QXmppBookmarkConference::setAutoJoin (bool autoJoin)
+{
     m_autoJoin = autoJoin;
 }
 
 /// Returns the JID of the conference room.
 ///
 
-QString QXmppBookmarkConference::jid() const {
+QString QXmppBookmarkConference::jid() const
+{
     return m_jid;
 }
 
@@ -63,14 +67,16 @@ QString QXmppBookmarkConference::jid() const {
 ///
 /// \param jid
 
-void QXmppBookmarkConference::setJid (const QString &jid) {
+void QXmppBookmarkConference::setJid (const QString &jid)
+{
     m_jid = jid;
 }
 
 /// Returns the friendly name for the bookmark.
 ///
 
-QString QXmppBookmarkConference::name() const {
+QString QXmppBookmarkConference::name() const
+{
     return m_name;
 }
 
@@ -78,14 +84,16 @@ QString QXmppBookmarkConference::name() const {
 ///
 /// \param name
 
-void QXmppBookmarkConference::setName (const QString &name) {
+void QXmppBookmarkConference::setName (const QString &name)
+{
     m_name = name;
 }
 
 /// Returns the preferred nickname for the conference room.
 ///
 
-QString QXmppBookmarkConference::nickName() const {
+QString QXmppBookmarkConference::nickName() const
+{
     return m_nickName;
 }
 
@@ -93,14 +101,16 @@ QString QXmppBookmarkConference::nickName() const {
 ///
 /// \param nickName
 
-void QXmppBookmarkConference::setNickName (const QString &nickName) {
+void QXmppBookmarkConference::setNickName (const QString &nickName)
+{
     m_nickName = nickName;
 }
 
 /// Returns the friendly name for the bookmark.
 ///
 
-QString QXmppBookmarkUrl::name() const {
+QString QXmppBookmarkUrl::name() const
+{
     return m_name;
 }
 
@@ -108,14 +118,16 @@ QString QXmppBookmarkUrl::name() const {
 ///
 /// \param name
 
-void QXmppBookmarkUrl::setName (const QString &name) {
+void QXmppBookmarkUrl::setName (const QString &name)
+{
     m_name = name;
 }
 
 /// Returns the URL for the web page.
 ///
 
-QUrl QXmppBookmarkUrl::url() const {
+QUrl QXmppBookmarkUrl::url() const
+{
     return m_url;
 }
 
@@ -123,14 +135,16 @@ QUrl QXmppBookmarkUrl::url() const {
 ///
 /// \param url
 
-void QXmppBookmarkUrl::setUrl (const QUrl &url) {
+void QXmppBookmarkUrl::setUrl (const QUrl &url)
+{
     m_url = url;
 }
 
 /// Returns the conference rooms bookmarks in this bookmark set.
 ///
 
-QList<QXmppBookmarkConference> QXmppBookmarkSet::conferences() const {
+QList<QXmppBookmarkConference> QXmppBookmarkSet::conferences() const
+{
     return m_conferences;
 }
 
@@ -138,14 +152,16 @@ QList<QXmppBookmarkConference> QXmppBookmarkSet::conferences() const {
 ///
 /// \param conferences
 
-void QXmppBookmarkSet::setConferences (const QList<QXmppBookmarkConference> &conferences) {
+void QXmppBookmarkSet::setConferences (const QList<QXmppBookmarkConference> &conferences)
+{
     m_conferences = conferences;
 }
 
 /// Returns the web page bookmarks in this bookmark set.
 ///
 
-QList<QXmppBookmarkUrl> QXmppBookmarkSet::urls() const {
+QList<QXmppBookmarkUrl> QXmppBookmarkSet::urls() const
+{
     return m_urls;
 }
 
@@ -153,21 +169,26 @@ QList<QXmppBookmarkUrl> QXmppBookmarkSet::urls() const {
 ///
 /// \param urls
 
-void QXmppBookmarkSet::setUrls (const QList<QXmppBookmarkUrl> &urls) {
+void QXmppBookmarkSet::setUrls (const QList<QXmppBookmarkUrl> &urls)
+{
     m_urls = urls;
 }
 
 /// \cond
-bool QXmppBookmarkSet::isBookmarkSet (const QDomElement &element) {
+bool QXmppBookmarkSet::isBookmarkSet (const QDomElement &element)
+{
     return element.tagName() == "storage" &&
            element.namespaceURI() == ns_bookmarks;
 }
 
-void QXmppBookmarkSet::parse (const QDomElement &element) {
+void QXmppBookmarkSet::parse (const QDomElement &element)
+{
     QDomElement childElement = element.firstChildElement();
 
-    while (!childElement.isNull()) {
-        if (childElement.tagName() == "conference") {
+    while (!childElement.isNull())
+    {
+        if (childElement.tagName() == "conference")
+        {
             QXmppBookmarkConference conference;
             conference.setAutoJoin (childElement.attribute ("autojoin") == "true" || childElement.attribute ("autojoin") == "1");
             conference.setJid (childElement.attribute ("jid"));
@@ -176,7 +197,8 @@ void QXmppBookmarkSet::parse (const QDomElement &element) {
             m_conferences << conference;
         }
 
-        else if (childElement.tagName() == "url") {
+        else if (childElement.tagName() == "url")
+        {
             QXmppBookmarkUrl url;
             url.setName (childElement.attribute ("name"));
             url.setUrl (childElement.attribute ("url"));
@@ -187,10 +209,12 @@ void QXmppBookmarkSet::parse (const QDomElement &element) {
     }
 }
 
-void QXmppBookmarkSet::toXml (QXmlStreamWriter *writer) const {
+void QXmppBookmarkSet::toXml (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("storage");
     writer->writeAttribute ("xmlns", ns_bookmarks);
-    foreach (const QXmppBookmarkConference & conference, m_conferences) {
+    foreach (const QXmppBookmarkConference & conference, m_conferences)
+    {
         writer->writeStartElement ("conference");
 
         if (conference.autoJoin())
@@ -204,7 +228,8 @@ void QXmppBookmarkSet::toXml (QXmlStreamWriter *writer) const {
 
         writer->writeEndElement();
     }
-    foreach (const QXmppBookmarkUrl & url, m_urls) {
+    foreach (const QXmppBookmarkUrl & url, m_urls)
+    {
         writer->writeStartElement ("url");
         helperToXmlAddAttribute (writer, "name", url.name());
         helperToXmlAddAttribute (writer, "url", url.url().toString());

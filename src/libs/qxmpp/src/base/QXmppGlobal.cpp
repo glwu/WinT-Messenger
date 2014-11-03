@@ -24,7 +24,8 @@
 
 #include "QXmppGlobal.h"
 
-QString QXmppVersion() {
+QString QXmppVersion()
+{
     return QString ("%1.%2.%3").arg (
                QString::number ((QXMPP_VERSION >> 16) & 0xff),
                QString::number ((QXMPP_VERSION >> 8) & 0xff),

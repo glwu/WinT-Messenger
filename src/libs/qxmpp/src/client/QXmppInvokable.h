@@ -37,41 +37,42 @@ This is the base class for all objects that will be invokable via RPC.  All publ
 
         @author Ian Reinhart Geiser <geiseri@kde.org>
 */
-class QXMPP_EXPORT QXmppInvokable : public QObject {
-    Q_OBJECT
-  public:
-    QXmppInvokable ( QObject *parent = 0 );
+class QXMPP_EXPORT QXmppInvokable : public QObject
+{
+        Q_OBJECT
+    public:
+        QXmppInvokable ( QObject *parent = 0 );
 
-    ~QXmppInvokable();
+        ~QXmppInvokable();
 
-    /**
-     * Execute a method on an object. with a set of arguments. This method is reentrant, and the method
-     * that is invoked will be done in a thread safe manner.  It should be noted that while this method
-     * is threadsafe and reentrant the side affects of the methods invoked may not be.
-     */
-    QVariant dispatch ( const QByteArray &method, const QList<QVariant> &args = QList<QVariant>() );
+        /**
+         * Execute a method on an object. with a set of arguments. This method is reentrant, and the method
+         * that is invoked will be done in a thread safe manner.  It should be noted that while this method
+         * is threadsafe and reentrant the side affects of the methods invoked may not be.
+         */
+        QVariant dispatch ( const QByteArray &method, const QList<QVariant> &args = QList<QVariant>() );
 
-    /**
-     * Utility method to convert a QList<QVariant> to a list of types for type
-     * checking.
-     */
-    static QList<QByteArray> paramTypes ( const QList<QVariant> &params );
+        /**
+         * Utility method to convert a QList<QVariant> to a list of types for type
+         * checking.
+         */
+        static QList<QByteArray> paramTypes ( const QList<QVariant> &params );
 
-    /**
-      * Reimplement this method to return a true if the invoking JID is allowed to execute the method.
-      */
-    virtual bool isAuthorized ( const QString &jid ) const = 0;
+        /**
+          * Reimplement this method to return a true if the invoking JID is allowed to execute the method.
+          */
+        virtual bool isAuthorized ( const QString &jid ) const = 0;
 
-  public slots:
-    /**
-      * This provides a list of interfaces for introspection of the presented interface.
-      */
-    QStringList interfaces() const;
+    public slots:
+        /**
+          * This provides a list of interfaces for introspection of the presented interface.
+          */
+        QStringList interfaces() const;
 
-  private:
-    void buildMethodHash();
-    QHash<QByteArray, int> m_methodHash;
-    QReadWriteLock m_lock;
+    private:
+        void buildMethodHash();
+        QHash<QByteArray, int> m_methodHash;
+        QReadWriteLock m_lock;
 };
 
 

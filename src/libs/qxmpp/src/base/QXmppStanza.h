@@ -47,35 +47,36 @@ class QXmppExtendedAddressPrivate;
 /// others are defined in separate XEPs (for instance XEP-0146: Remote Controlling Clients).
 /// That is why the "type" property is a string rather than an enumerated type.
 
-class QXMPP_EXPORT QXmppExtendedAddress {
-  public:
-    QXmppExtendedAddress();
-    QXmppExtendedAddress (const QXmppExtendedAddress&);
-    ~QXmppExtendedAddress();
+class QXMPP_EXPORT QXmppExtendedAddress
+{
+    public:
+        QXmppExtendedAddress();
+        QXmppExtendedAddress (const QXmppExtendedAddress&);
+        ~QXmppExtendedAddress();
 
-    QXmppExtendedAddress& operator= (const QXmppExtendedAddress&);
+        QXmppExtendedAddress& operator= (const QXmppExtendedAddress&);
 
-    QString description() const;
-    void setDescription (const QString &description);
+        QString description() const;
+        void setDescription (const QString &description);
 
-    QString jid() const;
-    void setJid (const QString &jid);
+        QString jid() const;
+        void setJid (const QString &jid);
 
-    QString type() const;
-    void setType (const QString &type);
+        QString type() const;
+        void setType (const QString &type);
 
-    bool isDelivered() const;
-    void setDelivered (bool);
+        bool isDelivered() const;
+        void setDelivered (bool);
 
-    bool isValid() const;
+        bool isValid() const;
 
-    /// \cond
-    void parse (const QDomElement &element);
-    void toXml (QXmlStreamWriter *writer) const;
-    /// \endcond
+        /// \cond
+        void parse (const QDomElement &element);
+        void toXml (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QSharedDataPointer<QXmppExtendedAddressPrivate> d;
+    private:
+        QSharedDataPointer<QXmppExtendedAddressPrivate> d;
 };
 
 class QXmppStanzaPrivate;
@@ -86,116 +87,120 @@ class QXmppStanzaPrivate;
 ///
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppStanza {
-  public:
-    class QXMPP_EXPORT Error {
-      public:
-        enum Type {
-            Cancel,
-            Continue,
-            Modify,
-            Auth,
-            Wait
+class QXMPP_EXPORT QXmppStanza
+{
+    public:
+        class QXMPP_EXPORT Error
+        {
+            public:
+                enum Type
+                {
+                    Cancel,
+                    Continue,
+                    Modify,
+                    Auth,
+                    Wait
+                };
+
+                enum Condition
+                {
+                    BadRequest,
+                    Conflict,
+                    FeatureNotImplemented,
+                    Forbidden,
+                    Gone,
+                    InternalServerError,
+                    ItemNotFound,
+                    JidMalformed,
+                    NotAcceptable,
+                    NotAllowed,
+                    NotAuthorized,
+                    PaymentRequired,
+                    RecipientUnavailable,
+                    Redirect,
+                    RegistrationRequired,
+                    RemoteServerNotFound,
+                    RemoteServerTimeout,
+                    ResourceConstraint,
+                    ServiceUnavailable,
+                    SubscriptionRequired,
+                    UndefinedCondition,
+                    UnexpectedRequest
+                };
+
+                Error();
+                Error (Type type, Condition cond, const QString& text = QString());
+                Error (const QString& type, const QString& cond, const QString& text = QString());
+
+                int code() const;
+                void setCode (int code);
+
+                QString text() const;
+                void setText (const QString& text);
+
+                Condition condition() const;
+                void setCondition (Condition cond);
+
+                void setType (Type type);
+                Type type() const;
+
+                /// \cond
+                void parse (const QDomElement &element);
+                void toXml (QXmlStreamWriter *writer) const;
+                /// \endcond
+
+            private:
+                QString getConditionStr() const;
+                void setConditionFromStr (const QString& cond);
+
+                QString getTypeStr() const;
+                void setTypeFromStr (const QString& type);
+
+                int m_code;
+                Type m_type;
+                Condition m_condition;
+                QString m_text;
         };
 
-        enum Condition {
-            BadRequest,
-            Conflict,
-            FeatureNotImplemented,
-            Forbidden,
-            Gone,
-            InternalServerError,
-            ItemNotFound,
-            JidMalformed,
-            NotAcceptable,
-            NotAllowed,
-            NotAuthorized,
-            PaymentRequired,
-            RecipientUnavailable,
-            Redirect,
-            RegistrationRequired,
-            RemoteServerNotFound,
-            RemoteServerTimeout,
-            ResourceConstraint,
-            ServiceUnavailable,
-            SubscriptionRequired,
-            UndefinedCondition,
-            UnexpectedRequest
-        };
+        QXmppStanza (const QString& from = QString(), const QString& to = QString());
+        QXmppStanza (const QXmppStanza &other);
+        virtual ~QXmppStanza();
 
-        Error();
-        Error (Type type, Condition cond, const QString& text = QString());
-        Error (const QString& type, const QString& cond, const QString& text = QString());
+        QXmppStanza& operator= (const QXmppStanza &other);
 
-        int code() const;
-        void setCode (int code);
+        QString to() const;
+        void setTo (const QString&);
 
-        QString text() const;
-        void setText (const QString& text);
+        QString from() const;
+        void setFrom (const QString&);
 
-        Condition condition() const;
-        void setCondition (Condition cond);
+        QString id() const;
+        void setId (const QString&);
 
-        void setType (Type type);
-        Type type() const;
+        QString lang() const;
+        void setLang (const QString&);
+
+        QXmppStanza::Error error() const;
+        void setError (const QXmppStanza::Error& error);
+
+        QXmppElementList extensions() const;
+        void setExtensions (const QXmppElementList &elements);
+
+        QList<QXmppExtendedAddress> extendedAddresses() const;
+        void setExtendedAddresses (const QList<QXmppExtendedAddress> &extendedAddresses);
 
         /// \cond
-        void parse (const QDomElement &element);
-        void toXml (QXmlStreamWriter *writer) const;
+        virtual void parse (const QDomElement &element);
+        virtual void toXml (QXmlStreamWriter *writer) const = 0;
+
+    protected:
+        void extensionsToXml (QXmlStreamWriter *writer) const;
+        void generateAndSetNextId();
         /// \endcond
 
-      private:
-        QString getConditionStr() const;
-        void setConditionFromStr (const QString& cond);
-
-        QString getTypeStr() const;
-        void setTypeFromStr (const QString& type);
-
-        int m_code;
-        Type m_type;
-        Condition m_condition;
-        QString m_text;
-    };
-
-    QXmppStanza (const QString& from = QString(), const QString& to = QString());
-    QXmppStanza (const QXmppStanza &other);
-    virtual ~QXmppStanza();
-
-    QXmppStanza& operator= (const QXmppStanza &other);
-
-    QString to() const;
-    void setTo (const QString&);
-
-    QString from() const;
-    void setFrom (const QString&);
-
-    QString id() const;
-    void setId (const QString&);
-
-    QString lang() const;
-    void setLang (const QString&);
-
-    QXmppStanza::Error error() const;
-    void setError (const QXmppStanza::Error& error);
-
-    QXmppElementList extensions() const;
-    void setExtensions (const QXmppElementList &elements);
-
-    QList<QXmppExtendedAddress> extendedAddresses() const;
-    void setExtendedAddresses (const QList<QXmppExtendedAddress> &extendedAddresses);
-
-    /// \cond
-    virtual void parse (const QDomElement &element);
-    virtual void toXml (QXmlStreamWriter *writer) const = 0;
-
-  protected:
-    void extensionsToXml (QXmlStreamWriter *writer) const;
-    void generateAndSetNextId();
-    /// \endcond
-
-  private:
-    QSharedDataPointer<QXmppStanzaPrivate> d;
-    static uint s_uniqeIdNo;
+    private:
+        QSharedDataPointer<QXmppStanzaPrivate> d;
+        static uint s_uniqeIdNo;
 };
 
 #endif // QXMPPSTANZA_H

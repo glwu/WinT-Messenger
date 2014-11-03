@@ -29,7 +29,8 @@
 
 /// Returns the requested domain.
 
-QString QXmppPasswordRequest::domain() const {
+QString QXmppPasswordRequest::domain() const
+{
     return m_domain;
 }
 
@@ -37,25 +38,29 @@ QString QXmppPasswordRequest::domain() const {
 ///
 /// \param domain
 
-void QXmppPasswordRequest::setDomain (const QString &domain) {
+void QXmppPasswordRequest::setDomain (const QString &domain)
+{
     m_domain = domain;
 }
 
 /// Returns the given password.
 
-QString QXmppPasswordRequest::password() const {
+QString QXmppPasswordRequest::password() const
+{
     return m_password;
 }
 
 /// Sets the given \a password.
 
-void QXmppPasswordRequest::setPassword (const QString &password) {
+void QXmppPasswordRequest::setPassword (const QString &password)
+{
     m_password = password;
 }
 
 /// Returns the requested username.
 
-QString QXmppPasswordRequest::username() const {
+QString QXmppPasswordRequest::username() const
+{
     return m_username;
 }
 
@@ -63,7 +68,8 @@ QString QXmppPasswordRequest::username() const {
 ///
 /// \param username
 
-void QXmppPasswordRequest::setUsername (const QString &username) {
+void QXmppPasswordRequest::setUsername (const QString &username)
+{
     m_username = username;
 }
 
@@ -74,12 +80,14 @@ void QXmppPasswordRequest::setUsername (const QString &username) {
 QXmppPasswordReply::QXmppPasswordReply (QObject *parent)
     : QObject (parent),
       m_error (QXmppPasswordReply::NoError),
-      m_isFinished (false) {
+      m_isFinished (false)
+{
 }
 
 /// Returns the received MD5 digest.
 
-QByteArray QXmppPasswordReply::digest() const {
+QByteArray QXmppPasswordReply::digest() const
+{
     return m_digest;
 }
 
@@ -87,7 +95,8 @@ QByteArray QXmppPasswordReply::digest() const {
 ///
 /// \param digest
 
-void QXmppPasswordReply::setDigest (const QByteArray &digest) {
+void QXmppPasswordReply::setDigest (const QByteArray &digest)
+{
     m_digest = digest;
 }
 
@@ -95,38 +104,44 @@ void QXmppPasswordReply::setDigest (const QByteArray &digest) {
 ///
 /// If no error was found, returns NoError.
 
-QXmppPasswordReply::Error QXmppPasswordReply::error() const {
+QXmppPasswordReply::Error QXmppPasswordReply::error() const
+{
     return m_error;
 }
 
 /// Returns the error that was found during the processing of this request.
 ///
-void QXmppPasswordReply::setError (QXmppPasswordReply::Error error) {
+void QXmppPasswordReply::setError (QXmppPasswordReply::Error error)
+{
     m_error = error;
 }
 
 /// Mark reply as finished.
 
-void QXmppPasswordReply::finish() {
+void QXmppPasswordReply::finish()
+{
     m_isFinished = true;
     emit finished();
 }
 
 /// Delay marking reply as finished.
 
-void QXmppPasswordReply::finishLater() {
+void QXmppPasswordReply::finishLater()
+{
     QTimer::singleShot (0, this, SLOT (finish()));
 }
 
 /// Returns true when the reply has finished.
 
-bool QXmppPasswordReply::isFinished() const {
+bool QXmppPasswordReply::isFinished() const
+{
     return m_isFinished;
 }
 
 /// Returns the received password.
 
-QString QXmppPasswordReply::password() const {
+QString QXmppPasswordReply::password() const
+{
     return m_password;
 }
 
@@ -134,7 +149,8 @@ QString QXmppPasswordReply::password() const {
 ///
 /// \param password
 
-void QXmppPasswordReply::setPassword (const QString &password) {
+void QXmppPasswordReply::setPassword (const QString &password)
+{
     m_password = password;
 }
 
@@ -144,13 +160,15 @@ void QXmppPasswordReply::setPassword (const QString &password) {
 ///
 /// \param request
 
-QXmppPasswordReply *QXmppPasswordChecker::checkPassword (const QXmppPasswordRequest &request) {
+QXmppPasswordReply *QXmppPasswordChecker::checkPassword (const QXmppPasswordRequest &request)
+{
     QXmppPasswordReply *reply = new QXmppPasswordReply;
 
     QString secret;
     QXmppPasswordReply::Error error = getPassword (request, secret);
 
-    if (error == QXmppPasswordReply::NoError) {
+    if (error == QXmppPasswordReply::NoError)
+    {
         if (request.password() != secret)
             reply->setError (QXmppPasswordReply::AuthorizationError);
     }
@@ -170,13 +188,15 @@ QXmppPasswordReply *QXmppPasswordChecker::checkPassword (const QXmppPasswordRequ
 ///
 /// \param request
 
-QXmppPasswordReply *QXmppPasswordChecker::getDigest (const QXmppPasswordRequest &request) {
+QXmppPasswordReply *QXmppPasswordChecker::getDigest (const QXmppPasswordRequest &request)
+{
     QXmppPasswordReply *reply = new QXmppPasswordReply;
 
     QString secret;
     QXmppPasswordReply::Error error = getPassword (request, secret);
 
-    if (error == QXmppPasswordReply::NoError) {
+    if (error == QXmppPasswordReply::NoError)
+    {
         reply->setDigest (QCryptographicHash::hash (
                               (request.username() + ":" + request.domain() + ":" + secret).toUtf8(),
                               QCryptographicHash::Md5));
@@ -197,7 +217,8 @@ QXmppPasswordReply *QXmppPasswordChecker::getDigest (const QXmppPasswordRequest 
 /// \param request
 /// \param password
 
-QXmppPasswordReply::Error QXmppPasswordChecker::getPassword (const QXmppPasswordRequest &request, QString &password) {
+QXmppPasswordReply::Error QXmppPasswordChecker::getPassword (const QXmppPasswordRequest &request, QString &password)
+{
     Q_UNUSED (request);
     Q_UNUSED (password);
     return QXmppPasswordReply::TemporaryError;
@@ -206,7 +227,8 @@ QXmppPasswordReply::Error QXmppPasswordChecker::getPassword (const QXmppPassword
 /// Returns true if the getPassword() method is implemented.
 ///
 
-bool QXmppPasswordChecker::hasGetPassword() const {
+bool QXmppPasswordChecker::hasGetPassword() const
+{
     return false;
 }
 

@@ -27,84 +27,104 @@
 #include "QXmppConstants.h"
 #include "QXmppUtils.h"
 
-QString QXmppByteStreamIq::StreamHost::host() const {
+QString QXmppByteStreamIq::StreamHost::host() const
+{
     return m_host;
 }
 
-void QXmppByteStreamIq::StreamHost::setHost (const QString &host) {
+void QXmppByteStreamIq::StreamHost::setHost (const QString &host)
+{
     m_host = host;
 }
 
-QString QXmppByteStreamIq::StreamHost::jid() const {
+QString QXmppByteStreamIq::StreamHost::jid() const
+{
     return m_jid;
 }
 
-void QXmppByteStreamIq::StreamHost::setJid (const QString &jid) {
+void QXmppByteStreamIq::StreamHost::setJid (const QString &jid)
+{
     m_jid = jid;
 }
 
-quint16 QXmppByteStreamIq::StreamHost::port() const {
+quint16 QXmppByteStreamIq::StreamHost::port() const
+{
     return m_port;
 }
 
-void QXmppByteStreamIq::StreamHost::setPort (quint16 port) {
+void QXmppByteStreamIq::StreamHost::setPort (quint16 port)
+{
     m_port = port;
 }
 
-QString QXmppByteStreamIq::StreamHost::zeroconf() const {
+QString QXmppByteStreamIq::StreamHost::zeroconf() const
+{
     return m_zeroconf;
 }
 
-void  QXmppByteStreamIq::StreamHost::setZeroconf (const QString &zeroconf) {
+void  QXmppByteStreamIq::StreamHost::setZeroconf (const QString &zeroconf)
+{
     m_zeroconf = zeroconf;
 }
 
-QXmppByteStreamIq::Mode QXmppByteStreamIq::mode() const {
+QXmppByteStreamIq::Mode QXmppByteStreamIq::mode() const
+{
     return m_mode;
 }
 
-void QXmppByteStreamIq::setMode (QXmppByteStreamIq::Mode mode) {
+void QXmppByteStreamIq::setMode (QXmppByteStreamIq::Mode mode)
+{
     m_mode = mode;
 }
 
-QString QXmppByteStreamIq::sid() const {
+QString QXmppByteStreamIq::sid() const
+{
     return m_sid;
 }
 
-void QXmppByteStreamIq::setSid (const QString &sid) {
+void QXmppByteStreamIq::setSid (const QString &sid)
+{
     m_sid = sid;
 }
 
-QString QXmppByteStreamIq::activate() const {
+QString QXmppByteStreamIq::activate() const
+{
     return m_activate;
 }
 
-void QXmppByteStreamIq::setActivate (const QString &activate) {
+void QXmppByteStreamIq::setActivate (const QString &activate)
+{
     m_activate = activate;
 }
 
-QList<QXmppByteStreamIq::StreamHost> QXmppByteStreamIq::streamHosts() const {
+QList<QXmppByteStreamIq::StreamHost> QXmppByteStreamIq::streamHosts() const
+{
     return m_streamHosts;
 }
 
-void QXmppByteStreamIq::setStreamHosts (const QList<QXmppByteStreamIq::StreamHost> &streamHosts) {
+void QXmppByteStreamIq::setStreamHosts (const QList<QXmppByteStreamIq::StreamHost> &streamHosts)
+{
     m_streamHosts = streamHosts;
 }
 
-QString QXmppByteStreamIq::streamHostUsed() const {
+QString QXmppByteStreamIq::streamHostUsed() const
+{
     return m_streamHostUsed;
 }
 
-void QXmppByteStreamIq::setStreamHostUsed (const QString &jid) {
+void QXmppByteStreamIq::setStreamHostUsed (const QString &jid)
+{
     m_streamHostUsed = jid;
 }
 
 /// \cond
-bool QXmppByteStreamIq::isByteStreamIq (const QDomElement &element) {
+bool QXmppByteStreamIq::isByteStreamIq (const QDomElement &element)
+{
     return element.firstChildElement ("query").namespaceURI() == ns_bytestreams;
 }
 
-void QXmppByteStreamIq::parseElementFromChild (const QDomElement &element) {
+void QXmppByteStreamIq::parseElementFromChild (const QDomElement &element)
+{
     QDomElement queryElement = element.firstChildElement ("query");
     m_sid = queryElement.attribute ("sid");
     const QString modeStr = queryElement.attribute ("mode");
@@ -120,7 +140,8 @@ void QXmppByteStreamIq::parseElementFromChild (const QDomElement &element) {
 
     QDomElement hostElement = queryElement.firstChildElement ("streamhost");
 
-    while (!hostElement.isNull()) {
+    while (!hostElement.isNull())
+    {
         StreamHost streamHost;
         streamHost.setHost (hostElement.attribute ("host"));
         streamHost.setJid (hostElement.attribute ("jid"));
@@ -135,7 +156,8 @@ void QXmppByteStreamIq::parseElementFromChild (const QDomElement &element) {
     m_streamHostUsed = queryElement.firstChildElement ("streamhost-used").attribute ("jid");
 }
 
-void QXmppByteStreamIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppByteStreamIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("query");
     writer->writeAttribute ("xmlns", ns_bytestreams);
     helperToXmlAddAttribute (writer, "sid", m_sid);
@@ -148,7 +170,8 @@ void QXmppByteStreamIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
         modeStr = "udp";
 
     helperToXmlAddAttribute (writer, "mode", modeStr);
-    foreach (const StreamHost & streamHost, m_streamHosts) {
+    foreach (const StreamHost & streamHost, m_streamHosts)
+    {
         writer->writeStartElement ("streamhost");
         helperToXmlAddAttribute (writer, "host", streamHost.host());
         helperToXmlAddAttribute (writer, "jid", streamHost.jid());
@@ -160,7 +183,8 @@ void QXmppByteStreamIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
     if (!m_activate.isEmpty())
         helperToXmlAddTextElement (writer, "activate", m_activate);
 
-    if (!m_streamHostUsed.isEmpty()) {
+    if (!m_streamHostUsed.isEmpty())
+    {
         writer->writeStartElement ("streamhost-used");
         helperToXmlAddAttribute (writer, "jid", m_streamHostUsed);
         writer->writeEndElement();

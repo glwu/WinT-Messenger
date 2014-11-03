@@ -17,45 +17,32 @@
 #include <QApplication>
 
 #include "app_info.h"
-#include "platforms.h"
 
-/*!
- * \class Settings
- *
- * The Settings class allows the QML interface
- * to access and control a QSettings instance.
- *
- * The class also implements some "shortcuts" to
- * boolean configuration parameters because the
- * conversion between a QVariant and a bool failed
- * on some systems (such as Windows and Android).
- */
+class Settings : public QObject
+{
+        Q_OBJECT
 
-class Settings : public QObject {
-    Q_OBJECT
+    public:
+        Settings();
 
-  public:
+        Q_INVOKABLE void setValue (QString key, QVariant value);
+        Q_INVOKABLE QVariant value (QString key, QVariant defaultValue) const;
 
-    Settings();
+        Q_INVOKABLE int x();
+        Q_INVOKABLE int y();
+        Q_INVOKABLE int width();
+        Q_INVOKABLE int height();
+        Q_INVOKABLE bool textChat();
+        Q_INVOKABLE bool customColor();
+        Q_INVOKABLE bool firstLaunch();
+        Q_INVOKABLE bool notifyUpdates();
+        Q_INVOKABLE bool soundsEnabled();
+        Q_INVOKABLE QString primaryColor();
 
-    Q_INVOKABLE void setValue (QString key, QVariant value);
-    Q_INVOKABLE QVariant value (QString key, QVariant defaultValue) const;
+    private:
 
-    Q_INVOKABLE int x();
-    Q_INVOKABLE int y();
-    Q_INVOKABLE int width();
-    Q_INVOKABLE int height();
-    Q_INVOKABLE bool textChat();
-    Q_INVOKABLE bool customColor();
-    Q_INVOKABLE bool firstLaunch();
-    Q_INVOKABLE bool notifyUpdates();
-    Q_INVOKABLE bool soundsEnabled();
-    Q_INVOKABLE QString primaryColor();
-
-  private:
-
-    QSettings *m_settings;
-    QString m_primary_color;
+        QSettings *m_settings;
+        QString m_primary_color;
 };
 
 #endif

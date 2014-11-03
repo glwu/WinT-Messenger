@@ -56,66 +56,67 @@ class QXmppStream;
 ///
 /// \ingroup Core
 
-class QXMPP_EXPORT QXmppServer : public QXmppLoggable {
-    Q_OBJECT
-    Q_PROPERTY (QXmppLogger *logger READ logger WRITE setLogger NOTIFY loggerChanged)
+class QXMPP_EXPORT QXmppServer : public QXmppLoggable
+{
+        Q_OBJECT
+        Q_PROPERTY (QXmppLogger *logger READ logger WRITE setLogger NOTIFY loggerChanged)
 
-  public:
-    QXmppServer (QObject *parent = 0);
-    ~QXmppServer();
+    public:
+        QXmppServer (QObject *parent = 0);
+        ~QXmppServer();
 
-    void addExtension (QXmppServerExtension *extension);
-    QList<QXmppServerExtension *> extensions();
+        void addExtension (QXmppServerExtension *extension);
+        QList<QXmppServerExtension *> extensions();
 
-    QString domain() const;
-    void setDomain (const QString &domain);
+        QString domain() const;
+        void setDomain (const QString &domain);
 
-    QXmppLogger *logger();
-    void setLogger (QXmppLogger *logger);
+        QXmppLogger *logger();
+        void setLogger (QXmppLogger *logger);
 
-    QXmppPasswordChecker *passwordChecker();
-    void setPasswordChecker (QXmppPasswordChecker *checker);
+        QXmppPasswordChecker *passwordChecker();
+        void setPasswordChecker (QXmppPasswordChecker *checker);
 
-    QVariantMap statistics() const;
+        QVariantMap statistics() const;
 
-    void addCaCertificates (const QString &caCertificates);
-    void setLocalCertificate (const QString &path);
-    void setPrivateKey (const QString &path);
+        void addCaCertificates (const QString &caCertificates);
+        void setLocalCertificate (const QString &path);
+        void setPrivateKey (const QString &path);
 
-    void close();
-    bool listenForClients (const QHostAddress &address = QHostAddress::Any, quint16 port = 5222);
-    bool listenForServers (const QHostAddress &address = QHostAddress::Any, quint16 port = 5269);
+        void close();
+        bool listenForClients (const QHostAddress &address = QHostAddress::Any, quint16 port = 5222);
+        bool listenForServers (const QHostAddress &address = QHostAddress::Any, quint16 port = 5269);
 
-    bool sendElement (const QDomElement &element);
-    bool sendPacket (const QXmppStanza &stanza);
+        bool sendElement (const QDomElement &element);
+        bool sendPacket (const QXmppStanza &stanza);
 
-    void addIncomingClient (QXmppIncomingClient *stream);
+        void addIncomingClient (QXmppIncomingClient *stream);
 
-  signals:
-    /// This signal is emitted when a client has connected.
-    void clientConnected (const QString &jid);
+    signals:
+        /// This signal is emitted when a client has connected.
+        void clientConnected (const QString &jid);
 
-    /// This signal is emitted when a client has disconnected.
-    void clientDisconnected (const QString &jid);
+        /// This signal is emitted when a client has disconnected.
+        void clientDisconnected (const QString &jid);
 
-    /// This signal is emitted when the logger changes.
-    void loggerChanged (QXmppLogger *logger);
+        /// This signal is emitted when the logger changes.
+        void loggerChanged (QXmppLogger *logger);
 
-  public slots:
-    void handleElement (const QDomElement &element);
+    public slots:
+        void handleElement (const QDomElement &element);
 
-  private slots:
-    void _q_clientConnection (QSslSocket *socket);
-    void _q_clientConnected();
-    void _q_clientDisconnected();
-    void _q_dialbackRequestReceived (const QXmppDialback &dialback);
-    void _q_outgoingServerDisconnected();
-    void _q_serverConnection (QSslSocket *socket);
-    void _q_serverDisconnected();
+    private slots:
+        void _q_clientConnection (QSslSocket *socket);
+        void _q_clientConnected();
+        void _q_clientDisconnected();
+        void _q_dialbackRequestReceived (const QXmppDialback &dialback);
+        void _q_outgoingServerDisconnected();
+        void _q_serverConnection (QSslSocket *socket);
+        void _q_serverDisconnected();
 
-  private:
-    friend class QXmppServerPrivate;
-    QXmppServerPrivate *d;
+    private:
+        friend class QXmppServerPrivate;
+        QXmppServerPrivate *d;
 };
 
 class QXmppSslServerPrivate;
@@ -123,28 +124,29 @@ class QXmppSslServerPrivate;
 /// \brief The QXmppSslServer class represents an SSL-enabled TCP server.
 ///
 
-class QXMPP_EXPORT QXmppSslServer : public QTcpServer {
-    Q_OBJECT
+class QXMPP_EXPORT QXmppSslServer : public QTcpServer
+{
+        Q_OBJECT
 
-  public:
-    QXmppSslServer (QObject *parent = 0);
-    ~QXmppSslServer();
+    public:
+        QXmppSslServer (QObject *parent = 0);
+        ~QXmppSslServer();
 
-    void addCaCertificates (const QList<QSslCertificate> &certificates);
-    void setLocalCertificate (const QSslCertificate &certificate);
-    void setPrivateKey (const QSslKey &key);
+        void addCaCertificates (const QList<QSslCertificate> &certificates);
+        void setLocalCertificate (const QSslCertificate &certificate);
+        void setPrivateKey (const QSslKey &key);
 
-  signals:
-    /// This signal is emitted when a new connection is established.
-    void newConnection (QSslSocket *socket);
+    signals:
+        /// This signal is emitted when a new connection is established.
+        void newConnection (QSslSocket *socket);
 
-  private:
+    private:
 #if QT_VERSION < 0x050000
-    void incomingConnection (int socketDescriptor);
+        void incomingConnection (int socketDescriptor);
 #else
-    void incomingConnection (qintptr socketDescriptor);
+        void incomingConnection (qintptr socketDescriptor);
 #endif
-    QXmppSslServerPrivate *const d;
+        QXmppSslServerPrivate *const d;
 };
 
 #endif

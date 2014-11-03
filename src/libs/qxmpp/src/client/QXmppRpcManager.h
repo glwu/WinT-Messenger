@@ -51,42 +51,43 @@ class QXmppRpcResponseIq;
 ///
 /// \ingroup Managers
 
-class QXMPP_EXPORT QXmppRpcManager : public QXmppClientExtension {
-    Q_OBJECT
+class QXMPP_EXPORT QXmppRpcManager : public QXmppClientExtension
+{
+        Q_OBJECT
 
-  public:
-    QXmppRpcManager();
+    public:
+        QXmppRpcManager();
 
-    void addInvokableInterface ( QXmppInvokable *interface );
-    QXmppRemoteMethodResult callRemoteMethod ( const QString &jid,
-            const QString &interface,
-            const QVariant &arg1 = QVariant(),
-            const QVariant &arg2 = QVariant(),
-            const QVariant &arg3 = QVariant(),
-            const QVariant &arg4 = QVariant(),
-            const QVariant &arg5 = QVariant(),
-            const QVariant &arg6 = QVariant(),
-            const QVariant &arg7 = QVariant(),
-            const QVariant &arg8 = QVariant(),
-            const QVariant &arg9 = QVariant(),
-            const QVariant &arg10 = QVariant() );
+        void addInvokableInterface ( QXmppInvokable *interface );
+        QXmppRemoteMethodResult callRemoteMethod ( const QString &jid,
+                const QString &interface,
+                const QVariant &arg1 = QVariant(),
+                const QVariant &arg2 = QVariant(),
+                const QVariant &arg3 = QVariant(),
+                const QVariant &arg4 = QVariant(),
+                const QVariant &arg5 = QVariant(),
+                const QVariant &arg6 = QVariant(),
+                const QVariant &arg7 = QVariant(),
+                const QVariant &arg8 = QVariant(),
+                const QVariant &arg9 = QVariant(),
+                const QVariant &arg10 = QVariant() );
 
-    /// \cond
-    QStringList discoveryFeatures() const;
-    virtual QList<QXmppDiscoveryIq::Identity> discoveryIdentities() const;
-    bool handleStanza (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        QStringList discoveryFeatures() const;
+        virtual QList<QXmppDiscoveryIq::Identity> discoveryIdentities() const;
+        bool handleStanza (const QDomElement &element);
+        /// \endcond
 
-  signals:
-    /// \cond
-    void rpcCallResponse (const QXmppRpcResponseIq& result);
-    void rpcCallError (const QXmppRpcErrorIq &err);
-    /// \endcond
+    signals:
+        /// \cond
+        void rpcCallResponse (const QXmppRpcResponseIq& result);
+        void rpcCallError (const QXmppRpcErrorIq &err);
+        /// \endcond
 
-  private:
-    void invokeInterfaceMethod (const QXmppRpcInvokeIq &iq);
+    private:
+        void invokeInterfaceMethod (const QXmppRpcInvokeIq &iq);
 
-    QMap<QString, QXmppInvokable *> m_interfaces;
+        QMap<QString, QXmppInvokable *> m_interfaces;
 };
 
 #endif

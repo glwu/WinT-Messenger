@@ -32,10 +32,12 @@
 #include "QXmppRpcIq.h"
 #include "QXmppUtils.h"
 
-void QXmppRpcMarshaller::marshall (QXmlStreamWriter *writer, const QVariant &value) {
+void QXmppRpcMarshaller::marshall (QXmlStreamWriter *writer, const QVariant &value)
+{
     writer->writeStartElement ("value");
 
-    switch ( value.type() ) {
+    switch ( value.type() )
+    {
         case QVariant::Int:
         case QVariant::UInt:
         case QVariant::LongLong:
@@ -64,7 +66,8 @@ void QXmppRpcMarshaller::marshall (QXmlStreamWriter *writer, const QVariant &val
             break;
 
         case QVariant::StringList:
-        case QVariant::List: {
+        case QVariant::List:
+            {
                 writer->writeStartElement ("array");
                 writer->writeStartElement ("data");
                 foreach (const QVariant & item, value.toList())
@@ -74,12 +77,14 @@ void QXmppRpcMarshaller::marshall (QXmlStreamWriter *writer, const QVariant &val
                 break;
             }
 
-        case QVariant::Map: {
+        case QVariant::Map:
+            {
                 writer->writeStartElement ("struct");
                 QMap<QString, QVariant> map = value.toMap();
                 QMap<QString, QVariant>::ConstIterator index = map.begin();
 
-                while ( index != map.end() ) {
+                while ( index != map.end() )
+                {
                     writer->writeStartElement ("member");
                     writer->writeTextElement ("name", index.key());
                     marshall ( writer, *index );
@@ -91,12 +96,14 @@ void QXmppRpcMarshaller::marshall (QXmlStreamWriter *writer, const QVariant &val
                 break;
             }
 
-        case QVariant::ByteArray: {
+        case QVariant::ByteArray:
+            {
                 writer->writeTextElement ("base64", value.toByteArray().toBase64() );
                 break;
             }
 
-        default: {
+        default:
+            {
                 if (value.isNull())
                     writer->writeEmptyElement ("nil");
 
@@ -110,8 +117,10 @@ void QXmppRpcMarshaller::marshall (QXmlStreamWriter *writer, const QVariant &val
     writer->writeEndElement();
 }
 
-QVariant QXmppRpcMarshaller::demarshall (const QDomElement &elem, QStringList &errors) {
-    if ( elem.tagName().toLower() != "value" ) {
+QVariant QXmppRpcMarshaller::demarshall (const QDomElement &elem, QStringList &errors)
+{
+    if ( elem.tagName().toLower() != "value" )
+    {
         errors << "Bad param value";
         return QVariant();
     }
@@ -128,7 +137,8 @@ QVariant QXmppRpcMarshaller::demarshall (const QDomElement &elem, QStringList &e
     if ( typeName == "string" )
         return QVariant ( typeData.text() );
 
-    else if (typeName == "int" || typeName == "i4" ) {
+    else if (typeName == "int" || typeName == "i4" )
+    {
         bool ok = false;
         QVariant val ( typeData.text().toInt ( &ok ) );
 
@@ -139,7 +149,8 @@ QVariant QXmppRpcMarshaller::demarshall (const QDomElement &elem, QStringList &e
         return QVariant();
     }
 
-    else if ( typeName == "double" ) {
+    else if ( typeName == "double" )
+    {
         bool ok = false;
         QVariant val ( typeData.text().toDouble ( &ok ) );
 
@@ -155,11 +166,13 @@ QVariant QXmppRpcMarshaller::demarshall (const QDomElement &elem, QStringList &e
     else if ( typeName == "datetime" || typeName == "datetime.iso8601" )
         return QVariant ( QDateTime::fromString ( typeData.text(), Qt::ISODate ) );
 
-    else if ( typeName == "array" ) {
+    else if ( typeName == "array" )
+    {
         QVariantList arr;
         QDomElement valueNode = typeData.firstChildElement ("data").firstChildElement();
 
-        while (!valueNode.isNull() && errors.isEmpty()) {
+        while (!valueNode.isNull() && errors.isEmpty())
+        {
             arr.append (demarshall (valueNode, errors));
             valueNode = valueNode.nextSiblingElement();
         }
@@ -167,11 +180,13 @@ QVariant QXmppRpcMarshaller::demarshall (const QDomElement &elem, QStringList &e
         return QVariant ( arr );
     }
 
-    else if ( typeName == "struct" ) {
+    else if ( typeName == "struct" )
+    {
         QMap<QString, QVariant> stct;
         QDomNode valueNode = typeData.firstChild();
 
-        while (!valueNode.isNull() && errors.isEmpty()) {
+        while (!valueNode.isNull() && errors.isEmpty())
+        {
             const QDomElement memberNode = valueNode.toElement().elementsByTagName ("name").item (0).toElement();
             const QDomElement dataNode = valueNode.toElement().elementsByTagName ("value").item (0).toElement();
             stct[ memberNode.text() ] = demarshall (dataNode, errors);
@@ -181,7 +196,8 @@ QVariant QXmppRpcMarshaller::demarshall (const QDomElement &elem, QStringList &e
         return QVariant (stct);
     }
 
-    else if ( typeName == "base64" ) {
+    else if ( typeName == "base64" )
+    {
         QVariant returnVariant;
         QByteArray dest;
         QByteArray src = typeData.text().toLatin1();
@@ -192,20 +208,24 @@ QVariant QXmppRpcMarshaller::demarshall (const QDomElement &elem, QStringList &e
     return QVariant();
 }
 
-QXmppRpcErrorIq::QXmppRpcErrorIq() : QXmppIq ( QXmppIq::Error ) {
+QXmppRpcErrorIq::QXmppRpcErrorIq() : QXmppIq ( QXmppIq::Error )
+{
 
 }
 
-QXmppRpcInvokeIq QXmppRpcErrorIq::query() const {
+QXmppRpcInvokeIq QXmppRpcErrorIq::query() const
+{
     return m_query;
 }
 
-void QXmppRpcErrorIq::setQuery (const QXmppRpcInvokeIq &query) {
+void QXmppRpcErrorIq::setQuery (const QXmppRpcInvokeIq &query)
+{
     m_query = query;
 }
 
 /// \cond
-bool QXmppRpcErrorIq::isRpcErrorIq (const QDomElement &element) {
+bool QXmppRpcErrorIq::isRpcErrorIq (const QDomElement &element)
+{
     QString type = element.attribute ("type");
     QDomElement errorElement = element.firstChildElement ("error");
     QDomElement queryElement = element.firstChildElement ("query");
@@ -214,24 +234,28 @@ bool QXmppRpcErrorIq::isRpcErrorIq (const QDomElement &element) {
            queryElement.namespaceURI() == ns_rpc;
 }
 
-void QXmppRpcErrorIq::parseElementFromChild (const QDomElement &element) {
+void QXmppRpcErrorIq::parseElementFromChild (const QDomElement &element)
+{
     m_query.parseElementFromChild (element);
 }
 
-void QXmppRpcErrorIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppRpcErrorIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     m_query.toXmlElementFromChild (writer);
 }
 /// \endcond
 
 QXmppRpcResponseIq::QXmppRpcResponseIq()
     : QXmppIq (QXmppIq::Result),
-      m_faultCode (0) {
+      m_faultCode (0)
+{
 }
 
 /// Returns the fault code.
 ///
 
-int QXmppRpcResponseIq::faultCode() const {
+int QXmppRpcResponseIq::faultCode() const
+{
     return m_faultCode;
 }
 
@@ -239,14 +263,16 @@ int QXmppRpcResponseIq::faultCode() const {
 ///
 /// \param faultCode
 
-void QXmppRpcResponseIq::setFaultCode (int faultCode) {
+void QXmppRpcResponseIq::setFaultCode (int faultCode)
+{
     m_faultCode = faultCode;
 }
 
 /// Returns the fault string.
 ///
 
-QString QXmppRpcResponseIq::faultString() const {
+QString QXmppRpcResponseIq::faultString() const
+{
     return m_faultString;
 }
 
@@ -254,14 +280,16 @@ QString QXmppRpcResponseIq::faultString() const {
 ///
 /// \param faultString
 
-void QXmppRpcResponseIq::setFaultString (const QString& faultString) {
+void QXmppRpcResponseIq::setFaultString (const QString& faultString)
+{
     m_faultString = faultString;
 }
 
 /// Returns the response values.
 ///
 
-QVariantList QXmppRpcResponseIq::values() const {
+QVariantList QXmppRpcResponseIq::values() const
+{
     return m_values;
 }
 
@@ -269,28 +297,33 @@ QVariantList QXmppRpcResponseIq::values() const {
 ///
 /// \param values
 
-void QXmppRpcResponseIq::setValues (const QVariantList &values) {
+void QXmppRpcResponseIq::setValues (const QVariantList &values)
+{
     m_values = values;
 }
 
 /// \cond
-bool QXmppRpcResponseIq::isRpcResponseIq (const QDomElement &element) {
+bool QXmppRpcResponseIq::isRpcResponseIq (const QDomElement &element)
+{
     QString type = element.attribute ("type");
     QDomElement dataElement = element.firstChildElement ("query");
     return dataElement.namespaceURI() == ns_rpc &&
            type == "result";
 }
 
-void QXmppRpcResponseIq::parseElementFromChild (const QDomElement &element) {
+void QXmppRpcResponseIq::parseElementFromChild (const QDomElement &element)
+{
     QDomElement queryElement = element.firstChildElement ("query");
     QDomElement methodElement = queryElement.firstChildElement ("methodResponse");
 
     const QDomElement contents = methodElement.firstChildElement();
 
-    if ( contents.tagName().toLower() == "params") {
+    if ( contents.tagName().toLower() == "params")
+    {
         QDomNode param = contents.firstChildElement ("param");
 
-        while (!param.isNull()) {
+        while (!param.isNull())
+        {
             QStringList errors;
             const QVariant value = QXmppRpcMarshaller::demarshall (param.firstChildElement ("value"), errors);
 
@@ -302,7 +335,8 @@ void QXmppRpcResponseIq::parseElementFromChild (const QDomElement &element) {
         }
     }
 
-    else if ( contents.tagName().toLower() == "fault") {
+    else if ( contents.tagName().toLower() == "fault")
+    {
         QStringList errors;
         const QDomElement errElement = contents.firstChildElement ("value");
         const QVariant error = QXmppRpcMarshaller::demarshall (errElement, errors);
@@ -315,13 +349,15 @@ void QXmppRpcResponseIq::parseElementFromChild (const QDomElement &element) {
     }
 }
 
-void QXmppRpcResponseIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppRpcResponseIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("query");
     writer->writeAttribute ("xmlns", ns_rpc);
 
     writer->writeStartElement ("methodResponse");
 
-    if (m_faultCode) {
+    if (m_faultCode)
+    {
         writer->writeStartElement ("fault");
         QMap<QString, QVariant> fault;
         fault["faultCode"] = m_faultCode;
@@ -330,9 +366,11 @@ void QXmppRpcResponseIq::toXmlElementFromChild (QXmlStreamWriter *writer) const 
         writer->writeEndElement();
     }
 
-    else if (!m_values.isEmpty()) {
+    else if (!m_values.isEmpty())
+    {
         writer->writeStartElement ("params");
-        foreach (const QVariant & arg, m_values) {
+        foreach (const QVariant & arg, m_values)
+        {
             writer->writeStartElement ("param");
             QXmppRpcMarshaller::marshall (writer, arg);
             writer->writeEndElement();
@@ -347,13 +385,15 @@ void QXmppRpcResponseIq::toXmlElementFromChild (QXmlStreamWriter *writer) const 
 /// \endcond
 
 QXmppRpcInvokeIq::QXmppRpcInvokeIq()
-    : QXmppIq (QXmppIq::Set) {
+    : QXmppIq (QXmppIq::Set)
+{
 }
 
 /// Returns the method arguments.
 ///
 
-QVariantList QXmppRpcInvokeIq::arguments() const {
+QVariantList QXmppRpcInvokeIq::arguments() const
+{
     return m_arguments;
 }
 
@@ -361,14 +401,16 @@ QVariantList QXmppRpcInvokeIq::arguments() const {
 ///
 /// \param arguments
 
-void QXmppRpcInvokeIq::setArguments (const QVariantList &arguments) {
+void QXmppRpcInvokeIq::setArguments (const QVariantList &arguments)
+{
     m_arguments = arguments;
 }
 
 /// Returns the method name.
 ///
 
-QString QXmppRpcInvokeIq::method() const {
+QString QXmppRpcInvokeIq::method() const
+{
     return m_method;
 }
 
@@ -376,19 +418,22 @@ QString QXmppRpcInvokeIq::method() const {
 ///
 /// \param method
 
-void QXmppRpcInvokeIq::setMethod (const QString &method) {
+void QXmppRpcInvokeIq::setMethod (const QString &method)
+{
     m_method = method;
 }
 
 /// \cond
-bool QXmppRpcInvokeIq::isRpcInvokeIq (const QDomElement &element) {
+bool QXmppRpcInvokeIq::isRpcInvokeIq (const QDomElement &element)
+{
     QString type = element.attribute ("type");
     QDomElement dataElement = element.firstChildElement ("query");
     return dataElement.namespaceURI() == ns_rpc &&
            type == "set";
 }
 
-void QXmppRpcInvokeIq::parseElementFromChild (const QDomElement &element) {
+void QXmppRpcInvokeIq::parseElementFromChild (const QDomElement &element)
+{
     QDomElement queryElement = element.firstChildElement ("query");
     QDomElement methodElement = queryElement.firstChildElement ("methodCall");
 
@@ -397,10 +442,12 @@ void QXmppRpcInvokeIq::parseElementFromChild (const QDomElement &element) {
     const QDomElement methodParams = methodElement.firstChildElement ("params");
     m_arguments.clear();
 
-    if ( !methodParams.isNull() ) {
+    if ( !methodParams.isNull() )
+    {
         QDomNode param = methodParams.firstChildElement ("param");
 
-        while (!param.isNull()) {
+        while (!param.isNull())
+        {
             QStringList errors;
             QVariant arg = QXmppRpcMarshaller::demarshall (param.firstChildElement ("value"), errors);
 
@@ -413,16 +460,19 @@ void QXmppRpcInvokeIq::parseElementFromChild (const QDomElement &element) {
     }
 }
 
-void QXmppRpcInvokeIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppRpcInvokeIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("query");
     writer->writeAttribute ("xmlns", ns_rpc);
 
     writer->writeStartElement ("methodCall");
     writer->writeTextElement ("methodName", m_method);
 
-    if (!m_arguments.isEmpty()) {
+    if (!m_arguments.isEmpty())
+    {
         writer->writeStartElement ("params");
-        foreach (const QVariant & arg, m_arguments) {
+        foreach (const QVariant & arg, m_arguments)
+        {
             writer->writeStartElement ("param");
             QXmppRpcMarshaller::marshall (writer, arg);
             writer->writeEndElement();

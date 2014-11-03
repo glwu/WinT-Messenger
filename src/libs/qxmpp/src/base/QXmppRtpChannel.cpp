@@ -45,7 +45,8 @@ const quint8 RTP_VERSION = 0x02;
 ///
 /// \param ba
 
-bool QXmppRtpPacket::decode (const QByteArray &ba) {
+bool QXmppRtpPacket::decode (const QByteArray &ba)
+{
     if (ba.isEmpty())
         return false;
 
@@ -71,7 +72,8 @@ bool QXmppRtpPacket::decode (const QByteArray &ba) {
     csrc.clear();
     quint32 src;
 
-    for (int i = 0; i < cc; ++i) {
+    for (int i = 0; i < cc; ++i)
+    {
         stream >> src;
         csrc << src;
     }
@@ -83,7 +85,8 @@ bool QXmppRtpPacket::decode (const QByteArray &ba) {
 
 /// Encodes an RTP packet.
 
-QByteArray QXmppRtpPacket::encode() const {
+QByteArray QXmppRtpPacket::encode() const
+{
     Q_ASSERT (csrc.size() < 16);
 
     // fixed header
@@ -107,7 +110,8 @@ QByteArray QXmppRtpPacket::encode() const {
 
 /// Returns a string representation of the RTP header.
 
-QString QXmppRtpPacket::toString() const {
+QString QXmppRtpPacket::toString() const
+{
     return QString ("RTP packet seq %1 stamp %2 marker %3 type %4 size %5").arg (
                QString::number (sequence),
                QString::number (stamp),
@@ -119,13 +123,15 @@ QString QXmppRtpPacket::toString() const {
 /// Creates a new RTP channel.
 
 QXmppRtpChannel::QXmppRtpChannel()
-    : m_outgoingPayloadNumbered (false) {
+    : m_outgoingPayloadNumbered (false)
+{
 }
 
 /// Returns the local payload types.
 ///
 
-QList<QXmppJinglePayloadType> QXmppRtpChannel::localPayloadTypes() {
+QList<QXmppJinglePayloadType> QXmppRtpChannel::localPayloadTypes()
+{
     m_outgoingPayloadNumbered = true;
     return m_outgoingPayloadTypes;
 }
@@ -134,11 +140,13 @@ QList<QXmppJinglePayloadType> QXmppRtpChannel::localPayloadTypes() {
 ///
 /// \param remotePayloadTypes
 
-void QXmppRtpChannel::setRemotePayloadTypes (const QList<QXmppJinglePayloadType> &remotePayloadTypes) {
+void QXmppRtpChannel::setRemotePayloadTypes (const QList<QXmppJinglePayloadType> &remotePayloadTypes)
+{
     QList<QXmppJinglePayloadType> commonOutgoingTypes;
     QList<QXmppJinglePayloadType> commonIncomingTypes;
 
-    foreach (const QXmppJinglePayloadType & incomingType, remotePayloadTypes) {
+    foreach (const QXmppJinglePayloadType & incomingType, remotePayloadTypes)
+    {
         // check we support this payload type
         int outgoingIndex = m_outgoingPayloadTypes.indexOf (incomingType);
 
@@ -155,7 +163,8 @@ void QXmppRtpChannel::setRemotePayloadTypes (const QList<QXmppJinglePayloadType>
         commonOutgoingTypes << outgoingType;
     }
 
-    if (commonOutgoingTypes.isEmpty()) {
+    if (commonOutgoingTypes.isEmpty())
+    {
         qWarning ("QXmppRtpChannel could not negociate a common codec");
         return;
     }
@@ -168,7 +177,8 @@ void QXmppRtpChannel::setRemotePayloadTypes (const QList<QXmppJinglePayloadType>
     payloadTypesChanged();
 }
 
-enum CodecId {
+enum CodecId
+{
     G711u = 0,
     GSM = 3,
     G723 = 4,
@@ -180,15 +190,18 @@ enum CodecId {
     G729 = 18,
 };
 
-struct ToneInfo {
+struct ToneInfo
+{
     QXmppRtpAudioChannel::Tone tone;
     quint32 incomingStart;
     quint32 outgoingStart;
     bool finished;
 };
 
-static QPair<int, int> toneFreqs (QXmppRtpAudioChannel::Tone tone) {
-    switch (tone) {
+static QPair<int, int> toneFreqs (QXmppRtpAudioChannel::Tone tone)
+{
+    switch (tone)
+    {
         case QXmppRtpAudioChannel::Tone_1:
             return qMakePair (697, 1209);
 
@@ -241,7 +254,8 @@ static QPair<int, int> toneFreqs (QXmppRtpAudioChannel::Tone tone) {
     return qMakePair (0, 0);
 }
 
-QByteArray renderTone (QXmppRtpAudioChannel::Tone tone, int clockrate, quint32 clockTick, qint64 samples) {
+QByteArray renderTone (QXmppRtpAudioChannel::Tone tone, int clockrate, quint32 clockTick, qint64 samples)
+{
     QPair<int, int> tf = toneFreqs (tone);
     const float clockMult = 2.0 * M_PI / float (clockrate);
     QByteArray chunk;
@@ -249,7 +263,8 @@ QByteArray renderTone (QXmppRtpAudioChannel::Tone tone, int clockrate, quint32 c
     QDataStream output (&chunk, QIODevice::WriteOnly);
     output.setByteOrder (QDataStream::LittleEndian);
 
-    for (quint32 i = 0; i < samples; ++i) {
+    for (quint32 i = 0; i < samples; ++i)
+    {
         quint16 val = 16383.0 * (sin (clockMult * clockTick * tf.first) + sin (clockMult * clockTick * tf.second));
         output << val;
         clockTick++;
@@ -258,44 +273,45 @@ QByteArray renderTone (QXmppRtpAudioChannel::Tone tone, int clockrate, quint32 c
     return chunk;
 }
 
-class QXmppRtpAudioChannelPrivate {
-  public:
-    QXmppRtpAudioChannelPrivate (QXmppRtpAudioChannel *qq);
-    QXmppCodec *codecForPayloadType (const QXmppJinglePayloadType &payloadType);
+class QXmppRtpAudioChannelPrivate
+{
+    public:
+        QXmppRtpAudioChannelPrivate (QXmppRtpAudioChannel *qq);
+        QXmppCodec *codecForPayloadType (const QXmppJinglePayloadType &payloadType);
 
-    // signals
-    bool signalsEmitted;
-    qint64 writtenSinceLastEmit;
+        // signals
+        bool signalsEmitted;
+        qint64 writtenSinceLastEmit;
 
-    // RTP
-    QHostAddress remoteHost;
-    quint16 remotePort;
+        // RTP
+        QHostAddress remoteHost;
+        quint16 remotePort;
 
-    QByteArray incomingBuffer;
-    bool incomingBuffering;
-    QMap<int, QXmppCodec *> incomingCodecs;
-    int incomingMinimum;
-    int incomingMaximum;
-    // position of the head of the incoming buffer, in bytes
-    qint64 incomingPos;
-    quint16 incomingSequence;
+        QByteArray incomingBuffer;
+        bool incomingBuffering;
+        QMap<int, QXmppCodec *> incomingCodecs;
+        int incomingMinimum;
+        int incomingMaximum;
+        // position of the head of the incoming buffer, in bytes
+        qint64 incomingPos;
+        quint16 incomingSequence;
 
-    QByteArray outgoingBuffer;
-    quint16 outgoingChunk;
-    QXmppCodec *outgoingCodec;
-    bool outgoingMarker;
-    bool outgoingPayloadNumbered;
-    quint16 outgoingSequence;
-    quint32 outgoingStamp;
-    QTimer *outgoingTimer;
-    QList<ToneInfo> outgoingTones;
-    QXmppJinglePayloadType outgoingTonesType;
+        QByteArray outgoingBuffer;
+        quint16 outgoingChunk;
+        QXmppCodec *outgoingCodec;
+        bool outgoingMarker;
+        bool outgoingPayloadNumbered;
+        quint16 outgoingSequence;
+        quint32 outgoingStamp;
+        QTimer *outgoingTimer;
+        QList<ToneInfo> outgoingTones;
+        QXmppJinglePayloadType outgoingTonesType;
 
-    quint32 outgoingSsrc;
-    QXmppJinglePayloadType payloadType;
+        quint32 outgoingSsrc;
+        QXmppJinglePayloadType payloadType;
 
-  private:
-    QXmppRtpAudioChannel *q;
+    private:
+        QXmppRtpAudioChannel *q;
 };
 
 QXmppRtpAudioChannelPrivate::QXmppRtpAudioChannelPrivate (QXmppRtpAudioChannel *qq)
@@ -313,7 +329,8 @@ QXmppRtpAudioChannelPrivate::QXmppRtpAudioChannelPrivate (QXmppRtpAudioChannel *
       outgoingStamp (0),
       outgoingTimer (0),
       outgoingSsrc (0),
-      q (qq) {
+      q (qq)
+{
     qRegisterMetaType<QXmppRtpAudioChannel::Tone> ("QXmppRtpAudioChannel::Tone");
     outgoingSsrc = qrand();
 }
@@ -321,7 +338,8 @@ QXmppRtpAudioChannelPrivate::QXmppRtpAudioChannelPrivate (QXmppRtpAudioChannel *
 /// Returns the audio codec for the given payload type.
 ///
 
-QXmppCodec *QXmppRtpAudioChannelPrivate::codecForPayloadType (const QXmppJinglePayloadType &payloadType) {
+QXmppCodec *QXmppRtpAudioChannelPrivate::codecForPayloadType (const QXmppJinglePayloadType &payloadType)
+{
     if (payloadType.id() == G711u)
         return new QXmppG711uCodec (payloadType.clockrate());
 
@@ -339,11 +357,13 @@ QXmppCodec *QXmppRtpAudioChannelPrivate::codecForPayloadType (const QXmppJingleP
 /// Constructs a new RTP audio channel with the given \a parent.
 
 QXmppRtpAudioChannel::QXmppRtpAudioChannel (QObject *parent)
-    : QIODevice (parent) {
+    : QIODevice (parent)
+{
     d = new QXmppRtpAudioChannelPrivate (this);
     QXmppLoggable *logParent = qobject_cast<QXmppLoggable *> (parent);
 
-    if (logParent) {
+    if (logParent)
+    {
         connect (this, SIGNAL (logMessage (QXmppLogger::MessageType, QString)),
                  logParent, SIGNAL (logMessage (QXmppLogger::MessageType, QString)));
     }
@@ -387,7 +407,8 @@ QXmppRtpAudioChannel::QXmppRtpAudioChannel (QObject *parent)
 /// Destroys an RTP audio channel.
 ///
 
-QXmppRtpAudioChannel::~QXmppRtpAudioChannel() {
+QXmppRtpAudioChannel::~QXmppRtpAudioChannel()
+{
     foreach (QXmppCodec * codec, d->incomingCodecs)
     delete codec;
 
@@ -399,13 +420,15 @@ QXmppRtpAudioChannel::~QXmppRtpAudioChannel() {
 
 /// Returns the number of bytes that are available for reading.
 
-qint64 QXmppRtpAudioChannel::bytesAvailable() const {
+qint64 QXmppRtpAudioChannel::bytesAvailable() const
+{
     return QIODevice::bytesAvailable() + d->incomingBuffer.size();
 }
 
 /// Closes the RTP audio channel.
 
-void QXmppRtpAudioChannel::close() {
+void QXmppRtpAudioChannel::close()
+{
     d->outgoingTimer->stop();
     QIODevice::close();
 }
@@ -414,7 +437,8 @@ void QXmppRtpAudioChannel::close() {
 ///
 /// \param ba
 
-void QXmppRtpAudioChannel::datagramReceived (const QByteArray &ba) {
+void QXmppRtpAudioChannel::datagramReceived (const QByteArray &ba)
+{
     QXmppRtpPacket packet;
 
     if (!packet.decode (ba))
@@ -438,9 +462,12 @@ void QXmppRtpAudioChannel::datagramReceived (const QByteArray &ba) {
     // get or create codec
     QXmppCodec *codec = 0;
 
-    if (!d->incomingCodecs.contains (packet.type)) {
-        foreach (const QXmppJinglePayloadType & payload, m_incomingPayloadTypes) {
-            if (packet.type == payload.id()) {
+    if (!d->incomingCodecs.contains (packet.type))
+    {
+        foreach (const QXmppJinglePayloadType & payload, m_incomingPayloadTypes)
+        {
+            if (packet.type == payload.id())
+            {
                 codec = d->codecForPayloadType (payload);
                 break;
             }
@@ -462,10 +489,12 @@ void QXmppRtpAudioChannel::datagramReceived (const QByteArray &ba) {
     // determine packet's position in the buffer (in bytes)
     qint64 packetOffset = 0;
 
-    if (!d->incomingBuffer.isEmpty()) {
+    if (!d->incomingBuffer.isEmpty())
+    {
         packetOffset = packet.stamp * SAMPLE_BYTES - d->incomingPos;
 
-        if (packetOffset < 0) {
+        if (packetOffset < 0)
+        {
 #ifdef QXMPP_DEBUG_RTP_BUFFER
             warning (QString ("RTP packet stamp %1 is too old, buffer start is %2")
                      .arg (QString::number (packet.stamp))
@@ -492,7 +521,8 @@ void QXmppRtpAudioChannel::datagramReceived (const QByteArray &ba) {
     codec->decode (input, output);
 
     // check whether we are running late
-    if (d->incomingBuffer.size() > d->incomingMaximum) {
+    if (d->incomingBuffer.size() > d->incomingMaximum)
+    {
         qint64 droppedSize = d->incomingBuffer.size() - d->incomingMinimum;
         const int remainder = droppedSize % SAMPLE_BYTES;
 
@@ -515,7 +545,8 @@ void QXmppRtpAudioChannel::datagramReceived (const QByteArray &ba) {
         emit readyRead();
 }
 
-void QXmppRtpAudioChannel::emitSignals() {
+void QXmppRtpAudioChannel::emitSignals()
+{
     emit bytesWritten (d->writtenSinceLastEmit);
     d->writtenSinceLastEmit = 0;
     d->signalsEmitted = false;
@@ -524,13 +555,15 @@ void QXmppRtpAudioChannel::emitSignals() {
 /// Returns true, as the RTP channel is a sequential device.
 ///
 
-bool QXmppRtpAudioChannel::isSequential() const {
+bool QXmppRtpAudioChannel::isSequential() const
+{
     return true;
 }
 
 /// Returns the mode in which the channel has been opened.
 
-QIODevice::OpenMode QXmppRtpAudioChannel::openMode() const {
+QIODevice::OpenMode QXmppRtpAudioChannel::openMode() const
+{
     return QIODevice::openMode();
 }
 
@@ -539,14 +572,17 @@ QIODevice::OpenMode QXmppRtpAudioChannel::openMode() const {
 /// You can use this to determine the QAudioFormat to use with your
 /// QAudioInput/QAudioOutput.
 
-QXmppJinglePayloadType QXmppRtpAudioChannel::payloadType() const {
+QXmppJinglePayloadType QXmppRtpAudioChannel::payloadType() const
+{
     return d->payloadType;
 }
 
 /// \cond
-qint64 QXmppRtpAudioChannel::readData (char *data, qint64 maxSize) {
+qint64 QXmppRtpAudioChannel::readData (char *data, qint64 maxSize)
+{
     // if we are filling the buffer, return empty samples
-    if (d->incomingBuffering) {
+    if (d->incomingBuffering)
+    {
         // FIXME: if we are asked for a non-integer number of samples,
         // we will return junk on next read as we don't increment d->incomingPos
         memset (data, 0, maxSize);
@@ -557,7 +593,8 @@ qint64 QXmppRtpAudioChannel::readData (char *data, qint64 maxSize) {
     memcpy (data, d->incomingBuffer.constData(), readSize);
     d->incomingBuffer.remove (0, readSize);
 
-    if (readSize < maxSize) {
+    if (readSize < maxSize)
+    {
 #ifdef QXMPP_DEBUG_RTP
         debug (QString ("QXmppRtpAudioChannel::readData missing %1 bytes").arg (QString::number (maxSize - readSize)));
 #endif
@@ -565,7 +602,8 @@ qint64 QXmppRtpAudioChannel::readData (char *data, qint64 maxSize) {
     }
 
     // add local DTMF echo
-    if (!d->outgoingTones.isEmpty()) {
+    if (!d->outgoingTones.isEmpty())
+    {
         const int headOffset = d->incomingPos % SAMPLE_BYTES;
         const int samples = (headOffset + maxSize + SAMPLE_BYTES - 1) / SAMPLE_BYTES;
         const QByteArray chunk = renderTone (
@@ -580,28 +618,33 @@ qint64 QXmppRtpAudioChannel::readData (char *data, qint64 maxSize) {
     return maxSize;
 }
 
-void QXmppRtpAudioChannel::payloadTypesChanged() {
+void QXmppRtpAudioChannel::payloadTypesChanged()
+{
     // delete incoming codecs
     foreach (QXmppCodec * codec, d->incomingCodecs)
     delete codec;
     d->incomingCodecs.clear();
 
     // delete outgoing codec
-    if (d->outgoingCodec) {
+    if (d->outgoingCodec)
+    {
         delete d->outgoingCodec;
         d->outgoingCodec = 0;
     }
 
     // create outgoing codec
-    foreach (const QXmppJinglePayloadType & outgoingType, m_outgoingPayloadTypes) {
+    foreach (const QXmppJinglePayloadType & outgoingType, m_outgoingPayloadTypes)
+    {
         // check for telephony events
         if (outgoingType.name() == "telephone-event")
             d->outgoingTonesType = outgoingType;
 
-        else if (!d->outgoingCodec) {
+        else if (!d->outgoingCodec)
+        {
             QXmppCodec *codec = d->codecForPayloadType (outgoingType);
 
-            if (codec) {
+            if (codec)
+            {
                 d->payloadType = outgoingType;
                 d->outgoingCodec = codec;
             }
@@ -621,7 +664,8 @@ void QXmppRtpAudioChannel::payloadTypesChanged() {
 
 /// Returns the position in the received audio data.
 
-qint64 QXmppRtpAudioChannel::pos() const {
+qint64 QXmppRtpAudioChannel::pos() const
+{
     return d->incomingPos;
 }
 
@@ -632,7 +676,8 @@ qint64 QXmppRtpAudioChannel::pos() const {
 ///
 /// \param pos
 
-bool QXmppRtpAudioChannel::seek (qint64 pos) {
+bool QXmppRtpAudioChannel::seek (qint64 pos)
+{
     qint64 delta = pos - d->incomingPos;
 
     if (delta < 0)
@@ -649,7 +694,8 @@ bool QXmppRtpAudioChannel::seek (qint64 pos) {
 ///
 /// \param tone
 
-void QXmppRtpAudioChannel::startTone (QXmppRtpAudioChannel::Tone tone) {
+void QXmppRtpAudioChannel::startTone (QXmppRtpAudioChannel::Tone tone)
+{
     ToneInfo info;
     info.tone = tone;
     info.incomingStart = d->incomingPos / SAMPLE_BYTES;
@@ -662,9 +708,12 @@ void QXmppRtpAudioChannel::startTone (QXmppRtpAudioChannel::Tone tone) {
 ///
 /// \param tone
 
-void QXmppRtpAudioChannel::stopTone (QXmppRtpAudioChannel::Tone tone) {
-    for (int i = 0; i < d->outgoingTones.size(); ++i) {
-        if (d->outgoingTones[i].tone == tone) {
+void QXmppRtpAudioChannel::stopTone (QXmppRtpAudioChannel::Tone tone)
+{
+    for (int i = 0; i < d->outgoingTones.size(); ++i)
+    {
+        if (d->outgoingTones[i].tone == tone)
+        {
             d->outgoingTones[i].finished = true;
             break;
         }
@@ -672,8 +721,10 @@ void QXmppRtpAudioChannel::stopTone (QXmppRtpAudioChannel::Tone tone) {
 }
 
 /// \cond
-qint64 QXmppRtpAudioChannel::writeData (const char *data, qint64 maxSize) {
-    if (!d->outgoingCodec) {
+qint64 QXmppRtpAudioChannel::writeData (const char *data, qint64 maxSize)
+{
+    if (!d->outgoingCodec)
+    {
         warning ("QXmppRtpAudioChannel::writeData before codec was set");
         return -1;
     }
@@ -688,29 +739,34 @@ qint64 QXmppRtpAudioChannel::writeData (const char *data, qint64 maxSize) {
 }
 /// \endcond
 
-void QXmppRtpAudioChannel::writeDatagram() {
+void QXmppRtpAudioChannel::writeDatagram()
+{
     // read audio chunk
     QByteArray chunk;
 
-    if (d->outgoingBuffer.size() < d->outgoingChunk) {
+    if (d->outgoingBuffer.size() < d->outgoingChunk)
+    {
 #ifdef QXMPP_DEBUG_RTP_BUFFER
         warning ("Outgoing RTP buffer is starved");
 #endif
         chunk = QByteArray (d->outgoingChunk, 0);
     }
 
-    else {
+    else
+    {
         chunk = d->outgoingBuffer.left (d->outgoingChunk);
         d->outgoingBuffer.remove (0, d->outgoingChunk);
     }
 
     bool sendAudio = true;
 
-    if (!d->outgoingTones.isEmpty()) {
+    if (!d->outgoingTones.isEmpty())
+    {
         const quint32 packetTicks = (d->payloadType.clockrate() * d->payloadType.ptime()) / 1000;
         const ToneInfo info = d->outgoingTones[0];
 
-        if (d->outgoingTonesType.id()) {
+        if (d->outgoingTonesType.id())
+        {
             // send RFC 2833 DTMF
             QXmppRtpPacket packet;
             packet.version = RTP_VERSION;
@@ -734,7 +790,8 @@ void QXmppRtpAudioChannel::writeDatagram() {
             sendAudio = false;
         }
 
-        else {
+        else
+        {
             // generate in-band DTMF
             chunk = renderTone (info.tone, d->payloadType.clockrate(), d->outgoingStamp - info.outgoingStart, packetTicks);
         }
@@ -744,12 +801,14 @@ void QXmppRtpAudioChannel::writeDatagram() {
             d->outgoingTones.removeFirst();
     }
 
-    if (sendAudio) {
+    if (sendAudio)
+    {
         // send audio data
         QXmppRtpPacket packet;
         packet.version = RTP_VERSION;
 
-        if (d->outgoingMarker) {
+        if (d->outgoingMarker)
+        {
             packet.marker = true;
             d->outgoingMarker = false;
         }
@@ -779,7 +838,8 @@ void QXmppRtpAudioChannel::writeDatagram() {
     // queue signals
     d->writtenSinceLastEmit += chunk.size();
 
-    if (!d->signalsEmitted && !signalsBlocked()) {
+    if (!d->signalsEmitted && !signalsBlocked())
+    {
         d->signalsEmitted = true;
         QMetaObject::invokeMethod (this, "emitSignals", Qt::QueuedConnection);
     }
@@ -792,7 +852,8 @@ QXmppVideoFrame::QXmppVideoFrame()
       m_height (0),
       m_mappedBytes (0),
       m_pixelFormat (Format_Invalid),
-      m_width (0) {
+      m_width (0)
+{
 }
 
 /** Constructs a video frame of the given pixel format and size in pixels.
@@ -807,37 +868,43 @@ QXmppVideoFrame::QXmppVideoFrame (int bytes, const QSize &size, int bytesPerLine
       m_height (size.height()),
       m_mappedBytes (bytes),
       m_pixelFormat (format),
-      m_width (size.width()) {
+      m_width (size.width())
+{
     m_data.resize (bytes);
 }
 
 /// Returns a pointer to the start of the frame data buffer.
 
-uchar *QXmppVideoFrame::bits() {
+uchar *QXmppVideoFrame::bits()
+{
     return (uchar *)m_data.data();
 }
 
 /// Returns a pointer to the start of the frame data buffer.
 
-const uchar *QXmppVideoFrame::bits() const {
+const uchar *QXmppVideoFrame::bits() const
+{
     return (const uchar *)m_data.constData();
 }
 
 /// Returns the number of bytes in a scan line.
 
-int QXmppVideoFrame::bytesPerLine() const {
+int QXmppVideoFrame::bytesPerLine() const
+{
     return m_bytesPerLine;
 }
 
 /// Returns the height of a video frame.
 
-int QXmppVideoFrame::height() const {
+int QXmppVideoFrame::height() const
+{
     return m_height;
 }
 
 /// Returns true if the frame is valid.
 
-bool QXmppVideoFrame::isValid() const {
+bool QXmppVideoFrame::isValid() const
+{
     return m_pixelFormat != Format_Invalid &&
            m_height > 0 && m_width > 0 &&
            m_mappedBytes > 0;
@@ -845,41 +912,46 @@ bool QXmppVideoFrame::isValid() const {
 
 /// Returns the number of bytes occupied by the mapped frame data.
 
-int QXmppVideoFrame::mappedBytes() const {
+int QXmppVideoFrame::mappedBytes() const
+{
     return m_mappedBytes;
 }
 
 /// Returns the color format of a video frame.
 
-QXmppVideoFrame::PixelFormat QXmppVideoFrame::pixelFormat() const {
+QXmppVideoFrame::PixelFormat QXmppVideoFrame::pixelFormat() const
+{
     return m_pixelFormat;
 }
 
 /// Returns the size of a video frame.
 
-QSize QXmppVideoFrame::size() const {
+QSize QXmppVideoFrame::size() const
+{
     return QSize (m_width, m_height);
 }
 
 /// Returns the width of a video frame.
 
-int QXmppVideoFrame::width() const {
+int QXmppVideoFrame::width() const
+{
     return m_width;
 }
 
-class QXmppRtpVideoChannelPrivate {
-  public:
-    QXmppRtpVideoChannelPrivate();
-    QMap<int, QXmppVideoDecoder *> decoders;
-    QXmppVideoEncoder *encoder;
-    QList<QXmppVideoFrame> frames;
+class QXmppRtpVideoChannelPrivate
+{
+    public:
+        QXmppRtpVideoChannelPrivate();
+        QMap<int, QXmppVideoDecoder *> decoders;
+        QXmppVideoEncoder *encoder;
+        QList<QXmppVideoFrame> frames;
 
-    // local
-    QXmppVideoFormat outgoingFormat;
-    quint8 outgoingId;
-    quint16 outgoingSequence;
-    quint32 outgoingStamp;
-    quint32 outgoingSsrc;
+        // local
+        QXmppVideoFormat outgoingFormat;
+        quint8 outgoingId;
+        quint16 outgoingSequence;
+        quint32 outgoingStamp;
+        quint32 outgoingSsrc;
 };
 
 QXmppRtpVideoChannelPrivate::QXmppRtpVideoChannelPrivate()
@@ -887,14 +959,16 @@ QXmppRtpVideoChannelPrivate::QXmppRtpVideoChannelPrivate()
       outgoingId (0),
       outgoingSequence (1),
       outgoingStamp (0),
-      outgoingSsrc (0) {
+      outgoingSsrc (0)
+{
     outgoingSsrc = qrand();
 }
 
 /// Constructs a new RTP video channel with the given \a parent.
 
 QXmppRtpVideoChannel::QXmppRtpVideoChannel (QObject *parent)
-    : QXmppLoggable (parent) {
+    : QXmppLoggable (parent)
+{
     d = new QXmppRtpVideoChannelPrivate;
     d->outgoingFormat.setFrameRate (15.0);
     d->outgoingFormat.setFrameSize (QSize (320, 240));
@@ -929,7 +1003,8 @@ QXmppRtpVideoChannel::QXmppRtpVideoChannel (QObject *parent)
 #endif
 }
 
-QXmppRtpVideoChannel::~QXmppRtpVideoChannel() {
+QXmppRtpVideoChannel::~QXmppRtpVideoChannel()
+{
     foreach (QXmppVideoDecoder * decoder, d->decoders)
     delete decoder;
 
@@ -941,14 +1016,16 @@ QXmppRtpVideoChannel::~QXmppRtpVideoChannel() {
 
 /// Closes the RTP video channel.
 
-void QXmppRtpVideoChannel::close() {
+void QXmppRtpVideoChannel::close()
+{
 }
 
 /// Processes an incoming RTP video packet.
 ///
 /// \param ba
 
-void QXmppRtpVideoChannel::datagramReceived (const QByteArray &ba) {
+void QXmppRtpVideoChannel::datagramReceived (const QByteArray &ba)
+{
     QXmppRtpPacket packet;
 
     if (!packet.decode (ba))
@@ -969,7 +1046,8 @@ void QXmppRtpVideoChannel::datagramReceived (const QByteArray &ba) {
 
 /// Returns the video format used by the encoder.
 
-QXmppVideoFormat QXmppRtpVideoChannel::decoderFormat() const {
+QXmppVideoFormat QXmppRtpVideoChannel::decoderFormat() const
+{
     if (d->decoders.isEmpty())
         return QXmppVideoFormat();
 
@@ -979,13 +1057,15 @@ QXmppVideoFormat QXmppRtpVideoChannel::decoderFormat() const {
 
 /// Returns the video format used by the encoder.
 
-QXmppVideoFormat QXmppRtpVideoChannel::encoderFormat() const {
+QXmppVideoFormat QXmppRtpVideoChannel::encoderFormat() const
+{
     return d->outgoingFormat;
 }
 
 /// Sets the video format used by the encoder.
 
-void QXmppRtpVideoChannel::setEncoderFormat (const QXmppVideoFormat &format) {
+void QXmppRtpVideoChannel::setEncoderFormat (const QXmppVideoFormat &format)
+{
     if (d->encoder && !d->encoder->setFormat (format))
         return;
 
@@ -994,7 +1074,8 @@ void QXmppRtpVideoChannel::setEncoderFormat (const QXmppVideoFormat &format) {
 
 /// Returns the mode in which the channel has been opened.
 
-QIODevice::OpenMode QXmppRtpVideoChannel::openMode() const {
+QIODevice::OpenMode QXmppRtpVideoChannel::openMode() const
+{
     QIODevice::OpenMode mode = QIODevice::NotOpen;
 
     if (!d->decoders.isEmpty())
@@ -1007,15 +1088,18 @@ QIODevice::OpenMode QXmppRtpVideoChannel::openMode() const {
 }
 
 /// \cond
-void QXmppRtpVideoChannel::payloadTypesChanged() {
+void QXmppRtpVideoChannel::payloadTypesChanged()
+{
     // refresh decoders
     foreach (QXmppVideoDecoder * decoder, d->decoders)
     delete decoder;
     d->decoders.clear();
-    foreach (const QXmppJinglePayloadType & payload, m_incomingPayloadTypes) {
+    foreach (const QXmppJinglePayloadType & payload, m_incomingPayloadTypes)
+    {
         QXmppVideoDecoder *decoder = 0;
 
-        if (false) {
+        if (false)
+        {
         }
 
 #ifdef QXMPP_USE_THEORA
@@ -1030,22 +1114,26 @@ void QXmppRtpVideoChannel::payloadTypesChanged() {
 
 #endif
 
-        if (decoder) {
+        if (decoder)
+        {
             decoder->setParameters (payload.parameters());
             d->decoders.insert (payload.id(), decoder);
         }
     }
 
     // refresh encoder
-    if (d->encoder) {
+    if (d->encoder)
+    {
         delete d->encoder;
         d->encoder = 0;
     }
 
-    foreach (const QXmppJinglePayloadType & payload, m_outgoingPayloadTypes) {
+    foreach (const QXmppJinglePayloadType & payload, m_outgoingPayloadTypes)
+    {
         QXmppVideoEncoder *encoder = 0;
 
-        if (false) {
+        if (false)
+        {
         }
 
 #ifdef QXMPP_USE_THEORA
@@ -1060,7 +1148,8 @@ void QXmppRtpVideoChannel::payloadTypesChanged() {
 
 #endif
 
-        if (encoder) {
+        if (encoder)
+        {
             encoder->setFormat (d->outgoingFormat);
             d->encoder = encoder;
             d->outgoingId = payload.id();
@@ -1072,7 +1161,8 @@ void QXmppRtpVideoChannel::payloadTypesChanged() {
 
 /// Decodes buffered RTP packets and returns a list of video frames.
 
-QList<QXmppVideoFrame> QXmppRtpVideoChannel::readFrames() {
+QList<QXmppVideoFrame> QXmppRtpVideoChannel::readFrames()
+{
     const QList<QXmppVideoFrame> frames = d->frames;
     d->frames.clear();
     return frames;
@@ -1080,8 +1170,10 @@ QList<QXmppVideoFrame> QXmppRtpVideoChannel::readFrames() {
 
 /// Encodes a video \a frame and sends RTP packets.
 
-void QXmppRtpVideoChannel::writeFrame (const QXmppVideoFrame &frame) {
-    if (!d->encoder) {
+void QXmppRtpVideoChannel::writeFrame (const QXmppVideoFrame &frame)
+{
+    if (!d->encoder)
+    {
         warning ("QXmppRtpVideoChannel::writeFrame before codec was set");
         return;
     }
@@ -1091,7 +1183,8 @@ void QXmppRtpVideoChannel::writeFrame (const QXmppVideoFrame &frame) {
     packet.marker = false;
     packet.type = d->outgoingId;
     packet.ssrc = d->outgoingSsrc;
-    foreach (const QByteArray & payload, d->encoder->handleFrame (frame)) {
+    foreach (const QByteArray & payload, d->encoder->handleFrame (frame))
+    {
         packet.sequence = d->outgoingSequence++;
         packet.stamp = d->outgoingStamp;
         packet.payload = payload;

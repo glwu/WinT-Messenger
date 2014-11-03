@@ -28,7 +28,8 @@
 #include "QXmppDiscoveryIq.h"
 #include "QXmppUtils.h"
 
-static bool identityLessThan (const QXmppDiscoveryIq::Identity &i1, const QXmppDiscoveryIq::Identity &i2) {
+static bool identityLessThan (const QXmppDiscoveryIq::Identity &i1, const QXmppDiscoveryIq::Identity &i2)
+{
     if (i1.category() < i2.category())
         return true;
 
@@ -56,83 +57,103 @@ static bool identityLessThan (const QXmppDiscoveryIq::Identity &i1, const QXmppD
     return false;
 }
 
-QString QXmppDiscoveryIq::Identity::category() const {
+QString QXmppDiscoveryIq::Identity::category() const
+{
     return m_category;
 }
 
-void QXmppDiscoveryIq::Identity::setCategory (const QString &category) {
+void QXmppDiscoveryIq::Identity::setCategory (const QString &category)
+{
     m_category = category;
 }
 
-QString QXmppDiscoveryIq::Identity::language() const {
+QString QXmppDiscoveryIq::Identity::language() const
+{
     return m_language;
 }
 
-void QXmppDiscoveryIq::Identity::setLanguage (const QString &language) {
+void QXmppDiscoveryIq::Identity::setLanguage (const QString &language)
+{
     m_language = language;
 }
 
-QString QXmppDiscoveryIq::Identity::name() const {
+QString QXmppDiscoveryIq::Identity::name() const
+{
     return m_name;
 }
 
-void QXmppDiscoveryIq::Identity::setName (const QString &name) {
+void QXmppDiscoveryIq::Identity::setName (const QString &name)
+{
     m_name = name;
 }
 
-QString QXmppDiscoveryIq::Identity::type() const {
+QString QXmppDiscoveryIq::Identity::type() const
+{
     return m_type;
 }
 
-void QXmppDiscoveryIq::Identity::setType (const QString &type) {
+void QXmppDiscoveryIq::Identity::setType (const QString &type)
+{
     m_type = type;
 }
 
-QString QXmppDiscoveryIq::Item::jid() const {
+QString QXmppDiscoveryIq::Item::jid() const
+{
     return m_jid;
 }
 
-void QXmppDiscoveryIq::Item::setJid (const QString &jid) {
+void QXmppDiscoveryIq::Item::setJid (const QString &jid)
+{
     m_jid = jid;
 }
 
-QString QXmppDiscoveryIq::Item::name() const {
+QString QXmppDiscoveryIq::Item::name() const
+{
     return m_name;
 }
 
-void QXmppDiscoveryIq::Item::setName (const QString &name) {
+void QXmppDiscoveryIq::Item::setName (const QString &name)
+{
     m_name = name;
 }
 
-QString QXmppDiscoveryIq::Item::node() const {
+QString QXmppDiscoveryIq::Item::node() const
+{
     return m_node;
 }
 
-void QXmppDiscoveryIq::Item::setNode (const QString &node) {
+void QXmppDiscoveryIq::Item::setNode (const QString &node)
+{
     m_node = node;
 }
 
-QStringList QXmppDiscoveryIq::features() const {
+QStringList QXmppDiscoveryIq::features() const
+{
     return m_features;
 }
 
-void QXmppDiscoveryIq::setFeatures (const QStringList &features) {
+void QXmppDiscoveryIq::setFeatures (const QStringList &features)
+{
     m_features = features;
 }
 
-QList<QXmppDiscoveryIq::Identity> QXmppDiscoveryIq::identities() const {
+QList<QXmppDiscoveryIq::Identity> QXmppDiscoveryIq::identities() const
+{
     return m_identities;
 }
 
-void QXmppDiscoveryIq::setIdentities (const QList<QXmppDiscoveryIq::Identity> &identities) {
+void QXmppDiscoveryIq::setIdentities (const QList<QXmppDiscoveryIq::Identity> &identities)
+{
     m_identities = identities;
 }
 
-QList<QXmppDiscoveryIq::Item> QXmppDiscoveryIq::items() const {
+QList<QXmppDiscoveryIq::Item> QXmppDiscoveryIq::items() const
+{
     return m_items;
 }
 
-void QXmppDiscoveryIq::setItems (const QList<QXmppDiscoveryIq::Item> &items) {
+void QXmppDiscoveryIq::setItems (const QList<QXmppDiscoveryIq::Item> &items)
+{
     m_items = items;
 }
 
@@ -140,7 +161,8 @@ void QXmppDiscoveryIq::setItems (const QList<QXmppDiscoveryIq::Item> &items) {
 /// XEP-0128: Service Discovery Extensions.
 ///
 
-QXmppDataForm QXmppDiscoveryIq::form() const {
+QXmppDataForm QXmppDiscoveryIq::form() const
+{
     return m_form;
 }
 
@@ -150,29 +172,35 @@ QXmppDataForm QXmppDiscoveryIq::form() const {
 /// \param form
 ///
 
-void QXmppDiscoveryIq::setForm (const QXmppDataForm &form) {
+void QXmppDiscoveryIq::setForm (const QXmppDataForm &form)
+{
     m_form = form;
 }
 
-QString QXmppDiscoveryIq::queryNode() const {
+QString QXmppDiscoveryIq::queryNode() const
+{
     return m_queryNode;
 }
 
-void QXmppDiscoveryIq::setQueryNode (const QString &node) {
+void QXmppDiscoveryIq::setQueryNode (const QString &node)
+{
     m_queryNode = node;
 }
 
-enum QXmppDiscoveryIq::QueryType QXmppDiscoveryIq::queryType() const {
+enum QXmppDiscoveryIq::QueryType QXmppDiscoveryIq::queryType() const
+{
     return m_queryType;
 }
 
-void QXmppDiscoveryIq::setQueryType (enum QXmppDiscoveryIq::QueryType type) {
+void QXmppDiscoveryIq::setQueryType (enum QXmppDiscoveryIq::QueryType type)
+{
     m_queryType = type;
 }
 
 /// Calculate the verification string for XEP-0115 : Entity Capabilities
 
-QByteArray QXmppDiscoveryIq::verificationString() const {
+QByteArray QXmppDiscoveryIq::verificationString() const
+{
     QString S;
     QList<QXmppDiscoveryIq::Identity> sortedIdentities = m_identities;
     qSort (sortedIdentities.begin(), sortedIdentities.end(), identityLessThan);
@@ -184,23 +212,28 @@ QByteArray QXmppDiscoveryIq::verificationString() const {
     foreach (const QString & feature, sortedFeatures)
     S += feature + QLatin1String ("<");
 
-    if (!m_form.isNull()) {
+    if (!m_form.isNull())
+    {
         QMap<QString, QXmppDataForm::Field> fieldMap;
-        foreach (const QXmppDataForm::Field & field, m_form.fields()) {
+        foreach (const QXmppDataForm::Field & field, m_form.fields())
+        {
             fieldMap.insert (field.key(), field);
         }
 
-        if (fieldMap.contains ("FORM_TYPE")) {
+        if (fieldMap.contains ("FORM_TYPE"))
+        {
             const QXmppDataForm::Field field = fieldMap.take ("FORM_TYPE");
             S += field.value().toString() + QLatin1String ("<");
 
             QStringList keys = fieldMap.keys();
             qSort (keys);
-            foreach (const QString & key, keys) {
+            foreach (const QString & key, keys)
+            {
                 const QXmppDataForm::Field field = fieldMap.value (key);
                 S += key + QLatin1String ("<");
 
-                if (field.value().canConvert<QStringList>()) {
+                if (field.value().canConvert<QStringList>())
+                {
                     QStringList list = field.value().toStringList();
                     list.sort();
                     S += list.join (QLatin1String ("<"));
@@ -223,13 +256,15 @@ QByteArray QXmppDiscoveryIq::verificationString() const {
 }
 
 /// \cond
-bool QXmppDiscoveryIq::isDiscoveryIq (const QDomElement &element) {
+bool QXmppDiscoveryIq::isDiscoveryIq (const QDomElement &element)
+{
     QDomElement queryElement = element.firstChildElement ("query");
     return (queryElement.namespaceURI() == ns_disco_info ||
             queryElement.namespaceURI() == ns_disco_items);
 }
 
-void QXmppDiscoveryIq::parseElementFromChild (const QDomElement &element) {
+void QXmppDiscoveryIq::parseElementFromChild (const QDomElement &element)
+{
     QDomElement queryElement = element.firstChildElement ("query");
     m_queryNode = queryElement.attribute ("node");
 
@@ -241,11 +276,13 @@ void QXmppDiscoveryIq::parseElementFromChild (const QDomElement &element) {
 
     QDomElement itemElement = queryElement.firstChildElement();
 
-    while (!itemElement.isNull()) {
+    while (!itemElement.isNull())
+    {
         if (itemElement.tagName() == "feature")
             m_features.append (itemElement.attribute ("var"));
 
-        else if (itemElement.tagName() == "identity") {
+        else if (itemElement.tagName() == "identity")
+        {
             QXmppDiscoveryIq::Identity identity;
             identity.setLanguage (itemElement.attribute ("xml:lang"));
             identity.setCategory (itemElement.attribute ("category"));
@@ -256,8 +293,10 @@ void QXmppDiscoveryIq::parseElementFromChild (const QDomElement &element) {
             // so we are forced to use QDomNamedNodeMap
             QDomNamedNodeMap m (itemElement.attributes());
 
-            for (int i = 0; i < m.size(); ++i) {
-                if (m.item (i).nodeName() == "xml:lang") {
+            for (int i = 0; i < m.size(); ++i)
+            {
+                if (m.item (i).nodeName() == "xml:lang")
+                {
                     identity.setLanguage (m.item (i).nodeValue());
                     break;
                 }
@@ -266,7 +305,8 @@ void QXmppDiscoveryIq::parseElementFromChild (const QDomElement &element) {
             m_identities.append (identity);
         }
 
-        else if (itemElement.tagName() == "item") {
+        else if (itemElement.tagName() == "item")
+        {
             QXmppDiscoveryIq::Item item;
             item.setJid (itemElement.attribute ("jid"));
             item.setName (itemElement.attribute ("name"));
@@ -282,14 +322,17 @@ void QXmppDiscoveryIq::parseElementFromChild (const QDomElement &element) {
     }
 }
 
-void QXmppDiscoveryIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
+void QXmppDiscoveryIq::toXmlElementFromChild (QXmlStreamWriter *writer) const
+{
     writer->writeStartElement ("query");
     writer->writeAttribute ("xmlns",
                             m_queryType == InfoQuery ? ns_disco_info : ns_disco_items);
     helperToXmlAddAttribute (writer, "node", m_queryNode);
 
-    if (m_queryType == InfoQuery) {
-        foreach (const QXmppDiscoveryIq::Identity & identity, m_identities) {
+    if (m_queryType == InfoQuery)
+    {
+        foreach (const QXmppDiscoveryIq::Identity & identity, m_identities)
+        {
             writer->writeStartElement ("identity");
             helperToXmlAddAttribute (writer, "xml:lang", identity.language());
             helperToXmlAddAttribute (writer, "category", identity.category());
@@ -298,15 +341,18 @@ void QXmppDiscoveryIq::toXmlElementFromChild (QXmlStreamWriter *writer) const {
             writer->writeEndElement();
         }
 
-        foreach (const QString & feature, m_features) {
+        foreach (const QString & feature, m_features)
+        {
             writer->writeStartElement ("feature");
             helperToXmlAddAttribute (writer, "var", feature);
             writer->writeEndElement();
         }
     }
 
-    else {
-        foreach (const QXmppDiscoveryIq::Item & item, m_items) {
+    else
+    {
+        foreach (const QXmppDiscoveryIq::Item & item, m_items)
+        {
             writer->writeStartElement ("item");
             helperToXmlAddAttribute (writer, "jid", item.jid());
             helperToXmlAddAttribute (writer, "name", item.name());

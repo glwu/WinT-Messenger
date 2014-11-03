@@ -27,86 +27,90 @@
 #include "QXmppDataForm.h"
 #include "QXmppIq.h"
 
-class QXMPP_EXPORT QXmppDiscoveryIq : public QXmppIq {
-  public:
-    class QXMPP_EXPORT Identity {
-      public:
-        QString category() const;
-        void setCategory (const QString &category);
+class QXMPP_EXPORT QXmppDiscoveryIq : public QXmppIq
+{
+    public:
+        class QXMPP_EXPORT Identity
+        {
+            public:
+                QString category() const;
+                void setCategory (const QString &category);
 
-        QString language() const;
-        void setLanguage (const QString &language);
+                QString language() const;
+                void setLanguage (const QString &language);
 
-        QString name() const;
-        void setName (const QString &name);
+                QString name() const;
+                void setName (const QString &name);
 
-        QString type() const;
-        void setType (const QString &type);
+                QString type() const;
+                void setType (const QString &type);
 
-      private:
-        QString m_category;
-        QString m_language;
-        QString m_name;
-        QString m_type;
-    };
+            private:
+                QString m_category;
+                QString m_language;
+                QString m_name;
+                QString m_type;
+        };
 
-    class QXMPP_EXPORT Item {
-      public:
-        QString jid() const;
-        void setJid (const QString &jid);
+        class QXMPP_EXPORT Item
+        {
+            public:
+                QString jid() const;
+                void setJid (const QString &jid);
 
-        QString name() const;
-        void setName (const QString &name);
+                QString name() const;
+                void setName (const QString &name);
 
-        QString node() const;
-        void setNode (const QString &node);
+                QString node() const;
+                void setNode (const QString &node);
 
-      private:
-        QString m_jid;
-        QString m_name;
-        QString m_node;
-    };
+            private:
+                QString m_jid;
+                QString m_name;
+                QString m_node;
+        };
 
-    enum QueryType {
-        InfoQuery,
-        ItemsQuery,
-    };
+        enum QueryType
+        {
+            InfoQuery,
+            ItemsQuery,
+        };
 
-    QStringList features() const;
-    void setFeatures (const QStringList &features);
+        QStringList features() const;
+        void setFeatures (const QStringList &features);
 
-    QList<QXmppDiscoveryIq::Identity> identities() const;
-    void setIdentities (const QList<QXmppDiscoveryIq::Identity> &identities);
+        QList<QXmppDiscoveryIq::Identity> identities() const;
+        void setIdentities (const QList<QXmppDiscoveryIq::Identity> &identities);
 
-    QList<QXmppDiscoveryIq::Item> items() const;
-    void setItems (const QList<QXmppDiscoveryIq::Item> &items);
+        QList<QXmppDiscoveryIq::Item> items() const;
+        void setItems (const QList<QXmppDiscoveryIq::Item> &items);
 
-    QXmppDataForm form() const;
-    void setForm (const QXmppDataForm &form);
+        QXmppDataForm form() const;
+        void setForm (const QXmppDataForm &form);
 
-    QString queryNode() const;
-    void setQueryNode (const QString &node);
+        QString queryNode() const;
+        void setQueryNode (const QString &node);
 
-    enum QueryType queryType() const;
-    void setQueryType (enum QueryType type);
+        enum QueryType queryType() const;
+        void setQueryType (enum QueryType type);
 
-    QByteArray verificationString() const;
+        QByteArray verificationString() const;
 
-    static bool isDiscoveryIq (const QDomElement &element);
+        static bool isDiscoveryIq (const QDomElement &element);
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement &element);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement &element);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QStringList m_features;
-    QList<QXmppDiscoveryIq::Identity> m_identities;
-    QList<QXmppDiscoveryIq::Item> m_items;
-    QXmppDataForm m_form;
-    QString m_queryNode;
-    enum QueryType m_queryType;
+    private:
+        QStringList m_features;
+        QList<QXmppDiscoveryIq::Identity> m_identities;
+        QList<QXmppDiscoveryIq::Item> m_items;
+        QXmppDataForm m_form;
+        QString m_queryNode;
+        enum QueryType m_queryType;
 };
 
 #endif

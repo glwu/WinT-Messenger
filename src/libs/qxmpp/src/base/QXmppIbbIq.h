@@ -27,73 +27,76 @@
 
 #include "QXmppIq.h"
 
-class QXmppIbbOpenIq: public QXmppIq {
-  public:
-    QXmppIbbOpenIq();
+class QXmppIbbOpenIq: public QXmppIq
+{
+    public:
+        QXmppIbbOpenIq();
 
-    long blockSize() const;
-    void setBlockSize ( long block_size );
+        long blockSize() const;
+        void setBlockSize ( long block_size );
 
-    QString sid() const;
-    void setSid ( const QString &sid );
+        QString sid() const;
+        void setSid ( const QString &sid );
 
-    static bool isIbbOpenIq (const QDomElement &element);
+        static bool isIbbOpenIq (const QDomElement &element);
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement &element);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement &element);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    long m_block_size;
-    QString m_sid;
+    private:
+        long m_block_size;
+        QString m_sid;
 };
 
-class QXmppIbbCloseIq: public QXmppIq {
-  public:
-    QXmppIbbCloseIq();
+class QXmppIbbCloseIq: public QXmppIq
+{
+    public:
+        QXmppIbbCloseIq();
 
-    QString sid() const;
-    void setSid ( const QString &sid );
+        QString sid() const;
+        void setSid ( const QString &sid );
 
-    static bool isIbbCloseIq (const QDomElement &element);
+        static bool isIbbCloseIq (const QDomElement &element);
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement &element);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement &element);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    QString m_sid;
+    private:
+        QString m_sid;
 };
 
-class QXMPP_EXPORT QXmppIbbDataIq : public QXmppIq {
-  public:
-    QXmppIbbDataIq();
+class QXMPP_EXPORT QXmppIbbDataIq : public QXmppIq
+{
+    public:
+        QXmppIbbDataIq();
 
-    quint16 sequence() const;
-    void setSequence ( quint16 seq );
+        quint16 sequence() const;
+        void setSequence ( quint16 seq );
 
-    QString sid() const;
-    void setSid ( const QString &sid );
+        QString sid() const;
+        void setSid ( const QString &sid );
 
-    QByteArray payload() const;
-    void setPayload ( const QByteArray &data );
+        QByteArray payload() const;
+        void setPayload ( const QByteArray &data );
 
-    static bool isIbbDataIq (const QDomElement &element);
+        static bool isIbbDataIq (const QDomElement &element);
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement &element);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement &element);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    quint16 m_seq;
-    QString m_sid;
-    QByteArray m_payload;
+    private:
+        quint16 m_seq;
+        QString m_sid;
+        QByteArray m_payload;
 };
 
 #endif // QXMPPIBBIQS_H

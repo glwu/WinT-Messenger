@@ -7,19 +7,11 @@
 #  Please check the license.txt file for more information.
 #
 
-TEMPLATE = lib
+QT += network
 CONFIG += c++11
-CONFIG += shared
-QT += core network
-DEFINES += QCHAT_LIBRARY
 
-win32 {
-    DESTDIR = $$OUT_PWD
-}
-
-macx {
-    CONFIG += static
-}
+INCLUDEPATH += $$PWD/src
+OTHER_FILES += $$PWD/src/QChat
 
 HEADERS += \
     $$PWD/src/qchat.h \
@@ -30,7 +22,6 @@ HEADERS += \
     $$PWD/src/message-connection/m_server.h \
     $$PWD/src/file-connection/f_connection.h \
     $$PWD/src/message-connection/m_connection.h \
-    $$PWD/src/QChat
 
 SOURCES += \
     $$PWD/src/qchat.cpp \

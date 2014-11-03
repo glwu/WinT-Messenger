@@ -7,25 +7,16 @@
 #  Please check the license.txt file for more information.
 #
 
-TEMPLATE = lib
 CONFIG += c++11
-CONFIG += shared
-QT += core xml network
-DEFINES += XMPP_LIBRARY
 
-win32 {
-    DESTDIR = $$OUT_PWD
-}
-
-macx {
-    CONFIG += static
-}
-
-LIBS += -L$$OUT_PWD/../qxmpp -lqxmpp
+LIBS += -L$$OUT_PWD/../libs/qxmpp -lqxmpp
 
 SOURCES += $$PWD/src/xmpp.cpp
-HEADERS += $$PWD/src/xmpp.h $$PWD/src/xmpp_global.h $$PWD/src/Xmpp
+HEADERS += $$PWD/src/xmpp.h
 
-INCLUDEPATH += $$PWD/../qxmpp/src/base \
+OTHER_FILES += $$PWD/src/Xmpp
+
+INCLUDEPATH += $$PWD/src \
+               $$PWD/../qxmpp/src/base \
                $$PWD/../qxmpp/src/client \
                $$PWD/../qxmpp/src/server

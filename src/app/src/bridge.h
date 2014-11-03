@@ -17,101 +17,78 @@
 
 #include <Xmpp>
 #include <QChat>
+#include <QSimpleUpdater>
 
-#include "updater.h"
-#include "platforms.h"
+#include "app_info.h"
 #include "image_provider.h"
 #include "device_manager.h"
 
-class Bridge : public QObject {
-    Q_OBJECT
+// TODO: IMO, this shitload of class is too complicated
+//       and has a lot of functions that could be modularized
+//       in order to make the code more efficient and easy
+//       on the eyes....just take a look at the number of
+//       SIGNALS that this shit has!
 
-  public:
+class Bridge : public QObject
+{
+        Q_OBJECT
 
-    Bridge();
+    public:
+        Bridge();
 
-    /// Stops and deletes the current instances
-    /// of the qChat module
-    Q_INVOKABLE void stopLanChat();
+        Q_INVOKABLE void stopLanChat();
+        Q_INVOKABLE void startLanChat();
 
-    /// Starts and configures a new instance of
-    /// the qChat module
-    Q_INVOKABLE void startLanChat();
+        Q_INVOKABLE void stopXmpp();
+        Q_INVOKABLE void startXmpp (QString jid, QString passwd);
 
-    /// Stops and deletes the current instances
-    /// of the XMPP module
-    Q_INVOKABLE void stopXmpp();
+        Q_INVOKABLE QString downloadPath();
+        Q_INVOKABLE void checkForUpdates();
+        Q_INVOKABLE void copy (const QString &string);
 
-    /// Starts and configures a new instance of
-    /// the XMPP module with the given JID and password
-    Q_INVOKABLE void startXmpp (QString jid, QString passwd);
+        Q_INVOKABLE QString getId (QString nickname);
+        Q_INVOKABLE void shareFiles (const QString& peer);
+        Q_INVOKABLE QString manageSmileys (const QString &data);
+        Q_INVOKABLE void sendStatus (const QString &to, const QString &status);
+        Q_INVOKABLE void sendMessage (const QString& to, const QString &message);
 
-    /// Returns the fullname of an user given its ID
-    Q_INVOKABLE QString getId (QString nickname);
+        DeviceManager manager;
+        ImageProvider *imageProvider;
 
-    /// Shares a selection of files to the given user
-    Q_INVOKABLE void shareFiles (const QString& peer);
+    signals:
+        void xmppConnected();
+        void xmppDisconnected();
+        void delUser (QString nick, QString id);
+        void newUser (QString nick, QString id);
+        void sendFile (QString file, QString peer);
+        void drawMessage (QString from, QString message);
+        void sendStatusSignal (QString to, QString status);
+        void returnPressed (QString message, QString peer);
+        void downloadComplete (QString name, QString file);
+        void newDownload (QString name, QString file, int size);
+        void presenceChanged (const QString &id, bool connected);
+        void updateAvailable (bool newUpdate, const QString &version);
+        void updateProgress (QString name, QString file, int progress);
+        void statusChanged (const QString &from, const QString &status);
 
-    /// Returns a smiley code or a HTML image based on the
-    /// input string
-    Q_INVOKABLE QString manageSmileys (const QString &data);
+    private slots:
+        void clearUsers();
+        void onCheckingFinished();
+        void processNewUser (const QString& nickname, const QString& id, const QImage& profilePicture);
 
-    /// Sends a status message to given peer
-    Q_INVOKABLE void sendStatus (const QString &to, const QString &status);
+    private:
+        Xmpp *m_xmpp;
+        QChat *m_qchat;
 
-    /// Sends a message to the given peer
-    Q_INVOKABLE void sendMessage (const QString& to, const QString &message);
+        QSimpleUpdater *m_updater;
 
-    /// Returns the path where WinT Messenger should write downloaded files
-    Q_INVOKABLE QString downloadPath();
+        QStringList m_uuids;
+        QStringList m_nicknames;
 
-    /// Requests the \c Updater class to check for a newer version of the application
-    Q_INVOKABLE void checkForUpdates();
+        QClipboard *m_clipboard;
 
-    /// Copies the given string to the system's clipboard (the JS implementation
-    /// was too complicated for our needs)
-    Q_INVOKABLE void copy (const QString &string);
-
-    DeviceManager manager;
-    ImageProvider *imageProvider;
-
-  signals:
-
-    void xmppConnected();
-    void xmppDisconnected();
-    void delUser (QString nick, QString id);
-    void newUser (QString nick, QString id);
-    void sendFile (QString file, QString peer);
-    void drawMessage (QString from, QString message);
-    void sendStatusSignal (QString to, QString status);
-    void returnPressed (QString message, QString peer);
-    void downloadComplete (QString name, QString file);
-    void newDownload (QString name, QString file, int size);
-    void presenceChanged (const QString &id, bool connected);
-    void updateAvailable (bool newUpdate, const QString &version);
-    void updateProgress (QString name, QString file, int progress);
-    void statusChanged (const QString &from, const QString &status);
-
-  private slots:
-
-    void processNewUser (const QString& nickname, const QString& id, const QImage& profilePicture);
-
-  private:
-
-    Xmpp *m_xmpp;
-    QChat *m_qchat;
-    Updater *m_updater;
-
-    QStringList m_uuids;
-    QStringList m_nicknames;
-
-    QClipboard *m_clipboard;
-
-    bool m_xmpp_enabled;
-    bool m_qchat_enabled;
-
-    QList<Xmpp *> m_xmpp_objects;
-    QList<QChat *> m_qchat_objects;
+        QList<Xmpp *> m_xmpp_objects;
+        QList<QChat *> m_qchat_objects;
 };
 
 #endif

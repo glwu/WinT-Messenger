@@ -30,12 +30,14 @@
 /// Constructs a QXmppDialback.
 
 QXmppDialback::QXmppDialback()
-    : m_command (Result) {
+    : m_command (Result)
+{
 }
 
 /// Returns the dialback command.
 
-QXmppDialback::Command QXmppDialback::command() const {
+QXmppDialback::Command QXmppDialback::command() const
+{
     return m_command;
 }
 
@@ -43,13 +45,15 @@ QXmppDialback::Command QXmppDialback::command() const {
 ///
 /// \param command
 
-void QXmppDialback::setCommand (QXmppDialback::Command command) {
+void QXmppDialback::setCommand (QXmppDialback::Command command)
+{
     m_command = command;
 }
 
 /// Returns the dialback key.
 
-QString QXmppDialback::key() const {
+QString QXmppDialback::key() const
+{
     return m_key;
 }
 
@@ -57,13 +61,15 @@ QString QXmppDialback::key() const {
 ///
 /// \param key
 
-void QXmppDialback::setKey (const QString &key) {
+void QXmppDialback::setKey (const QString &key)
+{
     m_key = key;
 }
 
 /// Returns the dialback type.
 
-QString QXmppDialback::type() const {
+QString QXmppDialback::type() const
+{
     return m_type;
 }
 
@@ -71,18 +77,21 @@ QString QXmppDialback::type() const {
 ///
 /// \param type
 
-void QXmppDialback::setType (const QString &type) {
+void QXmppDialback::setType (const QString &type)
+{
     m_type = type;
 }
 
 /// \cond
-bool QXmppDialback::isDialback (const QDomElement &element) {
+bool QXmppDialback::isDialback (const QDomElement &element)
+{
     return element.namespaceURI() == ns_server_dialback &&
            (element.tagName() == QLatin1String ("result") ||
             element.tagName() == QLatin1String ("verify"));
 }
 
-void QXmppDialback::parse (const QDomElement &element) {
+void QXmppDialback::parse (const QDomElement &element)
+{
     QXmppStanza::parse (element);
 
     if (element.tagName() == QLatin1String ("result"))
@@ -95,7 +104,8 @@ void QXmppDialback::parse (const QDomElement &element) {
     m_key = element.text();
 }
 
-void QXmppDialback::toXml (QXmlStreamWriter *xmlWriter) const {
+void QXmppDialback::toXml (QXmlStreamWriter *xmlWriter) const
+{
     if (m_command == Result)
         xmlWriter->writeStartElement ("db:result");
 

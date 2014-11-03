@@ -31,25 +31,26 @@
 
 /// \ingroup Stanzas
 
-class QXMPP_EXPORT QXmppEntityTimeIq : public QXmppIq {
-  public:
-    int tzo() const;
-    void setTzo (int tzo);
+class QXMPP_EXPORT QXmppEntityTimeIq : public QXmppIq
+{
+    public:
+        int tzo() const;
+        void setTzo (int tzo);
 
-    QDateTime utc() const;
-    void setUtc (const QDateTime &utc);
+        QDateTime utc() const;
+        void setUtc (const QDateTime &utc);
 
-    static bool isEntityTimeIq (const QDomElement &element);
+        static bool isEntityTimeIq (const QDomElement &element);
 
-  protected:
-    /// \cond
-    void parseElementFromChild (const QDomElement &element);
-    void toXmlElementFromChild (QXmlStreamWriter *writer) const;
-    /// \endcond
+    protected:
+        /// \cond
+        void parseElementFromChild (const QDomElement &element);
+        void toXmlElementFromChild (QXmlStreamWriter *writer) const;
+        /// \endcond
 
-  private:
-    int m_tzo;
-    QDateTime m_utc;
+    private:
+        int m_tzo;
+        QDateTime m_utc;
 };
 
 #endif //QXMPPENTITYTIMEIQ_H

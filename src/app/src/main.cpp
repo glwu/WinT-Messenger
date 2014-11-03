@@ -20,12 +20,14 @@
 #include "settings.h"
 #include "app_info.h"
 
-int generate_random_number (int max, int min) {
+int generate_random_number (int max, int min)
+{
     srand (time (nullptr));
     return rand() % (max - min + 1) + min;
 }
 
-int main (int argc, char *argv[]) {
+int main (int argc, char *argv[])
+{
     QApplication m_app (argc, argv);
     m_app.setApplicationName (APP_NAME);
     m_app.setApplicationVersion (APP_VERSION);
@@ -60,7 +62,11 @@ int main (int argc, char *argv[]) {
     m_component->loadUrl (QUrl ("qrc:/qml/qml/main.qml"));
     QQuickWindow *m_window = qobject_cast<QQuickWindow *> (m_component->create());
 
-    MOBILE_TARGET ? m_window->showMaximized() : m_window->showNormal();
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+    m_window->showMaximized();
+#else
+    m_window->showNormal();
+#endif
 
     return m_app.exec();
 }

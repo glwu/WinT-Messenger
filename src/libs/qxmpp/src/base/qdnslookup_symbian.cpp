@@ -49,7 +49,8 @@
 
 QT_BEGIN_NAMESPACE
 
-void QDnsLookupRunnable::query (const int requestType, const QByteArray &requestName, QDnsLookupReply *reply) {
+void QDnsLookupRunnable::query (const int requestType, const QByteArray &requestName, QDnsLookupReply *reply)
+{
     RHostResolver dnsResolver;
     RSocketServ dnsSocket;
 
@@ -57,7 +58,8 @@ void QDnsLookupRunnable::query (const int requestType, const QByteArray &request
     TInt err = dnsSocket.Connect();
     err = dnsResolver.Open (dnsSocket, KAfInet, KProtocolInetUdp);
 
-    if (err != KErrNone) {
+    if (err != KErrNone)
+    {
         reply->error = QDnsLookup::ResolverError;
         reply->errorString = QLatin1String ("RHostResolver::Open failed");
         return;
@@ -72,14 +74,16 @@ void QDnsLookupRunnable::query (const int requestType, const QByteArray &request
     dnsQuery().SetType (requestType);
     err = dnsResolver.Query (dnsQuery, dnsResponse);
 
-    if (err != KErrNone) {
+    if (err != KErrNone)
+    {
         reply->error = QDnsLookup::NotFoundError;
         reply->errorString = QLatin1String ("RHostResolver::Query failed");
         return;
     }
 
     // Extract results.
-    while (err == KErrNone) {
+    while (err == KErrNone)
+    {
         const QByteArray aceName ((const char *)dnsResponse().Target().Ptr(),
                                   dnsResponse().Target().Length());
 

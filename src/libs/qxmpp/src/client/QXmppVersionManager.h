@@ -34,34 +34,35 @@ class QXmppVersionManagerPrivate;
 ///
 /// \ingroup Managers
 
-class QXMPP_EXPORT QXmppVersionManager : public QXmppClientExtension {
-    Q_OBJECT
+class QXMPP_EXPORT QXmppVersionManager : public QXmppClientExtension
+{
+        Q_OBJECT
 
-  public:
-    QXmppVersionManager();
-    ~QXmppVersionManager();
+    public:
+        QXmppVersionManager();
+        ~QXmppVersionManager();
 
-    QString requestVersion (const QString& jid);
+        QString requestVersion (const QString& jid);
 
-    void setClientName (const QString&);
-    void setClientVersion (const QString&);
-    void setClientOs (const QString&);
+        void setClientName (const QString&);
+        void setClientVersion (const QString&);
+        void setClientOs (const QString&);
 
-    QString clientName() const;
-    QString clientVersion() const;
-    QString clientOs() const;
+        QString clientName() const;
+        QString clientVersion() const;
+        QString clientOs() const;
 
-    /// \cond
-    QStringList discoveryFeatures() const;
-    bool handleStanza (const QDomElement &element);
-    /// \endcond
+        /// \cond
+        QStringList discoveryFeatures() const;
+        bool handleStanza (const QDomElement &element);
+        /// \endcond
 
-  signals:
-    /// \brief This signal is emitted when a version response is received.
-    void versionReceived (const QXmppVersionIq&);
+    signals:
+        /// \brief This signal is emitted when a version response is received.
+        void versionReceived (const QXmppVersionIq&);
 
-  private:
-    QXmppVersionManagerPrivate *d;
+    private:
+        QXmppVersionManagerPrivate *d;
 };
 
 #endif // QXMPPVERSIONMANAGER_H

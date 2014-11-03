@@ -39,7 +39,8 @@
 
 // adapted from public domain source by Ross Williams and Eric Durbin
 // FIXME : is this valid for big-endian machines?
-static quint32 crctable[256] = {
+static quint32 crctable[256] =
+{
     0x00000000L, 0x77073096L, 0xEE0E612CL, 0x990951BAL,
     0x076DC419L, 0x706AF48FL, 0xE963A535L, 0x9E6495A3L,
     0x0EDB8832L, 0x79DCB8A4L, 0xE0D5E91EL, 0x97D2D988L,
@@ -109,7 +110,8 @@ static quint32 crctable[256] = {
 /// Parses a date-time from a string according to
 /// XEP-0082: XMPP Date and Time Profiles.
 
-QDateTime QXmppUtils::datetimeFromString (const QString &str) {
+QDateTime QXmppUtils::datetimeFromString (const QString &str)
+{
     QRegExp tzRe ("(Z|([+-])([0-9]{2}):([0-9]{2}))");
     int tzPos = tzRe.indexIn (str, 19);
 
@@ -121,13 +123,15 @@ QDateTime QXmppUtils::datetimeFromString (const QString &str) {
     dt.setTimeSpec (Qt::UTC);
 
     // process milliseconds
-    if (tzPos > 20 && str.at (19) == '.') {
+    if (tzPos > 20 && str.at (19) == '.')
+    {
         QString millis = (str.mid (20, tzPos - 20) + "000").left (3);
         dt = dt.addMSecs (millis.toInt());
     }
 
     // process time zone
-    if (tzRe.cap (1) != "Z") {
+    if (tzRe.cap (1) != "Z")
+    {
         int offset = tzRe.cap (3).toInt() * 3600 + tzRe.cap (4).toInt() * 60;
 
         if (tzRe.cap (2) == "+")
@@ -143,7 +147,8 @@ QDateTime QXmppUtils::datetimeFromString (const QString &str) {
 /// Serializes a date-time to a string according to
 /// XEP-0082: XMPP Date and Time Profiles.
 
-QString QXmppUtils::datetimeToString (const QDateTime &dt) {
+QString QXmppUtils::datetimeToString (const QDateTime &dt)
+{
     QDateTime utc = dt.toUTC();
 
     if (utc.time().msec())
@@ -156,7 +161,8 @@ QString QXmppUtils::datetimeToString (const QDateTime &dt) {
 /// Parses a timezone offset (in seconds) from a string according to
 /// XEP-0082: XMPP Date and Time Profiles.
 
-int QXmppUtils::timezoneOffsetFromString (const QString &str) {
+int QXmppUtils::timezoneOffsetFromString (const QString &str)
+{
     QRegExp tzRe ("(Z|([+-])([0-9]{2}):([0-9]{2}))");
 
     if (!tzRe.exactMatch (str))
@@ -180,7 +186,8 @@ int QXmppUtils::timezoneOffsetFromString (const QString &str) {
 /// Serializes a timezone offset (in seconds) to a string according to
 /// XEP-0082: XMPP Date and Time Profiles.
 
-QString QXmppUtils::timezoneOffsetToString (int secs) {
+QString QXmppUtils::timezoneOffsetToString (int secs)
+{
     if (!secs)
         return QString::fromLatin1 ("Z");
 
@@ -190,13 +197,15 @@ QString QXmppUtils::timezoneOffsetToString (int secs) {
 
 /// Returns the domain for the given \a jid.
 
-QString QXmppUtils::jidToDomain (const QString &jid) {
+QString QXmppUtils::jidToDomain (const QString &jid)
+{
     return jidToBareJid (jid).split ("@").last();
 }
 
 /// Returns the resource for the given \a jid.
 
-QString QXmppUtils::jidToResource (const QString& jid) {
+QString QXmppUtils::jidToResource (const QString& jid)
+{
     const int pos = jid.indexOf (QChar ('/'));
 
     if (pos < 0)
@@ -207,7 +216,8 @@ QString QXmppUtils::jidToResource (const QString& jid) {
 
 /// Returns the user for the given \a jid.
 
-QString QXmppUtils::jidToUser (const QString &jid) {
+QString QXmppUtils::jidToUser (const QString &jid)
+{
     const int pos = jid.indexOf (QChar ('@'));
 
     if (pos < 0)
@@ -218,7 +228,8 @@ QString QXmppUtils::jidToUser (const QString &jid) {
 
 /// Returns the bare jid (i.e. without resource) for the given \a jid.
 
-QString QXmppUtils::jidToBareJid (const QString& jid) {
+QString QXmppUtils::jidToBareJid (const QString& jid)
+{
     const int pos = jid.indexOf (QChar ('/'));
 
     if (pos < 0)
@@ -229,7 +240,8 @@ QString QXmppUtils::jidToBareJid (const QString& jid) {
 
 /// Calculates the CRC32 checksum for the given input.
 
-quint32 QXmppUtils::generateCrc32 (const QByteArray &in) {
+quint32 QXmppUtils::generateCrc32 (const QByteArray &in)
+{
     quint32 result = 0xffffffff;
 
     for (int n = 0; n < in.size(); ++n)
@@ -238,7 +250,8 @@ quint32 QXmppUtils::generateCrc32 (const QByteArray &in) {
     return result ^= 0xffffffff;
 }
 
-static QByteArray generateHmac (QCryptographicHash::Algorithm algorithm, const QByteArray &key, const QByteArray &text) {
+static QByteArray generateHmac (QCryptographicHash::Algorithm algorithm, const QByteArray &key, const QByteArray &text)
+{
     QCryptographicHash hasher (algorithm);
 
     const int B = 64;
@@ -265,13 +278,15 @@ static QByteArray generateHmac (QCryptographicHash::Algorithm algorithm, const Q
 
 /// Generates the MD5 HMAC for the given \a key and \a text.
 
-QByteArray QXmppUtils::generateHmacMd5 (const QByteArray &key, const QByteArray &text) {
+QByteArray QXmppUtils::generateHmacMd5 (const QByteArray &key, const QByteArray &text)
+{
     return generateHmac (QCryptographicHash::Md5, key, text);
 }
 
 /// Generates the SHA1 HMAC for the given \a key and \a text.
 
-QByteArray QXmppUtils::generateHmacSha1 (const QByteArray &key, const QByteArray &text) {
+QByteArray QXmppUtils::generateHmacSha1 (const QByteArray &key, const QByteArray &text)
+{
     return generateHmac (QCryptographicHash::Sha1, key, text);
 }
 
@@ -279,7 +294,8 @@ QByteArray QXmppUtils::generateHmacSha1 (const QByteArray &key, const QByteArray
 ///
 /// \param N
 
-int QXmppUtils::generateRandomInteger (int N) {
+int QXmppUtils::generateRandomInteger (int N)
+{
     Q_ASSERT (N > 0 && N <= RAND_MAX);
     int val;
 
@@ -292,7 +308,8 @@ int QXmppUtils::generateRandomInteger (int N) {
 ///
 /// \param length
 
-QByteArray QXmppUtils::generateRandomBytes (int length) {
+QByteArray QXmppUtils::generateRandomBytes (int length)
+{
     QByteArray bytes (length, 'm');
 
     for (int i = 0; i < length; ++i)
@@ -305,7 +322,8 @@ QByteArray QXmppUtils::generateRandomBytes (int length) {
 ///
 /// \param length
 
-QString QXmppUtils::generateStanzaHash (int length) {
+QString QXmppUtils::generateStanzaHash (int length)
+{
     const QString somechars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const int N = somechars.size();
     QString hashResult;
@@ -317,13 +335,15 @@ QString QXmppUtils::generateStanzaHash (int length) {
 }
 
 void helperToXmlAddAttribute (QXmlStreamWriter *stream, const QString& name,
-                              const QString& value) {
+                              const QString& value)
+{
     if (!value.isEmpty())
         stream->writeAttribute (name, value);
 }
 
 void helperToXmlAddTextElement (QXmlStreamWriter *stream, const QString& name,
-                                const QString& value) {
+                                const QString& value)
+{
     if (!value.isEmpty())
         stream->writeTextElement ( name, value);
 

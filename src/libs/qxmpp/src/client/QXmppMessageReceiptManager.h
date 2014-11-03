@@ -33,21 +33,22 @@
 ///
 /// \ingroup Managers
 
-class QXMPP_EXPORT QXmppMessageReceiptManager : public QXmppClientExtension {
-    Q_OBJECT
-  public:
-    QXmppMessageReceiptManager();
+class QXMPP_EXPORT QXmppMessageReceiptManager : public QXmppClientExtension
+{
+        Q_OBJECT
+    public:
+        QXmppMessageReceiptManager();
 
-    /// \cond
-    virtual QStringList discoveryFeatures() const;
-    virtual bool handleStanza (const QDomElement &stanza);
-    /// \endcond
+        /// \cond
+        virtual QStringList discoveryFeatures() const;
+        virtual bool handleStanza (const QDomElement &stanza);
+        /// \endcond
 
-  signals:
-    /// This signal is emitted when receipt for the message with the
-    /// given id is received. The id could be previously obtained by
-    /// calling QXmppMessage::id().
-    void messageDelivered (const QString &jid, const QString &id);
+    signals:
+        /// This signal is emitted when receipt for the message with the
+        /// given id is received. The id could be previously obtained by
+        /// calling QXmppMessage::id().
+        void messageDelivered (const QString &jid, const QString &id);
 };
 
 #endif // QXMPPMESSAGERECEIPTMANAGER_H

@@ -27,52 +27,53 @@
 #include "QXmppConfiguration.h"
 #include "QXmppUtils.h"
 
-class QXmppConfigurationPrivate : public QSharedData {
-  public:
-    QXmppConfigurationPrivate();
+class QXmppConfigurationPrivate : public QSharedData
+{
+    public:
+        QXmppConfigurationPrivate();
 
-    QString host;
-    int port;
-    QString user;
-    QString password;
-    QString domain;
-    QString resource;
+        QString host;
+        int port;
+        QString user;
+        QString password;
+        QString domain;
+        QString resource;
 
-    // Facebook
-    QString facebookAccessToken;
-    QString facebookAppId;
+        // Facebook
+        QString facebookAccessToken;
+        QString facebookAppId;
 
-    // Google
-    QString googleAccessToken;
+        // Google
+        QString googleAccessToken;
 
-    // Windows Live
-    QString windowsLiveAccessToken;
+        // Windows Live
+        QString windowsLiveAccessToken;
 
-    // default is false
-    bool autoAcceptSubscriptions;
-    // default is true
-    bool sendIntialPresence;
-    // default is true
-    bool sendRosterRequest;
-    // interval in seconds, if zero won't ping
-    int keepAliveInterval;
-    // interval in seconds, if zero won't timeout
-    int keepAliveTimeout;
-    // will keep reconnecting if disconnected, default is true
-    bool autoReconnectionEnabled;
-    // which authentication systems to use (if any)
-    bool useSASLAuthentication;
-    bool useNonSASLAuthentication;
-    // default is true
-    bool ignoreSslErrors;
+        // default is false
+        bool autoAcceptSubscriptions;
+        // default is true
+        bool sendIntialPresence;
+        // default is true
+        bool sendRosterRequest;
+        // interval in seconds, if zero won't ping
+        int keepAliveInterval;
+        // interval in seconds, if zero won't timeout
+        int keepAliveTimeout;
+        // will keep reconnecting if disconnected, default is true
+        bool autoReconnectionEnabled;
+        // which authentication systems to use (if any)
+        bool useSASLAuthentication;
+        bool useNonSASLAuthentication;
+        // default is true
+        bool ignoreSslErrors;
 
-    QXmppConfiguration::StreamSecurityMode streamSecurityMode;
-    QXmppConfiguration::NonSASLAuthMechanism nonSASLAuthMechanism;
-    QString saslAuthMechanism;
+        QXmppConfiguration::StreamSecurityMode streamSecurityMode;
+        QXmppConfiguration::NonSASLAuthMechanism nonSASLAuthMechanism;
+        QString saslAuthMechanism;
 
-    QNetworkProxy networkProxy;
+        QNetworkProxy networkProxy;
 
-    QList<QSslCertificate> caCertificates;
+        QList<QSslCertificate> caCertificates;
 };
 
 QXmppConfigurationPrivate::QXmppConfigurationPrivate()
@@ -89,30 +90,35 @@ QXmppConfigurationPrivate::QXmppConfigurationPrivate()
     , ignoreSslErrors (true)
     , streamSecurityMode (QXmppConfiguration::TLSEnabled)
     , nonSASLAuthMechanism (QXmppConfiguration::NonSASLDigest)
-    , saslAuthMechanism ("DIGEST-MD5") {
+    , saslAuthMechanism ("DIGEST-MD5")
+{
 }
 
 /// Creates a QXmppConfiguration object.
 
 QXmppConfiguration::QXmppConfiguration()
-    : d (new QXmppConfigurationPrivate) {
+    : d (new QXmppConfigurationPrivate)
+{
 }
 
 /// Creates a copy of \a other.
 
 QXmppConfiguration::QXmppConfiguration (const QXmppConfiguration &other)
-    : d (other.d) {
+    : d (other.d)
+{
 }
 
 /// Destructor, destroys the QXmppConfiguration object.
 ///
 
-QXmppConfiguration::~QXmppConfiguration() {
+QXmppConfiguration::~QXmppConfiguration()
+{
 }
 
 /// Assigns \a other to this QXmppConfiguration.
 
-QXmppConfiguration& QXmppConfiguration::operator= (const QXmppConfiguration &other) {
+QXmppConfiguration& QXmppConfiguration::operator= (const QXmppConfiguration &other)
+{
     d = other.d;
     return *this;
 }
@@ -124,7 +130,8 @@ QXmppConfiguration& QXmppConfiguration::operator= (const QXmppConfiguration &oth
 /// the form of a string (e.g. "192.168.1.25").
 ///
 
-void QXmppConfiguration::setHost (const QString& host) {
+void QXmppConfiguration::setHost (const QString& host)
+{
     d->host = host;
 }
 
@@ -135,7 +142,8 @@ void QXmppConfiguration::setHost (const QString& host) {
 /// domain name is gmail.com and host name is talk.google.com
 ///
 
-void QXmppConfiguration::setDomain (const QString& domain) {
+void QXmppConfiguration::setDomain (const QString& domain)
+{
     d->domain = domain;
 }
 
@@ -145,7 +153,8 @@ void QXmppConfiguration::setDomain (const QString& domain) {
 /// value is 5222.
 ///
 
-void QXmppConfiguration::setPort (int port) {
+void QXmppConfiguration::setPort (int port)
+{
     d->port = port;
 }
 
@@ -156,7 +165,8 @@ void QXmppConfiguration::setPort (int port) {
 /// "qxmpp.test1@gmail.com"
 ///
 
-void QXmppConfiguration::setUser (const QString& user) {
+void QXmppConfiguration::setUser (const QString& user)
+{
     d->user = user;
 }
 
@@ -165,7 +175,8 @@ void QXmppConfiguration::setUser (const QString& user) {
 /// \param password Password for the specified username
 ///
 
-void QXmppConfiguration::setPassword (const QString& password) {
+void QXmppConfiguration::setPassword (const QString& password)
+{
     d->password = password;
 }
 
@@ -180,7 +191,8 @@ void QXmppConfiguration::setPassword (const QString& password) {
 ///
 /// \param resource Resource identifier of the client in connection.
 
-void QXmppConfiguration::setResource (const QString& resource) {
+void QXmppConfiguration::setResource (const QString& resource)
+{
     d->resource = resource;
 }
 
@@ -190,7 +202,8 @@ void QXmppConfiguration::setResource (const QString& resource) {
 ///
 /// \param jid
 
-void QXmppConfiguration::setJid (const QString& jid) {
+void QXmppConfiguration::setJid (const QString& jid)
+{
     d->user = QXmppUtils::jidToUser (jid);
     d->domain = QXmppUtils::jidToDomain (jid);
     const QString resource = QXmppUtils::jidToResource (jid);
@@ -204,7 +217,8 @@ void QXmppConfiguration::setJid (const QString& jid) {
 /// \return host name
 ///
 
-QString QXmppConfiguration::host() const {
+QString QXmppConfiguration::host() const
+{
     return d->host;
 }
 
@@ -213,7 +227,8 @@ QString QXmppConfiguration::host() const {
 /// \return domain name
 ///
 
-QString QXmppConfiguration::domain() const {
+QString QXmppConfiguration::domain() const
+{
     return d->domain;
 }
 
@@ -222,7 +237,8 @@ QString QXmppConfiguration::domain() const {
 /// \return port number
 ///
 
-int QXmppConfiguration::port() const {
+int QXmppConfiguration::port() const
+{
     return d->port;
 }
 
@@ -231,7 +247,8 @@ int QXmppConfiguration::port() const {
 /// \return username
 ///
 
-QString QXmppConfiguration::user() const {
+QString QXmppConfiguration::user() const
+{
     return d->user;
 }
 
@@ -240,7 +257,8 @@ QString QXmppConfiguration::user() const {
 /// \return password
 ///
 
-QString QXmppConfiguration::password() const {
+QString QXmppConfiguration::password() const
+{
     return d->password;
 }
 
@@ -249,7 +267,8 @@ QString QXmppConfiguration::password() const {
 /// \return resource identifier
 ///
 
-QString QXmppConfiguration::resource() const {
+QString QXmppConfiguration::resource() const
+{
     return d->resource;
 }
 
@@ -259,7 +278,8 @@ QString QXmppConfiguration::resource() const {
 /// (e.g. "qxmpp.test1@gmail.com/resource" or qxmpptest@jabber.org/QXmpp156)
 ///
 
-QString QXmppConfiguration::jid() const {
+QString QXmppConfiguration::jid() const
+{
     if (d->user.isEmpty())
         return d->domain;
 
@@ -273,7 +293,8 @@ QString QXmppConfiguration::jid() const {
 /// (e.g. "qxmpp.test1@gmail.com" or qxmpptest@jabber.org)
 ///
 
-QString QXmppConfiguration::jidBare() const {
+QString QXmppConfiguration::jidBare() const
+{
     if (d->user.isEmpty())
         return d->domain;
 
@@ -283,7 +304,8 @@ QString QXmppConfiguration::jidBare() const {
 
 /// Returns the access token used for X-FACEBOOK-PLATFORM authentication.
 
-QString QXmppConfiguration::facebookAccessToken() const {
+QString QXmppConfiguration::facebookAccessToken() const
+{
     return d->facebookAccessToken;
 }
 
@@ -294,13 +316,15 @@ QString QXmppConfiguration::facebookAccessToken() const {
 ///
 /// \param accessToken
 
-void QXmppConfiguration::setFacebookAccessToken (const QString& accessToken) {
+void QXmppConfiguration::setFacebookAccessToken (const QString& accessToken)
+{
     d->facebookAccessToken = accessToken;
 }
 
 /// Returns the application ID used for X-FACEBOOK-PLATFORM authentication.
 
-QString QXmppConfiguration::facebookAppId() const {
+QString QXmppConfiguration::facebookAppId() const
+{
     return d->facebookAppId;
 }
 
@@ -308,13 +332,15 @@ QString QXmppConfiguration::facebookAppId() const {
 ///
 /// \param appId
 
-void QXmppConfiguration::setFacebookAppId (const QString& appId) {
+void QXmppConfiguration::setFacebookAppId (const QString& appId)
+{
     d->facebookAppId = appId;
 }
 
 /// Returns the access token used for X-OAUTH2 authentication.
 
-QString QXmppConfiguration::googleAccessToken() const {
+QString QXmppConfiguration::googleAccessToken() const
+{
     return d->googleAccessToken;
 }
 
@@ -325,13 +351,15 @@ QString QXmppConfiguration::googleAccessToken() const {
 ///
 /// \param accessToken
 
-void QXmppConfiguration::setGoogleAccessToken (const QString& accessToken) {
+void QXmppConfiguration::setGoogleAccessToken (const QString& accessToken)
+{
     d->googleAccessToken = accessToken;
 }
 
 /// Returns the access token used for X-MESSENGER-OAUTH2 authentication.
 
-QString QXmppConfiguration::windowsLiveAccessToken() const {
+QString QXmppConfiguration::windowsLiveAccessToken() const
+{
     return d->windowsLiveAccessToken;
 }
 
@@ -342,7 +370,8 @@ QString QXmppConfiguration::windowsLiveAccessToken() const {
 ///
 /// \param accessToken
 
-void QXmppConfiguration::setWindowsLiveAccessToken (const QString& accessToken) {
+void QXmppConfiguration::setWindowsLiveAccessToken (const QString& accessToken)
+{
     d->windowsLiveAccessToken = accessToken;
 }
 
@@ -352,7 +381,8 @@ void QXmppConfiguration::setWindowsLiveAccessToken (const QString& accessToken) 
 /// true means that auto-accept-subscriptions-request is enabled else disabled for false
 ///
 
-bool QXmppConfiguration::autoAcceptSubscriptions() const {
+bool QXmppConfiguration::autoAcceptSubscriptions() const
+{
     return d->autoAcceptSubscriptions;
 }
 
@@ -362,7 +392,8 @@ bool QXmppConfiguration::autoAcceptSubscriptions() const {
 /// true means that auto-accept-subscriptions-request is enabled else disabled for false
 ///
 
-void QXmppConfiguration::setAutoAcceptSubscriptions (bool value) {
+void QXmppConfiguration::setAutoAcceptSubscriptions (bool value)
+{
     d->autoAcceptSubscriptions = value;
 }
 
@@ -372,7 +403,8 @@ void QXmppConfiguration::setAutoAcceptSubscriptions (bool value) {
 /// true means that auto-reconnect is enabled else disabled for false
 ///
 
-bool QXmppConfiguration::autoReconnectionEnabled() const {
+bool QXmppConfiguration::autoReconnectionEnabled() const
+{
     return d->autoReconnectionEnabled;
 }
 
@@ -382,45 +414,52 @@ bool QXmppConfiguration::autoReconnectionEnabled() const {
 /// true means that auto-reconnect is enabled else disabled for false
 ///
 
-void QXmppConfiguration::setAutoReconnectionEnabled (bool value) {
+void QXmppConfiguration::setAutoReconnectionEnabled (bool value)
+{
     d->autoReconnectionEnabled = value;
 }
 
 /// Returns whether SSL errors (such as certificate validation errors)
 /// are to be ignored when connecting to the XMPP server.
 
-bool QXmppConfiguration::ignoreSslErrors() const {
+bool QXmppConfiguration::ignoreSslErrors() const
+{
     return d->ignoreSslErrors;
 }
 
 /// Specifies whether SSL errors (such as certificate validation errors)
 /// are to be ignored when connecting to an XMPP server.
 
-void QXmppConfiguration::setIgnoreSslErrors (bool value) {
+void QXmppConfiguration::setIgnoreSslErrors (bool value)
+{
     d->ignoreSslErrors = value;
 }
 
 /// Returns whether to make use of SASL authentication.
 
-bool QXmppConfiguration::useSASLAuthentication() const {
+bool QXmppConfiguration::useSASLAuthentication() const
+{
     return d->useSASLAuthentication;
 }
 
 /// Sets whether to make use of SASL authentication.
 
-void QXmppConfiguration::setUseSASLAuthentication (bool useSASL) {
+void QXmppConfiguration::setUseSASLAuthentication (bool useSASL)
+{
     d->useSASLAuthentication = useSASL;
 }
 
 /// Returns whether to make use of non-SASL authentication.
 
-bool QXmppConfiguration::useNonSASLAuthentication() const {
+bool QXmppConfiguration::useNonSASLAuthentication() const
+{
     return d->useNonSASLAuthentication;
 }
 
 /// Sets whether to make use of non-SASL authentication.
 
-void QXmppConfiguration::setUseNonSASLAuthentication (bool useNonSASL) {
+void QXmppConfiguration::setUseNonSASLAuthentication (bool useNonSASL)
+{
     d->useNonSASLAuthentication = useNonSASL;
 }
 
@@ -428,7 +467,8 @@ void QXmppConfiguration::setUseNonSASLAuthentication (bool useNonSASL) {
 /// QXmppConfiguration::TLSEnabled.
 /// \return StreamSecurityMode
 
-QXmppConfiguration::StreamSecurityMode QXmppConfiguration::streamSecurityMode() const {
+QXmppConfiguration::StreamSecurityMode QXmppConfiguration::streamSecurityMode() const
+{
     return d->streamSecurityMode;
 }
 
@@ -437,7 +477,8 @@ QXmppConfiguration::StreamSecurityMode QXmppConfiguration::streamSecurityMode() 
 /// \param mode StreamSecurityMode
 
 void QXmppConfiguration::setStreamSecurityMode (
-    QXmppConfiguration::StreamSecurityMode mode) {
+    QXmppConfiguration::StreamSecurityMode mode)
+{
     d->streamSecurityMode = mode;
 }
 
@@ -446,7 +487,8 @@ void QXmppConfiguration::setStreamSecurityMode (
 /// \return QXmppConfiguration::NonSASLAuthMechanism
 ///
 
-QXmppConfiguration::NonSASLAuthMechanism QXmppConfiguration::nonSASLAuthMechanism() const {
+QXmppConfiguration::NonSASLAuthMechanism QXmppConfiguration::nonSASLAuthMechanism() const
+{
     return d->nonSASLAuthMechanism;
 }
 
@@ -456,7 +498,8 @@ QXmppConfiguration::NonSASLAuthMechanism QXmppConfiguration::nonSASLAuthMechanis
 ///
 
 void QXmppConfiguration::setNonSASLAuthMechanism (
-    QXmppConfiguration::NonSASLAuthMechanism mech) {
+    QXmppConfiguration::NonSASLAuthMechanism mech)
+{
     d->nonSASLAuthMechanism = mech;
 }
 
@@ -464,7 +507,8 @@ void QXmppConfiguration::setNonSASLAuthMechanism (
 ///
 /// Default value: "DIGEST-MD5"
 
-QString QXmppConfiguration::saslAuthMechanism() const {
+QString QXmppConfiguration::saslAuthMechanism() const
+{
     return d->saslAuthMechanism;
 }
 
@@ -472,7 +516,8 @@ QString QXmppConfiguration::saslAuthMechanism() const {
 ///
 /// Valid values: "PLAIN", "DIGEST-MD5", "ANONYMOUS", "X-FACEBOOK-PLATFORM"
 
-void QXmppConfiguration::setSaslAuthMechanism (const QString &mechanism) {
+void QXmppConfiguration::setSaslAuthMechanism (const QString &mechanism)
+{
     d->saslAuthMechanism = mechanism;
 }
 
@@ -482,7 +527,8 @@ void QXmppConfiguration::setSaslAuthMechanism (const QString &mechanism) {
 /// QNetworkProxy::setApplicationProxy().
 /// \param proxy QNetworkProxy
 
-void QXmppConfiguration::setNetworkProxy (const QNetworkProxy& proxy) {
+void QXmppConfiguration::setNetworkProxy (const QNetworkProxy& proxy)
+{
     d->networkProxy = proxy;
 }
 
@@ -492,7 +538,8 @@ void QXmppConfiguration::setNetworkProxy (const QNetworkProxy& proxy) {
 /// QNetworkProxy::setApplicationProxy().
 /// \return QNetworkProxy
 
-QNetworkProxy QXmppConfiguration::networkProxy() const {
+QNetworkProxy QXmppConfiguration::networkProxy() const
+{
     return d->networkProxy;
 }
 
@@ -503,7 +550,8 @@ QNetworkProxy QXmppConfiguration::networkProxy() const {
 ///
 /// The default value is 60 seconds.
 
-void QXmppConfiguration::setKeepAliveInterval (int secs) {
+void QXmppConfiguration::setKeepAliveInterval (int secs)
+{
     d->keepAliveInterval = secs;
 }
 
@@ -511,7 +559,8 @@ void QXmppConfiguration::setKeepAliveInterval (int secs) {
 ///
 /// The default value is 60 seconds.
 
-int QXmppConfiguration::keepAliveInterval() const {
+int QXmppConfiguration::keepAliveInterval() const
+{
     return d->keepAliveInterval;
 }
 
@@ -523,7 +572,8 @@ int QXmppConfiguration::keepAliveInterval() const {
 ///
 /// The default value is 20 seconds.
 
-void QXmppConfiguration::setKeepAliveTimeout (int secs) {
+void QXmppConfiguration::setKeepAliveTimeout (int secs)
+{
     d->keepAliveTimeout = secs;
 }
 
@@ -531,18 +581,21 @@ void QXmppConfiguration::setKeepAliveTimeout (int secs) {
 ///
 /// The default value is 20 seconds.
 
-int QXmppConfiguration::keepAliveTimeout() const {
+int QXmppConfiguration::keepAliveTimeout() const
+{
     return d->keepAliveTimeout;
 }
 
 /// Specifies a list of trusted CA certificates.
 
-void QXmppConfiguration::setCaCertificates (const QList<QSslCertificate> &caCertificates) {
+void QXmppConfiguration::setCaCertificates (const QList<QSslCertificate> &caCertificates)
+{
     d->caCertificates = caCertificates;
 }
 
 /// Returns the a list of trusted CA certificates.
 
-QList<QSslCertificate> QXmppConfiguration::caCertificates() const {
+QList<QSslCertificate> QXmppConfiguration::caCertificates() const
+{
     return d->caCertificates;
 }
