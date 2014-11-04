@@ -10,6 +10,6 @@
 CONFIG += ordered
 TEMPLATE = subdirs
 
-SUBDIRS += $$PWD/src/libs/QXmpp
+SUBDIRS += $$PWD/src/libs/qxmpp
 SUBDIRS += $$PWD/src/app
 

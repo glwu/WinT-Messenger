@@ -123,4 +123,3 @@ For the moment, we have implemented the following modules:
         sudo make install
 	
 That's all! To run WinT Messenger, you can type "wint-messenger" (without quotes) in Terminal. You can also run WinT Messenger from your application menu (Gnome) or Dash (Unity).
-
