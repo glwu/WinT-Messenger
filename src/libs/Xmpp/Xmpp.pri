@@ -9,7 +9,7 @@
 
 CONFIG += c++11
 
-LIBS += -L$$OUT_PWD/../libs/qxmpp -lqxmpp
+LIBS += -L$$OUT_PWD/../libs/QXmpp -lqxmpp
 
 SOURCES += $$PWD/src/xmpp.cpp
 HEADERS += $$PWD/src/xmpp.h
@@ -17,6 +17,6 @@ HEADERS += $$PWD/src/xmpp.h
 OTHER_FILES += $$PWD/src/Xmpp
 
 INCLUDEPATH += $$PWD/src \
-               $$PWD/../qxmpp/src/base \
-               $$PWD/../qxmpp/src/client \
-               $$PWD/../qxmpp/src/server
+               $$PWD/../QXmpp/src/base \
+               $$PWD/../QXmpp/src/client \
+               $$PWD/../QXmpp/src/server
