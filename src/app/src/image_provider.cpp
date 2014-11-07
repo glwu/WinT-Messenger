@@ -19,6 +19,8 @@ void ImageProvider::clearImages()
 
 void ImageProvider::addImage (const QImage& image, const QString& id)
 {
+    Q_ASSERT(!id.isEmpty());
+
     m_id_list.append (id);
     m_image_list.append (image);
 }
@@ -30,7 +32,9 @@ QImage ImageProvider::requestImage (const QString& id,
     Q_UNUSED (size);
     Q_UNUSED (requestedSize);
 
+    Q_ASSERT(!id.isEmpty());
+
     int index = m_id_list.indexOf (id);
     return index >= 0 ? m_image_list.at (index)
-           : QImage (":/faces/generic-user.png");
+                      : QImage (":/faces/generic-user.png");
 }

@@ -17,11 +17,17 @@ Settings::Settings()
 
 void Settings::setValue (QString key, QVariant value)
 {
+    Q_ASSERT(!key.isEmpty());
+    Q_ASSERT(!value.isNull());
+
     m_settings->setValue (key, value);
 }
 
 QVariant Settings::value (QString key, QVariant defaultValue) const
 {
+    Q_ASSERT(!key.isEmpty());
+    Q_ASSERT(!defaultValue.isNull());
+
     return m_settings->value (key, defaultValue);
 }
 

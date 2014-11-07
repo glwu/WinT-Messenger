@@ -47,7 +47,6 @@ class QChat : public QObject
         /// message to every peer
         void returnPressed (const QString& to, const QString& message);
 
-
     signals:
 
         void delUser (const QString& nick, const QString& id);

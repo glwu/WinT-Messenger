@@ -25,6 +25,8 @@ Xmpp::~Xmpp()
 
 void Xmpp::setDownloadPath (const QString& path)
 {
+    Q_ASSERT(!path.isEmpty());
+
     // Change the path where we should write all downloaded files
     if (!path.isEmpty())
         m_path = path;
@@ -36,6 +38,9 @@ void Xmpp::setDownloadPath (const QString& path)
 
 void Xmpp::login (const QString& jid, const QString& passwd)
 {
+    Q_ASSERT(!jid.isEmpty());
+    Q_ASSERT(!passwd.isEmpty());
+
     m_jid = jid;
 
     // Avoid common issues realted to Facebook accounts...
@@ -67,11 +72,11 @@ void Xmpp::shareFile (const QString &to, const QString& path)
 
 void Xmpp::sendMessage (const QString &to, const QString &message)
 {
-    // Send a message to the specified user ("to" param)
+    Q_ASSERT(!to.isEmpty());
+    Q_ASSERT(!message.isEmpty());
+
     if (!message.isEmpty() && !to.isEmpty())
         m_client->sendMessage (to, message);
-
-    // Show a console warning in the case that the function is called incorrectly
     else
         qWarning() << "Xmpp: Invalid arguments for new message:" << to << message;
 }

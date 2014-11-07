@@ -46,7 +46,7 @@ MessageBox {
 
     function updatesAvailable(new_version) {
         _updates.caption = qsTr("A new version of WinT Messenger (" + new_version + ") is available to download")
-        _updates.details = qsTr("Would you like to open a web browser to download it?")
+        _updates.details = qsTr("Would you like to download it?")
 
         _updates.open()
     }
@@ -68,9 +68,8 @@ MessageBox {
             id: _yes_button
             anchors.centerIn: parent
             anchors.verticalCenterOffset: _updates.updates_available ? units.gu(3) : units.gu(6)
+            onClicked: _updates.updates_available ? bridge.downloadUpdates() : _updates.close()
             text: _updates.updates_available ? qsTr("Yes, download the new version") : qsTr("Close")
-            onClicked: _updates.updates_available ? Qt.openUrlExternally("http://wint-im.sf.net") :
-                                                    _updates.close()
 
             Component.onCompleted: {
                 width = parent.da_button_width

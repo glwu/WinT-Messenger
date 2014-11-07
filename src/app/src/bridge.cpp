@@ -16,9 +16,23 @@ Bridge::Bridge()
     m_updater = new QSimpleUpdater();
     m_clipboard = QApplication::clipboard();
 
+    QString _download_url;
+    QString _url_base = "https://raw.githubusercontent.com/wint-3794/wint-messenger/updater/files/";
+
+    // Get the download URL based on the OS
+#if defined(Q_OS_MAC)
+    _download_url = _url_base + "wint-messenger-latest.dmg";
+#elif defined(Q_OS_WIN32)
+    _download_url = _url_base + "wint-messenger-latest.exe";
+#elif defined(Q_OS_ANDROID)
+    _download_url = _url_base + "wint-messenger-latest.apk";
+#elif defined(Q_OS_LINUX)
+    _download_url = _url_base + "wint-messenger-latest.tar.gz";
+#endif
+
     // Configure the application updater
-    m_updater->setApplicationVersion (APP_VERSION);
-    m_updater->setDownloadUrl ("http://wint-im.sourceforge.net/download");
+    m_updater->setApplicationVersion ("0.1");
+    m_updater->setDownloadUrl  (_download_url);
     m_updater->setReferenceUrl ("https://raw.githubusercontent.com/wint-3794/wint-messenger/updater/latest.txt");
     m_updater->setChangelogUrl ("https://raw.githubusercontent.com/wint-3794/wint-messenger/updater/changelog.txt");
 
@@ -88,6 +102,9 @@ void Bridge::stopXmpp()
 
 void Bridge::startXmpp (QString jid, QString passwd)
 {
+    Q_ASSERT(!jid.isEmpty());
+    Q_ASSERT(!passwd.isEmpty());
+
     stopXmpp();
 
     // Create and register a new Xmpp object
@@ -120,9 +137,11 @@ void Bridge::startXmpp (QString jid, QString passwd)
 
 void Bridge::shareFiles (const QString& peer)
 {
+    Q_ASSERT(!peer.isEmpty());
+
     // Get list of selected files
     QStringList _filenames =
-        QFileDialog::getOpenFileNames (0, tr ("Select files"), QDir::homePath());
+            QFileDialog::getOpenFileNames (0, tr ("Select files"), QDir::homePath());
 
     // Send each file using the SIGNALS/SLOTS mechanism
     for (int i = 0; i < _filenames.count(); ++i)
@@ -131,6 +150,8 @@ void Bridge::shareFiles (const QString& peer)
 
 void Bridge::sendMessage (const QString& to, const QString &message)
 {
+    Q_ASSERT(!message.isEmpty());
+
     // Send data from QML to current chat module
     emit returnPressed (to, message);
 }
@@ -156,6 +177,8 @@ void Bridge::onCheckingFinished()
 void Bridge::processNewUser (const QString& nickname, const QString &id,
                              const QImage& profilePicture)
 {
+    Q_ASSERT(!id.isEmpty());
+    Q_ASSERT(!nickname.isEmpty());
 
     // Register user ID
     m_uuids.append (id);
@@ -172,6 +195,8 @@ void Bridge::processNewUser (const QString& nickname, const QString &id,
 
 void Bridge::copy (const QString &string)
 {
+    Q_ASSERT(!string.isEmpty());
+
     // Overwrite the contents of the system clipboard
     // with the input string
     m_clipboard->clear();
@@ -180,6 +205,8 @@ void Bridge::copy (const QString &string)
 
 QString Bridge::getId (QString nickname)
 {
+    Q_ASSERT(!nickname.isEmpty());
+
     // Get the ID based on the nickname...we can do this
     // piece of dirty code because the information of
     // an user is registered at the same time and thus,
@@ -202,6 +229,8 @@ QString Bridge::downloadPath()
 
 QString Bridge::manageSmileys (const QString &data)
 {
+    Q_ASSERT(!data.isEmpty());
+
     QFile _file (":/smileys/smileys/data.plist");
 
     if (!_file.open (QFile::ReadOnly))
@@ -218,8 +247,15 @@ void Bridge::checkForUpdates()
     m_updater->checkForUpdates();
 }
 
+void Bridge::downloadUpdates()
+{
+    m_updater->downloadLatestVersion();
+}
+
 void Bridge::sendStatus (const QString &to, const QString &status)
 {
+    Q_ASSERT(!status.isEmpty());
+
     // Send data from QML to current chat module
     emit sendStatusSignal (to, status);
 }

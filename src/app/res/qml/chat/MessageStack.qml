@@ -174,7 +174,6 @@ Item {
 
         onNewMessage: {
             if (message) {
-                sendSound.play()
                 bridge.sendMessage(uuid, message)
                 drawMessage("local user", peer, message, true)
             } else {

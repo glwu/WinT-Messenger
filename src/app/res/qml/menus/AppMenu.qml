@@ -54,9 +54,11 @@ Menu {
         Button {
             flat: true
             id: fullscreen
+            visible: height > 0
             width: website.width
             iconName: "fullscreen"
             text: enter_full_screen
+            height: device.isMobile() ? 0 : donate.height
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 app.appMenu.close()

@@ -44,6 +44,7 @@ class Bridge : public QObject
 
         Q_INVOKABLE QString downloadPath();
         Q_INVOKABLE void checkForUpdates();
+        Q_INVOKABLE void downloadUpdates();
         Q_INVOKABLE void copy (const QString &string);
 
         Q_INVOKABLE QString getId (QString nickname);

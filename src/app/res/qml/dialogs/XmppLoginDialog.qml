@@ -184,7 +184,6 @@ Dialog {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.margins: units.gu(1.5)
-                text: settings.value("xmpp_nickname", "")
                 onTextChanged: settings.setValue("xmpp_nickname", text)
                 placeholderText: qsTr("Username (for example user@chat.facebook.com)")
             }
