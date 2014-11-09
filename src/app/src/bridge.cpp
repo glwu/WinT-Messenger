@@ -90,8 +90,8 @@ void Bridge::stopXmpp()
 
 void Bridge::startXmpp (QString jid, QString passwd)
 {
-    Q_ASSERT(!jid.isEmpty());
-    Q_ASSERT(!passwd.isEmpty());
+    Q_ASSERT (!jid.isEmpty());
+    Q_ASSERT (!passwd.isEmpty());
 
     stopXmpp();
 
@@ -124,11 +124,11 @@ void Bridge::startXmpp (QString jid, QString passwd)
 
 void Bridge::shareFiles (const QString& peer)
 {
-    Q_ASSERT(!peer.isEmpty());
+    Q_ASSERT (!peer.isEmpty());
 
     // Get list of selected files
     QStringList _filenames =
-            QFileDialog::getOpenFileNames (0, tr ("Select files"), QDir::homePath());
+        QFileDialog::getOpenFileNames (0, tr ("Select files"), QDir::homePath());
 
     // Send each file using the SIGNALS/SLOTS mechanism
     for (int i = 0; i < _filenames.count(); ++i)
@@ -137,7 +137,7 @@ void Bridge::shareFiles (const QString& peer)
 
 void Bridge::sendMessage (const QString& to, const QString &message)
 {
-    Q_ASSERT(!message.isEmpty());
+    Q_ASSERT (!message.isEmpty());
     emit returnPressed (to, message);
 }
 
@@ -156,8 +156,8 @@ void Bridge::onCheckingFinished()
 void Bridge::processNewUser (const QString& nickname, const QString &id,
                              const QImage& profilePicture)
 {
-    Q_ASSERT(!id.isEmpty());
-    Q_ASSERT(!nickname.isEmpty());
+    Q_ASSERT (!id.isEmpty());
+    Q_ASSERT (!nickname.isEmpty());
 
     m_uuids.append (id);
     m_nicknames.append (nickname);
@@ -168,7 +168,7 @@ void Bridge::processNewUser (const QString& nickname, const QString &id,
 
 void Bridge::copy (const QString &string)
 {
-    Q_ASSERT(!string.isEmpty());
+    Q_ASSERT (!string.isEmpty());
 
     m_clipboard->clear();
     m_clipboard->setText (string);
@@ -176,7 +176,7 @@ void Bridge::copy (const QString &string)
 
 QString Bridge::getId (QString nickname)
 {
-    Q_ASSERT(!nickname.isEmpty());
+    Q_ASSERT (!nickname.isEmpty());
     return m_uuids.at (m_nicknames.indexOf (nickname));
 }
 
@@ -191,7 +191,7 @@ QString Bridge::downloadPath()
 
 QString Bridge::manageSmileys (const QString &data)
 {
-    Q_ASSERT(!data.isEmpty());
+    Q_ASSERT (!data.isEmpty());
 
     QFile _file (":/smileys/smileys/data.plist");
 
@@ -216,6 +216,6 @@ void Bridge::downloadUpdates()
 
 void Bridge::sendStatus (const QString &to, const QString &status)
 {
-    Q_ASSERT(!status.isEmpty());
+    Q_ASSERT (!status.isEmpty());
     emit sendStatusSignal (to, status);
 }

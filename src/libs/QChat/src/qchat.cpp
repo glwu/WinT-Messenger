@@ -28,7 +28,7 @@ QChat::QChat()
 
 void QChat::setNickname (const QString& nick)
 {
-    Q_ASSERT(!nick.isEmpty());
+    Q_ASSERT (!nick.isEmpty());
 
     if (!nick.isEmpty())
         client.setNickname (nick);
@@ -39,7 +39,7 @@ void QChat::setNickname (const QString& nick)
 
 void QChat::setProfilePicture (const QImage& image)
 {
-    Q_ASSERT(!image.isNull());
+    Q_ASSERT (!image.isNull());
 
     if (!image.isNull())
         client.setProfilePicture (image);
@@ -50,7 +50,7 @@ void QChat::setProfilePicture (const QImage& image)
 
 void QChat::setDownloadPath (const QString& path)
 {
-    Q_ASSERT(!path.isEmpty());
+    Q_ASSERT (!path.isEmpty());
 
     if (!path.isEmpty())
         client.setDownloadPath (path);
@@ -61,7 +61,7 @@ void QChat::setDownloadPath (const QString& path)
 
 void QChat::sendStatus (const QString &to, const QString &status)
 {
-    Q_ASSERT(!status.isEmpty());
+    Q_ASSERT (!status.isEmpty());
 
     if (!status.isEmpty())
         client.sendStatus (to, status);
@@ -72,7 +72,7 @@ void QChat::sendStatus (const QString &to, const QString &status)
 
 void QChat::shareFile (const QString& to, const QString& path)
 {
-    Q_ASSERT(!path.isEmpty());
+    Q_ASSERT (!path.isEmpty());
 
     if (!path.isEmpty())
         client.sendFile (to, path);
@@ -83,7 +83,7 @@ void QChat::shareFile (const QString& to, const QString& path)
 
 void QChat::returnPressed (const QString& to, const QString &message)
 {
-    Q_ASSERT(!message.isEmpty());
+    Q_ASSERT (!message.isEmpty());
 
     if (!message.isEmpty())
     {
@@ -99,9 +99,9 @@ void QChat::returnPressed (const QString& to, const QString &message)
 
 void QChat::processNewUser (const QString &name, const QString &id, const QImage &image)
 {
-    Q_ASSERT(!id.isEmpty());
-    Q_ASSERT(!name.isEmpty());
-    Q_ASSERT(!image.isNull());
+    Q_ASSERT (!id.isEmpty());
+    Q_ASSERT (!name.isEmpty());
+    Q_ASSERT (!image.isNull());
 
     emit newUser (name, id, image);
 }
