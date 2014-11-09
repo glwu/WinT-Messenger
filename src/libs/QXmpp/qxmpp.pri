@@ -5,6 +5,10 @@ QXMPP_LIBRARY_NAME = qxmpp
 QXMPP_LIBRARY_TYPE = static
 QXMPP_INCLUDEPATH = $$PWD/src/base $$PWD/src/client $$PWD/src/server
 
+win32 {
+    QXMPP_LIBRARY_TYPE = shared
+}
+
 # Libraries used internally by QXmpp
 android {
 

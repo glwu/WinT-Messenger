@@ -118,4 +118,5 @@
     <qresource prefix="/textures">
         <file>textures/background.png</file>
     </qresource>
+    <qresource prefix="/icons"/>
 </RCC>
