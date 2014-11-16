@@ -38,12 +38,13 @@ Page {
 
     onVisibleChanged: {
         if (!visible) {
-            bridge.stopXmpp()
-            bridge.stopLanChat()
-
             _sidebar.clear()
             _messageStack.clear()
             _sidebar.autoAdjustWidth()
+        }
+
+        else {
+            setTitle(qsTr("Chat"))
         }
     }
 

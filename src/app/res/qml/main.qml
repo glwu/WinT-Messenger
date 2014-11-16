@@ -31,8 +31,11 @@ App {
 
     initialPage: _start
 
-    // This is the inital start page, which allows the user
-    // to get help and to open the connect page
+    function stopChatModules() {
+        bridge.stopXmpp()
+        bridge.stopLanChat()
+    }
+
     Start {
         id: _start
         onHelpClicked: _helpDialog.open()
@@ -40,31 +43,29 @@ App {
         onChatClicked: stack.push(_connect)
     }
 
-    // This page allows the user to select between chating locally and
-    // online - or to get help
     Connect {
         id: _connect
-        onOnlineChatClicked: _xmppDialog.open()
+
+        onOnlineChatClicked: {
+            stopChatModules()
+            _xmppDialog.open()
+        }
+
         onLocalChatClicked: {
+            stopChatModules()
             bridge.startLanChat()
             stack.push(_chat_interface)
-            _chat_interface.setTitle("Local Chat")
         }
     }
 
-    // This is a page which represents the actual chat interface,
-    // where you can read and send messages to a select group of users
     ChatInterface {
         id: _chat_interface
     }
 
-    // This dialog downloads an RSS file from our page and presents it
-    // nicelly to the user
     NewsDialog {
         id: _newsDialog
     }
 
-    // This dialog allows the user to get support
     HelpDialog {
         id: _helpDialog
         onSupportClicked: Qt.openUrlExternally("mailto:alex.racotta@gmail.com")
@@ -72,21 +73,14 @@ App {
         onDocClicked: Qt.openUrlExternally("http://wint-im.sf.net/documentation/documentation.html")
     }
 
-    // This dialog allows the user to login to an XMPP server
-    // and show up the chat interface
     XmppLoginDialog {
         id: _xmppDialog
         gmailMessage: _gmailMessage
         onXmppConnected: {
             stack.push(_chat_interface)
-            _chat_interface.setTitle("Online Chat")
         }
     }
 
-    // This message will be shown in the case that:
-    //   - The account is a Google/Gmail account and:
-    //       - The user forgot his/her fucking password
-    //       - The user account does not trust XMPP clients
     MessageBox {
         id: _gmailMessage
         icon: "google"

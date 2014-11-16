@@ -23,12 +23,6 @@
 #include "image_provider.h"
 #include "device_manager.h"
 
-// TODO: IMO, this shitload of class is too complicated
-//       and has a lot of functions that could be modularized
-//       in order to make the code more efficient and easy
-//       on the eyes....just take a look at the number of
-//       SIGNALS that this shit has!
-
 class Bridge : public QObject
 {
         Q_OBJECT
@@ -49,7 +43,6 @@ class Bridge : public QObject
 
         Q_INVOKABLE QString getId (QString nickname);
         Q_INVOKABLE void shareFiles (const QString& peer);
-        Q_INVOKABLE QString manageSmileys (const QString &data);
         Q_INVOKABLE void sendStatus (const QString &to, const QString &status);
         Q_INVOKABLE void sendMessage (const QString& to, const QString &message);
 

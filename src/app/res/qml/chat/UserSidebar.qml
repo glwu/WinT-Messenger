@@ -117,14 +117,14 @@ Frame {
                 visible: _sidebar.width > 0
                 anchors.leftMargin: units.gu(2)
                 anchors.rightMargin: units.gu(2)
-                placeholderText: qsTr("Search...")
+                placeholderText: qsTr("Search users...")
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
 
         Label {
             fontSize: "medium"
-            text: qsTr("No users")
+            text: qsTr("No users available")
             anchors.centerIn: parent
             opacity: _usersModel.count <= 0 && _sidebar.width > 0 ? 1 : 0
             Behavior on opacity {NumberAnimation{}}

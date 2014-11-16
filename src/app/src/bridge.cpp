@@ -39,13 +39,13 @@ Bridge::Bridge()
 void Bridge::stopLanChat()
 {
     clearUsers();
+	
+	qDeleteAll (m_qchat_objects.begin(), m_qchat_objects.end());
     m_qchat_objects.clear();
 }
 
 void Bridge::startLanChat()
 {
-    stopLanChat();
-
     m_qchat = new QChat();
     m_qchat_objects.append (m_qchat);
 
@@ -57,7 +57,6 @@ void Bridge::startLanChat()
 
     m_qchat->setDownloadPath (downloadPath());
 
-    // Receive data from QChat and send it to QML
     connect (m_qchat, SIGNAL (delUser (QString, QString)),
              this,    SIGNAL (delUser (QString, QString)));
     connect (m_qchat, SIGNAL (newUser (QString, QString, QImage)),
@@ -73,7 +72,6 @@ void Bridge::startLanChat()
     connect (m_qchat, SIGNAL (statusChanged (QString, QString)),
              this,    SIGNAL (statusChanged (QString, QString)));
 
-    // Send data from QML to QChat object
     connect (this,    SIGNAL (returnPressed (QString, QString)),
              m_qchat, SLOT   (returnPressed (QString, QString)));
     connect (this,    SIGNAL (sendFile  (QString, QString)),
@@ -85,6 +83,8 @@ void Bridge::startLanChat()
 void Bridge::stopXmpp()
 {
     clearUsers();
+	
+	qDeleteAll (m_xmpp_objects.begin(), m_xmpp_objects.end());
     m_xmpp_objects.clear();
 }
 
@@ -93,12 +93,9 @@ void Bridge::startXmpp (QString jid, QString passwd)
     Q_ASSERT (!jid.isEmpty());
     Q_ASSERT (!passwd.isEmpty());
 
-    stopXmpp();
-
     m_xmpp = new Xmpp();
     m_xmpp_objects.append (m_xmpp);
 
-    // Receive data from Xmpp and send it to QML
     connect (m_xmpp, SIGNAL (connected()),
              this,   SIGNAL (xmppConnected()));
     connect (m_xmpp, SIGNAL (disconnected()),
@@ -110,7 +107,6 @@ void Bridge::startXmpp (QString jid, QString passwd)
     connect (m_xmpp, SIGNAL (newUser        (QString, QString, QImage)),
              this,   SLOT   (processNewUser (QString, QString, QImage)));
 
-    // Send data from QML to Xmpp
     connect (this,   SIGNAL (returnPressed (QString, QString)),
              m_xmpp, SLOT   (sendMessage   (QString, QString)));
     connect (this,   SIGNAL (sendFile  (QString, QString)),
@@ -118,7 +114,6 @@ void Bridge::startXmpp (QString jid, QString passwd)
     connect (this,   SIGNAL (sendStatusSignal  (QString, QString)),
              m_xmpp, SLOT   (sendStatus        (QString, QString)));
 
-    // Try to login with given information
     m_xmpp->login (jid, passwd);
 }
 
@@ -187,21 +182,6 @@ QString Bridge::downloadPath()
 #else
     return QDir::tempPath() + "/";
 #endif
-}
-
-QString Bridge::manageSmileys (const QString &data)
-{
-    Q_ASSERT (!data.isEmpty());
-
-    QFile _file (":/smileys/smileys/data.plist");
-
-    if (!_file.open (QFile::ReadOnly))
-        return data;
-
-    else
-        return data;
-
-    return data;
 }
 
 void Bridge::checkForUpdates()

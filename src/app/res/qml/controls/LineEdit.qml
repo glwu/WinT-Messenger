@@ -31,7 +31,8 @@ TextField {
 
             background: Frame {
                 color: theme.textFieldBackground
-                border.color: textField.focus && coloredBorder ? theme.secondary : theme.borderColor
+                border.color: textField.focus && coloredBorder ?
+                                  Qt.lighter(theme.secondary) : theme.borderColor
 
                 Behavior on border.color {ColorAnimation{}}
             }

@@ -27,19 +27,19 @@ ColumnPage {
         anchors.verticalCenterOffset: -parent.height * 0.17
 
         Button {
-            text: qsTr("Local chat")
+            text: qsTr("Local chat (LAN)")
             width: units.gu(24)
             onClicked: localChatClicked()
         }
 
         Button {
-            text: qsTr("Online chat")
+            text: qsTr("Online chat (XMPP)")
             width: units.gu(24)
             onClicked: onlineChatClicked()
         }
 
         Button {
-            text: qsTr("Chat help")
+            text: qsTr("Learn more")
             width: units.gu(24)
             onClicked: chatHelpClicked()
         }

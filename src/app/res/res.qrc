@@ -2,7 +2,6 @@
     <qresource prefix="/fonts">
         <file>fonts/font_awesome.ttf</file>
         <file>fonts/regular.ttf</file>
-        <file>fonts/bold.ttf</file>
     </qresource>
     <qresource prefix="/faces">
         <file>faces/astronaut.jpg</file>
@@ -79,44 +78,7 @@
         <file>qml/controls/NiceScrollView.qml</file>
         <file>qml/controls/Frame.qml</file>
     </qresource>
-    <qresource prefix="/smileys">
-        <file>smileys/Ambivalent.png</file>
-        <file>smileys/Angry.png</file>
-        <file>smileys/Confused.png</file>
-        <file>smileys/Content.png</file>
-        <file>smileys/Cool.png</file>
-        <file>smileys/Crazy.png</file>
-        <file>smileys/Crying.png</file>
-        <file>smileys/data.plist</file>
-        <file>smileys/Embarrassed.png</file>
-        <file>smileys/Footinmouth.png</file>
-        <file>smileys/Frown.png</file>
-        <file>smileys/Gasp.png</file>
-        <file>smileys/Grin.png</file>
-        <file>smileys/Heart-Eyes.png</file>
-        <file>smileys/Heart.png</file>
-        <file>smileys/Innocent.png</file>
-        <file>smileys/Kiss.png</file>
-        <file>smileys/Laugh.png</file>
-        <file>smileys/Mini-Frown.png</file>
-        <file>smileys/Mini-Smile.png</file>
-        <file>smileys/Money-Mouth.png</file>
-        <file>smileys/Naughty.png</file>
-        <file>smileys/Nerd.png</file>
-        <file>smileys/Not-Amused.png</file>
-        <file>smileys/Sarcastic.png</file>
-        <file>smileys/Sealed.png</file>
-        <file>smileys/Sick.png</file>
-        <file>smileys/Slant.png</file>
-        <file>smileys/Smile.png</file>
-        <file>smileys/Thumbs-Down.png</file>
-        <file>smileys/Thumbs-Up.png</file>
-        <file>smileys/Wink.png</file>
-        <file>smileys/Yuck.png</file>
-        <file>smileys/Yum.png</file>
-    </qresource>
     <qresource prefix="/textures">
         <file>textures/background.png</file>
     </qresource>
-    <qresource prefix="/icons"/>
 </RCC>

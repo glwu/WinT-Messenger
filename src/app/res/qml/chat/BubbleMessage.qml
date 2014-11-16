@@ -49,8 +49,6 @@ Rectangle {
         string = string.replace(http, '<a href="$1" target="_blank">$1</a>');
         string = string.replace(www, '$1<a href="http://$2" target="_blank">$2</a>');
 
-        string = bridge.manageSmileys(string)
-
         return string
     }
 
@@ -62,7 +60,7 @@ Rectangle {
     // following users:
     //     - Bob
     //     - Alice
-    //     - And you
+    //     - And you (yay!)
     //
     // You are talking with Alice about how much you hate Bob,
     // so you can see her messages and the messages that you sent to her.

@@ -98,7 +98,7 @@ Item {
 
             anchors {
                 top: parent.top
-                right: _smileys.left
+                right: _send.left
                 bottom: parent.bottom
                 left: _share_file.right
                 leftMargin: -units.scale(1)
@@ -119,21 +119,6 @@ Item {
             }
         }
 
-        // Create the smileys button
-        Button {
-            id: _smileys
-            iconName: "smile-o"
-            toggled: smileys.showing
-            onClicked: smileys.toggle(_smileys)
-
-            anchors {
-                top: parent.top
-                right: _send.left
-                bottom: parent.bottom
-                rightMargin: -units.scale(1)
-            }
-        }
-
         // Create the send button
         Button {
             id: _send
@@ -145,48 +130,6 @@ Item {
                 top: parent.top
                 right: parent.right
                 bottom: parent.bottom
-            }
-        }
-    }
-
-    // Create the smileys menu
-    Menu {
-        id: smileys
-        width: app.width < app.height ? app.width * 0.9 : units.gu(32)
-
-        Behavior on width {NumberAnimation{}}
-        Behavior on height {NumberAnimation{}}
-
-        // Display the smileys inside a scroll view
-        NiceScrollView {
-            anchors.centerIn: parent
-
-            // Arrange all detected smileys in a grid
-            GridView {
-                model: emojiList
-                anchors.fill: parent
-                anchors.centerIn: parent
-                anchors.margins: units.gu(1)
-
-                cellWidth: units.gu(4.5)
-                cellHeight: units.gu(4.5)
-
-                delegate: Image {
-                    smooth: true
-                    width: units.gu(2.25)
-                    height: units.gu(2.25)
-                    sourceSize: Qt.size(width, height)
-                    source: "qrc:/smileys/smileys/" + modelData
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            smileys.close()
-                            _message_textbox.forceActiveFocus()
-                            _message_textbox.text = _message_textbox.text + bridge.manageSmileys(modelData)
-                        }
-                    }
-                }
             }
         }
     }
