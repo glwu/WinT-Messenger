@@ -3,7 +3,7 @@
 //
 //  Copyright (c) 2013-2014 WinT 3794
 //  Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
-//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Copyright (c) 2013-2014 Alex Spataru <alex_spataru@outlook.com>
 //
 //  This file is released under the terms of the BSD license.
 //

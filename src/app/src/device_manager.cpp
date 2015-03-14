@@ -2,25 +2,18 @@
 //  This file is part of WinT Messenger
 //
 //  Copyright (c) 2013-2014 WinT 3794
-//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Copyright (c) 2013-2014 Alex Spataru <alex_spataru@outlook.com>
 //
 //  Please check the license.txt file for more information.
 //
 
+#include <qdebug.h>
 #include "device_manager.h"
 
 DeviceManager::DeviceManager()
 {
-#ifdef Q_OS_ANDROID
-    // Scale the QML UI to match the size and DPI of
-    // the device's screen
-    QRect _screen = qApp->primaryScreen()->geometry();
-    m_ratio = 1.8 * qMin (qMax (_screen.width(), _screen.height()) / 1136.,
-                          qMin (_screen.width(), _screen.height()) / 640.);
-#else
-    // Scale the QML interface to a ratio of 1:1
-    m_ratio = 1.0;
-#endif
+    m_ratio = qApp->devicePixelRatio();
+    qDebug() << m_ratio;
 }
 
 bool DeviceManager::isMobile()

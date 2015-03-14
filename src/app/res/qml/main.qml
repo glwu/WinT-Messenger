@@ -2,7 +2,7 @@
 //  This file is part of WinT Messenger
 //
 //  Copyright (c) 2013-2014 WinT 3794
-//  Copyright (c) 2013-2014 Alex Spataru <alex.racotta@gmail.com>
+//  Copyright (c) 2013-2014 Alex Spataru <alex_spataru@outlook.com>
 //
 //  Please check the license.txt file for more information.
 //
@@ -68,7 +68,7 @@ App {
 
     HelpDialog {
         id: _helpDialog
-        onSupportClicked: Qt.openUrlExternally("mailto:alex.racotta@gmail.com")
+        onSupportClicked: Qt.openUrlExternally("mailto:alex_spataru@outlook.com")
         onBugClicked: Qt.openUrlExternally("https://github.com/wint-3794/wint-messenger/issues")
         onDocClicked: Qt.openUrlExternally("http://wint-im.sf.net/documentation/documentation.html")
     }
